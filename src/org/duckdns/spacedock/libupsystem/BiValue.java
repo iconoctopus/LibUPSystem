@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package libupsystem;
+package org.duckdns.spacedock.libupsystem;
 
 //TODO supprimer cette horrible classe et réimplémenter correctement, armes, armures et tables de référence
 

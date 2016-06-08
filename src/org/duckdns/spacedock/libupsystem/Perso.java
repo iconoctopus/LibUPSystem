@@ -1,5 +1,5 @@
 //TODO: les getters/setters sont encore de mauvaise qualité et nécessitent plus de sécurité
-package libupsystem;
+package org.duckdns.spacedock.libupsystem;
 //TODO gérer mort dont mort automatique
 
 import java.util.Arrays;

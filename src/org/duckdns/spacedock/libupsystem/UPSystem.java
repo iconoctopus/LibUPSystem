@@ -1,4 +1,4 @@
-package libupsystem;
+package org.duckdns.spacedock.libupsystem;
 
 import java.util.Random;
 

@@ -7,6 +7,8 @@ import java.util.Random;
 final class UPSystem
 {
 
+    private static final String errorMessage = "erreur d'accès au fichier de propriétés des textes d'exceptions";
+
     static RollResult lancerCompetence(int domaine, Competence comp, int trait, boolean non_relance_dix, int ND)
     {
 	return extraireIncrements(effectuerJetComp(domaine, comp.getRang(), trait, non_relance_dix, comp.isSpecialiste()), ND);
@@ -65,13 +67,10 @@ final class UPSystem
 		message = message.concat(", Dom=" + domaine);
 		message = message.concat(", Comp=" + comp);
 	    }
-	    catch(FileNotFoundException e)
-	    {
-		message = message.concat("fichier de propriétés des textes d'exceptions introuvable");
-	    }
+
 	    catch(IOException e)
 	    {
-		message = message.concat("fichier de propriétés des textes d'exceptions trouvé mais impossible de le lire");
+		message = message.concat(errorMessage);
 	    }
 	    throw new IllegalArgumentException(message);
 	}
@@ -135,13 +134,10 @@ final class UPSystem
 		message = message.concat("Lancés=" + nbLances);
 		message = message.concat(", Gardés=" + nbGardes);
 	    }
-	    catch(FileNotFoundException e)
-	    {
-		message = message.concat("fichier de propriétés des textes d'exceptions introuvable");
-	    }
+
 	    catch(IOException e)
 	    {
-		message = message.concat("fichier de propriétés des textes d'exceptions trouvé mais impossible de le lire");
+		message = message.concat(errorMessage);
 	    }
 	    throw new IllegalArgumentException(message);
 	}

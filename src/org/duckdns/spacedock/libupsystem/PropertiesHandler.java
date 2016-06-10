@@ -32,7 +32,7 @@ final class PropertiesHandler
      * @throws FileNotFoundException
      * @throws IOException
      */
-    static PropertiesHandler getInstance() throws FileNotFoundException, IOException
+    static PropertiesHandler getInstance() throws IOException
     {
 	if(m_instance == null)
 	{
@@ -44,12 +44,14 @@ final class PropertiesHandler
 
     /**
      * véritable contructeur, appelé par getInstance() si l'instance n'existe
-     * pas
+     * pas. Construit les objets properties à partir des fichiers idoines afin
+     * qu'il ne soit pas nécessaire de le faire de façon synchrone durant le
+     * reste de l'exécution
      *
      * @throws FileNotFoundException
      * @throws IOException
      */
-    private PropertiesHandler() throws FileNotFoundException, IOException
+    private PropertiesHandler() throws IOException
     {
 	m_exceptionProperties = new Properties();
 

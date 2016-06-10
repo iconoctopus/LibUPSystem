@@ -1,0 +1,9 @@
+{
+    "domaine": "corps à corps",
+    "name": "hache d'arme",
+    "VD": "6g3",
+    "bonus_init": 0,
+    "malus_attaque": 0,
+    "physique_minimal": 2,
+    "catégorie": 1
+}

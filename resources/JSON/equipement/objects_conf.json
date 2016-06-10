@@ -1,0 +1,12 @@
+{
+    "liste_armes": ["rapiere", "hachedarme"],
+    "types_armes": ["simple", "perce-armure", "pénétrante", "perce-blindage", "énergétique"],
+    "types_armures": ["ancienne", "moderne", "blindage", "énergétique"],
+    "pieces_armures": ["heaume complet", "heaume ouvert", "masque", "gantelet", "brassière", "jambière", "botte", "cuirasse"],
+    "materiaux_armures": ["plates", "lamellaire ou maille", "cuir clouté", "cuir bouilli"],
+    "type_boucliers": ["targe", "bouclier", "écu", "pavois"],
+    "materiaux_boucliers": ["metal", "bois"],
+    "cat_armes": ["escrime", "haches"],
+    "dom_cac": "corps à corps",
+    "dom_dist": "distance"
+}

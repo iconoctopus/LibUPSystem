@@ -30,7 +30,7 @@ public class Armure
 	public Armure(int nbPoints,int typeArmure)
 	{
 		points=nbPoints;
-		BiValue effets = ReferenceTableGroup.getEffetsArmure(points);
+		BiValue effets = UPreference.getEffetsArmure(points);
 		augND = ((int) effets.getX());
 		redDegats = ((int) effets.getY());
 		type=typeArmure;

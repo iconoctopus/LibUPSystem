@@ -1,0 +1,9 @@
+{
+    "domaine": "corps à corps",
+    "name": "rapiere",
+    "VD": "2g3",
+    "bonus_init": 1,
+    "malus_attaque": 0,
+    "physique_minimal": 0,
+    "catégorie": 0
+}

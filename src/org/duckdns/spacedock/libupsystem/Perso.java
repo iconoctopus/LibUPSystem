@@ -139,9 +139,9 @@ public class Perso
 
     private BiValue getArmureEffective(int TypeArme)
     {
-	double quotientArmure = (ReferenceTableGroup.getPointsArmureEffectifs(TypeArme, armure.getType()));
+	double quotientArmure = (UPreference.getPointsArmureEffectifs(TypeArme, armure.getType()));
 	int pointsArmureEffectifs = (int) ((double) (quotientArmure) * (double) (armure.getPoints()));
-	return ReferenceTableGroup.getEffetsArmure(pointsArmureEffectifs);
+	return UPreference.getEffetsArmure(pointsArmureEffectifs);
     }
     //TODO : vérifier que la vieile règle des malus de blessure n'est pas appliquée
 

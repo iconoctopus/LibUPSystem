@@ -1,5 +1,6 @@
 package org.duckdns.spacedock.libupsystem;
 
+import java.io.IOException;
 import java.io.InputStream;
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -9,6 +10,7 @@ import javax.json.JsonReader;
 final class UPReference
 {
 
+    private static final String errorMessage = "erreur d'accès au fichier de propriétés des textes d'exceptions";
     private static UPReference m_instance;
 
     //TODO réorganiser la classe et mieux expliquer le fonctionnement des indices par des commentaires en regarde de chaque table
@@ -71,8 +73,33 @@ final class UPReference
 
     int getInitModCoord(int p_coordination)
     {
-	//le tableau est indexé à partir de 0, pas la coordination
-	return m_tableInitCoord.getInt(p_coordination - 1);
+	if(p_coordination > 0)
+	{
+	    //le tableau est indexé à partir de 0, pas la coordination
+	    return m_tableInitCoord.getInt(p_coordination - 1);
+	}
+	else
+	{
+	    if(p_coordination == 0)
+	    {
+		return 0;
+	    }
+	    else
+	    {
+		String message = "";
+		try
+		{
+		    message = message.concat(PropertiesHandler.getInstance().getErrorMessage("caracs_inf_0"));
+		    message = message.concat("trait=" + p_coordination);
+		}
+
+		catch(IOException e)
+		{
+		    message = message.concat(errorMessage);
+		}
+		throw new IllegalArgumentException(message);
+	    }
+	}
     }
 
     int getInitModMental(int p_mental)

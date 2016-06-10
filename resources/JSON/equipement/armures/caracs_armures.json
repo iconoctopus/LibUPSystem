@@ -37,5 +37,9 @@
     "points_blouclier0": [2, 1],
     "points_blouclier1": [3, 2],
     "points_blouclier2": [4, 3],
-    "points_blouclier3": [5, 4]
+    "points_blouclier3": [5, 4],
+    "ajustement0": [1, 0.5, 0.33, 0.25, 0.4],
+    "ajustement1": [2, 1, 0.5, 0.33, 0.25],
+    "ajustement2": [3, 2, 1, 0.5, 0.33],
+    "ajustement3": [4, 3, 2, 1, 0.5]
 }

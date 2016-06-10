@@ -1,10 +1,9 @@
 package org.duckdns.spacedock.libupsystem;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Random;
 
-final class UPSystem
+final class RollGenerator
 {
 
     private static final String errorMessage = "erreur d'accès au fichier de propriétés des textes d'exceptions";

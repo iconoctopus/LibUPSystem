@@ -2,37 +2,58 @@
 package org.duckdns.spacedock.libupsystem;
 //TODO gérer mort dont mort automatique
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 
+//TODO PARTOUT PARTOUT PARTOUT tester les cas limites des métohdes...
 public class Perso
 {
 
-    protected int NDPassif;
-    protected int[] actions;
-    protected String libellePerso;
-    protected BiValue jaugeSante;//x est la taille de la jauge ; y le point choc
-    protected boolean inconscient;
-    protected boolean sonne;
-    protected int blessuresGraves;
-    protected int blessuresLegeres;
-    public Arme arme;//TODO wtf? pqoi public?
-    protected int actionCourante;
-    protected int physique;
-    protected int volonte;
-    protected int coordination;
-    protected int initiative;
-    public Armure armure;//TODO wtf? pqoi public?
+    private ArrayList<Integer> actions;
+    private int actionCourante;
+    private String libellePerso;
+    private CoupleJauge m_jaugeSanteInit;
 
-    public Perso()
+    private Arme arme;
+    private int[] m_traits;
+    private Armure armure;
+
+    private int RM;
+    private int domaineCombat;//là pour compiler, à revoir
+    private Competence compCombat;//là pour compiler, à revoir
+
+    /**
+     * constructeur produisant des PNJ générés par rang de menace (RM)
+     *
+     * @param p_RM
+     */
+    public Perso(int p_RM)//TODO créer un autre constructeur prenant en paramétre un tableau de traits et de domaines
     {
-	super();
-	blessuresGraves = 0;
-	blessuresLegeres = 0;
-	inconscient = false;
-	sonne = false;
+	RM = p_RM;
+	m_traits = new int[5];
+	m_traits[0] = p_RM;
+	m_traits[1] = p_RM;//TODO tester génération avec RM1, voir si erreurs dans Reference,
+	m_traits[2] = p_RM - 1;
+	m_traits[3] = p_RM - 1;
+	m_traits[4] = p_RM - 1;
+
+	compCombat = new Competence(p_RM, false);
+	domaineCombat = p_RM;
+	UPReference reference = UPReference.getInstance();
+
+	m_jaugeSanteInit = new CoupleJauge(m_traits[0], m_traits[2], m_traits[3], m_traits[1]);
+
+	libellePerso = "PersoRM" + RM;
+	//TODO ajouter un constructeur permettant de spécifier ces choses là
+	arme = new Arme(2, 3, 0, 0);//2g3 sans bonus ancienne par défaut pour la plupart des PNJ
+	armure = new Armure(0, 0);//rien par défaut pour la plupart des PNJ
+
+	genInit();
+
     }
 
-    public String getLibellePerso()
+    @Override
+    public String toString()
     {
 	return libellePerso;
     }
@@ -62,56 +83,55 @@ public class Perso
 	this.armure = armure;
     }
 
-    public BiValue getJaugeSante()
-    {
-	return jaugeSante;
-    }
-
     public boolean isInconscient()
     {
-	return inconscient;
+	return m_jaugeSanteInit.isInconscient();
     }
 
-    public boolean isSonne()
+    public boolean isSonne()//TODO : doit maintenant vérifier LES DEUX jauges
     {
-	return sonne;
+	return m_jaugeSanteInit.isSonne();
     }
 
-    //TODO plutôt renvoyer un "état de santé" via objet dédié [jauge] depuis classe interne que d'avoir ces vilains get/set on pourrait d'ailleurs utiliser cette jauge ailleurs là où les blssures sont directement appelées
     public int getBlessuresGraves()
     {
-	return blessuresGraves;
+	return m_jaugeSanteInit.getRemplissage_interne();
     }
 
     public int getBlessuresLegeres()
     {
-	return blessuresLegeres;
+	return m_jaugeSanteInit.getBlessuresLegeres();
     }
 
-    public boolean isActif(int phaseActuelle)//renvoie vrai si le personnage a une action dans la phase active
-    {//TODO gérer la possibilité que les p
-	return ((actions.length - actionCourante) > 0 && phaseActuelle == actions[actionCourante]);
+    public boolean isActif(int phaseActuelle)//renvoie vrai si le personnage a une action dans la phase active comportement indéfini si demande pour pĥase ultérieure ou antérieure
+    {
+
+	return ((actions.size() - actionCourante) > 0 && phaseActuelle == actions.get(actionCourante));
+    }
+
+    public int getInitTotale()
+    {
+	//TODO implémenter
+	return 0;
     }
 
     public final void genInit()
     {//TODO mieux trier le tableau, couteux en l'état
+
+	int initiative = m_jaugeSanteInit.getRemplissage_externe();
 	actionCourante = 0;
-	int[] tabResult;
+	ArrayList<Integer> tabResult = new ArrayList<>();
 	if(initiative > 0)
 	{
-	    tabResult = new int[initiative];
 
 	    for(int i = 0; i < initiative; i++)
 	    {
-		tabResult[i] = UPSystem.lancer(1, 1, true);
+		tabResult.set(i, RollGenerator.lancer(1, 1, true));
 	    }
-	    tabResult[0] -= arme.getBonusInit();//TODO virer ces notions de bonus à l'init: on utilisera l'init totale maintenant
+
 	}
-	else
-	{
-	    tabResult = new int[0];
-	}
-	Arrays.sort(tabResult);
+
+	Collections.sort(tabResult);
 	actions = tabResult;
     }
 
@@ -121,71 +141,60 @@ public class Perso
     {//TODO intégrer notion arme actuelle pour gérer les bonus malus aussi modifier les arguments : ce devrait être à partir de la classe pas de l'extérieur
 	//TODO la phase actuelle devrait générer une exception pour prévenir plus haut que l'action n'est pas possible, pas gober l'erreur silencieusement en renvoyant faux
 	RollResult result = new RollResult(0, false);
-	if((actions.length - actionCourante) > 0 && phaseActuelle == actions[actionCourante])
+	if((actions.size() - actionCourante) > 0 && phaseActuelle == actions.get(actionCourante))
 	{
-	    actions[actionCourante] = 11;
+	    actions.set(actionCourante, 11);
 	    actionCourante++;
-	    result = UPSystem.lancerCompetence(domaineCourant, compCourante, traitCourant, nonRelanceDix, ND);
+	    result = RollGenerator.lancerCompetence(domaineCourant, compCourante, traitCourant, nonRelanceDix, ND);
 	}
 	return result;
     }
 
-    public RollResult etreAttaque(int score, int typeArme)//par défaut on n'utilise que la défense passive et on laisse passer si celle-ci est dépassée, overidable pour les casses héritières
-    {
-	BiValue armureEffective = getArmureEffective(typeArme);
-	int AugND = (int) armureEffective.getX();
-	return UPSystem.extraireIncrements(score, NDPassif + AugND);
+    public int getNDPassif()
+    {//TODO mieux gérer les armures en s'inspirant de ci-dessous
+	//BiValue armureEffective = getArmureEffective(typeArme);
+	//int AugND = (int) armureEffective.getX();
+	int rang = compCombat.getRang();
+	int ND = rang * 5 + 5;
+	if(rang >= 3)
+	{
+	    ND += 5;
+	}
+
+	return ND;
     }
 
-    private BiValue getArmureEffective(int TypeArme)
+//TODO : ci-dessous commenté pour que ça compile mais à régler rapidement
+    /* private BiValue getArmureEffective(int TypeArme)
     {
-	double quotientArmure = (UPreference.getPointsArmureEffectifs(TypeArme, armure.getType()));
+	double quotientArmure = (UPReference.getPointsArmureEffectifs(TypeArme, armure.getType()));
 	int pointsArmureEffectifs = (int) ((double) (quotientArmure) * (double) (armure.getPoints()));
-	return UPreference.getEffetsArmure(pointsArmureEffectifs);
-    }
+	return UPReference.getEffetsArmure(pointsArmureEffectifs);
+    }*/
     //TODO : vérifier que la vieile règle des malus de blessure n'est pas appliquée
-
     public void etreBlesse(int degats, int typeArme)//TODO cela ne devrait pas marcher comme cela, il faudrait un objet de type degats incorporant le type d'arme
     {
 	/*BiValue armureEffective = getArmureEffective(typeArme);
 		 int redDegats = (int)armureEffective.getY();*/
 	int degatsEffectifs = degats/*-redDegats*/;//TODO le code des armures étant suspects il est pour l'instant commenté avant vérification
+
 	if(degatsEffectifs > 0)
 	{
-	    double quotient;
-	    int blessGraves;
-	    int resultTest = UPSystem.lancer(physique, physique, false);
-	    blessuresLegeres += degatsEffectifs;
-	    if(resultTest < blessuresLegeres)
-	    {
-		quotient = ((double) (blessuresLegeres) - (double) (resultTest));//TODO remplacer ce calcul par un modulo ou autre, en tout cas quelque chose de plus propre
-		quotient = quotient / 10.0;
-		blessGraves = (int) quotient + 1;
-		blessuresLegeres = 0;
-		blessuresGraves += blessGraves;
-		if(blessuresGraves >= jaugeSante.getY())
-		{
-		    sonne = true;
-		    if(blessuresGraves > jaugeSante.getY())
-		    {
-			if(initiative > 0)
-			{
-			    initiative--;//TODO: à terme prendre garde à la régénération de cette valeur avec le système de soin
-			}
-			if(blessuresGraves >= jaugeSante.getX() || UPSystem.lancer(volonte, volonte, sonne) < (5 * blessuresGraves))
-			{
-			    inconscient = true;
-			}
-		    }
-		}
-	    }
+	    int resultTest = RollGenerator.lancer(m_traits[0], m_traits[0], false);
 	}
 
     }
 
     public int genererDegats(int increments)
     {
-	return (UPSystem.lancer(arme.getDesLances() + increments + physique, arme.getDesGardes(), sonne));
+	return (RollGenerator.lancer(arme.getDesLances() + increments + m_traits[0], arme.getDesGardes(), m_jaugeSanteInit.isSonne()));
+    }
+
+    //TODO complètement revoir cette méthode pour qu'elle génère directement les dégâts
+    //TODO probablement la rappatrier dans la superclasse, erichissant au passage la méthode appelée
+    public RollResult attaquer(int phaseActuelle, int ND)
+    {
+	return agirEnCombat(phaseActuelle, ND, m_jaugeSanteInit.isSonne(), m_traits[1], domaineCombat, compCombat);
     }
 
     /*ATTENTION : ces methodes sont à revoir complètement (et peut être même ne doivent pas exister et leur code être réparti ailleurs)
@@ -197,7 +206,7 @@ public class Perso
 	{
 	    actions[actionCourante] = 11;
 	    actionCourante++;
-	    result = UPSystem.lancer(((int) attaque.getX()) - malus, (int) attaque.getY(), estSonne);
+	    result = RollGenerator.lancer(((int) attaque.getX()) - malus, (int) attaque.getY(), estSonne);
 	}
 	return result;
 
@@ -212,7 +221,7 @@ public class Perso
 	    actionCourante++;
 	    actions[actionCourante] = 11;
 	    actionCourante++;
-	    result = UPSystem.lancer(((int) defense.getX()) - malus, (int) defense.getY(), estSonne);
+	    result = RollGenerator.lancer(((int) defense.getX()) - malus, (int) defense.getY(), estSonne);
 	}
 	return result;
     }

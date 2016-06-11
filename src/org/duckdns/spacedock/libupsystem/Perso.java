@@ -137,10 +137,10 @@ public class Perso
 
     //TODO il vaudrait mieux que l'on compose cet obet avec des objets "attaques" qui utiliseraient directement cette méthode devenue cachée, elle appellerait diretement generer degats au passage
     //TODO d'ailleurs ca permettrait d'ajouter l'attaque de base à mains nues
-    public RollResult agirEnCombat(int phaseActuelle, int ND, boolean nonRelanceDix, int traitCourant, int domaineCourant, Competence compCourante)
+    public RollGenerator.RollResult agirEnCombat(int phaseActuelle, int ND, boolean nonRelanceDix, int traitCourant, int domaineCourant, Competence compCourante)
     {//TODO intégrer notion arme actuelle pour gérer les bonus malus aussi modifier les arguments : ce devrait être à partir de la classe pas de l'extérieur
 	//TODO la phase actuelle devrait générer une exception pour prévenir plus haut que l'action n'est pas possible, pas gober l'erreur silencieusement en renvoyant faux
-	RollResult result = new RollResult(0, false);
+	RollGenerator.RollResult result = new RollGenerator.RollResult(0, false);
 	if((actions.size() - actionCourante) > 0 && phaseActuelle == actions.get(actionCourante))
 	{
 	    actions.set(actionCourante, 11);
@@ -192,7 +192,7 @@ public class Perso
 
     //TODO complètement revoir cette méthode pour qu'elle génère directement les dégâts
     //TODO probablement la rappatrier dans la superclasse, erichissant au passage la méthode appelée
-    public RollResult attaquer(int phaseActuelle, int ND)
+    public RollGenerator.RollResult attaquer(int phaseActuelle, int ND)
     {
 	return agirEnCombat(phaseActuelle, ND, m_jaugeSanteInit.isSonne(), m_traits[1], domaineCombat, compCombat);
     }

@@ -1,5 +1,6 @@
 package org.duckdns.spacedock.libupsystem;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,6 +14,16 @@ import java.util.Properties;
  */
 final class PropertiesHandler
 {
+
+    /**
+     * message d'erreur par défaut pour les paramétres inférieurs à 0
+     */
+    private final static String m_propertiesErrorMessage = "erreur d'accès à un fichier de propriétés";
+
+    /**
+     * si les propriétés des exceptions ont pu être récupérées
+     */
+    private boolean m_exceptionsRecovered;
 
     /**
      * instance statique unique
@@ -32,7 +43,7 @@ final class PropertiesHandler
      * @throws FileNotFoundException
      * @throws IOException
      */
-    static PropertiesHandler getInstance() throws IOException
+    static PropertiesHandler getInstance()
     {
 	if(m_instance == null)
 	{
@@ -51,7 +62,7 @@ final class PropertiesHandler
      * @throws FileNotFoundException
      * @throws IOException
      */
-    private PropertiesHandler() throws IOException
+    private PropertiesHandler()
     {
 	m_exceptionProperties = new Properties();
 
@@ -60,9 +71,21 @@ final class PropertiesHandler
 	 *On utilise le classloader du thread afin d'être davantage sur qu'il explorera tout le classpath, contrairement au classloader
 	 *de la classe (utilisé dans le bout de code commenté ci-dessus). J'ignore si cela marche bien avec les threads android.
 	 */
-	InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("strings/exceptions.properties");
-	m_exceptionProperties.load(in);
-	in.close();
+	InputStream in;
+
+	try
+	{
+
+	    in = Thread.currentThread().getContextClassLoader().getResourceAsStream("strings/exceptions.properties");
+	    m_exceptionProperties.load(in);
+	    in.close();
+	    m_exceptionsRecovered = true;
+	}
+	catch(IOException e)
+	{
+	    m_exceptionsRecovered = false;
+	}
+
     }
 
     /**
@@ -72,6 +95,15 @@ final class PropertiesHandler
      */
     String getErrorMessage(String p_property)
     {
-	return (m_exceptionProperties.getProperty(p_property));
+	String result;
+	if(m_exceptionsRecovered)
+	{
+	    result = m_exceptionProperties.getProperty(p_property);
+	}
+	else
+	{
+	    result = m_propertiesErrorMessage;
+	}
+	return result;
     }
 }

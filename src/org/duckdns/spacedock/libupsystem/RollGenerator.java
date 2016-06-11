@@ -6,8 +6,6 @@ import java.util.Random;
 final class RollGenerator
 {
 
-    private static final String errorMessage = "erreur d'accès au fichier de propriétés des textes d'exceptions";
-
     static RollResult lancerCompetence(int domaine, Competence comp, int trait, boolean non_relance_dix, int ND)
     {
 	return extraireIncrements(effectuerJetComp(domaine, comp.getRang(), trait, non_relance_dix, comp.isSpecialiste()), ND);
@@ -34,9 +32,10 @@ final class RollGenerator
     //todo passer objet domaine avec identificateur de comp plutôt
     private static int effectuerJetComp(int domaine, int comp, int trait, boolean estSonne, boolean specialite)
     {
+	int result = 0;
 	if(domaine > 0 && comp >= 0 && trait >= 0)
 	{
-	    int bonus = 0, lances = domaine + comp, result;
+	    int bonus = 0, lances = domaine + comp;
 	    if(trait > 0)
 	    {
 		if(specialite)
@@ -49,30 +48,21 @@ final class RollGenerator
 		}
 		result = lancer(lances, trait, estSonne);
 	    }
-	    else
-	    {
-		result = 0;
-	    }
+
 	    result = result + bonus;
-	    return (result);
+
 	}
 	else
 	{
 	    String message = "";
-	    try
-	    {
-		message = message.concat(PropertiesHandler.getInstance().getErrorMessage("domaine_inf_0"));
-		message = message.concat("Trait=" + trait);
-		message = message.concat(", Dom=" + domaine);
-		message = message.concat(", Comp=" + comp);
-	    }
 
-	    catch(IOException e)
-	    {
-		message = message.concat(errorMessage);
-	    }
-	    throw new IllegalArgumentException(message);
+	    message = message.concat("Trait=" + trait);
+	    message = message.concat(", Dom=" + domaine);
+	    message = message.concat(", Comp=" + comp);
+	    ErrorHandler.paramAberrant(message);
+
 	}
+	return (result);
     }
 
     static int lancer(int nbLances, int nbGardes, boolean non_relance_dix)
@@ -122,23 +112,40 @@ final class RollGenerator
 	    {
 		total = 0;
 	    }
-	    return total;
+
 	}
 	else
 	{
 	    String message = "";
-	    try
-	    {
-		message = message.concat(PropertiesHandler.getInstance().getErrorMessage("nbdes_inf_0"));
-		message = message.concat("Lancés=" + nbLances);
-		message = message.concat(", Gardés=" + nbGardes);
-	    }
 
-	    catch(IOException e)
-	    {
-		message = message.concat(errorMessage);
-	    }
-	    throw new IllegalArgumentException(message);
+	    message = message.concat("Lancés=" + nbLances);
+	    message = message.concat(", Gardés=" + nbGardes);
+	    ErrorHandler.paramAberrant(message);
+	}
+	return total;
+    }
+
+    public static class RollResult
+    {
+
+	private final int nbIncrements;
+
+	public int getNbIncrements()
+	{
+	    return nbIncrements;
+	}
+
+	public boolean isJetReussi()
+	{
+	    return jetReussi;
+	}
+	private boolean jetReussi;
+
+	public RollResult(int increments, boolean reussite)
+	{
+	    super();
+	    this.nbIncrements = increments;
+	    this.jetReussi = reussite;
 	}
     }
 }

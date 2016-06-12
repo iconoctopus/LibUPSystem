@@ -1,19 +1,25 @@
-package org.duckdns.spacedock.libupsystem;
+package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
-//TODO blinder dans toutes les méthodes de toutes les classes.....
 
 /**
- * Classe permetant l'accès aux éléments de référence du UP!System
+ * Classe permetant l'accès aux éléments de référence du UP!System Pour des
+ * raisons de simplicité il a été décidé d'utiliser plusieurs tableaux plutôt
+ * que des tableaux de tableaux (notamment pour les armures) il pourrait être
+ * remédié à cela
  *
  * @author iconoctopus
  */
 public final class UPReference
 {
+    //TODO : tableau de tableaux en JSON pour les armures plutôt que le système simpliste actuel utilisant plusieurs variables (une par ligne) faire ça avant de s'occuper d'implémenter la classe armure
+    //TODO : voir si des libellés pourraient être intégré dans des tableaux sous la forme d'objets, Les armes fonctionnent déjà sur ce modèle contrairement aux listes séparées libellés/effets actuelles des autres éléments (on pourrait notamment fusionner les tables "domaine" et "comps_domaine" ensemble puis avec les libellés des comps
+    //TODO : ajouter la gastion des libellés pour l'équipement (rien pour les armures actuellement, seuls les libellés des armes sont intégrés côté armement)
 
     /**
      * instance unique de cet pbjet
@@ -70,11 +76,31 @@ public final class UPReference
      * table des libellés des traits
      */
     private final JsonArray m_tableTraits;
-
     /**
      * table des autres libellés
      */
     public final CollectionLibelles libelles;
+    /**
+     * préfixe des libellés des compétences d'attaque
+     */
+    private final String m_lblCompAttaque;
+    /**
+     * préfixe des libellés des compétences de parade
+     */
+    private final String m_lblCompParade;
+    /**
+     * préfixe des libellés des compétences d'arts et métiers
+     */
+    private final String m_lblCompMetier;
+    /**
+     * tableau contenant tous les domaines et leurs compétences non free form,
+     */
+    final ArrayList<Domaine> m_arbreDomaines;
+    /**
+     * tableau contenant toutes les armes existant en jeu, accessible uniquement
+     * en lecture
+     */
+    final ArrayList<Arme> m_tableArmes;
 
     /**
      * pseudo constructeur statique renvoyant l'instance unique et la
@@ -100,7 +126,7 @@ public final class UPReference
 	JsonObject object;
 
 	//chargement des règles d'armure
-	object = loadJsonFile("JSON/equipement/armures/caracs_armures.json");
+	object = loadJsonFile("JSON/equipement/caracs_armures.json");
 	m_tableArmureBonusND = object.getJsonArray("bonusND");
 	m_tableArmureRedDegats = object.getJsonArray("red_degats");
 	m_tableArmureRangs = object.getJsonArray("rangs");
@@ -114,13 +140,44 @@ public final class UPReference
 	m_tableInitCoord = object.getJsonArray("coordination");
 	m_tableInitMental = object.getJsonArray("mental");
 
-	//chargement des libellés des caractéristiques
+	//chargement des libellés des caractéristiques particulières
 	object = loadJsonFile("JSON/tables_systeme/tab_caracs.json");
 	m_tableTraits = object.getJsonArray("traits");
+	m_lblCompAttaque = object.getString("lbl_attaque");
+	m_lblCompParade = object.getString("lbl_parade");
+	m_lblCompMetier = object.getString("lbl_metier");
+
+	//chargement de l'arbre des domaines et competences
+	JsonArray arbreBrut = object.getJsonArray("arbres_domaines");
+
+	m_arbreDomaines = new ArrayList<>();
+
+	for(int i = 0; i < arbreBrut.size(); ++i)
+	{
+	    JsonObject row = arbreBrut.getJsonObject(i);
+	    String nomDomaineCourant = row.getString("lbl");
+	    JsonArray competencesBrutes = row.getJsonArray("comps");
+	    ArrayList<Competence> newCompetences = new ArrayList<>();
+
+	    for(int j = 0; j < competencesBrutes.size(); ++j)
+	    {
+		String nomCompCourante = competencesBrutes.getString(j);
+		Competence addedComp = new Competence(0, nomCompCourante);
+		newCompetences.add(addedComp);
+	    }
+
+	    Domaine newDomaine = new Domaine(nomDomaineCourant, 0, newCompetences);
+
+	    m_arbreDomaines.add(newDomaine);
+	}
 
 	//chargement des autres libellés
 	object = loadJsonFile("JSON/tables_systeme/tab_libelles.json");
 	libelles = new CollectionLibelles(object);
+
+	//chargement de la liste des armes
+	object = loadJsonFile("JSON/equipement/caracs_armes.json");
+
     }
 
     /**
@@ -143,7 +200,7 @@ public final class UPReference
     int getInitModCoord(int p_coordination)
     {
 	int res = 0;
-	if(p_coordination > 0)
+	if(p_coordination > 0 && p_coordination < 8)
 	{
 	    //le tableau est indexé à partir de 0, pas la coordination
 	    return m_tableInitCoord.getInt(p_coordination - 1);
@@ -152,9 +209,7 @@ public final class UPReference
 	{
 	    if(p_coordination < 0)
 	    {
-
-		ErrorHandler.paramAberrant(libelles.trait + p_coordination);
-
+		ErrorHandler.paramAberrant(libelles.trait + ":" + p_coordination);
 	    }
 	}
 	return res;
@@ -169,7 +224,7 @@ public final class UPReference
     {
 	int res = 0;
 
-	if(p_mental > 0)
+	if(p_mental > 0 && p_mental < 8)
 	{
 	    //le tableau est indexé à partir de 0, pas le mental
 	    return m_tableInitMental.getInt(p_mental - 1);
@@ -178,9 +233,7 @@ public final class UPReference
 	{
 	    if(p_mental < 0)
 	    {
-
-		ErrorHandler.paramAberrant(libelles.trait + p_mental);
-
+		ErrorHandler.paramAberrant(libelles.trait + ":" + p_mental);
 	    }
 	}
 	return res;
@@ -196,8 +249,8 @@ public final class UPReference
 	int res = 0;
 	if(p_points >= 0)
 	{
-	    int i = -1;//on commence avec i en dehors du tableau (0 points d'armure, pas de bonus) et l'on teste si on peut l'augmenter, quand on ne peut plus l'augmenter on le renvoie. A noter que cela blinde du même coup la fonction contre les chiffres négatifs sans erreur (ce qui est préférable ici)
-	    while(p_points > m_tableArmureRangs.getInt(i + 1))
+	    int i = -1;//on commence avec i en dehors du tableau (0 points d'armure, pas de bonus) et l'on teste si on peut l'augmenter, quand on ne peut plus l'augmenter on le renvoie.
+	    while(i <= 4 && p_points >= m_tableArmureRangs.getInt(i + 1))
 	    {
 		++i;
 	    }
@@ -205,7 +258,7 @@ public final class UPReference
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant(libelles.ptsarmure + p_points);
+	    ErrorHandler.paramAberrant(libelles.ptsarmure + ":" + p_points);
 	}
 	return (res);
     }
@@ -230,11 +283,10 @@ public final class UPReference
 	{
 	    if(p_points < 0)
 	    {
-		ErrorHandler.paramAberrant(libelles.ptsarmure + p_points);
+		ErrorHandler.paramAberrant(libelles.ptsarmure + ":" + p_points);
 	    }
 	}
 	return resultat;
-
     }
 
     /**
@@ -257,11 +309,10 @@ public final class UPReference
 	{
 	    if(p_points < 0)
 	    {
-		ErrorHandler.paramAberrant(libelles.ptsarmure + p_points);
+		ErrorHandler.paramAberrant(libelles.ptsarmure + ":" + p_points);
 	    }
 	}
 	return resultat;
-
     }
 
     /**
@@ -271,7 +322,7 @@ public final class UPReference
      * @return les points d'armure à effectivement utiliser face à un type
      * d'arme donné en fonction du type d'armure
      */
-    double getPointsArmureEffectifs(int p_typeArme, int p_typeArmure)
+    double getCoeffArmeArmure(int p_typeArme, int p_typeArmure)
     {
 	double resultat = 0;
 	if(p_typeArme >= 0 && p_typeArmure >= 0)
@@ -290,27 +341,48 @@ public final class UPReference
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant(libelles.typarm + p_typeArme + libelles.typarmure + p_typeArmure);
+	    ErrorHandler.paramAberrant(libelles.typarm + ":" + p_typeArme + " " + libelles.typarmure + ":" + p_typeArmure);
 	}
-
 	return resultat;
     }
 
     /**
      *
      * @param p_indice l'indice du trait tel que défini dan le fichier JSON
-     * @return le libelle du trait indicé tel
+     * @return le libelle du trait indicé
      */
     public String getLibelleTrait(int p_indice)
     {
 	String res = "";
-	if(p_indice >= 0)
+	if(p_indice >= 0 && p_indice <= 4)
 	{
 	    res = m_tableTraits.getString(p_indice);
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant("indice=" + p_indice);
+	    ErrorHandler.paramAberrant("indice:" + p_indice);
+	}
+	return res;
+    }
+
+    /**
+     *
+     * @param p_indice l'indice de la comp tel que définie dans le fichier JSON
+     * @return le libelle de la comp identifiée
+     */
+    public String getLibelleCompFreeFrom(IdCompsFreeFrom p_identifiant)
+    {
+	String res = "";
+
+	switch(p_identifiant)
+	{
+	    case attaque: res = m_lblCompAttaque;
+		break;
+	    case metier: res = m_lblCompMetier;
+		break;
+	    case parade: res = m_lblCompParade;
+		break;
+	    default: ErrorHandler.paramAberrant("indice:" + p_identifiant);
 	}
 
 	return res;
@@ -346,4 +418,9 @@ public final class UPReference
 	    }
 	}
     }
+
+    public enum IdCompsFreeFrom
+    {
+	attaque, parade, metier
+    };
 }

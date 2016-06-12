@@ -1,11 +1,14 @@
 //TODO: les getters/setters sont encore de mauvaise qualité et nécessitent plus de sécurité
-package org.duckdns.spacedock.libupsystem;
+package org.duckdns.spacedock.upengine.libupsystem;
 //TODO gérer mort dont mort automatique
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-//TODO PARTOUT PARTOUT PARTOUT tester les cas limites des métohdes...
+//TODO PARTOUT PARTOUT PARTOUT tester les cas limites des métohdes dans des classes de tests ad hoc (chaque classe doit en avoir une : il y a au moins un constructeur à blinder et dont il faut tester le blindage)
+//TODO ajouter malus attaque
+//TODO ajouter physique minimum
+//TODO gérer l'equive : pour l'instant on ne gère dans la liste des défenses que des références aux comps du domaine corps à corps (donc des parades....) il faut ajouter n traitement spécial (genre une comparaison regardant si esquive vaut mieux)
 public class Perso
 {
 
@@ -41,7 +44,7 @@ public class Perso
 	domaineCombat = p_RM;
 	UPReference reference = UPReference.getInstance();
 
-	m_jaugeSanteInit = new CoupleJauge(m_traits[0], m_traits[2], m_traits[3], m_traits[1]);
+	m_jaugeSanteInit = new CoupleJauge(m_traits[0], m_traits[3], m_traits[2], m_traits[1]);
 
 	libellePerso = "PersoRM" + RM;
 	//TODO ajouter un constructeur permettant de spécifier ces choses là
@@ -145,7 +148,7 @@ public class Perso
 	{
 	    actions.set(actionCourante, 11);
 	    actionCourante++;
-	    result = RollGenerator.lancerCompetence(domaineCourant, compCourante, traitCourant, nonRelanceDix, ND);
+	    result = RollGenerator.jetDeCompetence(domaineCourant, compCourante, traitCourant, nonRelanceDix, ND);
 	}
 	return result;
     }
@@ -167,7 +170,7 @@ public class Perso
 //TODO : ci-dessous commenté pour que ça compile mais à régler rapidement
     /* private BiValue getArmureEffective(int TypeArme)
     {
-	double quotientArmure = (UPReference.getPointsArmureEffectifs(TypeArme, armure.getType()));
+	double quotientArmure = (UPReference.getCoeffArmeArmure(TypeArme, armure.getType()));
 	int pointsArmureEffectifs = (int) ((double) (quotientArmure) * (double) (armure.getPoints()));
 	return UPReference.getEffetsArmure(pointsArmureEffectifs);
     }*/
@@ -185,13 +188,12 @@ public class Perso
 
     }
 
+    //méthode séparée pour être appelée par le contrôleur qui pourrait bien utiliser les incréments pour autre chose genre cibler
     public int genererDegats(int increments)
     {
 	return (RollGenerator.lancer(arme.getDesLances() + increments + m_traits[0], arme.getDesGardes(), m_jaugeSanteInit.isSonne()));
     }
 
-    //TODO complètement revoir cette méthode pour qu'elle génère directement les dégâts
-    //TODO probablement la rappatrier dans la superclasse, erichissant au passage la méthode appelée
     public RollGenerator.RollResult attaquer(int phaseActuelle, int ND)
     {
 	return agirEnCombat(phaseActuelle, ND, m_jaugeSanteInit.isSonne(), m_traits[1], domaineCombat, compCombat);

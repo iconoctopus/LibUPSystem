@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.duckdns.spacedock.libupsystem;
+package org.duckdns.spacedock.upengine.libupsystem;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -12,6 +12,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+//TODO : ajouter le test sur l'import des armes et donc la création de celles-ci au passage
+//TODO : idem pour les tests sur les comp et les domaines
 /**
  *
  * @author iconoctopus

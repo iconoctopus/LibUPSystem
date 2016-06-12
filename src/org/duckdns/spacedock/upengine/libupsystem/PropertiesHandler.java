@@ -1,4 +1,4 @@
-package org.duckdns.spacedock.libupsystem;
+package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;

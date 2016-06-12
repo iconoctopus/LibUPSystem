@@ -1,4 +1,4 @@
-package org.duckdns.spacedock.libupsystem;
+package org.duckdns.spacedock.upengine.libupsystem;
 
 public class Armure
 {//TODO : reecriture : l'armure sera composée de pièces avec des points et d'éventuels malus; tester pour vérifier que les maxima de chaque pièce sont respectés

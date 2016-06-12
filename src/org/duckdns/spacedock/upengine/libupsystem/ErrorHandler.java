@@ -3,17 +3,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.duckdns.spacedock.libupsystem;
+package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.io.IOException;
 
 /**
+ * Classe de sucre syntactique pour centraliser le message d'erreur sur
+ * paramétre envoyé par toutes les méthodes de toutes les classes y étant
+ * confrontées
  *
  * @author iconoctopus
  */
 public class ErrorHandler
 {
 
+    /**
+     * envoyer une exception IllegalArgumentException avec un message d'erreur
+     * standardisé et un complément de texte
+     *
+     * @param p_complementTexte
+     */
     static void paramAberrant(String p_complementTexte)
     {
 	String message = "";

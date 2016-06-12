@@ -1,5 +1,5 @@
 {
-    "rangs": [5, 10, 15, 20, 25, 30],
+    "rangs": [1, 6, 11, 16, 21, 26],
     "red_degats": [0, 5, 5, 10, 10, 15],
     "bonusND": [5, 5, 10, 10, 15, 15],
     "points0": [3, 2, 2, 1],
@@ -38,8 +38,13 @@
     "points_blouclier1": [3, 2],
     "points_blouclier2": [4, 3],
     "points_blouclier3": [5, 4],
-    "ajustement0": [1, 0.5, 0.33, 0.25, 0.4],
+    "ajustement0": [1, 0.5, 0.33, 0.25, 0.2],
     "ajustement1": [2, 1, 0.5, 0.33, 0.25],
     "ajustement2": [3, 2, 1, 0.5, 0.33],
-    "ajustement3": [4, 3, 2, 1, 0.5]
+    "ajustement3": [4, 3, 2, 1, 0.5],
+    "types_armures": ["ancienne", "moderne", "blindage", "énergétique"],
+    "pieces_armures": ["heaume complet", "heaume ouvert", "masque", "gantelet", "brassière", "jambière", "botte", "cuirasse"],
+    "materiaux_armures": ["plates", "lamellaire ou maille", "cuir clouté", "cuir bouilli"],
+    "type_boucliers": ["targe", "bouclier", "écu", "pavois"],
+    "materiaux_boucliers": ["metal", "bois"]
 }

@@ -1,12 +1,11 @@
-package org.duckdns.spacedock.libupsystem;
+package org.duckdns.spacedock.upengine.libupsystem;
 
-import java.io.IOException;
 import java.util.Random;
 
 final class RollGenerator
 {
 
-    static RollResult lancerCompetence(int domaine, Competence comp, int trait, boolean non_relance_dix, int ND)
+    static RollResult jetDeCompetence(int domaine, Competence comp, int trait, boolean non_relance_dix, int ND)
     {
 	return extraireIncrements(effectuerJetComp(domaine, comp.getRang(), trait, non_relance_dix, comp.isSpecialiste()), ND);
     }

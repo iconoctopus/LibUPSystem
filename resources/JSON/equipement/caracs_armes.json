@@ -1,5 +1,5 @@
 {
-    "liste_armes": [{
+    "armes": [{
 	    "nom": "rapiere",
 	    "lance": 2,
 	    "garde": 3,

@@ -157,6 +157,8 @@ public class Perso
     {//TODO mieux gérer les armures en s'inspirant de ci-dessous
 	//BiValue armureEffective = getArmureEffective(typeArme);
 	//int AugND = (int) armureEffective.getX();
+
+	//TODO gérer le malus de parade et d'esquive infligé par l'armure
 	int rang = compCombat.getRang();
 	int ND = rang * 5 + 5;
 	if(rang >= 3)
@@ -175,7 +177,7 @@ public class Perso
 	return UPReference.getEffetsArmure(pointsArmureEffectifs);
     }*/
     //TODO : vérifier que la vieile règle des malus de blessure n'est pas appliquée
-    public void etreBlesse(int degats, int typeArme)//TODO cela ne devrait pas marcher comme cela, il faudrait un objet de type degats incorporant le type d'arme
+    public void etreBlesse(int degats, int typeArme)//TODO objet entrant de type degats incorporant degats et type
     {
 	/*BiValue armureEffective = getArmureEffective(typeArme);
 		 int redDegats = (int)armureEffective.getY();*/
@@ -190,7 +192,7 @@ public class Perso
 
     //méthode séparée pour être appelée par le contrôleur qui pourrait bien utiliser les incréments pour autre chose genre cibler
     public int genererDegats(int increments)
-    {
+    {//TODO retourner objet de type degats incorporant degats et type
 	return (RollGenerator.lancer(arme.getDesLances() + increments + m_traits[0], arme.getDesGardes(), m_jaugeSanteInit.isSonne()));
     }
 

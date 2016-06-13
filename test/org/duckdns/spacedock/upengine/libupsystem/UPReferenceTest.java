@@ -152,7 +152,7 @@ public final class UPReferenceTest
     }
 
     @Test
-    public void testGetLibelleTrait()
+    public void testGetLibelleTraitErreur()
     {
 	thrown.expect(IllegalArgumentException.class);
 	thrown.expectMessage("paramétre aberrant:indice:-1");

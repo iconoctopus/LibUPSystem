@@ -2,49 +2,70 @@
     "rangs": [1, 6, 11, 16, 21, 26],
     "red_degats": [0, 5, 5, 10, 10, 15],
     "bonusND": [5, 5, 10, 10, 15, 15],
-    "points0": [3, 2, 2, 1],
-    "points1": [2, 1, 1, 1],
-    "points2": [1, 1, 1, 0.5],
-    "points3": [2, 2, 1, 0.5],
-    "points4": [2, 2, 2, 1, 0.5],
-    "points5": [2, 1, 1, 0.5],
-    "points6": [1, 1, 1, 0.5],
-    "points7": [6, 4, 3, 2],
-    "nbmax0": 1,
-    "nbmax1": 1,
-    "nbmax2": 1,
-    "nbmax3": 2,
-    "nbmax4": 2,
-    "nbmax5": 2,
-    "nbmax6": 2,
-    "nbmax7": 1,
-    "malus_esquive0": [0, 0, 0, 0],
-    "malus_esquive1": [0, 0, 0, 0],
-    "malus_esquive2": [0, 0, 0, 0],
-    "malus_esquive3": [0, 0, 0, 0],
-    "malus_esquive4": [0, 0, 0, 0],
-    "malus_esquive5": [2, 2, 1, 0],
-    "malus_esquive6": [1, 1, 1, 0],
-    "malus_esquive7": [10, 5, 2, 1],
-    "malus_parade0": [0, 0, 0, 0],
-    "malus_parade1": [0, 0, 0, 0],
-    "malus_parade2": [0, 0, 0, 0],
-    "malus_parade3": [0, 0, 0, 0],
-    "malus_parade4": [4, 3, 2, 2],
-    "malus_parade5": [2, 2, 1, 0],
-    "malus_parade6": [1, 1, 1, 0],
-    "malus_parade7": [10, 5, 2, 1],
-    "points_blouclier0": [2, 1],
-    "points_blouclier1": [3, 2],
-    "points_blouclier2": [4, 3],
-    "points_blouclier3": [5, 4],
-    "ajustement0": [1, 0.5, 0.33, 0.25, 0.2],
-    "ajustement1": [2, 1, 0.5, 0.33, 0.25],
-    "ajustement2": [3, 2, 1, 0.5, 0.33],
-    "ajustement3": [4, 3, 2, 1, 0.5],
-    "types_armures": ["ancienne", "moderne", "blindage", "énergétique"],
-    "pieces_armures": ["heaume complet", "heaume ouvert", "masque", "gantelet", "brassière", "jambière", "botte", "cuirasse"],
+    "pieces": [{
+	    "lbl": "heaume complet",
+	    "points": [3, 2, 2, 1],
+	    "malus_esquive": [0, 0, 0, 0],
+	    "malus_parade": [0, 0, 0, 0],
+	    "nbmax": 1
+	}, {
+	    "lbl": "heaume ouvert",
+	    "points": [2, 1, 1, 1],
+	    "malus_esquive": [0, 0, 0, 0],
+	    "malus_parade": [0, 0, 0, 0],
+	    "nbmax": 1
+	}, {
+	    "lbl": "masque facial",
+	    "points": [1, 1, 1, 0.5],
+	    "malus_esquive": [0, 0, 0, 0],
+	    "malus_parade": [0, 0, 0, 0],
+	    "nbmax": 1
+	}, {
+	    "lbl": "gantelet",
+	    "points": [2, 2, 1, 0.5],
+	    "malus_esquive": [0, 0, 0, 0],
+	    "malus_parade": [0, 0, 0, 0],
+	    "nbmax": 2
+	}, {
+	    "lbl": "brassière",
+	    "points": [2, 2, 2, 1, 0.5],
+	    "malus_esquive": [0, 0, 0, 0],
+	    "malus_parade": [4, 3, 2, 2],
+	    "nbmax": 2
+	}, {
+	    "lbl": "jambière",
+	    "points": [2, 1, 1, 0.5],
+	    "malus_esquive": [2, 2, 1, 0],
+	    "malus_parade": [0, 0, 0, 0],
+	    "nbmax": 2
+	}, {
+	    "lbl": "botte",
+	    "points": [1, 1, 1, 0.5],
+	    "malus_esquive": [1, 1, 1, 0],
+	    "malus_parade": [0, 0, 0, 0],
+	    "nbmax": 2
+	}, {
+	    "lbl": "cuirasse",
+	    "points": [6, 4, 3, 2],
+	    "malus_esquive": [10, 5, 2, 1],
+	    "malus_parade": [0, 0, 0, 0],
+	    "nbmax": 1
+	}],
+    "bloucliers": [{
+	    "lbl": "targe",
+	    "points": [2, 1]
+	}, {
+	    "lbl": "bouclier",
+	    "points": [3, 2]
+	}, {
+	    "lbl": "écu",
+	    "points": [4, 3]
+	}, {
+	    "lbl": "pavois",
+	    "points": [5, 4]
+	}],
+    "ajustements": [[1, 0.5, 0.33, 0.25, 0.2], [2, 1, 0.5, 0.33, 0.25], [3, 2, 1, 0.5, 0.33], [4, 3, 2, 1, 0.5]],
     "materiaux_armures": ["plates", "lamellaire ou maille", "cuir clouté", "cuir bouilli"],
-    "type_boucliers": ["targe", "bouclier", "écu", "pavois"],
-    "materiaux_boucliers": ["metal", "bois"]
+    "materiaux_boucliers": ["metal", "bois"],
+    "types_armures": ["ancienne", "moderne", "blindage", "énergétique"]
 }

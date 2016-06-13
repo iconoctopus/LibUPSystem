@@ -17,9 +17,7 @@ import javax.json.JsonReader;
  */
 public final class UPReference
 {
-    //TODO : tableau de tableaux en JSON pour les armures plutôt que le système simpliste actuel utilisant plusieurs variables (une par ligne) faire ça avant de s'occuper d'implémenter la classe armure
-    //TODO : voir si des libellés pourraient être intégré dans des tableaux sous la forme d'objets, Les armes fonctionnent déjà sur ce modèle contrairement aux listes séparées libellés/effets actuelles des autres éléments (on pourrait notamment fusionner les tables "domaine" et "comps_domaine" ensemble puis avec les libellés des comps
-    //TODO : ajouter la gastion des libellés pour l'équipement (rien pour les armures actuellement, seuls les libellés des armes sont intégrés côté armement)
+//TODO : remplacer les for classiqus avec i++ qui itèrent sur les tableaux JSON par des itérateurs
 
     /**
      * instance unique de cet pbjet
@@ -41,27 +39,6 @@ public final class UPReference
      * points d'armure à atteindre
      */
     private final JsonArray m_tableArmureRangs;
-
-    /**
-     * table des effets des armes par type (indice) pour les armures de type 0
-     * (anciennes)
-     */
-    private final JsonArray m_tableArmureTyp0;
-    /**
-     * table des effets des armes par type (indice) pour les armures de type 1
-     * (modernes)
-     */
-    private final JsonArray m_tableArmureTyp1;
-    /**
-     * table des effets des armes par type (indice) pour les armures de type 2
-     * (blindage)
-     */
-    private final JsonArray m_tableArmureTyp2;
-    /**
-     * table des effets des armes par type (indice) pour les armures de type 3
-     * (énergétiques)
-     */
-    private final JsonArray m_tableArmureTyp3;
 
     /**
      * table des modificateurs à l'init issus de la coordination
@@ -95,12 +72,31 @@ public final class UPReference
     /**
      * tableau contenant tous les domaines et leurs compétences non free form,
      */
-    final ArrayList<Domaine> m_arbreDomaines;
+    final JsonArray m_arbreDomaines;
     /**
-     * tableau contenant toutes les armes existant en jeu, accessible uniquement
-     * en lecture
+     * tableau contenant toutes les armes existant en jeu
      */
-    final ArrayList<Arme> m_tableArmes;
+    final JsonArray m_tableArmes;
+
+    private final JsonArray m_tableAjustementArmure;
+
+    private final JsonArray m_listLblTypArm;
+
+    private final JsonArray m_listLblCatArm;
+
+    private final JsonArray m_listCatArmCaC;
+
+    private final JsonArray m_listCatArmDist;
+
+    private final JsonArray m_tabPiecesArmures;
+
+    private final JsonArray m_listLblMatArmures;
+
+    private final JsonArray m_listLblTypArmures;
+
+    private final JsonArray m_tabBoucliers;
+
+    private final JsonArray m_listLblMatBoucliers;
 
     /**
      * pseudo constructeur statique renvoyant l'instance unique et la
@@ -130,10 +126,12 @@ public final class UPReference
 	m_tableArmureBonusND = object.getJsonArray("bonusND");
 	m_tableArmureRedDegats = object.getJsonArray("red_degats");
 	m_tableArmureRangs = object.getJsonArray("rangs");
-	m_tableArmureTyp0 = object.getJsonArray("ajustement0");
-	m_tableArmureTyp1 = object.getJsonArray("ajustement1");
-	m_tableArmureTyp2 = object.getJsonArray("ajustement2");
-	m_tableArmureTyp3 = object.getJsonArray("ajustement3");
+	m_tableAjustementArmure = object.getJsonArray("ajustements");
+	m_tabPiecesArmures = object.getJsonArray("pieces");
+	m_listLblMatArmures = object.getJsonArray("materiaux_armures");
+	m_listLblTypArmures = object.getJsonArray("types_armures");
+	m_tabBoucliers = object.getJsonArray("boucliers");
+	m_listLblMatBoucliers = object.getJsonArray("materiaux_boucliers");
 
 	//chargement des règles de calcul de l'initiative
 	object = loadJsonFile("JSON/tables_systeme/tab_init.json");
@@ -148,52 +146,19 @@ public final class UPReference
 	m_lblCompMetier = object.getString("lbl_metier");
 
 	//chargement de l'arbre des domaines et competences
-	JsonArray arbreBrut = object.getJsonArray("arbre_domaines");
+	m_arbreDomaines = object.getJsonArray("arbre_domaines");
 
-	m_arbreDomaines = new ArrayList<>();
-
-	for(int i = 0; i < arbreBrut.size(); ++i)
-	{
-	    JsonObject row = arbreBrut.getJsonObject(i);
-	    String nomDomaineCourant = row.getString("lbl");
-	    JsonArray competencesBrutes = row.getJsonArray("comps");
-	    ArrayList<Competence> newCompetences = new ArrayList<>();
-
-	    for(int j = 0; j < competencesBrutes.size(); ++j)
-	    {
-		String nomCompCourante = competencesBrutes.getString(j);
-		Competence addedComp = new Competence(0, nomCompCourante);
-		newCompetences.add(addedComp);
-	    }
-
-	    Domaine newDomaine = new Domaine(nomDomaineCourant, 0, newCompetences);
-
-	    m_arbreDomaines.add(newDomaine);
-	}
-
-	//chargement des autres libellés
+	//chargement des libellés divers
 	object = loadJsonFile("JSON/tables_systeme/tab_libelles.json");
 	libelles = new CollectionLibelles(object);
 
-	//chargement de la liste des armes
+	//chargement ded règles des armes
 	object = loadJsonFile("JSON/equipement/caracs_armes.json");
-	JsonArray armesBrutes = object.getJsonArray("liste_armes");
-	m_tableArmes = new ArrayList<Arme>();
-	for(int i = 0; i < armesBrutes.size(); i++)
-	{
-	    JsonObject armeCourante = armesBrutes.getJsonObject(i);
-	    int lanceCourant = armeCourante.getInt("lance");
-	    int gardeCourant = armeCourante.getInt("garde");
-	    String nomCourant = armeCourante.getString("nom");
-	    int bonusInitCourant = armeCourante.getInt("bonus_init");
-	    int malusAttaqueCourant = armeCourante.getInt("malus_attaque");
-	    int phyMinCourant = armeCourante.getInt("physique_minimal");
-	    int categorieCourante = armeCourante.getInt("categorie");
-	    int typeCourant = armeCourante.getInt("type");
-
-	    Arme newArme = new Arme(lanceCourant, gardeCourant, bonusInitCourant, malusAttaqueCourant, phyMinCourant, categorieCourante, typeCourant, nomCourant);
-	    m_tableArmes.add(newArme);
-	}
+	m_tableArmes = object.getJsonArray("armes");
+	m_listLblTypArm = object.getJsonArray("types_armes");
+	m_listLblCatArm = object.getJsonArray("cat_armes");
+	m_listCatArmCaC = object.getJsonArray("cat_armes_cac");
+	m_listCatArmDist = object.getJsonArray("cat_armes_dist");
     }
 
     /**
@@ -343,17 +308,8 @@ public final class UPReference
 	double resultat = 0;
 	if(p_typeArme >= 0 && p_typeArmure >= 0)
 	{
-	    switch(p_typeArmure)
-	    {
-		case 1: resultat = m_tableArmureTyp1.getJsonNumber(p_typeArme).doubleValue();
-		    break;
-		case 2: resultat = m_tableArmureTyp2.getJsonNumber(p_typeArme).doubleValue();
-		    break;
-		case 3: resultat = m_tableArmureTyp3.getJsonNumber(p_typeArme).doubleValue();
-		    break;
-		default: resultat = m_tableArmureTyp0.getJsonNumber(p_typeArme).doubleValue();
-		    break;//par défaut on se place dans les armures anciennes
-	    }
+	    JsonArray tabPourType = m_tableAjustementArmure.getJsonArray(p_typeArmure);
+	    resultat = tabPourType.getJsonNumber(p_typeArme).doubleValue();
 	}
 	else
 	{
@@ -381,6 +337,35 @@ public final class UPReference
 	return res;
     }
 
+    /*
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    DEBUT DES AJOUTS
+
+
+
+
+
+
+
+
+
+
+
+
+     */
     /**
      *
      * @param p_indice l'indice de la comp tel que définie dans le fichier JSON
@@ -398,15 +383,364 @@ public final class UPReference
 		break;
 	    case parade: res = m_lblCompParade;
 		break;
-	    default: ErrorHandler.paramAberrant("indice:" + p_identifiant);
+	    default: ErrorHandler.paramAberrant("indice :" + p_identifiant);
 	}
 
 	return res;
     }
 
+    String getLblArme(int p_indice)
+    {
+	String res = "";
+	if(p_indice >= 0)
+	{
+
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("indice:" + p_indice);
+	}
+	return res;
+    }
+
+    int getNbLancesArme(int p_indice)
+    {
+	int res = 0;
+	if(p_indice >= 0)
+	{
+
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("indice:" + p_indice);
+	}
+	return res;
+    }
+
+    int getNbGardesArme(int p_indice)
+    {
+	int res = 0;
+	if(p_indice >= 0)
+	{
+
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("indice:" + p_indice);
+	}
+	return res;
+    }
+
+    int getNBonusInitArme(int p_indice)
+    {
+	int res = 0;
+	if(p_indice >= 0)
+	{
+
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("indice:" + p_indice);
+	}
+	return res;
+    }
+
+    int getMalusAttaqueArme(int p_indice)
+    {
+	int res = 0;
+	if(p_indice >= 0)
+	{
+
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("indice:" + p_indice);
+	}
+	return res;
+    }
+
+    int getPhysMinArme(int p_indice)
+    {
+	int res = 0;
+	if(p_indice >= 0)
+	{
+
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("indice:" + p_indice);
+	}
+	return res;
+    }
+
+    int getCategorieArme(int p_indice)
+    {
+	int res = 0;
+	if(p_indice >= 0)
+	{
+
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("indice:" + p_indice);
+	}
+	return res;
+    }
+
+    int getTypeArme(int p_indice)
+    {
+	int res = 0;
+	if(p_indice >= 0)
+	{
+
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("indice:" + p_indice);
+	}
+	return res;
+    }
+
+    String getLblTypeArme(int p_indice)
+    {
+	String res = "";
+	if(p_indice >= 0)
+	{
+
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("indice:" + p_indice);
+	}
+	return res;
+    }
+
+    String getLblCatArme(int p_indice)
+    {
+	String res = "";
+	if(p_indice >= 0)
+	{
+
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("indice:" + p_indice);
+	}
+	return res;
+    }
+
+    ArrayList<Integer> getCatArmCac()
+    {
+	ArrayList<Integer> res = new ArrayList<>();
+
+	return res;
+    }
+
+    ArrayList<Integer> getCatArmDist()
+    {
+	ArrayList<Integer> res = new ArrayList<>();
+
+	return res;
+    }
+
+    int getNbPointsBouclier(int p_indice)
+    {
+	int res = 0;
+	if(p_indice >= 0)
+	{
+
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("indice:" + p_indice);
+	}
+	return res;
+    }
+
+    String getLblMatBouclier(int p_indice)
+    {
+	String res = "";
+	if(p_indice >= 0)
+	{
+
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("indice:" + p_indice);
+	}
+	return res;
+    }
+
+    ArrayList<Competence> getListComp(int p_indice)
+    {
+	ArrayList<Competence> res = new ArrayList<>();
+	if(p_indice >= 0)
+	{
+
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("indice:" + p_indice);
+	}
+	return res;
+    }
+
+    String getLblDomaine(int p_indice)
+    {
+	String res = "";
+	if(p_indice >= 0)
+	{
+
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("indice:" + p_indice);
+	}
+	return res;
+    }
+
+    String getLblComp(int p_indiceDomaine, int p_indiceComp)
+    {
+	String res = "";
+	if(p_indiceDomaine >= 0 && p_indiceComp >= 0)
+	{
+
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("indice1:" + p_indiceDomaine + " indice2:" + p_indiceComp);
+	}
+	return res;
+    }
+
+    int getPtsArmure(int p_idPiece, int p_type, int p_materiau)
+    {
+	int res = 0;
+	if(p_idPiece >= 0 && p_materiau >= 0 && p_type >= 0)
+	{
+
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("indice1:" + p_idPiece + " indice2:" + p_type + " indice3:" + p_materiau);
+	}
+	return res;
+    }
+
+    String getLblMateriauArmure(int p_indice)
+    {
+	String res = "";
+	if(p_indice >= 0)
+	{
+
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("indice:" + p_indice);
+	}
+	return res;
+    }
+
+    String getLblTypeArmure(int p_indice)
+    {
+	String res = "";
+	if(p_indice >= 0)
+	{
+
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("indice:" + p_indice);
+	}
+	return res;
+    }
+
+    String getLblPiece(int p_indice)
+    {
+	String res = "";
+	if(p_indice >= 0)
+	{
+
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("indice:" + p_indice);
+	}
+	return res;
+    }
+
+    int getMalusEsquive(int p_indice)
+    {
+	int res = 0;
+	if(p_indice >= 0)
+	{
+
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("indice:" + p_indice);
+	}
+	return res;
+    }
+
+    int getMalusParade(int p_indice)
+    {
+	int res = 0;
+	if(p_indice >= 0)
+	{
+
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("indice:" + p_indice);
+	}
+	return res;
+    }
+
+    int getNbMaxPieces(int p_indice)
+    {
+	int res = 0;
+	if(p_indice >= 0)
+	{
+
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("indice:" + p_indice);
+	}
+	return res;
+    }
+
+    /*
+
+
+
+
+
+
+
+
+
+
+
+    FIN DES AJOUTS
+
+
+
+
+
+
+
+
+
+
+
+
+
+     */
     /**
      * Classe encapsulant les libellés autres que ceux utilisés dans les
-     * caractéristiques
+     * caractéristiques et l'équipement (surtout utilisé pour l'entrée sortie)
      */
     public final class CollectionLibelles
     {
@@ -415,6 +749,7 @@ public final class UPReference
 	public final String typarmure;
 	public final String ptsarmure;
 	public final String trait;
+	public final String interArme;
 
 	CollectionLibelles(JsonObject p_libelles)
 	{
@@ -424,6 +759,7 @@ public final class UPReference
 		typarmure = p_libelles.getString("typarmure");
 		ptsarmure = p_libelles.getString("ptsarmure");
 		trait = p_libelles.getString("trait");
+		interArme = p_libelles.getString("interArme");
 	    }
 	    else
 	    {
@@ -431,6 +767,7 @@ public final class UPReference
 		typarmure = "typarmure";
 		ptsarmure = "ptsarmure";
 		trait = "trait";
+		interArme = "interArme";
 	    }
 	}
     }

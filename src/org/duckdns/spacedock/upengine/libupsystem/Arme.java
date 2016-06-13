@@ -98,10 +98,16 @@ public class Arme
 	m_desLances = reference.getNbLancesArme(p_indice);
 	m_desGardes = reference.getNbGardesArme(p_indice);
 	m_bonusInit = reference.getBonusInitArme(p_indice);
+	/**
+	 * le type technologique (utilisé dans l'interraction avec les armures
+	 */
 	m_typeArme = reference.getTypeArme(p_indice);
 	m_malusAttaque = reference.getMalusAttaqueArme(p_indice);
 	m_physMin = reference.getPhysMinArme(p_indice);
 	m_nom = reference.getLblArme(p_indice);
+	/**
+	 * la catégorie utilisée dans l'interraction avec les comps
+	 */
 	m_categorie = reference.getCategorieArme(p_indice);
     }
 
@@ -115,7 +121,7 @@ public class Arme
      */
     Degats genererDegats(int p_nbIncrements, int p_physique, boolean p_isSonne)
     {
-	int degatsBruts = (RollGenerator.lancer(m_desLances + p_nbIncrements + p_physique, m_desGardes, p_isSonne));
+	int degatsBruts = (RollGenerator.lancer(m_desLances + p_nbIncrements + p_physique, m_desGardes, p_isSonne));//TODO : ce fonctionnement est bien adapté au corps à corps, voir si on peut surcharger la méthode pour les armes à distances (enlever l'ajout du physique) ou juste mettre un if avec un booléen en paramétre
 	return new Degats(degatsBruts, m_typeArme);
     }
 

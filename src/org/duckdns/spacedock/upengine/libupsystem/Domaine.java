@@ -71,6 +71,11 @@ public class Domaine
 	return m_rang;
     }
 
+    void setRang(int p_rang)
+    {
+	m_rang = p_rang;
+    }
+
     /**
      * @return the m_competences
      */
@@ -97,32 +102,42 @@ public class Domaine
      * @param p_comp
      * @param p_trait
      * @param p_nd
+     * @param p_modifNbDes un modificateur au nombre de dés lancés
      * @param p_isSonne
      * @return un RollResult encapsulant la réussite ou non du jet et les
      * incréments obtenus
      */
-    private RollResult effectuerJetComp(int p_comp, int p_trait, int p_nd, boolean p_isSonne)
+    RollResult effectuerJetComp(int p_comp, int p_trait, int p_nd, int p_modifNbDes, int p_modifScore, boolean p_isSonne)
     {
 	int result = 0;
 	int comp = getCompetences().get(p_comp).getRang();
 	if(getRang() > 0 && comp >= 0 && p_trait >= 0)
 	{
-	    int bonus = 0, lances = getRang() + comp;
-	    if(p_trait > 0)
+	    int bonus = p_modifScore;
+	    int lances = getRang() + comp + p_modifNbDes;
+	    if(lances > 0)
 	    {
-		/*if(specialite)
+		if(p_trait > 0)
+		{
+		    /*if(specialite)
 		{
 		//TODO gérer spécialité ici plus tard (et pas dans le getRang de la comp pour ne pas passer le rang 3 ou 5 par erreur)
 
 		    lances++;
 		}*/
-		if(comp >= 3)
-		{
-		    bonus = 5;
+		    if(comp >= 3)
+		    {
+			bonus += 5;
+		    }
+		    result = RollGenerator.lancer(lances, p_trait, p_isSonne);
 		}
-		result = RollGenerator.lancer(lances, p_trait, p_isSonne);
+		result = result + bonus;
+		if(result < 0)
+		{
+		    result = 0;
+		}
 	    }
-	    result = result + bonus;
+
 	}
 	else
 	{

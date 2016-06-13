@@ -67,6 +67,7 @@ class CoupleJauge//TODO : blinder blinder 2 constructeurs et 2 méthodes et ajou
     CoupleJauge(int p_physique, int p_volonte, int p_traitMinimum)//jauge de fatigue
     {
 	instancier(p_physique + p_volonte, p_traitMinimum, p_volonte);
+	//TODO blinder le trait minimum : il ne doit pas être < aux deux autres, vérifier
     }
 
     /**
@@ -95,7 +96,7 @@ class CoupleJauge//TODO : blinder blinder 2 constructeurs et 2 méthodes et ajou
      * externe au passage
      *
      * @param p_degats
-     * @param p_resultatJet
+     * @param p_resultatJet le resultat du jet d'absorption
      * @param p_volonte
      * @return le niveau de remplissage de la jauge externe, ce qui permet de
      * suivre si celle-ci a été réduite

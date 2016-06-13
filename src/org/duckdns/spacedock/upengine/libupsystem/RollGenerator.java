@@ -4,7 +4,8 @@ import java.util.Random;
 
 /**
  * classe de méthodes statiques techniques effectuant la réalité des jets
- * nécessaires, seul endroit où les dés sont effectivement manipulés
+ * nécessaires, seul endroit où les dés sont effectivement manipulés et les
+ * incréments effectivement calculés
  *
  * @author iconoctopus
  */
@@ -16,7 +17,7 @@ final class RollGenerator
      * @param p_score
      * @param p_ND
      * @return le résultat d'un jet donné : sa réussite et les incréments
-     * obtenus le cas échéant
+     * obtenus le cas échéant. Seul endroit où les incréments sont calculés.
      */
     static RollResult extraireIncrements(int p_score, int p_ND)
     {

@@ -4,6 +4,7 @@ package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import org.duckdns.spacedock.upengine.libupsystem.Arme.Degats;
 
 //TODO PARTOUT PARTOUT PARTOUT tester les cas limites des métohdes dans des classes de tests ad hoc (chaque classe doit en avoir une : il y a au moins un constructeur à blinder et dont il faut tester le blindage)
 //TODO ajouter malus attaque
@@ -47,10 +48,13 @@ public class Perso
 	m_jaugeSanteInit = new CoupleJauge(m_traits[0], m_traits[3], m_traits[2], m_traits[1]);
 
 	libellePerso = "PersoRM" + RM;
-	//TODO ajouter un constructeur permettant de spécifier ces choses là
+
+//TODO décommenter le code ci-dessous pour indiquer l'arme par défaut, laisser l'armure vide peut-être
+//TODO ajouter un constructeur permettant de spécifier ces choses là
+	/*
 	arme = new Arme(2, 3, 0, 0, 0, 0, 0, "rapière mal équilibrée");//2g3 sans bonus ancienne par défaut pour la plupart des PNJ
 	armure = new Armure(0, 0);//rien par défaut pour la plupart des PNJ
-
+	 */
 	genInit();
 
     }
@@ -191,9 +195,9 @@ public class Perso
     }
 
     //méthode séparée pour être appelée par le contrôleur qui pourrait bien utiliser les incréments pour autre chose genre cibler
-    public int genererDegats(int increments)
+    public Degats genererDegats(int increments)
     {//TODO retourner objet de type degats incorporant degats et type
-	return (RollGenerator.lancer(arme.getDesLances() + increments + m_traits[0], arme.getDesGardes(), m_jaugeSanteInit.isSonne()));
+	return arme.genererDegats(increments, m_traits[0], isSonne());
     }
 
     public RollGenerator.RollResult attaquer(int phaseActuelle, int ND)

@@ -1,13 +1,8 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
 /**
- * Classe représentant une arme. on laisse volontairement la génération de
- * dégâts dans la classe perso car les get/set de l'arme sont de toute façon
- * nécessaires pour l'affichage plus haut, de plus la classe Perso n'est pas
- * libre de quand et comment elle génère ses dégâts, il n'y a donc pas de vrai
- * intérêt à encapsuler ces éléments ici. La classe Arme est donc une simple
- * structure à laquelle est ajouté la capacité à générer des copies modifiées
- * d'elle-même
+ * Classe représentant une arme et permttant de générer des dégâts avec
+ * celle-ci.
  *
  * @author iconoctopus
  */
@@ -80,7 +75,7 @@ public class Arme
 
     int getCategorie()
     {
-	return m_physMin;
+	return m_categorie;
     }
 
     @Override
@@ -90,28 +85,82 @@ public class Arme
     }
 
     /**
-     * constructeur principal de l'arme, à destination de la classe de référence
-     * qui l'alimente par JSON, il vaut mieux faire appel à une copie de l'un de
-     * ses templates pour créer une nouvelle arme
+     * constructeur d'arme à parti de la référence UP!
      *
-     * @param p_lance dés lancés dans la VD
-     * @param p_garde ds gardés dans la VD
-     * @param p_initBonus bonus à l'init totale
-     * @param p_malusAttaque malus aux jets d'attaque
-     * @param p_physMin physique minimal pour manier l'arme
-     * @param p_categorie catégorie de l'arme (pour les compétences)
-     * @param p_type type de l'arme (pour les effets d'armure)
+     * @param p_indice
      */
-    Arme(int p_lance, int p_garde, int p_initBonus, int p_malusAttaque, int p_physMin, int p_categorie, int p_type, String p_nom)
-    {//TODO refaire sur le modèle de piecearmure
-	//ajouter la possibilité de spéifier la qualité et l'quilibrage pour spécifier la fabrique d'arme
-	m_desLances = p_lance;
-	m_desGardes = p_garde;
-	m_bonusInit = p_initBonus;
-	m_typeArme = p_type;
-	m_malusAttaque = p_malusAttaque;
-	m_physMin = p_physMin;
-	m_nom = p_nom;
+    Arme(int p_indice)
+    {
+	//TODO : ajouter la possibilité de spéifier la qualité et l'quilibrage pour spécifier la fabrique d'arme
+
+	UPReference reference = UPReference.getInstance();
+
+	m_desLances = reference.getNbLancesArme(p_indice);
+	m_desGardes = reference.getNbGardesArme(p_indice);
+	m_bonusInit = reference.getBonusInitArme(p_indice);
+	m_typeArme = reference.getTypeArme(p_indice);
+	m_malusAttaque = reference.getMalusAttaqueArme(p_indice);
+	m_physMin = reference.getPhysMinArme(p_indice);
+	m_nom = reference.getLblArme(p_indice);
+	m_categorie = reference.getCategorieArme(p_indice);
     }
 
+    /**
+     * génère les dégâts infligés avec cette arme en combat
+     *
+     * @param p_nbIncrements
+     * @param p_physique
+     * @param p_isSonne
+     * @return
+     */
+    Degats genererDegats(int p_nbIncrements, int p_physique, boolean p_isSonne)
+    {
+	int degatsBruts = (RollGenerator.lancer(m_desLances + p_nbIncrements + p_physique, m_desGardes, p_isSonne));
+	return new Degats(degatsBruts, m_typeArme);
+    }
+
+    /**
+     * classe utilisée pour encapsuler les résultats d'une attaque réussie ; des
+     * dégâts mais aussi le type
+     */
+    public class Degats
+    {//TODO : c'est ici que la localisation d'une attaque pourra être insérée pour être communiquée à la cible
+
+	/**
+	 * le total des dégâts infligés
+	 */
+	private int m_quantite;
+	/**
+	 * le type d'arme employé
+	 */
+	private int m_typeArme;
+
+	/**
+	 * constructeur de dégâts
+	 *
+	 * @param p_quantite
+	 * @param p_typeArme
+	 */
+	Degats(int p_quantite, int p_typeArme)
+	{
+	    m_quantite = p_quantite;
+	    m_typeArme = p_typeArme;
+	}
+
+	/**
+	 * @return the m_quantite
+	 */
+	int getQuantite()
+	{
+	    return m_quantite;
+	}
+
+	/**
+	 * @return the m_typeArme
+	 */
+	int getTypeArme()
+	{
+	    return m_typeArme;
+	}
+    }
 }

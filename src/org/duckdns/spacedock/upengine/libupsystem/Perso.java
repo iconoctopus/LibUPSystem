@@ -40,7 +40,7 @@ public class Perso
 	m_traits[3] = p_RM - 1;
 	m_traits[4] = p_RM - 1;
 
-	compCombat = new Competence(p_RM, false);
+	compCombat = new Competence(p_RM, "attaque principale");
 	domaineCombat = p_RM;
 	UPReference reference = UPReference.getInstance();
 
@@ -48,7 +48,7 @@ public class Perso
 
 	libellePerso = "PersoRM" + RM;
 	//TODO ajouter un constructeur permettant de spécifier ces choses là
-	arme = new Arme(2, 3, 0, 0);//2g3 sans bonus ancienne par défaut pour la plupart des PNJ
+	arme = new Arme(2, 3, 0, 0, 0, 0, 0, "rapière mal équilibrée");//2g3 sans bonus ancienne par défaut pour la plupart des PNJ
 	armure = new Armure(0, 0);//rien par défaut pour la plupart des PNJ
 
 	genInit();
@@ -148,7 +148,7 @@ public class Perso
 	{
 	    actions.set(actionCourante, 11);
 	    actionCourante++;
-	    result = RollGenerator.jetDeCompetence(domaineCourant, compCourante, traitCourant, nonRelanceDix, ND);
+	    result = RollGenerator.jetDeCompetence(domaineCourant, compCourante.getRang(), false, traitCourant, nonRelanceDix, ND);//TODO : placeholder avec specialite tjr fausse
 	}
 	return result;
     }

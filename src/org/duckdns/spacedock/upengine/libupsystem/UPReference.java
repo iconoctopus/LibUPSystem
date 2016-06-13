@@ -148,7 +148,7 @@ public final class UPReference
 	m_lblCompMetier = object.getString("lbl_metier");
 
 	//chargement de l'arbre des domaines et competences
-	JsonArray arbreBrut = object.getJsonArray("arbres_domaines");
+	JsonArray arbreBrut = object.getJsonArray("arbre_domaines");
 
 	m_arbreDomaines = new ArrayList<>();
 
@@ -177,7 +177,23 @@ public final class UPReference
 
 	//chargement de la liste des armes
 	object = loadJsonFile("JSON/equipement/caracs_armes.json");
+	JsonArray armesBrutes = object.getJsonArray("liste_armes");
+	m_tableArmes = new ArrayList<Arme>();
+	for(int i = 0; i < armesBrutes.size(); i++)
+	{
+	    JsonObject armeCourante = armesBrutes.getJsonObject(i);
+	    int lanceCourant = armeCourante.getInt("lance");
+	    int gardeCourant = armeCourante.getInt("garde");
+	    String nomCourant = armeCourante.getString("nom");
+	    int bonusInitCourant = armeCourante.getInt("bonus_init");
+	    int malusAttaqueCourant = armeCourante.getInt("malus_attaque");
+	    int phyMinCourant = armeCourante.getInt("physique_minimal");
+	    int categorieCourante = armeCourante.getInt("categorie");
+	    int typeCourant = armeCourante.getInt("type");
 
+	    Arme newArme = new Arme(lanceCourant, gardeCourant, bonusInitCourant, malusAttaqueCourant, phyMinCourant, categorieCourante, typeCourant, nomCourant);
+	    m_tableArmes.add(newArme);
+	}
     }
 
     /**

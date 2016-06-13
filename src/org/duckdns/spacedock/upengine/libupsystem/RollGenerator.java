@@ -4,10 +4,12 @@ import java.util.Random;
 
 final class RollGenerator
 {
+//TODO déplacer la logique de cette méthode dans le domaine et la fusionner avec effectuer jetCOmp, attention à l'ordre des paramétres qui n'est pas bon ici
 
-    static RollResult jetDeCompetence(int domaine, Competence comp, int trait, boolean non_relance_dix, int ND)
+    static RollResult jetDeCompetence(int domaine, int rangComp, boolean isSpecialiste, int trait, boolean non_relance_dix, int ND
+    )
     {
-	return extraireIncrements(effectuerJetComp(domaine, comp.getRang(), trait, non_relance_dix, comp.isSpecialiste()), ND);
+	return extraireIncrements(effectuerJetComp(domaine, rangComp, trait, non_relance_dix, isSpecialiste), ND);
     }
 
     static RollResult extraireIncrements(int score, int ND)

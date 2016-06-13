@@ -1,19 +1,22 @@
 {
     "liste_armes": [{
-	    "name": "rapiere",
-	    "VD": "2g3",
+	    "nom": "rapiere",
+	    "lance": 2,
+	    "garde": 3,
 	    "bonus_init": 1,
 	    "malus_attaque": 0,
 	    "physique_minimal": 0,
-	    "catégorie": 0,
+	    "categorie": 0,
 	    "type": 0
 	}, {
-	    "name": "hache d'arme",
-	    "VD": "6g3",
+	    "nom": "hache d'arme",
+	    "lance": 6,
+	    "garde": 3,
 	    "bonus_init": 0,
 	    "malus_attaque": 0,
 	    "physique_minimal": 2,
-	    "catégorie": 1
+	    "categorie": 1,
+	    "type": 0
 	}],
     "types_armes": ["simple", "perce-armure", "pénétrante", "perce-blindage", "énergétique"],
     "cat_armes": ["escrime", "haches"],

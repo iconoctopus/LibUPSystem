@@ -5,6 +5,7 @@
  */
 package org.duckdns.spacedock.upengine.libupsystem;
 
+//TODO: complètement refaire le fichier properties dont les noms ne correspondent à rien et aller dans les autres classes traquer les chaînes en dur qui sont encore nombreuses
 import java.io.IOException;
 
 /**

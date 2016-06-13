@@ -41,7 +41,8 @@ public class Perso
 	m_traits[3] = p_RM - 1;
 	m_traits[4] = p_RM - 1;
 
-	compCombat = new Competence(p_RM, "attaque principale");
+	//TODO gérer ci dessous
+//	compCombat = new Competence(p_RM, "attaque principale");
 	domaineCombat = p_RM;
 	UPReference reference = UPReference.getInstance();
 
@@ -152,7 +153,8 @@ public class Perso
 	{
 	    actions.set(actionCourante, 11);
 	    actionCourante++;
-	    result = RollGenerator.jetDeCompetence(domaineCourant, compCourante.getRang(), false, traitCourant, nonRelanceDix, ND);//TODO : placeholder avec specialite tjr fausse
+//TODO : gérer ci dessous
+// result = RollGenerator.jetDeCompetence(domaineCourant, compCourante.getRang(), false, traitCourant, nonRelanceDix, ND);//TODO : placeholder avec specialite tjr fausse
 	}
 	return result;
     }

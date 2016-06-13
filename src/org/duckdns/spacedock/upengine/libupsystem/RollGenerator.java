@@ -2,22 +2,28 @@ package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.util.Random;
 
+/**
+ * classe de méthodes statiques techniques effectuant la réalité des jets
+ * nécessaires, seul endroit où les dés sont effectivement manipulés
+ *
+ * @author iconoctopus
+ */
 final class RollGenerator
 {
-//TODO déplacer la logique de cette méthode dans le domaine et la fusionner avec effectuer jetCOmp, attention à l'ordre des paramétres qui n'est pas bon ici
 
-    static RollResult jetDeCompetence(int domaine, int rangComp, boolean isSpecialiste, int trait, boolean non_relance_dix, int ND
-    )
-    {
-	return extraireIncrements(effectuerJetComp(domaine, rangComp, trait, non_relance_dix, isSpecialiste), ND);
-    }
-
-    static RollResult extraireIncrements(int score, int ND)
+    /**
+     *
+     * @param p_score
+     * @param p_ND
+     * @return le résultat d'un jet donné : sa réussite et les incréments
+     * obtenus le cas échéant
+     */
+    static RollResult extraireIncrements(int p_score, int p_ND)
     {
 	RollResult result;
-	if(score >= ND)
+	if(p_score >= p_ND)
 	{
-	    double quotient = ((double) (score) - (double) (ND));
+	    double quotient = ((double) (p_score) - (double) (p_ND));
 	    quotient = quotient / 5.0;
 	    int increments = (int) quotient;
 	    result = new RollResult(increments, true);
@@ -27,68 +33,40 @@ final class RollGenerator
 	    result = new RollResult(0, false);
 	}
 	return result;
-
     }
 
-    //todo passer objet domaine avec identificateur de comp plutôt
-    private static int effectuerJetComp(int domaine, int comp, int trait, boolean estSonne, boolean specialite)
-    {
-	int result = 0;
-	if(domaine > 0 && comp >= 0 && trait >= 0)
-	{
-	    int bonus = 0, lances = domaine + comp;
-	    if(trait > 0)
-	    {
-		if(specialite)
-		{
-		    lances++;
-		}
-		if(comp >= 3)
-		{
-		    bonus = 5;
-		}
-		result = lancer(lances, trait, estSonne);
-	    }
-
-	    result = result + bonus;
-
-	}
-	else
-	{
-	    String message = "";
-
-	    message = message.concat("Trait=" + trait);
-	    message = message.concat(", Dom=" + domaine);
-	    message = message.concat(", Comp=" + comp);
-	    ErrorHandler.paramAberrant(message);
-
-	}
-	return (result);
-    }
-
-    static int lancer(int nbLances, int nbGardes, boolean non_relance_dix)
+    /**
+     * méthode centrale du système de jeu : manipule les dés et obtient les
+     * résultats chiffrés
+     *
+     * @param p_nbLances
+     * @param p_nbGardes
+     * @param p_non_relance_dix
+     * @return le score obtenu
+     */
+    static int lancer(int p_nbLances, int p_nbGardes, boolean p_non_relance_dix)
     {
 	int i, total = 0;
-	if(nbLances >= 0 && nbGardes >= 0)
+	if(p_nbLances >= 0 && p_nbGardes >= 0)
 	{
-	    if(nbGardes > 0)
+	    if(p_nbGardes > 0)
 	    {
 		Random rand = new Random();
-		if(nbLances < nbGardes)
+		if(p_nbLances < p_nbGardes)
 		{
-		    int temp = nbLances;
-		    nbLances = nbGardes;
-		    nbGardes = temp;
+		    int temp = p_nbLances;
+		    p_nbLances = p_nbGardes;
+		    p_nbGardes = temp;
 		}
-		int[] gardes = new int[nbGardes];
+		int[] gardes = new int[p_nbGardes];
 		for(i = 0; i < gardes.length; i++)
 		{
 		    gardes[i] = 0;
 		}
-		for(i = 0; i < (nbLances); i++)
+		for(i = 0; i < (p_nbLances); i++)
 		{
 		    int alea = rand.nextInt(10) + 1;
-		    while(!non_relance_dix && alea == 10)
+		    while(!p_non_relance_dix && alea == 10)
 		    {
 			alea += rand.nextInt(10) + 1;
 		    }
@@ -102,7 +80,6 @@ final class RollGenerator
 			gardes[j] = alea;
 			j++;
 		    }
-
 		}
 		for(i = 0; i < gardes.length; i++)
 		{
@@ -119,34 +96,37 @@ final class RollGenerator
 	{
 	    String message = "";
 
-	    message = message.concat("Lancés=" + nbLances);
-	    message = message.concat(", Gardés=" + nbGardes);
+	    message = message.concat("Lancés=" + p_nbLances);
+	    message = message.concat(", Gardés=" + p_nbGardes);
 	    ErrorHandler.paramAberrant(message);
 	}
 	return total;
     }
 
+    /**
+     * classe interne encapsulant un résultat de jet : sa réussite et le nombre
+     * d'incréments obtenus le cas échéant
+     */
     public static class RollResult
     {
 
-	private final int nbIncrements;
+	private final int m_nbIncrements;
+	private final boolean m_jetReussi;
 
 	public int getNbIncrements()
 	{
-	    return nbIncrements;
+	    return m_nbIncrements;
 	}
 
 	public boolean isJetReussi()
 	{
-	    return jetReussi;
+	    return m_jetReussi;
 	}
-	private boolean jetReussi;
 
-	public RollResult(int increments, boolean reussite)
+	public RollResult(int p_increments, boolean p_reussite)
 	{
-	    super();
-	    this.nbIncrements = increments;
-	    this.jetReussi = reussite;
+	    this.m_nbIncrements = p_increments;
+	    this.m_jetReussi = p_reussite;
 	}
     }
 }

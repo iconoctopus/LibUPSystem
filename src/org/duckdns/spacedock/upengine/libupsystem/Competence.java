@@ -14,27 +14,24 @@ class Competence
     /**
      * le rang de la compétence, déclenche des jets spéciaux à 3 et 5
      */
-    private final int m_rang;
-
-    /**
-     * libellé de la compétence
-     */
-    private final String m_nom;
+    private int m_rang;
 
     int getRang()
     {
 	return m_rang;
     }
 
-    @Override
-    public String toString()
+    /**
+     * pour l'instant la compétence ignore son nom car il est fourni par les
+     * classes plus élevées en fonction de son indice. Pour l'instant cette
+     * classe est inutile : elle n'encapsule qu'un entier, mais à terme elle
+     * pourra contenir un tableau de spécalités
+     *
+     *
+     * @param p_rang
+     */
+    Competence(int p_rang)
     {
-	return m_nom;
-    }
-
-    public Competence(int p_rang, String p_nom)
-    {//TODO : refaire ur e modèle de piecearmure
 	m_rang = p_rang;
-	m_nom = p_nom;
     }
 }

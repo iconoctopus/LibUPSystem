@@ -103,7 +103,8 @@ public class Arme
      * @param p_type type de l'arme (pour les effets d'armure)
      */
     Arme(int p_lance, int p_garde, int p_initBonus, int p_malusAttaque, int p_physMin, int p_categorie, int p_type, String p_nom)
-    {
+    {//TODO refaire sur le modèle de piecearmure
+	//ajouter la possibilité de spéifier la qualité et l'quilibrage pour spécifier la fabrique d'arme
 	m_desLances = p_lance;
 	m_desGardes = p_garde;
 	m_bonusInit = p_initBonus;
@@ -111,23 +112,6 @@ public class Arme
 	m_malusAttaque = p_malusAttaque;
 	m_physMin = p_physMin;
 	m_nom = p_nom;
-    }
-
-    /**
-     * constructeur par copie permettant de générer de nouvelles armes à partir
-     * d'un template (vraisemblablement celui accessible par UPReference)
-     *
-     * @param p_original
-     */
-    Arme(Arme p_original)
-    {//TODO dans ce constructeur par copie, ajouter la possibilité de spéifier la qualité et l'quilibrage pour spécifier la fabrique d'arme
-	m_desLances = p_original.getDesLances();
-	m_desGardes = p_original.getDesGardes();
-	m_bonusInit = p_original.getBonusInit();
-	m_typeArme = p_original.getTypeArme();
-	m_malusAttaque = p_original.getMalusAttaque();
-	m_physMin = p_original.getphysMin();
-	m_nom = p_original.toString();
     }
 
 }

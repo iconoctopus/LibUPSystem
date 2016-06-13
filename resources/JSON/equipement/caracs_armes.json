@@ -19,7 +19,7 @@
 	    "type": 0
 	}],
     "types_armes": ["simple", "perce-armure", "pénétrante", "perce-blindage", "énergétique"],
-    "cat_armes": ["escrime", "haches"],
+    "cat_armes": ["armes d'escrime", "haches"],
     "cat_armes_cac": [0, 1],
     "cat_armes_dist": []
 }

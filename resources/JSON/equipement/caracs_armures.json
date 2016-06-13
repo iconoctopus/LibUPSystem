@@ -30,7 +30,7 @@
 	    "lbl": "brassière",
 	    "points": [2, 2, 2, 1, 0.5],
 	    "malus_esquive": [0, 0, 0, 0],
-	    "malus_parade": [4, 3, 2, 2],
+	    "malus_parade": [3, 2, 2, 0],
 	    "nbmax": 2
 	}, {
 	    "lbl": "jambière",
@@ -51,7 +51,7 @@
 	    "malus_parade": [0, 0, 0, 0],
 	    "nbmax": 1
 	}],
-    "bloucliers": [{
+    "boucliers": [{
 	    "lbl": "targe",
 	    "points": [2, 1]
 	}, {

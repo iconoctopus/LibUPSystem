@@ -21,7 +21,7 @@ public class Domaine
     private ArrayList<Competence> m_competences = new ArrayList<>();
 
     Domaine(String p_nom, int p_rang, ArrayList<Competence> p_competences)
-    {
+    { // TODO refaire sur le modèle de piecearmure
 	m_nom = p_nom;
 	m_competences = p_competences;
 	m_rang = p_rang;

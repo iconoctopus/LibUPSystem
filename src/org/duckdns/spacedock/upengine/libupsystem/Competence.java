@@ -33,7 +33,7 @@ class Competence
     }
 
     public Competence(int p_rang, String p_nom)
-    {
+    {//TODO : refaire ur e modèle de piecearmure
 	m_rang = p_rang;
 	m_nom = p_nom;
     }

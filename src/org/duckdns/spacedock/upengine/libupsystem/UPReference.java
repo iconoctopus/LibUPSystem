@@ -9,17 +9,15 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonValue;
 
+//TODO : vu la taille de cette classe il pourrait s'avérer judicieux de la splitter en plusieurs (peut être système, armes et armures) et, si ses méthodes deviennent publiques (probable), de carrément la mettre dans son propre sous package
+//TODO : pour plus de propreté objet, rendre privée getCoeffArmeArmure et l'appeler depuis les méthodes finales que sont getArmureRedDegats et getArmureBonusND (comme pour getRang) : le calcul devrait être fait ici et pas dans la classe armure (dont le code devrait du coup être importé ici)
 /**
- * Classe permetant l'accès aux éléments de référence du UP!System Pour des
- * raisons de simplicité il a été décidé d'utiliser plusieurs tableaux plutôt
- * que des tableaux de tableaux (notamment pour les armures) il pourrait être
- * remédié à cela
+ * Classe permetant l'accès aux éléments de référence du UP!System
  *
  * @author iconoctopus
  */
 public final class UPReference
 {
-//TODO : remplacer les for classiqus avec i++ qui itèrent sur les tableaux JSON par des itérateurs
 
     /**
      * instance unique de cet objet

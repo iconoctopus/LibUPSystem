@@ -30,7 +30,7 @@ public class ArmeTest
     public void testArme()
     {
 	Assert.assertEquals(1, arme1.getBonusInit());
-	Assert.assertEquals(0, arme1.getCategorie());
+	Assert.assertEquals(1, arme1.getCategorie());
 	Assert.assertEquals(3, arme1.getDesGardes());
 	Assert.assertEquals(2, arme1.getDesLances());
 	Assert.assertEquals(0, arme1.getMalusAttaque());
@@ -38,7 +38,7 @@ public class ArmeTest
 	Assert.assertEquals(0, arme1.getphysMin());
 
 	Assert.assertEquals(0, arme2.getBonusInit());
-	Assert.assertEquals(1, arme2.getCategorie());
+	Assert.assertEquals(3, arme2.getCategorie());
 	Assert.assertEquals(3, arme2.getDesGardes());
 	Assert.assertEquals(6, arme2.getDesLances());
 	Assert.assertEquals(0, arme2.getMalusAttaque());

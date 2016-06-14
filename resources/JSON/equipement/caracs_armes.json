@@ -1,12 +1,13 @@
 {
-    "armes": [{
+    "armes_cac": [
+	{
 	    "nom": "rapiere",
 	    "lance": 2,
 	    "garde": 3,
 	    "bonus_init": 1,
 	    "malus_attaque": 0,
 	    "physique_minimal": 0,
-	    "categorie": 0,
+	    "categorie": 1,
 	    "type": 0
 	}, {
 	    "nom": "hache d'arme",
@@ -15,11 +16,24 @@
 	    "bonus_init": 0,
 	    "malus_attaque": 0,
 	    "physique_minimal": 2,
-	    "categorie": 1,
+	    "categorie": 3,
+	    "type": 0
+	}],
+    "armes_dist": [
+	{
+	    "nom": "arc",
+	    "lance": 2,
+	    "garde": 3,
+	    "bonus_init": 1,
+	    "malus_attaque": 0,
+	    "physique_minimal": 0,
+	    "categorie": 0,
+	    "malus_long": 10,
+	    "malus_court": 5,
+	    "actions_recharge": 1,
 	    "type": 0
 	}],
     "types_armes": ["simple", "perce-armure", "pénétrante", "perce-blindage", "énergétique"],
-    "cat_armes": ["armes d'escrime", "haches"],
-    "cat_armes_cac": [0, 1],
-    "cat_armes_dist": []
+    "cat_armes_cac": ["mains nues", "armes d'escrime", "armes à lame longue", "haches", "armes contondantes", "petites armes", "armes d'hast"],
+    "cat_armes_dist": ["armes de jet"]
 }

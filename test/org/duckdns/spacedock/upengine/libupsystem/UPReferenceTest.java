@@ -103,92 +103,74 @@ public final class UPReferenceTest
     }
 
     @Test
-    public void testGetLibelleCompFreeFormNominal()
-    {
-	Assert.assertEquals("attaque", m_reference.getLibelleCompFreeForm(UPReference.IdCompsFreeFrom.attaque));
-	Assert.assertEquals("parade", m_reference.getLibelleCompFreeForm(UPReference.IdCompsFreeFrom.parade));
-	Assert.assertEquals("art & métier", m_reference.getLibelleCompFreeForm(UPReference.IdCompsFreeFrom.metier));
-
-    }
-
-    @Test
     public void testGetNbLancesArme()
     {
-	Assert.assertEquals(2, m_reference.getNbLancesArme(0));
-	Assert.assertEquals(6, m_reference.getNbLancesArme(1));
+	Assert.assertEquals(2, m_reference.getNbLancesArmeCac(0));
+	Assert.assertEquals(6, m_reference.getNbLancesArmeCac(1));
     }
 
     @Test
     public void testGetNbGardesArme()
     {
-	Assert.assertEquals(3, m_reference.getNbGardesArme(0));
-	Assert.assertEquals(3, m_reference.getNbGardesArme(1));
+	Assert.assertEquals(3, m_reference.getNbGardesArmeCac(0));
+	Assert.assertEquals(3, m_reference.getNbGardesArmeCac(1));
     }
 
     @Test
     public void testGetBonusInitArme()
     {
-	Assert.assertEquals(1, m_reference.getBonusInitArme(0));
-	Assert.assertEquals(0, m_reference.getBonusInitArme(1));
+	Assert.assertEquals(1, m_reference.getBonusInitArmeCac(0));
+	Assert.assertEquals(0, m_reference.getBonusInitArmeCac(1));
     }
 
     @Test
     public void testGetMalusAttaqueArme()
     {
-	Assert.assertEquals(0, m_reference.getMalusAttaqueArme(0));
-	Assert.assertEquals(0, m_reference.getMalusAttaqueArme(1));
+	Assert.assertEquals(0, m_reference.getMalusAttaqueArmeCac(0));
+	Assert.assertEquals(0, m_reference.getMalusAttaqueArmeCac(1));
     }
 
     @Test
     public void testGetPhysMinArme()
     {
-	Assert.assertEquals(0, m_reference.getPhysMinArme(0));
-	Assert.assertEquals(2, m_reference.getPhysMinArme(1));
+	Assert.assertEquals(0, m_reference.getPhysMinArmeCac(0));
+	Assert.assertEquals(2, m_reference.getPhysMinArmeCac(1));
     }
 
     @Test
     public void testGetCategorieArme()
     {
-	Assert.assertEquals(0, m_reference.getCategorieArme(0));
-	Assert.assertEquals(1, m_reference.getCategorieArme(1));
+	Assert.assertEquals(1, m_reference.getCategorieArmeCac(0));
+	Assert.assertEquals(3, m_reference.getCategorieArmeCac(1));
     }
 
     @Test
     public void testGetTypeArme()
     {
-	Assert.assertEquals(0, m_reference.getTypeArme(0));
-	Assert.assertEquals(0, m_reference.getTypeArme(1));
+	Assert.assertEquals(0, m_reference.getTypeArmeCac(0));
+	Assert.assertEquals(0, m_reference.getTypeArmeCac(1));
     }
 
     @Test
     public void testGetLblTypeArme()
     {
-	Assert.assertEquals("simple", m_reference.getLblTypeArme(0));
-	Assert.assertEquals("perce-armure", m_reference.getLblTypeArme(1));
+	Assert.assertEquals("simple", m_reference.getLblTypeArmeCac(0));
+	Assert.assertEquals("perce-armure", m_reference.getLblTypeArmeCac(1));
     }
 
     @Test
-    public void testGetLblCatArme()
+    public void testGetListCatArmeCac()
     {
-	Assert.assertEquals("armes d'escrime", m_reference.getLblCatArme(0));
-	Assert.assertEquals("haches", m_reference.getLblCatArme(1));
-    }
+	ArrayList<String> listTest = new ArrayList<>();
+	listTest.add("mains nues");
+	listTest.add("armes d'escrime");
+	listTest.add("armes à lame longue");
+	listTest.add("haches");
+	listTest.add("armes contondantes");
+	listTest.add("petites armes");
+	listTest.add("armes d'hast");
 
-    @Test
-    public void testGetCatArmCac()
-    {
-	ArrayList<Integer> listTest = new ArrayList<>();
-	listTest.add(0);
-	listTest.add(1);
-
-	Assert.assertEquals(listTest, m_reference.getCatArmCac());
-    }
-
-    @Test
-    public void testGetCatArmDist()
-    {
-	ArrayList<Integer> listTest = new ArrayList<>();
-	Assert.assertEquals(listTest, m_reference.getCatArmDist());
+	Assert.assertEquals(listTest, m_reference.getListCatArmeCac());
     }
 
     @Test

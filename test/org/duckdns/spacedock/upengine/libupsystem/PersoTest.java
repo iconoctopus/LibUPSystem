@@ -38,7 +38,7 @@ public class PersoTest
 	    Assert.assertTrue(persoRM1.getActions().get(i) < 11 && persoRM1.getActions().get(i) > 0);
 	}
 	Assert.assertTrue(persoRM1.isActif(persoRM1.getActions().get(0)));
-	Assert.assertEquals(0, persoRM1.getArmeCourante().getCategorie());
+	Assert.assertEquals(1, persoRM1.getArmeCourante().getCategorie());
 	Assert.assertEquals(null, persoRM1.getArmureCourante());
 	Assert.assertEquals(0, persoRM1.getBlessuresGraves());
 	Assert.assertEquals(0, persoRM1.getBlessuresLegeres());
@@ -57,7 +57,7 @@ public class PersoTest
 	    Assert.assertTrue(persoRM3.getActions().get(i) < 11 && persoRM3.getActions().get(i) > 0);
 	}
 	Assert.assertTrue(persoRM3.isActif(persoRM3.getActions().get(0)));
-	Assert.assertEquals(0, persoRM3.getArmeCourante().getCategorie());
+	Assert.assertEquals(1, persoRM3.getArmeCourante().getCategorie());
 	Assert.assertEquals(null, persoRM3.getArmureCourante());
 	Assert.assertEquals(0, persoRM3.getBlessuresGraves());
 	Assert.assertEquals(0, persoRM3.getBlessuresLegeres());
@@ -76,7 +76,7 @@ public class PersoTest
 	    Assert.assertTrue(persoRM5.getActions().get(i) < 11 && persoRM5.getActions().get(i) > 0);
 	}
 	Assert.assertTrue(persoRM5.isActif(persoRM5.getActions().get(0)));
-	Assert.assertEquals(0, persoRM5.getArmeCourante().getCategorie());
+	Assert.assertEquals(1, persoRM5.getArmeCourante().getCategorie());
 	Assert.assertEquals(null, persoRM5.getArmureCourante());
 	Assert.assertEquals(0, persoRM5.getBlessuresGraves());
 	Assert.assertEquals(0, persoRM5.getBlessuresLegeres());

@@ -6,7 +6,7 @@ package org.duckdns.spacedock.upengine.libupsystem;
  *
  * @author iconoctopus
  */
-public class Arme
+public class Arme//TODO transformer ctte classe en interface qu'implémenteront ArmeCac et ArmeDist (ils interrogeront différemment UPReference dans leur constructeur car les indices d'armes des dexu catégories se recouvrent)
 {
 
     /**
@@ -85,7 +85,7 @@ public class Arme
     }
 
     /**
-     * constructeur d'arme à parti de la référence UP!
+     * constructeur d'arme de corps à corps à parti de la référence UP!
      *
      * @param p_indice
      */
@@ -95,20 +95,20 @@ public class Arme
 
 	UPReference reference = UPReference.getInstance();
 
-	m_desLances = reference.getNbLancesArme(p_indice);
-	m_desGardes = reference.getNbGardesArme(p_indice);
-	m_bonusInit = reference.getBonusInitArme(p_indice);
+	m_desLances = reference.getNbLancesArmeCac(p_indice);
+	m_desGardes = reference.getNbGardesArmeCac(p_indice);
+	m_bonusInit = reference.getBonusInitArmeCac(p_indice);
 	/**
 	 * le type technologique (utilisé dans l'interraction avec les armures
 	 */
-	m_typeArme = reference.getTypeArme(p_indice);
-	m_malusAttaque = reference.getMalusAttaqueArme(p_indice);
-	m_physMin = reference.getPhysMinArme(p_indice);
-	m_nom = reference.getLblArme(p_indice);
+	m_typeArme = reference.getTypeArmeCac(p_indice);
+	m_malusAttaque = reference.getMalusAttaqueArmeCac(p_indice);
+	m_physMin = reference.getPhysMinArmeCac(p_indice);
+	m_nom = reference.getLblArmeCac(p_indice);
 	/**
 	 * la catégorie utilisée dans l'interraction avec les comps
 	 */
-	m_categorie = reference.getCategorieArme(p_indice);
+	m_categorie = reference.getCategorieArmeCac(p_indice);
     }
 
     /**

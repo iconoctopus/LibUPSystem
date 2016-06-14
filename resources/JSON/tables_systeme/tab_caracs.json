@@ -8,7 +8,7 @@
 	    "comps": ["empathie", "investigation", "politique"]
 	}, {
 	    "lbl": "arts et métiers",
-	    "comps": []
+	    "comps": ["art & métier"]
 	}, {
 	    "lbl": "arts physiques",
 	    "comps": ["esquive", "équitation", "sport"]

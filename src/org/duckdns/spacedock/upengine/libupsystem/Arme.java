@@ -43,37 +43,37 @@ public class Arme//TODO transformer ctte classe en interface qu'implémenteront 
      */
     private final String m_nom;
 
-    int getDesLances()
+    public int getDesLances()
     {
 	return m_desLances;
     }
 
-    int getDesGardes()
+    public int getDesGardes()
     {
 	return m_desGardes;
     }
 
-    int getBonusInit()
+    public int getBonusInit()
     {
 	return m_bonusInit;
     }
 
-    int getTypeArme()
+    public int getTypeArme()
     {
 	return m_typeArme;
     }
 
-    int getMalusAttaque()
+    public int getMalusAttaque()
     {
 	return m_malusAttaque;
     }
 
-    int getphysMin()
+    public int getphysMin()
     {
 	return m_physMin;
     }
 
-    int getCategorie()
+    public int getCategorie()
     {
 	return m_categorie;
     }
@@ -89,7 +89,7 @@ public class Arme//TODO transformer ctte classe en interface qu'implémenteront 
      *
      * @param p_indice
      */
-    Arme(int p_indice)
+    public Arme(int p_indice)
     {
 	//TODO : ajouter la possibilité de spéifier la qualité et l'quilibrage pour spécifier la fabrique d'arme
 
@@ -155,7 +155,7 @@ public class Arme//TODO transformer ctte classe en interface qu'implémenteront 
 	 * @param p_quantite
 	 * @param p_typeArme
 	 */
-	Degats(int p_quantite, int p_typeArme)
+	public Degats(int p_quantite, int p_typeArme)
 	{
 	    if(p_quantite >= 0 && p_typeArme <= 0)
 	    {
@@ -171,7 +171,7 @@ public class Arme//TODO transformer ctte classe en interface qu'implémenteront 
 	/**
 	 * @return the m_quantite
 	 */
-	int getQuantite()
+	public int getQuantite()
 	{
 	    return m_quantite;
 	}
@@ -179,7 +179,7 @@ public class Arme//TODO transformer ctte classe en interface qu'implémenteront 
 	/**
 	 * @return the m_typeArme
 	 */
-	int getTypeArme()
+	public int getTypeArme()
 	{
 	    return m_typeArme;
 	}

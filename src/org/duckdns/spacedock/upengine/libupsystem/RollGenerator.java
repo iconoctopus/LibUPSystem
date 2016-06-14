@@ -9,7 +9,7 @@ import java.util.Random;
  *
  * @author iconoctopus
  */
-final class RollGenerator
+public final class RollGenerator
 {
 
     /**

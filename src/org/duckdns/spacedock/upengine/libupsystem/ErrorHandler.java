@@ -15,7 +15,7 @@ import java.io.IOException;
  *
  * @author iconoctopus
  */
-public class ErrorHandler
+class ErrorHandler
 {
 
     /**

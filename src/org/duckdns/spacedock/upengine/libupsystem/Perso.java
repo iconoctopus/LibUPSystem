@@ -1,4 +1,3 @@
-//TODO: les getters/setters sont encore de mauvaise qualité et nécessitent plus de sécurité
 package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.util.ArrayList;
@@ -6,9 +5,9 @@ import java.util.Collections;
 import org.duckdns.spacedock.upengine.libupsystem.Arme.Degats;
 import org.duckdns.spacedock.upengine.libupsystem.RollGenerator.RollResult;
 
-//TODO PARTOUT PARTOUT PARTOUT tester les cas limites des métohdes dans des classes de tests ad hoc (chaque classe doit en avoir une : il y a au moins un constructeur à blinder et dont il faut tester le blindage)
 //TODO gérer l'equive : pour l'instant on ne gère dans la liste des défenses que des références aux comps du domaine corps à corps (donc des parades....) il faut ajouter n traitement spécial (genre une comparaison regardant si esquive vaut mieux)
 //TODO gérer les compétences de combat : pour l'instant il n'y a qu'un brouillon avec une compétence unique dans le domaine corps à corps, ajouter dans le JSON la liste des attaques et parades pour chaque catégorie d'arme (ajouter la posibilité de vérifier dans UPReference qu'une arme est bien utilisable avec telle ou telle compétence), le choix de la comp courante pourrait être laissé au CharacterAssembly
+//TODO ajouter la possibiité de aire un jet général : de compétence ou de trait et réorienter les jets déjà effectués vers ces nouvelles méthodes
 public class Perso
 {
 
@@ -99,7 +98,7 @@ public class Perso
 
 	for(int i = 0; i < 9; ++i)
 	{
-	    m_listDomaines.set(i, new Domaine(i, 0));
+	    m_listDomaines.add(new Domaine(i, 0));
 	}
     }
 
@@ -136,7 +135,7 @@ public class Perso
 
 	    for(int i = 0; i < initiative; i++)
 	    {
-		tabResult.set(i, RollGenerator.lancer(1, 1, true));
+		tabResult.add(RollGenerator.lancer(1, 1, true));
 	    }
 
 	}
@@ -155,7 +154,7 @@ public class Perso
      */
     public RollGenerator.RollResult attaquer(int p_phaseActuelle, int p_ND)
     {
-	RollResult result = new RollGenerator.RollResult(0, false);//au lieu de détruire l'application pour une erreur de phase on renvoie un échec
+	RollResult result = null;
 	if(agirEnCombat(p_phaseActuelle))
 	{
 	    int MalusDes = 0;
@@ -169,7 +168,7 @@ public class Perso
 		}
 		MalusDes += arme.getMalusAttaque();
 	    }
-	    result = m_listDomaines.get(3).effectuerJetComp(0, m_traits[1], -MalusDes, 10 * ecartPhyMin, p_ND, isSonne());//TODO : pour l'instant simpliste: on utilise une seule compétence d'attaque du domaine corps à corps par défaut
+	    result = m_listDomaines.get(3).effectuerJetComp(0, m_traits[1], p_ND, -MalusDes, 10 * ecartPhyMin, isSonne());//TODO : pour l'instant simpliste: on utilise une seule compétence d'attaque du domaine corps à corps par défaut
 	}
 	return result;
     }
@@ -246,6 +245,7 @@ public class Perso
      */
     public int getNDPassif(int p_typeArme)
     {//TODO : gérer quand on n'a pas de compétence
+//TODO : ajouter paramétre indiquant la comp à utiliser, surcharger la méthode avec une autre sans paramétre pour utiliser esquive
 	//calcul de la valeur issue de la compétence
 	int rang = m_listDomaines.get(3).getCompetences().get(0).getRang();//TODO : pour l'instant on utilise uniquement ce système simpliste d'une seule comptence de combat de parade dans le domaine corps à corps obligatoirement
 	int ND = rang * 5 + 5;

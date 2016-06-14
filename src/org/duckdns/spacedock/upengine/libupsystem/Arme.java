@@ -37,7 +37,7 @@ public class Arme
     /**
      * la categorie d'arme (permet de définir la compétence à utiliser)
      */
-    private int m_categorie;
+    private final int m_categorie;
     /**
      * le nom de l'arme
      */
@@ -129,7 +129,7 @@ public class Arme
      * classe utilisée pour encapsuler les résultats d'une attaque réussie ; des
      * dégâts mais aussi le type
      */
-    public class Degats
+    public static class Degats
     {//TODO : c'est ici que la localisation d'une attaque pourra être insérée pour être communiquée à la cible
 
 	/**

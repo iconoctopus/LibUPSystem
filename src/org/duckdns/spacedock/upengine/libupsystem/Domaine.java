@@ -13,7 +13,7 @@ import org.duckdns.spacedock.upengine.libupsystem.RollGenerator.RollResult;
  * @author iconoctopus
  */
 public class Domaine
-{//TODO : déplacer la logique des jets ici
+{
 
     private int m_rang;
 

@@ -201,8 +201,10 @@ public final class UPReference
      */
     int getInitModCoord(int p_coordination)
     {
-	//le tableau est indexé à partir de 0, pas la coordination
-	return m_tableInitCoord.getInt(p_coordination - 1);
+
+//le tableau est indexé à partir de 0, pas la coordination
+	return m_tableInitCoord.getInt(p_coordination);
+
     }
 
     /**
@@ -212,8 +214,10 @@ public final class UPReference
      */
     int getInitModMental(int p_mental)
     {
+
 	//le tableau est indexé à partir de 0, pas le mental
-	return m_tableInitMental.getInt(p_mental - 1);
+	return m_tableInitMental.getInt(p_mental);
+
     }
 
     /**
@@ -305,7 +309,7 @@ public final class UPReference
      * pour l'instant)
      */
     public String getLibelleCompFreeForm(IdCompsFreeFrom p_identifiant)
-    {
+    {//TODO : virer les comps d'attaque et de défense : elles ne sont pas free-form : elles ont une liste définie! Virer cette méthode et intégrer la seule comp Art&Metier au JSON et lui donner un traitement particulier dans un domaine spécial qui a une liste dynamique
 	String res = "";
 
 	switch(p_identifiant)

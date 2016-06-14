@@ -13,8 +13,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-//TODO : ajouter le test sur l'import des armes et donc la création de celles-ci au passage
-//TODO : idem pour les tests sur les comp et les domaines
 /**
  *
  * @author iconoctopus

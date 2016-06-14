@@ -55,4 +55,24 @@ class CompCac extends Competence
 	return getRang();
     }
 
+    /**
+     * met à jour le rang de parade celui d'attaque vient de la superclasse
+     *
+     * @return
+     */
+    void setParade(int p_rang)
+    {
+	m_rangParade = p_rang;
+    }
+
+    /**
+     * appelle la SuperClasse pour indiquer le rang d'attaque
+     *
+     * @return
+     */
+    void setAttaque(int p_rang)
+    {
+	setRang(p_rang);
+    }
+
 }

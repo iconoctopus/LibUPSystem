@@ -44,7 +44,8 @@ public class PersoTest
 	Assert.assertEquals(0, persoRM1.getBlessuresLegeres());
 	Assert.assertEquals(0, persoRM1.getBlessuresLegeresMentales());
 	Assert.assertEquals(1, persoRM1.getListArmes().size());
-	Assert.assertEquals(10, persoRM1.getNDPassif(0));
+	Assert.assertEquals(10, persoRM1.getNDPassif(0, 1, false));//TODO tester en ajoutant de l'armure
+	Assert.assertEquals(10, persoRM1.getNDPassif(0, 1, true));//TODO tester en ajoutant de l'armure
 	Assert.assertEquals(0, persoRM1.getPointsDeFatigue());
 	Assert.assertTrue(persoRM1.isSonne());
 	Assert.assertFalse(persoRM1.isInconscient());
@@ -63,7 +64,8 @@ public class PersoTest
 	Assert.assertEquals(0, persoRM3.getBlessuresLegeres());
 	Assert.assertEquals(0, persoRM3.getBlessuresLegeresMentales());
 	Assert.assertEquals(1, persoRM3.getListArmes().size());
-	Assert.assertEquals(25, persoRM3.getNDPassif(0));
+	Assert.assertEquals(25, persoRM3.getNDPassif(0, 1, false));//TODO tester en ajoutant de l'armure
+	Assert.assertEquals(25, persoRM3.getNDPassif(0, 1, true));//TODO tester en ajoutant de l'armure
 	Assert.assertEquals(0, persoRM3.getPointsDeFatigue());
 	Assert.assertFalse(persoRM3.isSonne());
 	Assert.assertFalse(persoRM3.isInconscient());
@@ -82,7 +84,8 @@ public class PersoTest
 	Assert.assertEquals(0, persoRM5.getBlessuresLegeres());
 	Assert.assertEquals(0, persoRM5.getBlessuresLegeresMentales());
 	Assert.assertEquals(1, persoRM5.getListArmes().size());
-	Assert.assertEquals(35, persoRM5.getNDPassif(0));
+	Assert.assertEquals(35, persoRM5.getNDPassif(0, 1, false));//TODO tester en ajoutant de l'armure
+	Assert.assertEquals(35, persoRM5.getNDPassif(0, 1, true));//TODO tester en ajoutant de l'armure
 	Assert.assertEquals(0, persoRM5.getPointsDeFatigue());
 	Assert.assertFalse(persoRM3.isSonne());
 	Assert.assertFalse(persoRM3.isInconscient());
@@ -168,7 +171,7 @@ public class PersoTest
 		    p_perso.genInit();
 		    compteurActions = 0;
 		}
-		if(p_perso.attaquer(p_perso.getActions().get(compteurActions), p_nd).isJetReussi())
+		if(p_perso.attaquer(p_perso.getActions().get(compteurActions), 1, p_nd).isJetReussi())
 		{
 		    nbReussites++;
 		}
@@ -186,7 +189,7 @@ public class PersoTest
 	    for(int i = 0; i <= 999999; ++i)//un million de lancers
 	    {
 		p_perso = new Perso(p_rm);
-		total_degats += p_perso.genererDegats(0).getQuantite();
+		total_degats += p_perso.genererDegats(0, false).getQuantite();
 		p_perso.etreBlesse(new Arme.Degats(p_degats, 0));
 		nbBlessuresGraves += p_perso.getBlessuresGraves();
 	    }

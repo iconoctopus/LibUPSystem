@@ -5,8 +5,6 @@ import java.util.Collections;
 import org.duckdns.spacedock.upengine.libupsystem.Arme.Degats;
 import org.duckdns.spacedock.upengine.libupsystem.RollGenerator.RollResult;
 
-//TODO gérer l'equive : pour l'instant on ne gère dans la liste des défenses que des références aux comps du domaine corps à corps (donc des parades....) il faut ajouter n traitement spécial (genre une comparaison regardant si esquive vaut mieux)
-//TODO gérer les compétences de combat : pour l'instant il n'y a qu'un brouillon avec une compétence unique dans le domaine corps à corps, ajouter dans le JSON la liste des attaques et parades pour chaque catégorie d'arme (ajouter la posibilité de vérifier dans UPReference qu'une arme est bien utilisable avec telle ou telle compétence), le choix de la comp courante pourrait être laissé au CharacterAssembly
 //TODO ajouter la possibiité de aire un jet général : de compétence ou de trait et réorienter les jets déjà effectués vers ces nouvelles méthodes
 public class Perso
 {
@@ -55,7 +53,6 @@ public class Perso
      */
     public Perso(int p_RM)//TODO créer un autre constructeur prenant en paramétre des caracs
     {
-
 	//configuration des traits
 	m_traits = new int[5];
 	m_traits[0] = p_RM;//physique
@@ -69,7 +66,16 @@ public class Perso
 
 	//configuration des caractéristiques de combat (corps à corps uniquement pour l'instant)
 	m_listDomaines.get(3).setRang(p_RM);//on initialise le domaine corps à corps avec le RM
-	m_listDomaines.get(3).getCompetences().add(new Competence(p_RM));//on ajoute une compétence de combat au domaine corps à corps
+
+	//on parcourt tout le domaine CàC et on met toutes les attaques et parades au RM
+	for(Competence i : m_listDomaines.get(3).getCompetences())
+	{
+	    ((CompCac) i).setAttaque(p_RM);
+	    ((CompCac) i).setParade(p_RM);
+	}
+
+	//on ajoute des rangs en esquive
+	m_listDomaines.get(2).getCompetences().get(0).setRang(p_RM);
 
 	//configuration de l'arme par défaut, une rapière
 	Arme arme = new Arme(0);
@@ -93,12 +99,14 @@ public class Perso
     /**
      * initialise la liste des domaines
      */
-    private void initDomaines()
+    private void initDomaines()//TODO déplacer ce code dans une classe ArbreDomaine qui l'utiliserait dans son constructeur
     {//TODO : mettre en référence le nombre des domaines et le récupérer ici plutot que d'utiliser la valeur hardcodée ci-dessous
 
 	for(int i = 0; i < 9; ++i)
 	{
+
 	    m_listDomaines.add(new Domaine(i, 0));
+
 	}
     }
 
@@ -149,18 +157,21 @@ public class Perso
      * choisir d'utiliser les incréments pour autre chose que des dégâs
      *
      * @param p_phaseActuelle
+     * @param p_catArme la catégorie d'armeà emplyer, ignoré si le perso est
+     * désarmé
      * @param p_ND
      * @return
      */
-    public RollGenerator.RollResult attaquer(int p_phaseActuelle, int p_ND)
+    public RollGenerator.RollResult attaquer(int p_phaseActuelle, int p_catArme, int p_ND)
     {
 	RollResult result = null;
 	if(agirEnCombat(p_phaseActuelle))
 	{
 	    int MalusDes = 0;
 	    int ecartPhyMin = 0;
-	    Arme arme = m_inventaire.getArmeCourante();
-	    if(arme != null)//une arme est équipée
+	    int catArm = p_catArme;
+	    Arme arme = m_inventaire.getArmeCourante();//TODO vérifier que l'arme équipée correspond à celle avec laquelle on veut faire effectuer l'attaque
+	    if(catArm != 0 && arme != null)//une arme est équipée et on veut l'utiliser
 	    {
 		if(arme.getphysMin() > m_traits[0])
 		{
@@ -168,7 +179,11 @@ public class Perso
 		}
 		MalusDes += arme.getMalusAttaque();
 	    }
-	    result = m_listDomaines.get(3).effectuerJetComp(0, m_traits[1], p_ND, -MalusDes, 10 * ecartPhyMin, isSonne());//TODO : pour l'instant simpliste: on utilise une seule compétence d'attaque du domaine corps à corps par défaut
+	    else
+	    {
+		catArm = 0; //on passe en mains nues de façon certaine
+	    }
+	    result = m_listDomaines.get(3).effectuerJetComp(catArm, m_traits[1], p_ND, -MalusDes, 10 * ecartPhyMin, isSonne());
 	}
 	return result;
     }
@@ -200,19 +215,20 @@ public class Perso
      * @param p_increments
      * @return
      */
-    public Degats genererDegats(int p_increments)
+    public Degats genererDegats(int p_increments, boolean p_mainsNues)
     {
 	Degats result;
 	Arme arme = m_inventaire.getArmeCourante();
-	if(arme != null)
+	if(arme != null && !p_mainsNues)//avec arme
 	{
-	    result = arme.genererDegats(p_increments, m_traits[0], true);
+	    result = arme.genererDegats(p_increments, m_traits[0], isSonne());
+
 	}
 	else//mains nues
 	{
-	    //TODO ajouter une arme dans les références pour l'attaque à mains nues, peut être justement au rang 0 à la place de la rapièce, et l'utiliser ici
+	    result = new Degats(RollGenerator.lancer(m_traits[0] + p_increments, 1, isSonne()), 0);//TODO : tester ca dans les tests autos
 	}
-	return arme.genererDegats(p_increments, m_traits[0], isSonne());
+	return result;
     }
 
     /**
@@ -241,25 +257,47 @@ public class Perso
     /**
      *
      * @param p_typeArme
+     * @param p_parade catégorie d'arme à employer en parade, ignoré si esquive
+     * @param p_esquive : si l'squive doit être employée, sinon c'est une parade
+     * qui est effectuée
      * @return le ND passif calculé à partir des comps et de l'armure
      */
-    public int getNDPassif(int p_typeArme)
+    public int getNDPassif(int p_typeArme, int p_parade, boolean p_esquive)
     {//TODO : gérer quand on n'a pas de compétence
-//TODO : ajouter paramétre indiquant la comp à utiliser, surcharger la méthode avec une autre sans paramétre pour utiliser esquive
-	//calcul de la valeur issue de la compétence
-	int rang = m_listDomaines.get(3).getCompetences().get(0).getRang();//TODO : pour l'instant on utilise uniquement ce système simpliste d'une seule comptence de combat de parade dans le domaine corps à corps obligatoirement
-	int ND = rang * 5 + 5;
+	int ND = 5;
+	int rang = 0;
+	int effetArmure = 0;
+	Armure armure = m_inventaire.getArmureCourante();
+
+	if(!p_esquive)
+	{
+	    //calcul de la valeur issue de la compétence parade
+	    rang = m_listDomaines.get(3).getCompetences().get(p_parade).getRang();
+
+	    //ajout des bonus  et malus d'armure
+	    if(armure != null)
+	    {
+		effetArmure += armure.getBonusND(p_typeArme);
+		effetArmure -= armure.getMalusParade();
+	    }
+	}
+	else
+	{
+	    //calcul de la valeur issue de la compétence esquive
+	    rang = m_listDomaines.get(2).getCompetences().get(0).getRang();
+
+	    //ajout des bonus  et malus d'armure
+	    if(armure != null)
+	    {
+		effetArmure += armure.getBonusND(p_typeArme);
+		effetArmure -= armure.getMalusEsquive();
+	    }
+	}
+
+	ND = rang * 5 + 5 + effetArmure;
 	if(rang >= 3)
 	{
 	    ND += 5;
-	}
-
-	//ajout des bonus  et malus d'armure
-	Armure armure = m_inventaire.getArmureCourante();
-	if(armure != null)
-	{
-	    ND += armure.getBonusND(p_typeArme);
-	    ND -= armure.getMalusParade();//TODO : pour l'instant parade est la seule compétence utilisée, changer cela en ne rendant plus ce malus systématique et en intégrant aussi le malus d'esquive infligé par l'armure
 	}
 	return ND;
     }
@@ -311,6 +349,17 @@ public class Perso
     public void setLibellePerso(String libellePerso)
     {
 	this.m_libellePerso = libellePerso;
+    }
+
+    /**
+     * renvoie une copie de la liste des domaines pour ne pas risquer une
+     * édition malencontreuse
+     *
+     * @return
+     */
+    public ArrayList<Domaine> GetDomaines()
+    {
+	return new ArrayList<Domaine>(m_listDomaines);
     }
 
     /**

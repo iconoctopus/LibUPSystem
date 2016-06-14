@@ -32,11 +32,23 @@ public class Domaine
     Domaine(int p_indice, int p_rang)
     {
 	m_rang = p_rang;
-	int nbComps = UPReference.getInstance().getListComp(p_indice).size();
+	int nbComps = 0;
 
-	for(int i = 0; i < nbComps; ++i)
+	if(p_indice != 3)//cas général
 	{
-	    m_competences.add(new Competence(0));
+	    nbComps = UPReference.getInstance().getListComp(p_indice).size();
+	    for(int i = 0; i < nbComps; ++i)
+	    {
+		m_competences.add(new Competence(0));
+	    }
+	}
+	else//traitement particulier du corps à corps
+	{
+	    nbComps = UPReference.getInstance().getListCatArmeCac().size();
+	    for(int i = 0; i < nbComps; ++i)
+	    {
+		m_competences.add(new CompCac(0, 0));
+	    }
 	}
     }
 
@@ -108,7 +120,7 @@ public class Domaine
      * incréments obtenus
      */
     RollResult effectuerJetComp(int p_comp, int p_trait, int p_nd, int p_modifNbDes, int p_modifScore, boolean p_isSonne)
-    {
+    {//TODO : cette fonction pour les jets d'attaques grace à getRang() qui abrite la valeur d'attaque, il faudrait un traitement particulier pour les parades actives
 	int result = 0;
 	int comp = getCompetences().get(p_comp).getRang();
 	if(getRang() > 0 && comp >= 0 && p_trait >= 0)
@@ -150,4 +162,5 @@ public class Domaine
 	}
 	return RollGenerator.extraireIncrements(result, p_nd);
     }
+
 }

@@ -31,25 +31,33 @@ public class Domaine
      */
     Domaine(int p_indice, int p_rang)
     {
-	m_rang = p_rang;
-	int nbComps = 0;
+	if(p_indice >= 0)//on n'a rien à faire là si le domaine ne vaut pas 1
+	{
+	    setRang(p_rang);
+	    int nbComps = 0;
 
-	if(p_indice != 3)//cas général
-	{
-	    nbComps = UPReference.getInstance().getListComp(p_indice).size();
-	    for(int i = 0; i < nbComps; ++i)
+	    if(p_indice != 3)//cas général
 	    {
-		m_competences.add(new Competence(0));
+		nbComps = UPReference.getInstance().getListComp(p_indice).size();
+		for(int i = 0; i < nbComps; ++i)
+		{
+		    m_competences.add(new Competence(0));
+		}
+	    }
+	    else//traitement particulier du corps à corps
+	    {
+		nbComps = UPReference.getInstance().getListCatArmeCac().size();
+		for(int i = 0; i < nbComps; ++i)
+		{
+		    m_competences.add(new CompCac(0, 0));
+		}
 	    }
 	}
-	else//traitement particulier du corps à corps
+	else
 	{
-	    nbComps = UPReference.getInstance().getListCatArmeCac().size();
-	    for(int i = 0; i < nbComps; ++i)
-	    {
-		m_competences.add(new CompCac(0, 0));
-	    }
+	    ErrorHandler.paramAberrant("indice:" + p_indice);
 	}
+
     }
 
     /**
@@ -62,7 +70,7 @@ public class Domaine
      */
     Domaine(int p_indice, int p_rang, ArrayList<Competence> p_competences)
     {
-	m_rang = p_rang;
+	setRang(p_rang);
 	int nbComps = UPReference.getInstance().getListComp(p_indice).size();
 
 	if(p_indice != 1 && p_indice != 3 && p_indice != 4 && nbComps == p_competences.size())//si la référence indique bien ce nombre de compétences, sauf pour les domaines free-form
@@ -85,7 +93,14 @@ public class Domaine
 
     void setRang(int p_rang)
     {
-	m_rang = p_rang;
+	if(p_rang >= 0)
+	{
+	    m_rang = p_rang;
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("rang:" + p_rang);
+	}
     }
 
     /**

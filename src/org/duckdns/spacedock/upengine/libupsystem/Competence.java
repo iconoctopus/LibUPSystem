@@ -27,7 +27,14 @@ class Competence
      */
     void setRang(int p_rang)
     {
-	m_rang = p_rang;
+	if(p_rang >= 0)
+	{
+	    m_rang = p_rang;
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("rang:" + p_rang);
+	}
     }
 
     /**
@@ -41,6 +48,8 @@ class Competence
      */
     Competence(int p_rang)
     {
-	m_rang = p_rang;
+
+	setRang(p_rang);
+
     }
 }

@@ -121,7 +121,15 @@ public class Arme//TODO transformer ctte classe en interface qu'implémenteront 
      */
     Degats genererDegats(int p_nbIncrements, int p_physique, boolean p_isSonne)
     {
-	int degatsBruts = (RollGenerator.lancer(m_desLances + p_nbIncrements + p_physique, m_desGardes, p_isSonne));//TODO : ce fonctionnement est bien adapté au corps à corps, voir si on peut surcharger la méthode pour les armes à distances (enlever l'ajout du physique) ou juste mettre un if avec un booléen en paramétre
+	int degatsBruts = 0;
+	if(p_nbIncrements >= 0 && p_physique >= 0)
+	{
+	    degatsBruts = (RollGenerator.lancer(m_desLances + p_nbIncrements + p_physique, m_desGardes, p_isSonne));//TODO : ce fonctionnement est bien adapté au corps à corps, voir si on peut surcharger la méthode pour les armes à distances (enlever l'ajout du physique) ou juste mettre un if avec un booléen en paramétre
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("increments:" + p_nbIncrements + " physique:" + p_physique);
+	}
 	return new Degats(degatsBruts, m_typeArme);
     }
 
@@ -149,8 +157,15 @@ public class Arme//TODO transformer ctte classe en interface qu'implémenteront 
 	 */
 	Degats(int p_quantite, int p_typeArme)
 	{
-	    m_quantite = p_quantite;
-	    m_typeArme = p_typeArme;
+	    if(p_quantite >= 0 && p_typeArme <= 0)
+	    {
+		m_quantite = p_quantite;
+		m_typeArme = p_typeArme;
+	    }
+	    else
+	    {
+		ErrorHandler.paramAberrant("degats:" + p_quantite + " type:" + p_typeArme);
+	    }
 	}
 
 	/**

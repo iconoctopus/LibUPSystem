@@ -20,7 +20,7 @@ final class RollGenerator
      * obtenus le cas échéant. Seul endroit où les incréments sont calculés.
      */
     static RollResult extraireIncrements(int p_score, int p_ND)
-    {
+    {//on ne vérifie pas le ND, il pourrait être négatif suite à des bonus divers
 	RollResult result;
 	if(p_score >= p_ND)
 	{

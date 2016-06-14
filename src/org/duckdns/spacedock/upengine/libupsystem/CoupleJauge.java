@@ -6,7 +6,7 @@ package org.duckdns.spacedock.upengine.libupsystem;
  *
  * @author iconoctopus
  */
-class CoupleJauge//TODO : blinder blinder 2 constructeurs et 2 méthodes et ajouter classe de test
+class CoupleJauge
 {
 
     /**
@@ -54,7 +54,14 @@ class CoupleJauge//TODO : blinder blinder 2 constructeurs et 2 méthodes et ajou
      */
     CoupleJauge(int p_physique, int p_volonte, int p_mental, int p_coordination)//jauge de santé
     {
-	instancier(p_physique + p_volonte, UPReference.getInstance().getInitModCoord(p_coordination) + UPReference.getInstance().getInitModMental(p_mental), p_physique);
+	if(p_physique >= 0 && p_volonte >= 0 && p_mental >= 0 && p_coordination >= 0)
+	{
+	    instancier(p_physique + p_volonte, UPReference.getInstance().getInitModCoord(p_coordination) + UPReference.getInstance().getInitModMental(p_mental), p_physique);
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("physique:" + p_physique + " volonte:" + p_volonte + " mental:" + p_mental + " coordination:" + p_coordination);
+	}
     }
 
     /**
@@ -62,12 +69,21 @@ class CoupleJauge//TODO : blinder blinder 2 constructeurs et 2 méthodes et ajou
      *
      * @param p_physique le trait physique
      * @param p_volonte le trait volonte
-     * @param p_traitMinimum le plus faible des traits du perso
+     * @param p_tailleForceDAme le plus faible des traits du perso
      */
-    CoupleJauge(int p_physique, int p_volonte, int p_traitMinimum)//jauge de fatigue
+    CoupleJauge(int p_physique, int p_volonte, int p_tailleForceDAme)//jauge de fatigue
     {
-	instancier(p_physique + p_volonte, p_traitMinimum, p_volonte);
-	//TODO blinder le trait minimum : il ne doit pas être < aux deux autres, vérifier
+	if(p_physique >= 0 && p_volonte >= 0 && p_tailleForceDAme >= 0)
+	{
+
+	    instancier(p_physique + p_volonte, p_tailleForceDAme, p_volonte);
+
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("physique:" + p_physique + " volonte:" + p_volonte + " trait minimum:" + p_tailleForceDAme);
+	}
+
     }
 
     /**
@@ -103,42 +119,50 @@ class CoupleJauge//TODO : blinder blinder 2 constructeurs et 2 méthodes et ajou
      */
     int recevoirDegats(int p_degats, int p_resultatJet, int p_volonte)
     {
-	double quotient;
-	int blessGraves;
-
-	m_blessuresLegeres += p_degats;
-	if(p_resultatJet < m_blessuresLegeres)//le jet d'absorption est en dessous du ND des blessures légères
+	if(p_degats >= 0 && p_resultatJet >= 0 && p_volonte >= 0)
 	{
-	    quotient = ((double) (m_blessuresLegeres) - (double) (p_resultatJet));//TODO remplacer ce calcul par un modulo ou autre, en tout cas quelque chose de plus propre
-	    quotient = quotient / 10.0; //on compte le nombre de tranches entières de 10, comme indiqué ci-dessus l'absence de modulo  peut générer une blessures graves supplémentaire
-	    blessGraves = (int) quotient + 1;//total des blessures graves : une pour avoir raté le jet, et une par tranche de 10
-	    m_blessuresLegeres = 0;
-	    m_remplissage_interne += blessGraves;
+	    double quotient;
+	    int blessGraves;
 
-	    if(m_remplissage_interne > m_choc)//on risque l'inconscience et l'élimination
+	    m_blessuresLegeres += p_degats;
+	    if(p_resultatJet < m_blessuresLegeres)//le jet d'absorption est en dessous du ND des blessures légères
 	    {
-		if(m_remplissage_interne >= m_taille_interne || RollGenerator.lancer(p_volonte, p_volonte, isSonne()) < (5 * m_remplissage_interne))//jet raté ou jauge remplie
+		quotient = ((double) (m_blessuresLegeres) - (double) (p_resultatJet));//TODO remplacer ce calcul par un modulo ou autre, en tout cas quelque chose de plus propre
+		quotient = quotient / 10.0; //on compte le nombre de tranches entières de 10, comme indiqué ci-dessus l'absence de modulo  peut générer une blessures graves supplémentaire
+		blessGraves = (int) quotient + 1;//total des blessures graves : une pour avoir raté le jet, et une par tranche de 10
+		m_blessuresLegeres = 0;
+		m_remplissage_interne += blessGraves;
+
+		if(m_remplissage_interne > m_choc)//on risque l'inconscience et l'élimination
 		{
-		    m_inconscient = true;
-		    if(m_remplissage_interne >= m_taille_interne)//jauge remplie
+		    if(m_remplissage_interne >= m_taille_interne || RollGenerator.lancer(p_volonte, p_volonte, isSonne()) < (5 * m_remplissage_interne))//jet raté ou jauge remplie
 		    {
-			m_elimine = true;
-			m_remplissage_interne = m_taille_interne;//on ramène le remplissage au max de la jauge si il dépasse
+			m_inconscient = true;
+			if(m_remplissage_interne >= m_taille_interne)//jauge remplie
+			{
+			    m_elimine = true;
+			    m_remplissage_interne = m_taille_interne;//on ramène le remplissage au max de la jauge si il dépasse
+			}
+		    }
+		}
+
+		int ecart_IntExt = m_taille_interne - m_taille_externe;
+		if(m_remplissage_interne > ecart_IntExt)//on vide la jauge externe
+		{
+		    m_remplissage_externe -= m_remplissage_interne - ecart_IntExt;
+		    if(m_remplissage_externe < 0)//jauge vide, on corrige tout nombre négatif
+		    {
+			m_remplissage_externe = 0;//TODO à terme gérer le remplissage de cette valeur avec le système de soins
 		    }
 		}
 	    }
-
-	    int ecart_IntExt = m_taille_interne - m_taille_externe;
-	    if(m_remplissage_interne > ecart_IntExt)//on vide la jauge externe
-	    {
-		m_remplissage_externe -= m_remplissage_interne - ecart_IntExt;
-		if(m_remplissage_externe < 0)//jauge vide, on corrige tout nombre négatif
-		{
-		    m_remplissage_externe = 0;//TODO à terme gérer le remplissage de cette valeur avec le système de soins
-		}
-	    }
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("degats:" + p_degats + " jet:" + p_resultatJet + " volonte:" + p_volonte);
 	}
 	return m_remplissage_externe;
+
     }
 
     /**

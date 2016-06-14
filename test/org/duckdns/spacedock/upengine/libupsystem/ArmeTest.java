@@ -7,7 +7,9 @@ package org.duckdns.spacedock.upengine.libupsystem;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 /**
  *
@@ -18,6 +20,9 @@ public class ArmeTest
 
     static Arme arme1;
     static Arme arme2;
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     @BeforeClass
     public static void setUpClass()
@@ -44,6 +49,18 @@ public class ArmeTest
 	Assert.assertEquals(0, arme2.getMalusAttaque());
 	Assert.assertEquals(0, arme2.getTypeArme());
 	Assert.assertEquals(2, arme2.getphysMin());
+
+	thrown.expect(IllegalArgumentException.class);
+	thrown.expectMessage("degats:-1 type:2");
+	new Arme.Degats(-1, 2);
+
+	thrown.expect(IllegalArgumentException.class);
+	thrown.expectMessage("degats:2 type:-1");
+	new Arme.Degats(2, -1);
+
+	thrown.expect(IllegalArgumentException.class);
+	thrown.expectMessage("increments:2 physque:-1");
+	arme1.genererDegats(2, -1, true);
 
     }
 }

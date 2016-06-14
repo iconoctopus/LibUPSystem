@@ -6,7 +6,9 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 /**
  *
@@ -14,6 +16,9 @@ import org.junit.Test;
  */
 public class CoupleJaugeTest
 {
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     static CoupleJauge jauge1;
     static CoupleJauge jauge2;
@@ -85,6 +90,15 @@ public class CoupleJaugeTest
 	Assert.assertTrue(jauge1.isSonne());
 	Assert.assertTrue(jauge2.isSonne());
 	Assert.assertTrue(jauge3.isSonne());
+
+	thrown.expect(IllegalArgumentException.class);
+	thrown.expectMessage("physique:3 volonte:2 trait minimum:-1");
+	new CoupleJauge(3, 2, -1);
+
+	thrown.expect(IllegalArgumentException.class);
+	thrown.expectMessage("degats:-1 jet:20 volonte:2");
+	jauge3.recevoirDegats(-1, 20, 2);
+
     }
 
     @Test

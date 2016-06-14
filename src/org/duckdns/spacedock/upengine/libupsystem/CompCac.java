@@ -30,7 +30,9 @@ class CompCac extends Competence
     CompCac(int p_attaque, int p_parade)
     {
 	super(p_attaque);
-	m_rangParade = p_parade;
+
+	setParade(p_parade);
+
     }
 
     /**
@@ -62,7 +64,14 @@ class CompCac extends Competence
      */
     void setParade(int p_rang)
     {
-	m_rangParade = p_rang;
+	if(p_rang >= 0)
+	{
+	    m_rangParade = p_rang;
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("rang:" + p_rang);
+	}
     }
 
     /**

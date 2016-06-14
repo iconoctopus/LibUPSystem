@@ -53,6 +53,10 @@ public class Perso
      */
     public Perso(int p_RM)//TODO créer un autre constructeur prenant en paramétre des caracs
     {
+	if(p_RM < 1)
+	{
+	    ErrorHandler.paramAberrant("rang:" + p_RM);
+	}
 	//configuration des traits
 	m_traits = new int[5];
 	m_traits[0] = p_RM;//physique
@@ -64,7 +68,7 @@ public class Perso
 	//configuration automatique des autres caractéristiques maintenant possible car les traits sont générés
 	initPerso();
 
-	//configuration des caractéristiques de combat (corps à corps uniquement pour l'instant)
+	//configuration des caractéristiques de combat (corps à corps uniquement pour l'instant) une fois que l'arbre des domaines est généré
 	m_listDomaines.get(3).setRang(p_RM);//on initialise le domaine corps à corps avec le RM
 
 	//on parcourt tout le domaine CàC et on met toutes les attaques et parades au RM
@@ -84,6 +88,7 @@ public class Perso
 	m_inventaire.setArmeCourante(0);
 
 	m_libellePerso = "PersoRM" + p_RM;
+
     }
 
     /**
@@ -105,7 +110,7 @@ public class Perso
 	for(int i = 0; i < 9; ++i)
 	{
 
-	    m_listDomaines.add(new Domaine(i, 0));
+	    m_listDomaines.add(new Domaine(i, 1));
 
 	}
     }
@@ -199,11 +204,19 @@ public class Perso
     public boolean agirEnCombat(int p_phaseActuelle)
     {//TODO : gérer ici les interruptions
 	boolean result = false;
-	if((m_actions.size() - m_actionCourante) > 0 && p_phaseActuelle == m_actions.get(m_actionCourante))
+	if(p_phaseActuelle > 0)
 	{
-	    m_actions.set(m_actionCourante, 11);
-	    m_actionCourante++;
-	    result = true;
+
+	    if((m_actions.size() - m_actionCourante) > 0 && p_phaseActuelle == m_actions.get(m_actionCourante))
+	    {
+		m_actions.set(m_actionCourante, 11);
+		m_actionCourante++;
+		result = true;
+	    }
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("phase:" + p_phaseActuelle);
 	}
 	return result;
     }
@@ -212,6 +225,8 @@ public class Perso
      * génère des dégâts avec l'arme courante, séparée de l'attaque pour que le
      * contrôleur puisse utiliser les incréments pour autre chose (comme cibler)
      *
+     * @param p_mainsNues indique si les dégâts doivent ignorer l'arme portée si
+     * elle existe
      * @param p_increments
      * @return
      */
@@ -226,7 +241,7 @@ public class Perso
 	}
 	else//mains nues
 	{
-	    result = new Degats(RollGenerator.lancer(m_traits[0] + p_increments, 1, isSonne()), 0);//TODO : tester ca dans les tests autos
+	    result = new Degats(RollGenerator.lancer(m_traits[0] + p_increments, 1, isSonne()), 0);
 	}
 	return result;
     }
@@ -265,6 +280,7 @@ public class Perso
     public int getNDPassif(int p_typeArme, int p_parade, boolean p_esquive)
     {//TODO : gérer quand on n'a pas de compétence
 	int ND = 5;
+
 	int rang = 0;
 	int effetArmure = 0;
 	Armure armure = m_inventaire.getArmureCourante();
@@ -299,6 +315,7 @@ public class Perso
 	{
 	    ND += 5;
 	}
+
 	return ND;
     }
 

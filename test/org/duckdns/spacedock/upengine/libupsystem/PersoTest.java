@@ -133,9 +133,10 @@ public class PersoTest
     @Test
     public void testAttaquer()
     {
-	StatTest stat = new StatTest(persoRM1, 5);
-	Assert.assertTrue(stat.nbReussites > stat.nbEchecs);
-	stat = new StatTest(persoRM1, 10);
+	persoRM1.getListArmes().add(new Arme(1));
+	persoRM1.setArmeCourante(persoRM1.getListArmes().size() - 1);
+
+	StatTest stat = new StatTest(persoRM1, 1);
 	Assert.assertFalse(stat.nbReussites > stat.nbEchecs);
 
 	stat = new StatTest(persoRM3, 30);

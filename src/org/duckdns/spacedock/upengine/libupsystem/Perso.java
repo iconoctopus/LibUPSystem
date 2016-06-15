@@ -180,7 +180,7 @@ public class Perso
 	    {
 		if(arme.getphysMin() > m_traits[0])
 		{
-		    ecartPhyMin += arme.getphysMin() - m_traits[0];
+		    ecartPhyMin += m_traits[0] - arme.getphysMin();
 		}
 		MalusDes += arme.getMalusAttaque();
 	    }

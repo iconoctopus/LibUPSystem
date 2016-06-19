@@ -110,7 +110,7 @@ public class Armure
      */
     int getRedDegats(int p_typArm)
     {
-	int pointsEffectifs = getPointsEffectifs(p_typArm);
+	int pointsEffectifs = UPReference.getInstance().getPtsArmureEffectifs(p_typArm, m_type, m_points);
 
 	return UPReference.getInstance().getArmureRedDegats(pointsEffectifs);
     }
@@ -123,23 +123,9 @@ public class Armure
      */
     int getBonusND(int p_typArm)
     {
-	int pointsEffectifs = getPointsEffectifs(p_typArm);
+	int pointsEffectifs = UPReference.getInstance().getPtsArmureEffectifs(p_typArm, m_type, m_points);
 
 	return UPReference.getInstance().getArmureBonusND(pointsEffectifs);
-    }
-
-    /**
-     * calcule les points d'armure effectifs de cette armure contre un type
-     * d'arme donné
-     *
-     * @param p_typArm
-     * @return
-     */
-    private int getPointsEffectifs(int p_typArm)//TODO:déplacer la logiqe de ce code dans UPReference : le calcul devrait s'y faire et pas ici qui est une classe cliente du système de référence
-    {
-	double coeff = UPReference.getInstance().getCoeffArmeArmure(p_typArm, m_type);
-	//application du coefficient arme/armure au nombre de points de cette armure
-	return (int) (((double) m_points) * coeff);
     }
 
     /**

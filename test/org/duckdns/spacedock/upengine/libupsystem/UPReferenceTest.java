@@ -82,13 +82,13 @@ public final class UPReferenceTest
     @Test
     public void testGetPointsArmureEffectifsNominal()
     {
-	Assert.assertEquals(0.5, m_reference.getCoeffArmeArmure(4, 3), 0);
-	Assert.assertEquals(1, m_reference.getCoeffArmeArmure(0, 0), 0);
-	Assert.assertEquals(4, m_reference.getCoeffArmeArmure(0, 3), 0);
-	Assert.assertEquals(0.2, m_reference.getCoeffArmeArmure(4, 0), 0);
-	Assert.assertEquals(0.5, m_reference.getCoeffArmeArmure(2, 1), 0);
-	Assert.assertEquals(0.5, m_reference.getCoeffArmeArmure(3, 2), 0);
-	Assert.assertEquals(0.33, m_reference.getCoeffArmeArmure(3, 1), 0);
+	Assert.assertEquals(2, m_reference.getPtsArmureEffectifs(4, 3, 4), 0);
+	Assert.assertEquals(10, m_reference.getPtsArmureEffectifs(0, 0, 10), 0);
+	Assert.assertEquals(8, m_reference.getPtsArmureEffectifs(0, 3, 2), 0);
+	Assert.assertEquals(1, m_reference.getPtsArmureEffectifs(4, 0, 7), 0);
+	Assert.assertEquals(2, m_reference.getPtsArmureEffectifs(2, 1, 3), 0);
+	Assert.assertEquals(3, m_reference.getPtsArmureEffectifs(3, 2, 6), 0);
+	Assert.assertEquals(3, m_reference.getPtsArmureEffectifs(3, 1, 9), 0);
     }
 
     @Test

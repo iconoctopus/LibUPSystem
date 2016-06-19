@@ -1,7 +1,7 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
 /**
- * Classe représentant une arme et permttant de générer des dégâts avec
+ * Classe représentant une arme et permettant de générer des dégâts avec
  * celle-ci.
  *
  * @author iconoctopus

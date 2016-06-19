@@ -10,7 +10,7 @@ import javax.json.JsonReader;
 import javax.json.JsonValue;
 
 //TODO : vu la taille de cette classe il pourrait s'avérer judicieux de la splitter en plusieurs (peut être système, armes et armures) et, si ses méthodes deviennent publiques (probable), de carrément la mettre dans son propre sous package
-//TODO : pour plus de propreté objet, rendre privée getCoeffArmeArmure et l'appeler depuis les méthodes finales que sont getArmureRedDegats et getArmureBonusND (comme pour getRang) : le calcul devrait être fait ici et pas dans la classe armure (dont le code devrait du coup être importé ici)
+//TODO : pour plus de propreté objet, rendre privée getPtsArmureEffectifs et l'appeler depuis les méthodes finales que sont getArmureRedDegats et getArmureBonusND (comme pour getRang) : le calcul devrait être fait ici et pas dans la classe armure (dont le code devrait du coup être importé ici)
 /**
  * Classe permetant l'accès aux éléments de référence du UP!System
  *
@@ -276,14 +276,16 @@ public final class UPReference
      * @return les points d'armure à effectivement utiliser face à un type
      * d'arme donné en fonction du type d'armure
      */
-    double getCoeffArmeArmure(int p_typeArme, int p_typeArmure)
+    int getPtsArmureEffectifs(int p_typeArme, int p_typeArmure, int p_nbPts)
     {
-	double resultat = 0;
+	double coeff = 0;
 
 	JsonArray tabPourType = m_tableAjustementArmure.getJsonArray(p_typeArmure);
-	resultat = tabPourType.getJsonNumber(p_typeArme).doubleValue();
+	coeff = tabPourType.getJsonNumber(p_typeArme).doubleValue();
 
-	return resultat;
+	double preResult = (((double) p_nbPts) * coeff);
+	long preIntResult = Math.round(preResult);//TODO partout ailleurs le simple cast vers int ne fait que tronquer, remplacer toutes ses occurences par un appel à math.round() comme ici
+	return (int) preIntResult;
     }
 
     /**

@@ -35,7 +35,7 @@ public class Arme//TODO transformer ctte classe en interface qu'implémenteront 
      */
     private final int m_physMin;
     /**
-     * la categorie d'arme (permet de définir la compétence à utiliser)
+     * la catégorie d'arme (permet de définir la compétence à utiliser)
      */
     private final int m_categorie;
     /**

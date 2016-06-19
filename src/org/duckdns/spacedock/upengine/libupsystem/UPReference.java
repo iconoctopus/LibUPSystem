@@ -486,7 +486,7 @@ public final class UPReference
      *
      * @param p_indiceDomaine
      * @param p_indiceComp
-     * @return le libellé d'une comp
+     * @return le libellé d'une compétence
      */
     String getLblComp(int p_indiceDomaine, int p_indiceComp)
     {//TODO si domaine CaC appeler la liste des catégories

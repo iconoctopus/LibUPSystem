@@ -22,8 +22,8 @@ public class Arme//TODO transformer ctte classe en interface qu'implémenteront 
      */
     private final int m_bonusInit;
     /**
-     * le type de l'arme : simple, perce-amure, penetrante, perce-blindage ou
-     * energetique, respectivement de 0 à 4
+     * le type de l'arme : simple, perce-amure, pénétrante, perce-blindage ou
+     * energétique, respectivement de 0 à 4
      */
     private final int m_typeArme;
     /**
@@ -35,7 +35,7 @@ public class Arme//TODO transformer ctte classe en interface qu'implémenteront 
      */
     private final int m_physMin;
     /**
-     * la categorie d'arme (permet de définir la compétence à utiliser)
+     * la catégorie d'arme (permet de définir la compétence à utiliser)
      */
     private final int m_categorie;
     /**

@@ -5,7 +5,7 @@ import java.util.Collections;
 import org.duckdns.spacedock.upengine.libupsystem.Arme.Degats;
 import org.duckdns.spacedock.upengine.libupsystem.RollGenerator.RollResult;
 
-//TODO ajouter la possibiité de aire un jet général : de compétence ou de trait et réorienter les jets déjà effectués vers ces nouvelles méthodes
+//TODO ajouter la possibiité de faire un jet général : de compétence ou de trait et réorienter les jets déjà effectués vers ces nouvelles méthodes
 public class Perso
 {
 

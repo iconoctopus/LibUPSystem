@@ -489,7 +489,7 @@ public final class UPReference
      * @return le libellé d'une comp
      */
     String getLblComp(int p_indiceDomaine, int p_indiceComp)
-    {//TODO si domaine Cac appeler la liste des catégories
+    {//TODO si domaine CaC appeler la liste des catégories
 	JsonObject domaine = m_arbreDomaines.getJsonObject(p_indiceDomaine);
 	JsonArray tabComp = domaine.getJsonArray("comps");
 	return tabComp.getString(p_indiceComp);

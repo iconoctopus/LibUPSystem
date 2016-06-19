@@ -22,7 +22,7 @@ public class Arme//TODO transformer ctte classe en interface qu'implémenteront 
      */
     private final int m_bonusInit;
     /**
-     * le type de l'arme : simple, perce-amure, penetrante, perce-blindage ou
+     * le type de l'arme : simple, perce-amure, pénétrante, perce-blindage ou
      * energétique, respectivement de 0 à 4
      */
     private final int m_typeArme;

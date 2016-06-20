@@ -4,10 +4,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import javax.json.Json;
 import javax.json.JsonArray;
-import javax.json.JsonNumber;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
-import javax.json.JsonValue;
 
 //TODO : vu la taille de cette classe il pourrait s'avérer judicieux de la splitter en plusieurs (peut être système, armes et armures) et, si ses méthodes deviennent publiques (probable), de carrément la mettre dans son propre sous package
 //TODO : pour plus de propreté objet, rendre privée getPtsArmureEffectifs et l'appeler depuis les méthodes finales que sont getArmureRedDegats et getArmureBonusND (comme pour getRang) : le calcul devrait être fait ici et pas dans la classe armure (dont le code devrait du coup être importé ici)

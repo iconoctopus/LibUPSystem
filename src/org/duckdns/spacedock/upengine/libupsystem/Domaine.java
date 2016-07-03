@@ -46,7 +46,7 @@ public class Domaine
 	    }
 	    else//traitement particulier du corps à corps
 	    {//TODO ATTENTION BROKEN : les catégories ont été mélées, virer ce code et le reporter dans getListComp avec différenciation entre CaC et CaD
-		nbComps = UPReference.getInstance().getListCatArme().size();//TODO volntairement pété pour forcer à réparer ça avant de committer l'erreur
+		nbComps = UPReference.getInstance().getListCatArme().size();//TODO volontairement pété pour forcer à réparer ça avant de committer l'erreur
 		for (int i = 0; i < nbComps; ++i)
 		{
 		    m_competences.add(new CompCac(0, 0));
@@ -136,7 +136,7 @@ public class Domaine
      * incréments obtenus
      */
     RollResult effectuerJetComp(int p_comp, int p_trait, int p_nd, int p_modifNbDes, int p_modifScore, boolean p_isSonne)
-    {//TODO : cette fonction pour les jets d'attaques grace à getRang() qui abrite la valeur d'attaque, il faudrait un traitement particulier pour les parades actives
+    {//TODO : cette fonction pour les jets d'attaques grâce à getRang() qui abrite la valeur d'attaque, il faudrait un traitement particulier pour les parades actives
 	int result = 0;
 	int comp = getCompetences().get(p_comp).getRang();
 	if (getRang() > 0 && comp >= 0 && p_trait >= 0)

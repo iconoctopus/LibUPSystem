@@ -46,7 +46,7 @@ public class Domaine
 	    }
 	    else//traitement particulier du corps à corps
 	    {//TODO ATTENTION BROKEN : les catégories ont été mélées, virer ce code et le reporter dans getListComp avec différenciation entre CaC et CaD
-		nbComps = UPReference.getInstance().getListCatArme().size();//TODO volntairement pété pour forcer à réparer ça avant de committer l'erreur
+		nbComps = UPReference.getInstance().getListCatArme().size();//TODO volontairement pété pour forcer à réparer ça avant de committer l'erreur
 		for (int i = 0; i < nbComps; ++i)
 		{
 		    m_competences.add(new CompCac(0, 0));

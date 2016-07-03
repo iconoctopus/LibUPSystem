@@ -30,6 +30,16 @@
 	    "categorie": 1,
 	    "type": 0,
 	    "mode": 0
+	},  {
+	    "nom": "sabre",
+	    "lance": 4,
+	    "garde": 3,
+	    "bonus_init": 1,
+	    "malus_attaque": 1,
+	    "physique_minimal": 0,
+	    "categorie": 1,
+	    "type": 0,
+	    "mode": 0
 	}, {
 	    "nom": "hache d'arme",
 	    "lance": 6,

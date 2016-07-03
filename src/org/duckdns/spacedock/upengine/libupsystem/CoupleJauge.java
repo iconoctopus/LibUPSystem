@@ -135,7 +135,7 @@ class CoupleJauge
 
 		if(m_remplissage_interne > m_choc)//on risque l'inconscience et l'élimination
 		{
-		    if(m_remplissage_interne >= m_taille_interne || RollGenerator.lancer(p_volonte, p_volonte, isSonne()) < (5 * m_remplissage_interne))//jet raté ou jauge remplie
+		    if(m_remplissage_interne >= m_taille_interne || RollUtils.lancer(p_volonte, p_volonte, isSonne()) < (5 * m_remplissage_interne))//jet raté ou jauge remplie
 		    {
 			m_inconscient = true;
 			if(m_remplissage_interne >= m_taille_interne)//jauge remplie

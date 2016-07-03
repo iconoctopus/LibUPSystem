@@ -3,7 +3,7 @@ package org.duckdns.spacedock.upengine.libupsystem;
 import java.util.ArrayList;
 import java.util.Collections;
 import org.duckdns.spacedock.upengine.libupsystem.Arme.Degats;
-import org.duckdns.spacedock.upengine.libupsystem.RollGenerator.RollResult;
+import org.duckdns.spacedock.upengine.libupsystem.RollUtils.RollResult;
 
 //TODO ajouter la possibiité de faire un jet général : de compétence ou de trait et réorienter les jets déjà effectués vers ces nouvelles méthodes
 public class Perso
@@ -53,7 +53,7 @@ public class Perso
      */
     public Perso(int p_RM)//TODO créer un autre constructeur prenant en paramétre des caracs
     {
-	if(p_RM < 1)
+	if (p_RM < 1)
 	{
 	    ErrorHandler.paramAberrant("rang:" + p_RM);
 	}
@@ -72,7 +72,7 @@ public class Perso
 	m_listDomaines.get(3).setRang(p_RM);//on initialise le domaine corps à corps avec le RM
 
 	//on parcourt tout le domaine CàC et on met toutes les attaques et parades au RM
-	for(Competence i : m_listDomaines.get(3).getCompetences())
+	for (Competence i : m_listDomaines.get(3).getCompetences())
 	{
 	    ((CompCac) i).setAttaque(p_RM);
 	    ((CompCac) i).setParade(p_RM);
@@ -81,14 +81,10 @@ public class Perso
 	//on ajoute des rangs en esquive
 	m_listDomaines.get(2).getCompetences().get(0).setRang(p_RM);
 
-	//configuration de l'arme par défaut, une rapière
-	Arme arme = new Arme(0);
+	//configuration d'un inventaire vide
 	m_inventaire = new Inventaire();
-	m_inventaire.listArmes.add(arme);
-	m_inventaire.setArmeCourante(0);
 
 	m_libellePerso = "PersoRM" + p_RM;
-
     }
 
     /**
@@ -107,7 +103,7 @@ public class Perso
     private void initDomaines()//TODO déplacer ce code dans une classe ArbreDomaine qui l'utiliserait dans son constructeur
     {//TODO : mettre en référence le nombre des domaines et le récupérer ici plutot que d'utiliser la valeur hardcodée ci-dessous
 
-	for(int i = 0; i < 9; ++i)
+	for (int i = 0; i < 9; ++i)
 	{
 
 	    m_listDomaines.add(new Domaine(i, 1));
@@ -122,9 +118,9 @@ public class Perso
     private void initJauges()
     {
 	int traitMin = m_traits[0];
-	for(int i = 1; i < m_traits.length; ++i)
+	for (int i = 1; i < m_traits.length; ++i)
 	{
-	    if(m_traits[i] < traitMin)
+	    if (m_traits[i] < traitMin)
 	    {
 		traitMin = m_traits[i];
 	    }
@@ -143,12 +139,12 @@ public class Perso
 	int initiative = m_jaugeSanteInit.getRemplissage_externe();
 	m_actionCourante = 0;
 	ArrayList<Integer> tabResult = new ArrayList<>();
-	if(initiative > 0)
+	if (initiative > 0)
 	{
 
-	    for(int i = 0; i < initiative; i++)
+	    for (int i = 0; i < initiative; i++)
 	    {
-		tabResult.add(RollGenerator.lancer(1, 1, true));
+		tabResult.add(RollUtils.lancer(1, 1, true));
 	    }
 
 	}
@@ -159,36 +155,82 @@ public class Perso
     /**
      * Fait effectuer une attaque au personnage, la génération des dégâts est
      * séparée et déclenchée depuis l'extérieur afin que le contrôleur puisse
-     * choisir d'utiliser les incréments pour autre chose que des dégâs
+     * choisir d'utiliser les incréments pour autre chose que des dégâs. Me
+     * personnage attaquera systématiquement avec l'arme courante, il faut donc
+     * la configurer avant. Cette méthode vérifie que l'action est possible dans
+     * la phase courante en fonction de l'init du perso, elle est donc conçue
+     * pour le combat uniquement
      *
      * @param p_phaseActuelle
-     * @param p_catArme la catégorie d'armeà emplyer, ignoré si le perso est
-     * désarmé
      * @param p_ND
+     * @param p_distance ignoré si arme de corps à corps équipée ou attaque à
+     * mains nues
+     * @param p_mainsNues booléen pour forcer l'attaque sans arme
      * @return
      */
-    public RollGenerator.RollResult attaquer(int p_phaseActuelle, int p_catArme, int p_ND)
+    public RollUtils.RollResult attaquerCac(int p_phaseActuelle, int p_ND, boolean p_mainsNues)
+    {
+	Arme arme = m_inventaire.getArmeCourante();
+	int catArm;
+	if (arme != null)//une arme est équipée et on veut l'utiliser
+	{
+	    catArm = arme.getCategorie();
+	}
+	else
+	{
+	    catArm = 0;
+	}
+	return effectuerAttaque(p_phaseActuelle, p_ND, catArm, 3, 0);
+    }
+
+    public RollResult attaquerDist(int p_phaseActuelle, int p_ND, int p_distance)
+    {
+
+	if (p_distance >= 0)
+	{
+	    if (p_distance <= ((ArmeDist) arme).getPortee())//TODO mieux arrondir et tester cas pile la moitié
+	    {//portée courte
+		modDist = ((ArmeDist) arme).getMalusCourt();
+	    }
+	    else
+	    {//portée longue
+		modDist = ((ArmeDist) arme).getMalusLong();
+	    }
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("distance:" + p_distance);
+	}
+
+    }
+
+    private RollResult effectuerAttaque(int p_phaseActuelle, int p_ND, int p_catArm, int p_domaine, int p_modifScore)
     {
 	RollResult result = null;
-	if(agirEnCombat(p_phaseActuelle))
+	if (agirEnCombat(p_phaseActuelle))
 	{
 	    int MalusDes = 0;
 	    int ecartPhyMin = 0;
-	    int catArm = p_catArme;
-	    Arme arme = m_inventaire.getArmeCourante();//TODO vérifier que l'arme équipée correspond à celle avec laquelle on veut faire effectuer l'attaque
-	    if(catArm != 0 && arme != null)//une arme est équipée et on veut l'utiliser
+	    int modDist = 0;
+	    int catArm = 0; //mains nues par défaut
+	    int domaine = 3; //CaC par défaut
+	    Arme arme = m_inventaire.getArmeCourante();
+	    if (arme != null)//une arme est équipée et on veut l'utiliser
 	    {
-		if(arme.getphysMin() > m_traits[0])
+		catArm = arme.getCategorie();
+		if (arme.getphysMin() > m_traits[0])
 		{
 		    ecartPhyMin += m_traits[0] - arme.getphysMin();
 		}
 		MalusDes += arme.getMalusAttaque();
+		if (arme.getMode() == 1)//arme à distance
+		{
+		    domaine = 4;
+
+		}
 	    }
-	    else
-	    {
-		catArm = 0; //on passe en mains nues de façon certaine
-	    }
-	    result = m_listDomaines.get(3).effectuerJetComp(catArm, m_traits[1], p_ND, -MalusDes, 10 * ecartPhyMin, isSonne());
+	    int modFinal = (ecartPhyMin * 10) - modDist;
+	    result = m_listDomaines.get(domaine).effectuerJetComp(catArm, m_traits[1], p_ND, -MalusDes, modFinal, isSonne());
 	}
 	return result;
     }
@@ -204,10 +246,10 @@ public class Perso
     public boolean agirEnCombat(int p_phaseActuelle)
     {//TODO : gérer ici les interruptions
 	boolean result = false;
-	if(p_phaseActuelle > 0)
+	if (p_phaseActuelle > 0 && p_phaseActuelle < 11)
 	{
 
-	    if((m_actions.size() - m_actionCourante) > 0 && p_phaseActuelle == m_actions.get(m_actionCourante))
+	    if ((m_actions.size() - m_actionCourante) > 0 && p_phaseActuelle == m_actions.get(m_actionCourante))
 	    {
 		m_actions.set(m_actionCourante, 11);
 		m_actionCourante++;
@@ -222,27 +264,36 @@ public class Perso
     }
 
     /**
-     * génère des dégâts avec l'arme courante, séparée de l'attaque pour que le
-     * contrôleur puisse utiliser les incréments pour autre chose (comme cibler)
+     * génère des dégâts avec l'arme courante en corps à corps, séparée de
+     * l'attaque pour que le contrôleur puisse utiliser les incréments pour
+     * autre chose (comme cibler)
      *
      * @param p_mainsNues indique si les dégâts doivent ignorer l'arme portée si
      * elle existe
      * @param p_increments
      * @return
      */
-    public Degats genererDegats(int p_increments, boolean p_mainsNues)
+    public Degats genererDegatsCaC(int p_increments, boolean p_mainsNues)
     {
 	Degats result;
 	Arme arme = m_inventaire.getArmeCourante();
-	if(arme != null && !p_mainsNues)//avec arme
-	{
-	    result = arme.genererDegats(p_increments, m_traits[0], isSonne());
 
-	}
-	else//mains nues
+	if (p_mainsNues || arme == null)//mains nues
 	{
-	    result = new Degats(RollGenerator.lancer(m_traits[0] + p_increments, 1, isSonne()), 0);
+	    result = new Degats(RollUtils.lancer(m_traits[0] + p_increments, 1, isSonne()), 0);
 	}
+	else
+	{
+	    if (arme.getMode() == 0)//arme de corps à corps employée
+	    {
+		result = ((ArmeCaC) arme).genererDegats(p_increments, m_traits[0], isSonne());
+	    }
+	    else//arme à distance employée
+	    {
+		result = ((ArmeDist) arme).genererDegats(p_increments, isSonne());
+	    }
+	}
+
 	return result;
     }
 
@@ -256,15 +307,15 @@ public class Perso
     {
 	int redDegats = 0;
 	Armure armure = m_inventaire.getArmureCourante();
-	if(armure != null)
+	if (armure != null)
 	{
 	    redDegats = armure.getRedDegats(degats.getTypeArme());
 	}
 	int degatsEffectifs = degats.getQuantite() - redDegats;
 
-	if(degatsEffectifs > 0)
+	if (degatsEffectifs > 0)
 	{
-	    int resultTest = RollGenerator.lancer(m_traits[0], m_traits[0], false);
+	    int resultTest = RollUtils.lancer(m_traits[0], m_traits[0], false);
 	    m_jaugeSanteInit.recevoirDegats(degatsEffectifs, resultTest, m_traits[3]);
 	}
     }
@@ -285,13 +336,13 @@ public class Perso
 	int effetArmure = 0;
 	Armure armure = m_inventaire.getArmureCourante();
 
-	if(!p_esquive)
+	if (!p_esquive)
 	{
 	    //calcul de la valeur issue de la compétence parade
 	    rang = m_listDomaines.get(3).getCompetences().get(p_parade).getRang();
 
 	    //ajout des bonus  et malus d'armure
-	    if(armure != null)
+	    if (armure != null)
 	    {
 		effetArmure += armure.getBonusND(p_typeArme);
 		effetArmure -= armure.getMalusParade();
@@ -303,7 +354,7 @@ public class Perso
 	    rang = m_listDomaines.get(2).getCompetences().get(0).getRang();
 
 	    //ajout des bonus  et malus d'armure
-	    if(armure != null)
+	    if (armure != null)
 	    {
 		effetArmure += armure.getBonusND(p_typeArme);
 		effetArmure -= armure.getMalusEsquive();
@@ -311,7 +362,7 @@ public class Perso
 	}
 
 	ND = rang * 5 + 5 + effetArmure;
-	if(rang >= 3)
+	if (rang >= 3)
 	{
 	    ND += 5;
 	}
@@ -340,9 +391,9 @@ public class Perso
 	int result = 0;
 
 	//traitement de la partie dûe aux dés d'action
-	for(int i = 0; i < m_actions.size(); ++i)
+	for (int i = 0; i < m_actions.size(); ++i)
 	{
-	    if(m_actions.get(i) < 11)//si l'action considérée est toujours disponible
+	    if (m_actions.get(i) < 11)//si l'action considérée est toujours disponible
 	    {
 		result += m_actions.get(i);
 	    }
@@ -350,7 +401,7 @@ public class Perso
 
 	//traitement du bonus dû à l'arme
 	Arme arme = m_inventaire.getArmeCourante();
-	if(arme != null)
+	if (arme != null)
 	{
 	    result += arme.getBonusInit();
 	}

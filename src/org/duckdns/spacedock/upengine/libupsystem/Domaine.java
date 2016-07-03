@@ -6,7 +6,7 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.util.ArrayList;
-import org.duckdns.spacedock.upengine.libupsystem.RollGenerator.RollResult;
+import org.duckdns.spacedock.upengine.libupsystem.RollUtils.RollResult;
 
 /**
  *
@@ -31,23 +31,23 @@ public class Domaine
      */
     Domaine(int p_indice, int p_rang)
     {
-	if(p_indice >= 0)//on n'a rien à faire là si le domaine ne vaut pas 1
+	if (p_indice >= 0)//on n'a rien à faire là si le domaine ne vaut pas 1
 	{
 	    setRang(p_rang);
 	    int nbComps = 0;
 
-	    if(p_indice != 3)//cas général
+	    if (p_indice != 3)//cas général
 	    {
 		nbComps = UPReference.getInstance().getListComp(p_indice).size();
-		for(int i = 0; i < nbComps; ++i)
+		for (int i = 0; i < nbComps; ++i)
 		{
 		    m_competences.add(new Competence(0));
 		}
 	    }
 	    else//traitement particulier du corps à corps
-	    {
-		nbComps = UPReference.getInstance().getListCatArmeCac().size();
-		for(int i = 0; i < nbComps; ++i)
+	    {//TODO ATTENTION BROKEN : les catégories ont été mélées, virer ce code et le reporter dans getListComp avec différenciation entre CaC et CaD
+		nbComps = UPReference.getInstance().getListCatArme().size();//TODO volntairement pété pour forcer à réparer ça avant de committer l'erreur
+		for (int i = 0; i < nbComps; ++i)
 		{
 		    m_competences.add(new CompCac(0, 0));
 		}
@@ -73,7 +73,7 @@ public class Domaine
 	setRang(p_rang);
 	int nbComps = UPReference.getInstance().getListComp(p_indice).size();
 
-	if(p_indice != 1 && p_indice != 3 && p_indice != 4 && nbComps == p_competences.size())//si la référence indique bien ce nombre de compétences, sauf pour les domaines free-form
+	if (p_indice != 1 && p_indice != 3 && p_indice != 4 && nbComps == p_competences.size())//si la référence indique bien ce nombre de compétences, sauf pour les domaines free-form
 	{
 	    m_competences = p_competences;
 	}
@@ -93,7 +93,7 @@ public class Domaine
 
     void setRang(int p_rang)
     {
-	if(p_rang >= 0)
+	if (p_rang >= 0)
 	{
 	    m_rang = p_rang;
 	}
@@ -130,6 +130,7 @@ public class Domaine
      * @param p_trait
      * @param p_nd
      * @param p_modifNbDes un modificateur au nombre de dés lancés
+     * @param p_modifScore le modificateur à appliquer au résultat final
      * @param p_isSonne
      * @return un RollResult encapsulant la réussite ou non du jet et les
      * incréments obtenus
@@ -138,13 +139,13 @@ public class Domaine
     {//TODO : cette fonction pour les jets d'attaques grace à getRang() qui abrite la valeur d'attaque, il faudrait un traitement particulier pour les parades actives
 	int result = 0;
 	int comp = getCompetences().get(p_comp).getRang();
-	if(getRang() > 0 && comp >= 0 && p_trait >= 0)
+	if (getRang() > 0 && comp >= 0 && p_trait >= 0)
 	{
 	    int bonus = p_modifScore;
 	    int lances = getRang() + comp + p_modifNbDes;
-	    if(lances > 0)
+	    if (lances > 0)
 	    {
-		if(p_trait > 0)
+		if (p_trait > 0)
 		{
 		    /*if(specialite)
 		{
@@ -152,14 +153,14 @@ public class Domaine
 
 		    lances++;
 		}*/
-		    if(comp >= 3)
+		    if (comp >= 3)
 		    {
 			bonus += 5;
 		    }
-		    result = RollGenerator.lancer(lances, p_trait, p_isSonne);
+		    result = RollUtils.lancer(lances, p_trait, p_isSonne);
 		}
 		result = result + bonus;
-		if(result < 0)
+		if (result < 0)
 		{
 		    result = 0;
 		}
@@ -175,7 +176,7 @@ public class Domaine
 	    message = message.concat(", Comp=" + comp);
 	    ErrorHandler.paramAberrant(message);
 	}
-	return RollGenerator.extraireIncrements(result, p_nd);
+	return RollUtils.extraireIncrements(result, p_nd);
     }
 
 }

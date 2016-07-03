@@ -203,7 +203,7 @@ public class PersoTest
 	    for(int i = 0; i <= 999999; ++i)//un million de lancers
 	    {
 		p_perso = new Perso(p_rm);
-		total_degats += p_perso.genererDegats(0, false).getQuantite();
+		total_degats += p_perso.genererDegatsCaC(0, false).getQuantite();
 		p_perso.etreBlesse(new Arme.Degats(p_degats, 0));
 		nbBlessuresGraves += p_perso.getBlessuresGraves();
 	    }

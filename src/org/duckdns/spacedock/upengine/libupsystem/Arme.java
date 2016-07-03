@@ -2,11 +2,12 @@ package org.duckdns.spacedock.upengine.libupsystem;
 
 /**
  * Classe représentant une arme et permettant de générer des dégâts avec
- * celle-ci.
+ * celle-ci.Elle est abstraite car l'on ne doit pouvoir instancier que ses
+ * dérivées qui sont porteuses du code signifiant pour le CaC et le CaD
  *
  * @author iconoctopus
  */
-public class Arme//TODO transformer ctte classe en interface qu'implémenteront ArmeCac et ArmeDist (ils interrogeront différemment UPReference dans leur constructeur car les indices d'armes des dexu catégories se recouvrent)
+public abstract class Arme
 {
 
     /**
@@ -39,9 +40,95 @@ public class Arme//TODO transformer ctte classe en interface qu'implémenteront 
      */
     private final int m_categorie;
     /**
+     * le mode d'attaque de l'arme
+     */
+    private final int m_mode;
+
+    /**
      * le nom de l'arme
      */
     private final String m_nom;
+
+    /**
+     * constructeur d'arme de corps à corps à parti de la référence UP!
+     *
+     * @param p_indice
+     * @param p_qualite la qualite de l'arme
+     * @param p_equilibrage l'equilibrage de l'arme, ignoré si l'arme est de
+     * maître
+     */
+    public Arme(int p_indice, QualiteArme p_qualite, EquilibrageArme p_equilibrage)
+    {//TODO ajouter bonus spécifiques des gardes et accessoires de 7th Sea
+
+	UPReference reference = UPReference.getInstance();
+	String nom = reference.getLblArme(p_indice);
+	nom = nom.concat(" ");
+	int bonusLances = 0;
+	int bonusGardes = 0;
+	int bonusInitSup = 0;
+
+	//récupération des éléments liés à la qualité et l'équilibrage de l'arme
+	if (p_qualite == QualiteArme.maitre)
+	{
+	    nom = nom.concat((String) reference.libelles.libQualite.get(QualiteArme.maitre));
+	    ++bonusLances;
+	    ++bonusGardes;
+	    ++bonusInitSup;
+	}
+	else
+	{
+	    nom = nom.concat(reference.libelles.liaison);
+	    nom = nom.concat(" ");
+	    nom = nom.concat(reference.libelles.qualite);
+
+	    switch (p_qualite)
+	    {
+		case inferieure:
+		    --bonusLances;
+		    nom = nom.concat((String) reference.libelles.libQualite.get(QualiteArme.inferieure));
+		    break;
+		case moyenne:
+		    nom = nom.concat((String) reference.libelles.libQualite.get(QualiteArme.moyenne));
+		    break;
+		case superieure:
+		    ++bonusLances;
+		    nom = nom.concat((String) reference.libelles.libQualite.get(QualiteArme.superieure));
+		    break;
+	    }
+
+	    nom = nom.concat(" ");
+	    nom = nom.concat(reference.libelles.addition);
+	    nom = nom.concat(" ");
+	    nom = nom.concat(reference.libelles.equilibrage);
+	    nom = nom.concat(" ");
+
+	    switch (p_equilibrage)
+	    {
+		case mauvais:
+		    bonusLances = -1;
+		    nom = nom.concat((String) reference.libelles.libQualite.get(EquilibrageArme.mauvais));
+		    break;
+		case normal:
+		    nom = nom.concat((String) reference.libelles.libQualite.get(EquilibrageArme.normal));
+		    break;
+		case bon:
+		    bonusLances = +1;
+		    nom = nom.concat((String) reference.libelles.libQualite.get(EquilibrageArme.bon));
+		    break;
+	    }
+
+	}
+	m_desLances = reference.getNbLancesArme(p_indice) + bonusLances;
+	m_desGardes = reference.getNbGardesArme(p_indice) + bonusGardes;
+	m_bonusInit = reference.getBonusInitArme(p_indice) + bonusInitSup;
+
+	m_typeArme = reference.getTypeArme(p_indice);
+	m_malusAttaque = reference.getMalusAttaqueArme(p_indice);
+	m_physMin = reference.getPhysMinArme(p_indice);
+	m_nom = nom;
+	m_categorie = reference.getCategorieArme(p_indice);
+	m_mode = reference.getModArme(p_indice);
+    }
 
     public int getDesLances()
     {
@@ -78,6 +165,11 @@ public class Arme//TODO transformer ctte classe en interface qu'implémenteront 
 	return m_categorie;
     }
 
+    public int getMode()
+    {
+	return m_mode;
+    }
+
     @Override
     public String toString()
     {
@@ -85,57 +177,11 @@ public class Arme//TODO transformer ctte classe en interface qu'implémenteront 
     }
 
     /**
-     * constructeur d'arme de corps à corps à parti de la référence UP!
-     *
-     * @param p_indice
-     */
-    public Arme(int p_indice)
-    {
-	//TODO : ajouter la possibilité de spéifier la qualité et l'quilibrage pour spécifier la fabrique d'arme
-
-	UPReference reference = UPReference.getInstance();
-
-	m_desLances = reference.getNbLancesArmeCac(p_indice);
-	m_desGardes = reference.getNbGardesArmeCac(p_indice);
-	m_bonusInit = reference.getBonusInitArmeCac(p_indice);
-	/**
-	 * le type technologique (utilisé dans l'interraction avec les armures
-	 */
-	m_typeArme = reference.getTypeArmeCac(p_indice);
-	m_malusAttaque = reference.getMalusAttaqueArmeCac(p_indice);
-	m_physMin = reference.getPhysMinArmeCac(p_indice);
-	m_nom = reference.getLblArmeCac(p_indice);
-	/**
-	 * la catégorie utilisée dans l'interraction avec les comps
-	 */
-	m_categorie = reference.getCategorieArmeCac(p_indice);
-    }
-
-    /**
-     * génère les dégâts infligés avec cette arme en combat
-     *
-     * @param p_nbIncrements
-     * @param p_physique
-     * @param p_isSonne
-     * @return
-     */
-    Degats genererDegats(int p_nbIncrements, int p_physique, boolean p_isSonne)
-    {
-	int degatsBruts = 0;
-	if(p_nbIncrements >= 0 && p_physique >= 0)
-	{
-	    degatsBruts = (RollGenerator.lancer(m_desLances + p_nbIncrements + p_physique, m_desGardes, p_isSonne));//TODO : ce fonctionnement est bien adapté au corps à corps, voir si on peut surcharger la méthode pour les armes à distances (enlever l'ajout du physique) ou juste mettre un if avec un booléen en paramétre
-	}
-	else
-	{
-	    ErrorHandler.paramAberrant("increments:" + p_nbIncrements + " physique:" + p_physique);
-	}
-	return new Degats(degatsBruts, m_typeArme);
-    }
-
-    /**
      * classe utilisée pour encapsuler les résultats d'une attaque réussie ; des
-     * dégâts mais aussi le type
+     * dégâts mais aussi le type. On n'utilise pas de collections clé/valeur
+     * comme une EnumMap car l'on veut juste un accès simple à des champs
+     * définis : inutile de dégrader les performances avec toute la mécanique
+     * des collections.
      */
     public static class Degats
     {//TODO : c'est ici que la localisation d'une attaque pourra être insérée pour être communiquée à la cible
@@ -157,7 +203,7 @@ public class Arme//TODO transformer ctte classe en interface qu'implémenteront 
 	 */
 	public Degats(int p_quantite, int p_typeArme)
 	{
-	    if(p_quantite >= 0 && p_typeArme <= 0)
+	    if (p_quantite >= 0 && p_typeArme <= 0)
 	    {
 		m_quantite = p_quantite;
 		m_typeArme = p_typeArme;
@@ -184,4 +230,21 @@ public class Arme//TODO transformer ctte classe en interface qu'implémenteront 
 	    return m_typeArme;
 	}
     }
+
+    /**
+     * Enum contenant les niveaux de qualite des armes
+     */
+    public enum QualiteArme
+    {
+	inferieure, moyenne, superieure, maitre
+    };
+
+    /**
+     * Enum contenant les niveaux d'équilibrage
+     */
+    public enum EquilibrageArme
+    {
+	mauvais, normal, bon
+    };
+
 }

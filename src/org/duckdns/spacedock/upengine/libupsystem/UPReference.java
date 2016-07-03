@@ -2,6 +2,7 @@ package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -14,7 +15,7 @@ import javax.json.JsonReader;
  *
  * @author iconoctopus
  */
-public final class UPReference
+final class UPReference
 {
 
     /**
@@ -72,7 +73,7 @@ public final class UPReference
     /**
      * tableau contenant toutes les armes existant en jeu
      */
-    final JsonArray m_tabArmesCac;
+    final JsonArray m_tabArmes;
     /**
      * table des ajustemnts à effectuer sur les points d'armure pour adapter un
      * type d'armure à un type d'arme. C'est un tableau de tableaux (un pour
@@ -85,15 +86,15 @@ public final class UPReference
      */
     private final JsonArray m_listLblTypArm;
     /**
-     * liste des indices des catégories d'armes utilisables en Càc
+     * liste des libellés des catégories d'armes
      */
-    private final JsonArray m_listCatArmCaC;
+    private final JsonArray m_listLblCatArmCaC;
     /**
-     * liste des indices des catégories d'armes utilisables à distance
+     * liste des libellés des modes d'attaque des armes
      */
-    private final JsonArray m_listCatArmDist;
+    private final JsonArray m_listLblModArm;
     /**
-     * tableau des caracs de toutes les pièces d'armures
+     * tableau des pièces d'armure
      */
     private final JsonArray m_tabPiecesArmures;
     /**
@@ -121,7 +122,7 @@ public final class UPReference
      */
     static UPReference getInstance()
     {
-	if(m_instance == null)
+	if (m_instance == null)
 	{
 	    m_instance = new UPReference();
 	}
@@ -169,10 +170,10 @@ public final class UPReference
 
 	//chargement ded règles des armes
 	object = loadJsonFile("JSON/equipement/caracs_armes.json");
-	m_tabArmesCac = object.getJsonArray("armes_cac");
+	m_tabArmes = object.getJsonArray("armes");
 	m_listLblTypArm = object.getJsonArray("types_armes");
-	m_listCatArmCaC = object.getJsonArray("cat_armes_cac");
-	m_listCatArmDist = object.getJsonArray("cat_armes_dist");
+	m_listLblCatArmCaC = object.getJsonArray("cat_armes_cac");
+	m_listLblModArm = object.getJsonArray("mod_armes");
     }
 
     /**
@@ -223,7 +224,7 @@ public final class UPReference
 	int res = 0;
 
 	int i = -1;//on commence avec i en dehors du tableau (0 points d'armure, pas de bonus) et l'on teste si on peut l'augmenter, quand on ne peut plus l'augmenter on le renvoie.
-	while(i <= 4 && p_points >= m_tableArmureRangs.getInt(i + 1))
+	while (i <= 4 && p_points >= m_tableArmureRangs.getInt(i + 1))
 	{
 	    ++i;
 	}
@@ -242,7 +243,7 @@ public final class UPReference
 	int resultat = 0;
 
 	int rang = getRang(p_points);
-	if(rang >= 0)//impossible si l'on est arrivé jusque là mais on ne sait jamais
+	if (rang >= 0)//impossible si l'on est arrivé jusque là mais on ne sait jamais
 	{
 	    resultat = m_tableArmureRedDegats.getInt(rang);
 	}
@@ -260,7 +261,7 @@ public final class UPReference
 	int resultat = 0;
 
 	int rang = getRang(p_points);
-	if(rang >= 0)//impossible si l'on est arrivé jusque là mais on ne sait jamais
+	if (rang >= 0)//impossible si l'on est arrivé jusque là mais on ne sait jamais
 	{
 	    resultat = m_tableArmureBonusND.getInt(rang);
 	}
@@ -302,10 +303,10 @@ public final class UPReference
      * @param p_indice
      * @return le libellé d'une arme
      */
-    String getLblArmeCac(int p_indice)//TODO : faire équivalent pour distance ou faire un test sur un booléen
+    String getLblArme(int p_indice)
     {
 
-	JsonObject arme = m_tabArmesCac.getJsonObject(p_indice);
+	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
 	return arme.getString("nom");
     }
 
@@ -314,9 +315,9 @@ public final class UPReference
      * @param p_indice
      * @return le nb de dés lancés par une arme
      */
-    int getNbLancesArmeCac(int p_indice)//TODO faire équivalent pour distance ou faire un test sur un booléen
+    int getNbLancesArme(int p_indice)
     {
-	JsonObject arme = m_tabArmesCac.getJsonObject(p_indice);
+	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
 	return arme.getInt("lance");
 
     }
@@ -326,10 +327,10 @@ public final class UPReference
      * @param p_indice
      * @return le nombre de dés gardés d'une arme
      */
-    int getNbGardesArmeCac(int p_indice)//TODO faire équivalent pour distance ou faire un test sur un booléen
+    int getNbGardesArme(int p_indice)
     {
 
-	JsonObject arme = m_tabArmesCac.getJsonObject(p_indice);
+	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
 	return arme.getInt("garde");
 
     }
@@ -339,9 +340,9 @@ public final class UPReference
      * @param p_indice
      * @return le bonus d'init de l'arme
      */
-    int getBonusInitArmeCac(int p_indice)//TODO faire équivalent pour distance ou faire un test sur un booléen
+    int getBonusInitArme(int p_indice)
     {
-	JsonObject arme = m_tabArmesCac.getJsonObject(p_indice);
+	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
 	return arme.getInt("bonus_init");
     }
 
@@ -350,9 +351,9 @@ public final class UPReference
      * @param p_indice
      * @return le malus aux jets d'attaque de l'arme
      */
-    int getMalusAttaqueArmeCac(int p_indice)//TODO faire équivalent pour distance ou faire un test sur un booléen
+    int getMalusAttaqueArme(int p_indice)
     {
-	JsonObject arme = m_tabArmesCac.getJsonObject(p_indice);
+	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
 	return arme.getInt("malus_attaque");
     }
 
@@ -361,9 +362,9 @@ public final class UPReference
      * @param p_indice
      * @return le physique minimal de l'arme
      */
-    int getPhysMinArmeCac(int p_indice)//TODO faire équivalent pour distance ou faire un test sur un booléen
+    int getPhysMinArme(int p_indice)
     {
-	JsonObject arme = m_tabArmesCac.getJsonObject(p_indice);
+	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
 	return arme.getInt("physique_minimal");
     }
 
@@ -372,9 +373,9 @@ public final class UPReference
      * @param p_indice
      * @return l'indice de catégorie de l'arme
      */
-    int getCategorieArmeCac(int p_indice)//TODO faire équivalent pour distance ou faire un test sur un booléen
+    int getCategorieArme(int p_indice)
     {
-	JsonObject arme = m_tabArmesCac.getJsonObject(p_indice);
+	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
 	return arme.getInt("categorie");
     }
 
@@ -383,9 +384,9 @@ public final class UPReference
      * @param p_indice
      * @return l'indice du type de l'arme
      */
-    int getTypeArmeCac(int p_indice)//TODO faire équivalent pour distance ou faire un test sur un booléen
+    int getTypeArme(int p_indice)
     {
-	JsonObject arme = m_tabArmesCac.getJsonObject(p_indice);
+	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
 	return arme.getInt("type");
     }
 
@@ -394,7 +395,7 @@ public final class UPReference
      * @param p_indice
      * @return le libellé d'un type d'arme représenté par son index
      */
-    String getLblTypeArmeCac(int p_indice)//TODO faire équivalent pour distance ou faire un test sur un booléen
+    String getLblTypeArme(int p_indice)
     {
 	return m_listLblTypArm.getString(p_indice);
     }
@@ -402,16 +403,87 @@ public final class UPReference
     /**
      *
      * @param p_indice
-     * @return la liste des catégories d'armes CàC
+     * @return le mode d'attaque d'une arme représentée par son index
      */
-    ArrayList<String> getListCatArmeCac()//TODO faire équivalent pour distance ou faire un test sur un booléen
+    int getModArme(int p_indice)
     {
-	ArrayList<String> res = new ArrayList<>();
-	for(int i = 0; i < m_listCatArmCaC.size(); i++)
-	{
-	    res.add(m_listCatArmCaC.getString(i));
-	}
-	return res;
+	return m_tabArmes.getJsonObject(p_indice).getInt("mode");
+    }
+
+    /**
+     *
+     * @param p_indice
+     * @return le libellé du mode d'attaque représenté par son index
+     */
+    String getLblModArme(int p_indice)
+    {
+	return m_listLblModArm.getString(p_indice);
+    }
+
+    /**
+     * renvoie le libellé d'une catégorie d'arme
+     *
+     * @param p_indice
+     * @return
+     */
+    String getLblCatArmeCaC(int p_indice)
+    {
+	return m_listLblCatArmCaC.getString(p_indice);
+    }
+
+    /**
+     * renvoie le malus à l'attaque à courte portée de l'arme
+     *
+     * @param p_indice
+     * @return
+     */
+    int getMalusCourtArme(int p_indice)
+    {
+	return m_tabArmes.getJsonObject(p_indice).getInt("malus_court");
+    }
+
+    /**
+     * renvoie le malus à l'attaque à longue portée de l'arme
+     *
+     * @param p_indice
+     * @return
+     */
+    int getMalusLongArme(int p_indice)
+    {
+	return m_tabArmes.getJsonObject(p_indice).getInt("malus_long");
+    }
+
+    /**
+     * renvoie la portée de l'arme
+     *
+     * @param p_indice
+     * @return
+     */
+    int getPorteeArme(int p_indice)
+    {
+	return m_tabArmes.getJsonObject(p_indice).getInt("portee");
+    }
+
+    /**
+     * renvoie le nombre d'actions nécessaire au rechargement de l'arme
+     *
+     * @param p_indice
+     * @return
+     */
+    int getNbActionsRechargeArme(int p_indice)
+    {
+	return m_tabArmes.getJsonObject(p_indice).getInt("actions_recharge");
+    }
+
+    /**
+     * renvoie le max de munitions au sein de l'arme
+     *
+     * @param p_indice
+     * @return
+     */
+    int getMagasinArme(int p_indice)
+    {
+	return m_tabArmes.getJsonObject(p_indice).getInt("magasin");
     }
 
     /**
@@ -456,7 +528,7 @@ public final class UPReference
 	JsonObject domaine = m_arbreDomaines.getJsonObject(p_indice);
 	JsonArray tabComp = domaine.getJsonArray("comps");
 
-	for(int i = 0; i < tabComp.size(); ++i)
+	for (int i = 0; i < tabComp.size(); ++i)
 	{
 	    res.add(tabComp.getString(i));
 
@@ -487,7 +559,7 @@ public final class UPReference
      * @return le libellé d'une compétence
      */
     String getLblComp(int p_indiceDomaine, int p_indiceComp)
-    {//TODO si domaine CaC appeler la liste des catégories
+    {//TODO si domaine CaC ou CaD appeler la liste des catégories
 	JsonObject domaine = m_arbreDomaines.getJsonObject(p_indiceDomaine);
 	JsonArray tabComp = domaine.getJsonArray("comps");
 	return tabComp.getString(p_indiceComp);
@@ -582,7 +654,7 @@ public final class UPReference
      * Classe encapsulant les libellés autres que ceux utilisés dans les
      * caractéristiques et l'équipement (surtout utilisé pour l'entrée sortie)
      */
-    public final class CollectionLibelles
+    final class CollectionLibelles
     {
 
 	public final String typarm;
@@ -590,16 +662,39 @@ public final class UPReference
 	public final String ptsarmure;
 	public final String trait;
 	public final String interArme;
+	public final String liaison;
+	public final String addition;
+	public final String qualite;
+	public final String equilibrage;
+
+	public final EnumMap libQualite;
+	public final EnumMap libEquilibrage;
 
 	CollectionLibelles(JsonObject p_libelles)
 	{
-	    if(p_libelles != null)
+	    if (p_libelles != null)
 	    {
 		typarm = p_libelles.getString("typarm");
 		typarmure = p_libelles.getString("typarmure");
 		ptsarmure = p_libelles.getString("ptsarmure");
 		trait = p_libelles.getString("trait");
 		interArme = p_libelles.getString("interArme");
+		liaison = p_libelles.getString("liaison_standard");
+		addition = p_libelles.getString("liaison_addition");
+		qualite = p_libelles.getString("qualite");
+		equilibrage = p_libelles.getString("equilibrage");
+		JsonArray tabQualite = p_libelles.getJsonArray("lib_qualite");
+		libQualite = new EnumMap(Arme.QualiteArme.class);
+		libQualite.put(Arme.QualiteArme.inferieure, tabQualite.get(0));
+		libQualite.put(Arme.QualiteArme.moyenne, tabQualite.get(1));
+		libQualite.put(Arme.QualiteArme.superieure, tabQualite.get(2));
+		libQualite.put(Arme.QualiteArme.maitre, tabQualite.get(3));
+
+		JsonArray tabEquilibrage = p_libelles.getJsonArray("lib_equilibrage");
+		libEquilibrage = new EnumMap(Arme.EquilibrageArme.class);
+		libEquilibrage.put(Arme.EquilibrageArme.mauvais, tabQualite.get(0));
+		libEquilibrage.put(Arme.EquilibrageArme.normal, tabQualite.get(1));
+		libEquilibrage.put(Arme.EquilibrageArme.bon, tabQualite.get(2));
 	    }
 	    else
 	    {
@@ -608,16 +703,23 @@ public final class UPReference
 		ptsarmure = "ptsarmure";
 		trait = "trait";
 		interArme = "interArme";
+		liaison = "de";
+		addition = "et";
+		qualite = "qualite";
+		equilibrage = "equilibrage";
+		libQualite = new EnumMap(Arme.QualiteArme.class);
+		libQualite.put(Arme.QualiteArme.inferieure, "inf");
+		libQualite.put(Arme.QualiteArme.moyenne, "moy");
+		libQualite.put(Arme.QualiteArme.superieure, "sup");
+		libQualite.put(Arme.QualiteArme.maitre, "maitre");
+
+		JsonArray tabEquilibrage = p_libelles.getJsonArray("lib_equilibrage");
+		libEquilibrage = new EnumMap(Arme.EquilibrageArme.class);
+		libEquilibrage.put(Arme.EquilibrageArme.mauvais, "mauvais");
+		libEquilibrage.put(Arme.EquilibrageArme.normal, "normal");
+		libEquilibrage.put(Arme.EquilibrageArme.bon, "bon");
+
 	    }
 	}
     }
-
-    /**
-     * Enum contenant les types de compétences free form (pour l'instant
-     * attaque, parade et art & métier)
-     */
-    public enum IdCompsFreeFrom
-    {
-	attaque, parade, metier
-    };
 }

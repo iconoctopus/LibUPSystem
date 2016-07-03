@@ -171,35 +171,48 @@ public class Perso
     public RollUtils.RollResult attaquerCac(int p_phaseActuelle, int p_ND, boolean p_mainsNues)
     {
 	Arme arme = m_inventaire.getArmeCourante();
-	int catArm;
-	if (arme != null)//une arme est équipée et on veut l'utiliser
+	int catArm = 0;
+	if (arme != null && !p_mainsNues)//une arme est équipée et l'on veut s'en servir
 	{
-	    catArm = arme.getCategorie();
+
+	    if (arme.getMode() == 0)
+	    {
+		catArm = arme.getCategorie();
+	    }
+	    else
+	    {
+		ErrorHandler.mauvaiseMethode("mauvais mode d'attaque");
+	    }
+
+	    return effectuerAttaque(p_phaseActuelle, p_ND, catArm, 3, 0);
 	}
-	else
-	{
-	    catArm = 0;
-	}
-	return effectuerAttaque(p_phaseActuelle, p_ND, catArm, 3, 0);
-    }
+
+
+
+
+
+
 
     public RollResult attaquerDist(int p_phaseActuelle, int p_ND, int p_distance)
     {
-
-	if (p_distance >= 0)
+	Arme arme = m_inventaire.getArmeCourante();
+	if ()
 	{
-	    if (p_distance <= ((ArmeDist) arme).getPortee())//TODO mieux arrondir et tester cas pile la moitié
-	    {//portée courte
-		modDist = ((ArmeDist) arme).getMalusCourt();
+	    if (p_distance >= 0)
+	    {
+		if (p_distance <= ((ArmeDist) arme).getPortee())//TODO mieux arrondir et tester cas pile la moitié
+		{//portée courte
+		    modDist = ((ArmeDist) arme).getMalusCourt();
+		}
+		else
+		{//portée longue
+		    modDist = ((ArmeDist) arme).getMalusLong();
+		}
 	    }
 	    else
-	    {//portée longue
-		modDist = ((ArmeDist) arme).getMalusLong();
+	    {
+		ErrorHandler.paramAberrant("distance:" + p_distance);
 	    }
-	}
-	else
-	{
-	    ErrorHandler.paramAberrant("distance:" + p_distance);
 	}
 
     }

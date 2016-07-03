@@ -34,4 +34,20 @@ class ErrorHandler
 	throw new IllegalArgumentException(message);
     }
 
+    /**
+     * envoyer une exception IllegalStateException avec un message d'erreur
+     * standardisé et un complément de texte
+     *
+     * @param p_complementTexte
+     */
+    static void mauvaiseMethode(String p_complementTexte)
+    {
+	String message = "";
+
+	message = message.concat(PropertiesHandler.getInstance().getErrorMessage("mauv_meth"));
+	message = message.concat(p_complementTexte);
+
+	throw new IllegalStateException(message);
+    }
+
 }

@@ -6,7 +6,7 @@ package org.duckdns.spacedock.upengine.libupsystem;
  *
  * @author iconoctopus
  */
-public class Arme//TODO transformer ctte classe en interface qu'implémenteront ArmeCac et ArmeDist (ils interrogeront différemment UPReference dans leur constructeur car les indices d'armes des dexu catégories se recouvrent)
+public class Arme//TODO transformer cette classe en interface qu'implémenteront ArmeCac et ArmeDist (ils interrogeront différemment UPReference dans leur constructeur car les indices d'armes des deux catégories se recouvrent)
 {
 
     /**

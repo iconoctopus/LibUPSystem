@@ -1,15 +1,6 @@
 {
     "armes": [
 	{
-	    "nom": "epee courte",
-	    "lance": 3,
-	    "garde": 3,
-	    "bonus_init": 0,
-	    "malus_attaque": 0,
-	    "physique_minimal": 0,
-	    "categorie": 1,
-	    "type": 0
-	}, {
 	    "nom": "rapiere",
 	    "lance": 2,
 	    "garde": 3,

@@ -91,7 +91,7 @@ public class Arme//TODO transformer cette classe en interface qu'implémenteront
      */
     public Arme(int p_indice)
     {
-	//TODO : ajouter la possibilité de spécifier la qualité et l'quilibrage pour spécifier la fabrique d'arme
+	//TODO : ajouter la possibilité de spécifier la qualité et l'équilibrage pour spécifier la fabrique d'arme
 
 	UPReference reference = UPReference.getInstance();
 

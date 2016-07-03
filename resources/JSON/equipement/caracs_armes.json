@@ -1,6 +1,16 @@
 {
     "armes": [
 	{
+	    "nom": "coutelas",
+	    "lance": 2,
+	    "garde": 3,
+	    "bonus_init": 1,
+	    "malus_attaque": 1,
+	    "physique_minimal": 0,
+	    "categorie": 1,
+	    "type": 0,
+	    "mode": 0
+	}, {
 	    "nom": "epee courte",
 	    "lance": 3,
 	    "garde": 3,

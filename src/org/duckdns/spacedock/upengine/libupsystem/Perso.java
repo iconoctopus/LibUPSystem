@@ -168,7 +168,7 @@ public abstract class Perso
      * @param p_mainsNues booléen pour forcer l'attaque sans arme
      * @return
      */
-    public RollUtils.RollResult attaquerCac(int p_phaseActuelle, int p_ND, boolean p_mainsNues)
+    public RollUtils.RollResult attaquerCaC(int p_phaseActuelle, int p_ND, boolean p_mainsNues)
     {
 	Arme arme = m_inventaire.getArmeCourante();
 	int catArm = 0;
@@ -186,6 +186,8 @@ public abstract class Perso
 
 	    return effectuerAttaque(p_phaseActuelle, p_ND, catArm, 3, 0);
 	}
+
+
 
 
 

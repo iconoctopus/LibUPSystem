@@ -1,11 +1,11 @@
 {
     "armes": [
 	{
-	    "nom": "coutelas",
+	    "nom": "rapiere",
 	    "lance": 2,
 	    "garde": 3,
 	    "bonus_init": 1,
-	    "malus_attaque": 1,
+	    "malus_attaque": 0,
 	    "physique_minimal": 0,
 	    "categorie": 1,
 	    "type": 0,
@@ -21,22 +21,32 @@
 	    "type": 0,
 	    "mode": 0
 	}, {
-	    "nom": "rapiere",
+	    "nom": "coutelas",
 	    "lance": 2,
 	    "garde": 3,
 	    "bonus_init": 1,
-	    "malus_attaque": 0,
+	    "malus_attaque": 1,
 	    "physique_minimal": 0,
 	    "categorie": 1,
 	    "type": 0,
 	    "mode": 0
-	},  {
+	}, {
 	    "nom": "sabre",
 	    "lance": 4,
 	    "garde": 3,
 	    "bonus_init": 1,
 	    "malus_attaque": 1,
 	    "physique_minimal": 0,
+	    "categorie": 1,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "cimeterre",
+	    "lance": 4,
+	    "garde": 3,
+	    "bonus_init": 1,
+	    "malus_attaque": 1,
+	    "physique_minimal": 2,
 	    "categorie": 1,
 	    "type": 0,
 	    "mode": 0

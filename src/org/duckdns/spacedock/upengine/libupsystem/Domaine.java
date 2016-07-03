@@ -136,7 +136,7 @@ public class Domaine
      * incréments obtenus
      */
     RollResult effectuerJetComp(int p_comp, int p_trait, int p_nd, int p_modifNbDes, int p_modifScore, boolean p_isSonne)
-    {//TODO : cette fonction pour les jets d'attaques grace à getRang() qui abrite la valeur d'attaque, il faudrait un traitement particulier pour les parades actives
+    {//TODO : cette fonction pour les jets d'attaques grâce à getRang() qui abrite la valeur d'attaque, il faudrait un traitement particulier pour les parades actives
 	int result = 0;
 	int comp = getCompetences().get(p_comp).getRang();
 	if (getRang() > 0 && comp >= 0 && p_trait >= 0)

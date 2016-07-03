@@ -86,9 +86,13 @@ final class UPReference
      */
     private final JsonArray m_listLblTypArm;
     /**
-     * liste des libellés des catégories d'armes
+     * liste des libellés des catégories d'armes de corps à corps
      */
     private final JsonArray m_listLblCatArmCaC;
+    /**
+     * liste des libellés des catégories d'armes à distance
+     */
+    private final JsonArray m_listLblCatArmDist;
     /**
      * liste des libellés des modes d'attaque des armes
      */
@@ -173,6 +177,7 @@ final class UPReference
 	m_tabArmes = object.getJsonArray("armes");
 	m_listLblTypArm = object.getJsonArray("types_armes");
 	m_listLblCatArmCaC = object.getJsonArray("cat_armes_cac");
+	m_listLblCatArmDist = object.getJsonArray("cat_armes_dist");
 	m_listLblModArm = object.getJsonArray("mod_armes");
     }
 
@@ -421,7 +426,7 @@ final class UPReference
     }
 
     /**
-     * renvoie le libellé d'une catégorie d'arme
+     * renvoie le libellé d'une catégorie d'arme de corps à corps
      *
      * @param p_indice
      * @return
@@ -429,6 +434,17 @@ final class UPReference
     String getLblCatArmeCaC(int p_indice)
     {
 	return m_listLblCatArmCaC.getString(p_indice);
+    }
+
+    /**
+     * renvoie le libellé d'une catégorie d'arme à distance
+     *
+     * @param p_indice
+     * @return
+     */
+    String getLblCatArmeDist(int p_indice)
+    {
+	return m_listLblCatArmDist.getString(p_indice);
     }
 
     /**
@@ -494,11 +510,9 @@ final class UPReference
      */
     int getNbPointsBouclier(int p_bouclier, int p_materiau)
     {
-
 	JsonObject objetIntermediaire = m_tabBoucliers.getJsonObject(p_bouclier);
 	JsonArray tabIntermediaire = objetIntermediaire.getJsonArray("points");
 	return tabIntermediaire.getInt(p_materiau);
-
     }
 
     /**
@@ -515,25 +529,44 @@ final class UPReference
     /**
      * On utilise plutôt getLblComp pour récupérer un libellé de comp. Cette
      * compétence sert surtout à récupérer le nombre de comps d'un domaine (avec
-     * la size de la liste). MAis autant renvoyer un libellé au passage.
+     * la size de la liste). Mais autant renvoyer un libellé au passage.
      *
      * @param p_indice
      * @return la liste des libellés des compétences d'un domaine donné par son
-     * indice
+     * indice avec un traitement spécial pour le corps à corps où il y a juste
+     * la liste des catégories d'armes
      */
     ArrayList<String> getListComp(int p_indice)
     {
 	ArrayList<String> res = new ArrayList<>();
 
-	JsonObject domaine = m_arbreDomaines.getJsonObject(p_indice);
-	JsonArray tabComp = domaine.getJsonArray("comps");
-
-	for (int i = 0; i < tabComp.size(); ++i)
+	if (p_indice == 3)//domaine corps à corps : on renvoie la liste des catégories d'armes de corps à corps
 	{
-	    res.add(tabComp.getString(i));
-
+	    for (int i = 0; i < m_listLblCatArmCaC.size(); ++i)
+	    {
+		res.add(m_listLblCatArmCaC.getString(i));
+	    }
 	}
+	else
+	{
+	    if (p_indice == 4)//domaine combat à distance : on renvoie la liste des catégories d'armes à distance
+	    {
+		for (int i = 0; i < m_listLblCatArmDist.size(); ++i)
+		{
+		    res.add(m_listLblCatArmDist.getString(i));
+		}
+	    }
+	    else
+	    {
+		JsonObject domaine = m_arbreDomaines.getJsonObject(p_indice);
+		JsonArray tabComp = domaine.getJsonArray("comps");
 
+		for (int i = 0; i < tabComp.size(); ++i)
+		{
+		    res.add(tabComp.getString(i));
+		}
+	    }
+	}
 	return res;
     }
 

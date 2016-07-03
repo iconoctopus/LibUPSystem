@@ -54,7 +54,7 @@ class CoupleJauge
      */
     CoupleJauge(int p_physique, int p_volonte, int p_mental, int p_coordination)//jauge de santé
     {
-	if(p_physique >= 0 && p_volonte >= 0 && p_mental >= 0 && p_coordination >= 0)
+	if (p_physique >= 0 && p_volonte >= 0 && p_mental >= 0 && p_coordination >= 0)
 	{
 	    instancier(p_physique + p_volonte, UPReference.getInstance().getInitModCoord(p_coordination) + UPReference.getInstance().getInitModMental(p_mental), p_physique);
 	}
@@ -73,7 +73,7 @@ class CoupleJauge
      */
     CoupleJauge(int p_physique, int p_volonte, int p_tailleForceDAme)//jauge de fatigue
     {
-	if(p_physique >= 0 && p_volonte >= 0 && p_tailleForceDAme >= 0)
+	if (p_physique >= 0 && p_volonte >= 0 && p_tailleForceDAme >= 0)
 	{
 
 	    instancier(p_physique + p_volonte, p_tailleForceDAme, p_volonte);
@@ -119,26 +119,26 @@ class CoupleJauge
      */
     int recevoirDegats(int p_degats, int p_resultatJet, int p_volonte)
     {
-	if(p_degats >= 0 && p_resultatJet >= 0 && p_volonte >= 0)
+	if (p_degats >= 0 && p_resultatJet >= 0 && p_volonte >= 0)
 	{
-	    double quotient;
+	    int quotient;
 	    int blessGraves;
 
 	    m_blessuresLegeres += p_degats;
-	    if(p_resultatJet < m_blessuresLegeres)//le jet d'absorption est en dessous du ND des blessures légères
+	    if (p_resultatJet < m_blessuresLegeres)//le jet d'absorption est en dessous du ND des blessures légères
 	    {
-		quotient = ((double) (m_blessuresLegeres) - (double) (p_resultatJet));//TODO remplacer ce calcul par un modulo ou autre, en tout cas quelque chose de plus propre
-		quotient = quotient / 10.0; //on compte le nombre de tranches entières de 10, comme indiqué ci-dessus l'absence de modulo  peut générer une blessures graves supplémentaire
+		quotient = ((m_blessuresLegeres) - (p_resultatJet));
+		quotient = quotient / 10; //on compte le nombre de tranches entières de 10, la division entre int va correctement tronquer
 		blessGraves = (int) quotient + 1;//total des blessures graves : une pour avoir raté le jet, et une par tranche de 10
 		m_blessuresLegeres = 0;
 		m_remplissage_interne += blessGraves;
 
-		if(m_remplissage_interne > m_choc)//on risque l'inconscience et l'élimination
+		if (m_remplissage_interne > m_choc)//on risque l'inconscience et l'élimination
 		{
-		    if(m_remplissage_interne >= m_taille_interne || RollUtils.lancer(p_volonte, p_volonte, isSonne()) < (5 * m_remplissage_interne))//jet raté ou jauge remplie
+		    if (m_remplissage_interne >= m_taille_interne || RollUtils.lancer(p_volonte, p_volonte, isSonne()) < (5 * m_remplissage_interne))//jet raté ou jauge remplie
 		    {
 			m_inconscient = true;
-			if(m_remplissage_interne >= m_taille_interne)//jauge remplie
+			if (m_remplissage_interne >= m_taille_interne)//jauge remplie
 			{
 			    m_elimine = true;
 			    m_remplissage_interne = m_taille_interne;//on ramène le remplissage au max de la jauge si il dépasse
@@ -147,10 +147,10 @@ class CoupleJauge
 		}
 
 		int ecart_IntExt = m_taille_interne - m_taille_externe;
-		if(m_remplissage_interne > ecart_IntExt)//on vide la jauge externe
+		if (m_remplissage_interne > ecart_IntExt)//on vide la jauge externe
 		{
 		    m_remplissage_externe -= m_remplissage_interne - ecart_IntExt;
-		    if(m_remplissage_externe < 0)//jauge vide, on corrige tout nombre négatif
+		    if (m_remplissage_externe < 0)//jauge vide, on corrige tout nombre négatif
 		    {
 			m_remplissage_externe = 0;//TODO à terme gérer le remplissage de cette valeur avec le système de soins
 		    }

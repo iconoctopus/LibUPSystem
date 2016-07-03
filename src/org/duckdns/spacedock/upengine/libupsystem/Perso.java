@@ -153,29 +153,31 @@ public abstract class Perso
     }
 
     /**
-     * Fait effectuer une attaque au personnage, la génération des dégâts est
-     * séparée et déclenchée depuis l'extérieur afin que le contrôleur puisse
-     * choisir d'utiliser les incréments pour autre chose que des dégâs. Me
-     * personnage attaquera systématiquement avec l'arme courante, il faut donc
-     * la configurer avant. Cette méthode vérifie que l'action est possible dans
-     * la phase courante en fonction de l'init du perso, elle est donc conçue
-     * pour le combat uniquement
+     * Fait effectuer une attaque au corps à corps au personnage, la génération
+     * des dégâts est séparée et déclenchée depuis l'extérieur afin que le
+     * contrôleur puisse choisir d'utiliser les incréments pour autre chose que
+     * des dégâs. Me personnage attaquera systématiquement avec l'arme courante,
+     * il faut donc la configurer avant. Cette méthode vérifie que l'action est
+     * possible dans la phase courante en fonction de l'init du perso, elle est
+     * donc conçue pour le combat uniquement. On utilise l'arme courante ou les
+     * mains nues. Si l'on veut utiliser une autre arme il faut d'abord la
+     * configurer comme arme courante. Une exception est levée si l'on essaye
+     * d'attaquer en corps à corps avec une arme à distance (rien n'interdit
+     * d'entrer une distance 0 dans l'autre méthode adaptée)
      *
      * @param p_phaseActuelle
      * @param p_ND
-     * @param p_distance ignoré si arme de corps à corps équipée ou attaque à
-     * mains nues
      * @param p_mainsNues booléen pour forcer l'attaque sans arme
      * @return
      */
     public RollUtils.RollResult attaquerCaC(int p_phaseActuelle, int p_ND, boolean p_mainsNues)
     {
 	Arme arme = m_inventaire.getArmeCourante();
-	int catArm = 0;
+	int catArm = 0;//mains nues par défaut
 	if (arme != null && !p_mainsNues)//une arme est équipée et l'on veut s'en servir
 	{
 
-	    if (arme.getMode() == 0)
+	    if (arme.getMode() == 0)//vérification qu'il s'agit bien d'une arme de corps à corps
 	    {
 		catArm = arme.getCategorie();
 	    }
@@ -184,33 +186,84 @@ public abstract class Perso
 		ErrorHandler.mauvaiseMethode("mauvais mode d'attaque");
 	    }
 
-	    return effectuerAttaque(p_phaseActuelle, p_ND, catArm, 3, 0);
 	}
+	return effectuerAttaque(p_phaseActuelle, p_ND, catArm, 3, 0, 0, 0);
+    }
 
-
-
-
-
-
-
-
-
-
-
-    public RollResult attaquerDist(int p_phaseActuelle, int p_ND, int p_distance)
+    /**
+     * Fait effectuer une attaque à distance au personnage, la génération des
+     * dégâts est séparée et déclenchée depuis l'extérieur afin que le
+     * contrôleur puisse choisir d'utiliser les incréments pour autre chose que
+     * des dégâs. Cette méthode vérifie que l'action est possible dans la phase
+     * courante en fonction de l'init du perso, elle est donc conçue pour le
+     * combat uniquement. On utilise l'arme courante ou les mains nues. Si l'on
+     * veut utiliser une autre arme il faut d'abord la configurer comme arme
+     * courante. Une exception est levée si l'on essaye d'attaquer à distance
+     * avec une arme de corps à corps (rien n'interdit d'entrer une distance 0
+     * dans l'autre méthode adaptée). Aucune vérification n'est effectuée sur le
+     * magasin actuel de l'arme. Si celui-ci n'est pas suffisant l'arme lèvera
+     * une exception.
+     *
+     * @param p_phaseActuelle
+     * @param p_ND
+     * @param p_distance la distance de la cible
+     * @param p_nbCoups nombre de tirs effectués (pour la règle
+     * @return
+     */
+    public RollResult attaquerDist(int p_phaseActuelle, int p_ND, int p_distance, int p_nbCoups)
     {
-	Arme arme = m_inventaire.getArmeCourante();
-	if ()
+	RollResult result = new RollResult(0, false);//raté par défaut
+	ArmeDist arme = (ArmeDist) m_inventaire.getArmeCourante();
+	int modDist = 0;
+	if (arme.getMode() == 1)//vérification qu'il s'agit bien d'une arme à distance
 	{
+	    arme.consommerMun(p_nbCoups);//on consomme les coups, une exception sera levée si il n'y a pas assez de munitions, le code appelant devrait vérifier systématiquement cela
 	    if (p_distance >= 0)
 	    {
-		if (p_distance <= ((ArmeDist) arme).getPortee())//TODO mieux arrondir et tester cas pile la moitié
-		{//portée courte
-		    modDist = ((ArmeDist) arme).getMalusCourt();
-		}
-		else
-		{//portée longue
-		    modDist = ((ArmeDist) arme).getMalusLong();
+		if (p_distance <= arme.getPortee())//échec auto si distance > portée
+		{
+		    if (p_distance <= arme.getPortee())//TODO mieux arrondir et tester cas pile la moitié
+		    {//portée courte
+			modDist -= arme.getMalusCourt();
+		    }
+		    else
+		    {//portée longue
+			modDist -= arme.getMalusLong();
+		    }
+		    //tir effectif, maintenant il faut calculer l'éventuel bonus de rafale
+		    int bonusDesLancesRafale = 0;
+		    int bonusDesGardesRafale = 0;
+
+		    if (p_nbCoups > 1)
+		    {
+			if (arme.getCategorie() == 3)//rafales acceptées, sinon lever une exception
+			{
+			    if (p_nbCoups >= 3)//les bonus commmencent à partir de 3 balles
+			    {
+				if (p_nbCoups < 4)//rafale courte
+				{
+				    bonusDesLancesRafale = 2;
+				}
+				else
+				{
+				    if (p_nbCoups < 10)//rafale moyenne
+				    {
+					int preResult = (p_nbCoups / 3);//division entre int donc troncature
+					bonusDesLancesRafale = preResult * 2;
+				    }
+				    else//rafale longue
+				    {
+					bonusDesLancesRafale = bonusDesGardesRafale = (p_nbCoups / 5);//division entre int donc troncature
+				    }
+				}
+			    }
+			}
+			else
+			{
+			    ErrorHandler.paramAberrant("rafale sur arme à coup par coup");
+			}
+		    }
+		    result = effectuerAttaque(p_phaseActuelle, p_ND, arme.getCategorie(), 4, bonusDesLancesRafale, bonusDesGardesRafale, modDist);
 		}
 	    }
 	    else
@@ -218,36 +271,37 @@ public abstract class Perso
 		ErrorHandler.paramAberrant("distance:" + p_distance);
 	    }
 	}
-
+	else
+	{
+	    ErrorHandler.mauvaiseMethode("mauvais mode d'attaque");
+	}
+	return result;
     }
 
-    private RollResult effectuerAttaque(int p_phaseActuelle, int p_ND, int p_catArm, int p_domaine, int p_modifScore)
-    {
+    private RollResult effectuerAttaque(int p_phaseActuelle, int p_ND, int p_comp, int p_domaine, int p_modifNbLances, int p_modifNbGardes, int p_modifScore)
+    {//TODO blinder cette méthode
 	RollResult result = null;
 	if (agirEnCombat(p_phaseActuelle))
 	{
-	    int MalusDes = 0;
+	    int modDesLances = 0 + p_modifNbLances;
+	    int modDesGardes = 0 + p_modifNbGardes;
+	    int modFinal = 0 + p_modifScore;
 	    int ecartPhyMin = 0;
-	    int modDist = 0;
-	    int catArm = 0; //mains nues par défaut
-	    int domaine = 3; //CaC par défaut
-	    Arme arme = m_inventaire.getArmeCourante();
-	    if (arme != null)//une arme est équipée et on veut l'utiliser
-	    {
-		catArm = arme.getCategorie();
-		if (arme.getphysMin() > m_traits[0])
-		{
-		    ecartPhyMin += m_traits[0] - arme.getphysMin();
-		}
-		MalusDes += arme.getMalusAttaque();
-		if (arme.getMode() == 1)//arme à distance
-		{
-		    domaine = 4;
 
+	    Arme arme = m_inventaire.getArmeCourante();
+
+	    if (p_comp != 0)//on utilise une arme, il faut prendre en compte ses éventuels malus
+	    {
+		{
+		    if (arme.getphysMin() > m_traits[0])
+		    {
+			ecartPhyMin += m_traits[0] - arme.getphysMin();
+		    }
 		}
+		modDesLances -= arme.getMalusAttaque();
 	    }
-	    int modFinal = (ecartPhyMin * 10) - modDist;
-	    result = m_listDomaines.get(domaine).effectuerJetComp(catArm, m_traits[1], p_ND, -MalusDes, modFinal, isSonne());
+	    modFinal += (ecartPhyMin * 10);
+	    result = m_listDomaines.get(p_domaine).effectuerJetComp(p_comp, m_traits[1], p_ND, modDesLances, modDesGardes, modFinal, isSonne());
 	}
 	return result;
     }
@@ -310,7 +364,6 @@ public abstract class Perso
 		result = ((ArmeDist) arme).genererDegats(p_increments, isSonne());
 	    }
 	}
-
 	return result;
     }
 
@@ -420,7 +473,7 @@ public abstract class Perso
 	Arme arme = m_inventaire.getArmeCourante();
 	if (arme != null)
 	{
-	    result += arme.getBonusInit();
+	    result += arme.getBonusInit() * 5;
 	}
 	return result;
     }

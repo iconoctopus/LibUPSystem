@@ -43,7 +43,6 @@ public abstract class Arme
      * le mode d'attaque de l'arme
      */
     private final int m_mode;
-
     /**
      * le nom de l'arme
      */
@@ -80,6 +79,7 @@ public abstract class Arme
 	    nom = nom.concat(reference.libelles.liaison);
 	    nom = nom.concat(" ");
 	    nom = nom.concat(reference.libelles.qualite);
+	    nom = nom.concat(" ");
 
 	    switch (p_qualite)
 	    {
@@ -202,7 +202,7 @@ public abstract class Arme
 	 */
 	public Degats(int p_quantite, int p_typeArme)
 	{
-	    if (p_quantite >= 0 && p_typeArme <= 0)
+	    if (p_quantite >= 0 && p_typeArme >= 0)
 	    {
 		m_quantite = p_quantite;
 		m_typeArme = p_typeArme;
@@ -245,5 +245,4 @@ public abstract class Arme
     {
 	mauvais, normal, bon
     };
-
 }

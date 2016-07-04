@@ -1,7 +1,7 @@
 {
     "armes": [
 	{
-	    "nom": "rapiere",
+	    "nom": "rapière",
 	    "lance": 2,
 	    "garde": 3,
 	    "bonus_init": 1,

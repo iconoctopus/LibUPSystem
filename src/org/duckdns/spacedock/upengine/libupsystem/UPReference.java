@@ -725,9 +725,9 @@ final class UPReference
 
 		JsonArray tabEquilibrage = p_libelles.getJsonArray("lib_equilibrage");
 		libEquilibrage = new EnumMap(Arme.EquilibrageArme.class);
-		libEquilibrage.put(Arme.EquilibrageArme.mauvais, tabQualite.getString(0));
-		libEquilibrage.put(Arme.EquilibrageArme.normal, tabQualite.getString(1));
-		libEquilibrage.put(Arme.EquilibrageArme.bon, tabQualite.getString(2));
+		libEquilibrage.put(Arme.EquilibrageArme.mauvais, tabEquilibrage.getString(0));
+		libEquilibrage.put(Arme.EquilibrageArme.normal, tabEquilibrage.getString(1));
+		libEquilibrage.put(Arme.EquilibrageArme.bon, tabEquilibrage.getString(2));
 	    }
 	    else
 	    {

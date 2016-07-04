@@ -22,9 +22,6 @@ public final class UPReferenceTest
 
     private static UPReference m_reference;
 
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
     @BeforeClass
     public static void setUpClass()
     {

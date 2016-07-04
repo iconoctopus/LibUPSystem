@@ -6,7 +6,9 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.util.ArrayList;
+import static org.duckdns.spacedock.upengine.libupsystem.CoupleJaugeTest.jauge3;
 import org.junit.Assert;
+import static org.junit.Assert.fail;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -17,9 +19,6 @@ import org.junit.rules.ExpectedException;
  */
 public class DomaineTest
 {
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void testDomaine()
@@ -35,21 +34,44 @@ public class DomaineTest
 
 	Domaine domaine3;
 
-	thrown.expect(IllegalArgumentException.class);
-	thrown.expectMessage("indice:-1");
-	domaine3 = new Domaine(-1, 1);
+	try
+	{
+	    domaine3 = new Domaine(-1, 1);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:indice:-1", e.getMessage());
+	}
 
-	thrown.expect(IllegalArgumentException.class);
-	thrown.expectMessage("rang:-11");
-	domaine1.setRang(-11);
+	try
+	{
+	    domaine1.setRang(-11);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:rang:-11", e.getMessage());
+	}
 
-	thrown.expect(IllegalArgumentException.class);
-	thrown.expectMessage("rang:-11");
-	new Competence(-11);
+	try
+	{
+	    new Competence(-11);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:rang:-11", e.getMessage());
+	}
 
-	thrown.expect(IllegalArgumentException.class);
-	thrown.expectMessage("rang:-11");
-	new CompCac(1, -11);
-
+	try
+	{
+	    new CompCac(1, -11);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:rang:-11", e.getMessage());
+	}
     }
 }

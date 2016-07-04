@@ -6,6 +6,7 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
 import org.junit.Assert;
+import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -21,9 +22,6 @@ public class PersoTest
     static Perso persoRM1;
     static Perso persoRM3;
     static Perso persoRM5;
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     @Before
     public void setUp()
@@ -96,9 +94,16 @@ public class PersoTest
 	Assert.assertFalse(persoRM3.isInconscient());
 	Assert.assertFalse(persoRM3.isElimine());
 
-	thrown.expect(IllegalArgumentException.class);
-	thrown.expectMessage("rang:-11");
-	new Perso(-11);
+	try
+	{
+	    new Perso(-11);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:rang:-11", e.getMessage());
+	}
+
     }
 
     @Test
@@ -125,9 +130,15 @@ public class PersoTest
 	persoRM5.agirEnCombat(persoRM5.getActions().get(4));
 	Assert.assertEquals(11, persoRM5.getActions().get(4).intValue());
 
-	thrown.expect(IllegalArgumentException.class);
-	thrown.expectMessage("phase:0");
-	persoRM1.agirEnCombat(0);
+	try
+	{
+	    persoRM1.agirEnCombat(0);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:phase:0", e.getMessage());
+	}
     }
 
     @Test

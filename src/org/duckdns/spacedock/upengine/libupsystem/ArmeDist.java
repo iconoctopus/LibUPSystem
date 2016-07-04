@@ -142,7 +142,7 @@ public class ArmeDist extends Arme
      */
     int recharger(int p_nbMun)
     {
-	if (p_nbMun > 0 && p_nbMun <= m_magasinMax)
+	if (p_nbMun > 0 && (p_nbMun + m_magasinCourant) <= m_magasinMax)
 	{
 	    m_magasinCourant += p_nbMun;
 	}

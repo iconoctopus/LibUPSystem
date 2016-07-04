@@ -8,9 +8,7 @@ package org.duckdns.spacedock.upengine.libupsystem;
 import org.junit.Assert;
 import static org.junit.Assert.fail;
 import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 /**
  *
@@ -30,7 +28,7 @@ public class ArmeTest
 	arme1 = new ArmeCaC(0, Arme.QualiteArme.superieure, Arme.EquilibrageArme.mauvais);
 	arme2 = new ArmeCaC(1, Arme.QualiteArme.inferieure, Arme.EquilibrageArme.bon);
 	arme3 = new ArmeCaC(1, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais);
-	arme4 = new ArmeDist(2, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal);
+	arme4 = new ArmeDist(3, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal);
     }
 
     @Test
@@ -43,6 +41,7 @@ public class ArmeTest
 	Assert.assertEquals(0, arme1.getMalusAttaque());
 	Assert.assertEquals(0, arme1.getTypeArme());
 	Assert.assertEquals(0, arme1.getphysMin());
+	Assert.assertEquals(0, arme1.getMode());
 	Assert.assertEquals("rapière de qualité supérieure et équilibrage mauvais", arme1.toString());
 
 	Assert.assertEquals(1, arme2.getBonusInit());
@@ -52,6 +51,7 @@ public class ArmeTest
 	Assert.assertEquals(0, arme2.getMalusAttaque());
 	Assert.assertEquals(0, arme2.getTypeArme());
 	Assert.assertEquals(2, arme2.getphysMin());
+	Assert.assertEquals(0, arme2.getMode());
 	Assert.assertEquals("hache d'arme de qualité inférieure et équilibrage bon", arme2.toString());
 
 	Assert.assertEquals(1, arme3.getBonusInit());
@@ -61,6 +61,7 @@ public class ArmeTest
 	Assert.assertEquals(0, arme3.getMalusAttaque());
 	Assert.assertEquals(0, arme3.getTypeArme());
 	Assert.assertEquals(2, arme3.getphysMin());
+	Assert.assertEquals(0, arme3.getMode());
 	Assert.assertEquals("hache d'arme de maître", arme3.toString());
 
 	Assert.assertEquals(1, arme4.getBonusInit());
@@ -76,6 +77,7 @@ public class ArmeTest
 	Assert.assertEquals(1, arme4.getTailleMAgasin());
 	Assert.assertEquals(1, arme4.getNbActionsRecharge());
 	Assert.assertEquals(150, arme4.getPortee());
+	Assert.assertEquals(1, arme4.getMode());
 	Assert.assertEquals("arc de qualité moyenne et équilibrage normal", arme4.toString());
     }
 

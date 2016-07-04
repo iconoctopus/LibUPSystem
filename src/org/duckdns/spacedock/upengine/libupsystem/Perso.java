@@ -68,14 +68,22 @@ public class Perso
 	//configuration automatique des autres caractéristiques maintenant possible car les traits sont générés
 	initPerso();
 
-	//configuration des caractéristiques de combat (corps à corps uniquement pour l'instant) une fois que l'arbre des domaines est généré
-	m_listDomaines.get(3).setRang(p_RM);//on initialise le domaine corps à corps avec le RM
+	//configuration des caractéristiques de combat une fois que l'arbre des domaines est généré
+	m_listDomaines.get(3).setRang(p_RM);
 
-	//on parcourt tout le domaine CàC et on met toutes les attaques et parades au RM
+	//configuration du domaine corps à corps
+	m_listDomaines.get(3).setRang(p_RM);
 	for (Competence i : m_listDomaines.get(3).getCompetences())
 	{
 	    ((CompCac) i).setAttaque(p_RM);
 	    ((CompCac) i).setParade(p_RM);
+	}
+
+	//idem pour tout le domaine combat à distance
+	m_listDomaines.get(4).setRang(p_RM);
+	for (Competence i : m_listDomaines.get(4).getCompetences())
+	{
+	    i.setRang(p_RM);
 	}
 
 	//on ajoute des rangs en esquive
@@ -218,12 +226,13 @@ public class Perso
 	int modDist = 0;
 	if (arme.getMode() == 1)//vérification qu'il s'agit bien d'une arme à distance
 	{
-	    arme.consommerMun(p_nbCoups);//on consomme les coups, une exception sera levée si il n'y a pas assez de munitions, le code appelant devrait vérifier systématiquement cela
-	    if (p_distance >= 0)
+
+	    if (p_distance >= 0 && p_nbCoups > 0 && p_nbCoups <= 20)
 	    {
+		arme.consommerMun(p_nbCoups);//on consomme les coups, une exception sera levée si il n'y a pas assez de munitions, le code appelant devrait vérifier systématiquement cela
 		if (p_distance <= arme.getPortee())//échec auto si distance > portée
 		{
-		    if (p_distance <= arme.getPortee())//TODO mieux arrondir et tester cas pile la moitié
+		    if (p_distance <= arme.getPortee() / 2)//TODO mieux arrondir et tester cas pile la moitié
 		    {//portée courte
 			modDist -= arme.getMalusCourt();
 		    }
@@ -263,13 +272,14 @@ public class Perso
 			{
 			    ErrorHandler.paramAberrant("rafale sur arme à coup par coup");
 			}
+
 		    }
 		    result = effectuerAttaque(p_phaseActuelle, p_ND, arme.getCategorie(), 4, bonusDesLancesRafale, bonusDesGardesRafale, modDist);
 		}
 	    }
 	    else
 	    {
-		ErrorHandler.paramAberrant("distance:" + p_distance);
+		ErrorHandler.paramAberrant("distance:" + p_distance + " nbCoups:" + p_nbCoups);
 	    }
 	}
 	else

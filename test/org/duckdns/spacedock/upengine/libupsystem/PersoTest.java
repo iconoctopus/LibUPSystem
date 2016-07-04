@@ -105,6 +105,17 @@ public class PersoTest
     }
 
     @Test
+    public void testGetInitTotale()
+    {
+	Assert.assertEquals((int) persoRM1.getActions().get(0), (int) persoRM1.getInitTotale());//son init de base
+
+	persoRM1.getListArmes().add(new ArmeCaC(0, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.bon));
+	persoRM1.setArmeCourante(persoRM1.getListArmes().size() - 1);
+
+	Assert.assertEquals((int) persoRM1.getActions().get(0) + 10, (int) persoRM1.getInitTotale());//son init améliorée par une rapière bien équilibrée
+    }
+
+    @Test
     public void testAgirEnCombat()
     {
 	persoRM1.agirEnCombat(persoRM1.getActions().get(0));
@@ -140,89 +151,237 @@ public class PersoTest
     }
 
     @Test
-    public void testAttaquer()
+    public void testAttaquer()//sert aussi pour tester tout le système de jets de compétence : il se trouve qu'attaquer est la forme la plus complexe du jet de compétence, une fois tous les bonus et malus pris en compte
     {
+	//cas du physique minimal insuffisant avec une hache et un physique de 1
 	persoRM1.getListArmes().add(new ArmeCaC(1, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal));
 	persoRM1.setArmeCourante(persoRM1.getListArmes().size() - 1);
-	//cas du physique minimal insuffisant
-	StatTest stat = new StatTest(persoRM1, 1);
-	Assert.assertFalse(stat.nbReussites > stat.nbEchecs);
+	Assert.assertFalse(reussiteStatistiqueAttaque(persoRM1, 1, 0, 0));
 
-	stat = new StatTest(persoRM3, 30);
-	Assert.assertTrue(stat.nbReussites > stat.nbEchecs);
-	stat = new StatTest(persoRM3, 35);
-	Assert.assertFalse(stat.nbReussites > stat.nbEchecs);
+	//attaque à mains nues avec RM3
+	Assert.assertTrue(reussiteStatistiqueAttaque(persoRM3, 30, 0, 0));
+	Assert.assertFalse(reussiteStatistiqueAttaque(persoRM3, 35, 0, 0));
 
-	stat = new StatTest(persoRM5, 45);
-	Assert.assertTrue(stat.nbReussites > stat.nbEchecs);
-	stat = new StatTest(persoRM5, 50);
-	Assert.assertFalse(stat.nbReussites > stat.nbEchecs);
+	//attaque en prenant en compte le malus à l'attaque du sabre et RM3
+	persoRM3.getListArmes().add(new ArmeCaC(2, Arme.QualiteArme.inferieure, Arme.EquilibrageArme.bon));//la qualité ne devrait pas influer, l'équilibrage non plus, ni ici ni dans les autres tests de cette méthode
+	persoRM3.setArmeCourante(persoRM3.getListArmes().size() - 1);
+	Assert.assertTrue(reussiteStatistiqueAttaque(persoRM3, 27, 0, 0));
+	Assert.assertFalse(reussiteStatistiqueAttaque(persoRM3, 32, 0, 0));
 
-	//TODO il faudra aussi tester que le malus à l'attaque des armes est pris en compte avec l'un des deux tests ci-dessus
-	//TODO on ne teste que haches et mains nues ici, ajouter une arme à distance automatique avec toutes les rafales et
+	//attaque à distance au fusil d'assaut coup par coup avec RM5 et portée courte
+	persoRM5.getListArmes().add(new ArmeDist(4, Arme.QualiteArme.superieure, Arme.EquilibrageArme.mauvais));
+	persoRM5.setArmeCourante(persoRM5.getListArmes().size() - 1);
+	((ArmeDist) persoRM5.getArmeCourante()).recharger(30);
+	Assert.assertTrue(reussiteStatistiqueAttaque(persoRM5, 42, 150, 1));//pile la portée, donc courte
+	Assert.assertFalse(reussiteStatistiqueAttaque(persoRM5, 46, 150, 2));//deux balles ne devraient rien changer, on n'est pas au seuil de rafale courte
+
+	//attaque à distance au fusil d'assaut en rafale courte avec RM3 et portée courte
+	persoRM3.getListArmes().add(new ArmeDist(4, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal));
+	persoRM3.setArmeCourante(persoRM3.getListArmes().size() - 1);
+	((ArmeDist) persoRM3.getArmeCourante()).recharger(30);
+	Assert.assertTrue(reussiteStatistiqueAttaque(persoRM3, 27, 100, 3));
+	Assert.assertFalse(reussiteStatistiqueAttaque(persoRM3, 32, 20, 3));
+
+	//attaque à distance au fusil d'assaut en rafale moyenne avec RM3 et portée longue
+	persoRM3.getListArmes().add(new ArmeDist(4, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais));
+	persoRM3.setArmeCourante(persoRM3.getListArmes().size() - 1);
+	((ArmeDist) persoRM3.getArmeCourante()).recharger(30);
+	Assert.assertTrue(reussiteStatistiqueAttaque(persoRM3, 24, 200, 8));//donc deux groupes entiers de trois balles
+	Assert.assertFalse(reussiteStatistiqueAttaque(persoRM3, 28, 270, 8));
+
+	//attaque à distance au fusil d'assaut en rafale longue avec RM5 et portée courte
+	persoRM5.getListArmes().add(new ArmeDist(4, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
+	persoRM5.setArmeCourante(persoRM5.getListArmes().size() - 1);
+	((ArmeDist) persoRM5.getArmeCourante()).recharger(30);
+	Assert.assertTrue(reussiteStatistiqueAttaque(persoRM5, 56, 120, 13));//deux groupes entiers de 5 balles
+	Assert.assertFalse(reussiteStatistiqueAttaque(persoRM5, 60, 40, 13));
+
+	//TODO ajouter cas d'erreur : rafale avec arme ayant plusieurs munitions mais incapable de tirer en mode automatique (comme un pistolet)
+	//cas d'erreur : plus de 20 balles
+	try
+	{
+	    persoRM5.getListArmes().add(new ArmeDist(4, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
+	    persoRM5.setArmeCourante(persoRM5.getListArmes().size() - 1);
+	    ((ArmeDist) persoRM5.getArmeCourante()).recharger(30);
+	    persoRM5.genInit();
+	    persoRM5.attaquerDist(persoRM5.getActions().get(0), 0, 100, 21);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:distance:100 nbCoups:21", e.getMessage());
+	}
+
+	//cas d'erreur : nb de balles nul
+	try
+	{
+	    persoRM5.getListArmes().add(new ArmeDist(4, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
+	    persoRM5.setArmeCourante(persoRM5.getListArmes().size() - 1);
+	    ((ArmeDist) persoRM5.getArmeCourante()).recharger(30);
+	    persoRM5.genInit();
+	    persoRM5.attaquerDist(persoRM5.getActions().get(0), 0, 0, 0);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:distance:0 nbCoups:0", e.getMessage());
+	}
+
+	//cas d'erreur : distance négative
+	try
+	{
+	    persoRM5.getListArmes().add(new ArmeDist(4, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
+	    persoRM5.setArmeCourante(persoRM5.getListArmes().size() - 1);
+	    ((ArmeDist) persoRM5.getArmeCourante()).recharger(30);
+	    persoRM5.genInit();
+	    persoRM5.attaquerDist(persoRM5.getActions().get(0), 0, -1, 1);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:distance:-1 nbCoups:1", e.getMessage());
+	}
+
+	//cas d'erreur hors portée sur arc
+	persoRM5.getListArmes().add(new ArmeDist(3, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
+	persoRM5.setArmeCourante(persoRM5.getListArmes().size() - 1);
+	((ArmeDist) persoRM5.getArmeCourante()).recharger(1);
+	persoRM5.genInit();
+	Assert.assertFalse(persoRM5.attaquerDist(persoRM5.getActions().get(0), 0, 200, 1).isJetReussi());
+
+	//cas d'erreur arme pas assez chargée pour faire feu : rafale trop grosse
+	try
+	{
+	    persoRM5.getListArmes().add(new ArmeDist(4, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
+	    persoRM5.setArmeCourante(persoRM5.getListArmes().size() - 1);
+	    ((ArmeDist) persoRM5.getArmeCourante()).recharger(15);
+	    persoRM5.genInit();
+	    persoRM5.attaquerDist(persoRM5.getActions().get(0), 0, 0, 20);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:nbMun:20 mun courantes:15", e.getMessage());
+	}
+
+	//cas d'erreur arme pas assez chargée pour faire feu : arme vide
+	try
+	{
+	    persoRM5.getListArmes().add(new ArmeDist(3, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
+	    persoRM5.setArmeCourante(persoRM5.getListArmes().size() - 1);
+	    persoRM5.genInit();
+	    persoRM5.attaquerDist(persoRM5.getActions().get(0), 0, 0, 1);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:nbMun:1 mun courantes:0", e.getMessage());
+	}
     }
 
     @Test
-    public void testDegatsEtBlessure()//TODO varier plus les armes (hache et rapière ici, ajouter les dégâts à mains nues et une arme à distance )
+    public void testDegats()
     {
+	//Test en corps à corps avec rapière de maître sans incréments, le perso est sonné
+	Arme arme = new ArmeCaC(0, Arme.QualiteArme.maitre, Arme.EquilibrageArme.normal);
+	int resultVariant = degatsStatistiques(1, arme, 0);
+	Assert.assertTrue(22 == resultVariant || resultVariant == 21);
 
-	StatTest stat = new StatTest(30, 1);
-	Assert.assertTrue(stat.nbBlessuresGraves == 1);
-	Assert.assertTrue(stat.total_degats >= 16 && stat.total_degats <= 20);
+	//test en corps avec hache de mauvaise qualité et deux incréments
+	arme = new ArmeCaC(1, Arme.QualiteArme.inferieure, Arme.EquilibrageArme.normal);
+	Assert.assertEquals(31, degatsStatistiques(3, arme, 2));
 
-	stat = new StatTest(30, 3);
-	Assert.assertTrue(stat.nbBlessuresGraves == 1 || stat.nbBlessuresGraves == 2);
-	Assert.assertTrue(stat.total_degats == 24);
+	//test en corps à corps à mains nues sans incréments
+	Assert.assertEquals(11, degatsStatistiques(5, null, 0));
 
-	stat = new StatTest(30, 5);
-	Assert.assertTrue(stat.nbBlessuresGraves == 0);
-	Assert.assertTrue(stat.total_degats == 27);
+	//test à distance avec arc de bonne qualité et un incrément
+	arme = new ArmeDist(3, Arme.QualiteArme.superieure, Arme.EquilibrageArme.normal);
+	Assert.assertEquals(21, degatsStatistiques(5, arme, 1));
     }
 
-    private class StatTest
-    {//TODO refactorer cette classe et les deux méthodes qui l'utilisent pour effectuer tous les tests d'un coup
+    @Test
+    public void testBlessure()
+    {
+	int nbGraves = 0;
 
+	nbGraves = nbBlessuresGravesStatistique(30, 1);
+	Assert.assertTrue(nbGraves == 1);
+
+	nbGraves = nbBlessuresGravesStatistique(30, 3);
+	Assert.assertTrue(nbGraves == 1 || nbGraves == 2);
+
+	nbGraves = nbBlessuresGravesStatistique(30, 5);
+	Assert.assertTrue(nbGraves == 0);
+    }
+
+    private boolean reussiteStatistiqueAttaque(Perso p_perso, int p_nd, int p_distance, int p_nbCoups)
+    {
+	p_perso.genInit();
 	int nbReussites = 0;
 	int nbEchecs = 0;
-	int total_degats = 0;
-	int nbBlessuresGraves = 0;
-
-	StatTest(Perso p_perso, int p_nd)//test du jet d'attaque
+	int compteurActions = 0;
+	for (int i = 0; i <= 999999; ++i)//un million de lancers
 	{
-	    p_perso.genInit();
-	    int compteurActions = 0;
-	    for (int i = 0; i <= 999999; ++i)//un million de lancers
+	    boolean reussite = false;
+
+	    if (compteurActions == p_perso.getActions().size())
 	    {
-		if (compteurActions == p_perso.getActions().size())
+		p_perso.genInit();
+		compteurActions = 0;
+	    }
+
+	    if (p_distance > 0)
+	    {
+		if (p_perso.attaquerDist(p_perso.getActions().get(compteurActions), p_nd, p_distance, p_nbCoups).isJetReussi())
 		{
-		    p_perso.genInit();
-		    compteurActions = 0;
+		    reussite = true;
 		}
+		((ArmeDist) p_perso.getArmeCourante()).recharger(p_nbCoups);
+	    }
+	    else
+	    {
 		if (p_perso.attaquerCaC(p_perso.getActions().get(compteurActions), p_nd).isJetReussi())
 		{
-		    nbReussites++;
+		    reussite = true;
 		}
-		else
-		{
-		    nbEchecs++;
-		}
-		compteurActions++;
-	    }
-	}
 
-	StatTest(int p_degats, int p_rm)//test du jet de degats et des blessures
-	{
-	    for (int i = 0; i <= 999999; ++i)//un million de lancers
-	    {//on crée ici un nouveau perso pour chaque test : sinon les blessures s'accumulent entre deux boucles et ils meurrent au final...
-		Perso perso = new Perso(p_rm);
-		perso.getListArmes().add(new ArmeCaC(0, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal));
-		perso.setArmeCourante(perso.getListArmes().size() - 1);
-		total_degats += perso.genererDegats(0).getQuantite();
-		perso.etreBlesse(new Arme.Degats(p_degats, 0));
-		nbBlessuresGraves += perso.getBlessuresGraves();
 	    }
-	    total_degats = (int) (total_degats / 1000000);
-	    nbBlessuresGraves = (int) (nbBlessuresGraves / 1000000);
+	    if (reussite)
+	    {
+		nbReussites++;
+	    }
+	    else
+	    {
+		nbEchecs++;
+	    }
+
+	    compteurActions++;
 	}
+	return (nbReussites > nbEchecs);
+    }
+
+    private int degatsStatistiques(int p_rm, Arme p_arme, int p_increments)
+    {
+	int total_degats = 0;
+	Perso perso = new Perso(p_rm);
+	perso.getListArmes().add(p_arme);
+	perso.setArmeCourante(perso.getListArmes().size() - 1);
+	for (int i = 0; i <= 999999; ++i)//un million de lancers
+	{
+	    total_degats += perso.genererDegats(p_increments).getQuantite();
+	}
+	return (int) (total_degats / 1000000);
+    }
+
+    private int nbBlessuresGravesStatistique(int p_degats, int p_rm)
+    {
+	int nbBlessuresGraves = 0;
+	for (int i = 0; i <= 999999; ++i)//un million de lancers
+	{//on crée ici un nouveau perso pour chaque test : sinon les blessures s'accumulent entre deux boucles et ils meurrent au final...
+	    Perso perso = new Perso(p_rm);
+	    perso.etreBlesse(new Arme.Degats(p_degats, 0));
+	    nbBlessuresGraves += perso.getBlessuresGraves();
+	}
+	return (int) (nbBlessuresGraves / 1000000);
     }
 }

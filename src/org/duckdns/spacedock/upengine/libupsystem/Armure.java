@@ -46,7 +46,7 @@ public class Armure
     Armure(ArrayList<PieceArmure> p_listPieces)
     {
 	Iterator iterator = p_listPieces.iterator();
-	while(iterator.hasNext())
+	while (iterator.hasNext())
 	{
 	    addPiece((PieceArmure) iterator.next());
 	}
@@ -65,21 +65,21 @@ public class Armure
 	int id = p_piece.getIdPiece();
 	int dejaPortees = 0;
 
-	for(Iterator i = m_listPieces.iterator(); i.hasNext();)//on parcourt la liste des pièces courantes pour vérifier combien de pièces du même type sont déjà portées
+	for (Iterator i = m_listPieces.iterator(); i.hasNext();)//on parcourt la liste des pièces courantes pour vérifier combien de pièces du même type sont déjà portées
 	{
 	    PieceArmure pieceCourante = (PieceArmure) i.next();
-	    if(pieceCourante.getIdPiece() == id)
+	    if (pieceCourante.getIdPiece() == id)
 	    {
 		++dejaPortees;
 	    }
 	}
-	if(dejaPortees < nbmax)//on peut encore ajouter une pièce de ce type
+	if (dejaPortees < nbmax)//on peut encore ajouter une pièce de ce type
 	{
 	    m_listPieces.add(p_piece);
 	    m_points += p_piece.getNbpoints();
 	    m_malusEsquive += p_piece.getMalusEsquive();
 	    m_malusParade += p_piece.getMalusParade();
-	    if(m_type < type)
+	    if (m_type < type)
 	    {
 		m_type = type;//on considère toujours le meilleur type porté, cela évoluera avec la localisation
 	    }

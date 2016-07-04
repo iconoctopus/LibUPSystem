@@ -41,7 +41,6 @@ public class ArmureTest
 	listPieces.add(piece2);
 	listPieces.add(piece3);
 	listPieces.add(piece4);
-
     }
 
     @Before

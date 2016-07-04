@@ -6,9 +6,9 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
 import org.junit.Assert;
-import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.Assert.fail;
 
 /**
  *
@@ -151,6 +151,30 @@ public class PersoTest
     }
 
     @Test
+    public void testIsActif()
+    {
+	try
+	{
+	    persoRM1.isActif(0);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:phase:0", e.getMessage());
+	}
+
+	try
+	{
+	    persoRM1.isActif(11);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:phase:11", e.getMessage());
+	}
+    }
+
+    @Test
     public void testAttaquer()//sert aussi pour tester tout le système de jets de compétence : il se trouve qu'attaquer est la forme la plus complexe du jet de compétence, une fois tous les bonus et malus pris en compte
     {
 	//cas du physique minimal insuffisant avec une hache et un physique de 1
@@ -280,7 +304,7 @@ public class PersoTest
     }
 
     @Test
-    public void testDegats()
+    public void testGenererDegats()
     {
 	//Test en corps à corps avec rapière de maître sans incréments, le perso est sonné
 	Arme arme = new ArmeCaC(0, Arme.QualiteArme.maitre, Arme.EquilibrageArme.normal);
@@ -297,10 +321,21 @@ public class PersoTest
 	//test à distance avec arc de bonne qualité et un incrément
 	arme = new ArmeDist(3, Arme.QualiteArme.superieure, Arme.EquilibrageArme.normal);
 	Assert.assertEquals(21, degatsStatistiques(5, arme, 1));
+
+	//cas d'erreur : incréments négatifs
+	try
+	{
+	    persoRM5.genererDegats(-1);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:increments:-1", e.getMessage());
+	}
     }
 
     @Test
-    public void testBlessure()
+    public void testEtreBlesse()
     {
 	int nbGraves = 0;
 
@@ -312,6 +347,21 @@ public class PersoTest
 
 	nbGraves = nbBlessuresGravesStatistique(30, 5);
 	Assert.assertTrue(nbGraves == 0);
+
+	//cas limite : les dégâts à 0 pasent sans causer d'effet
+	persoRM1.etreBlesse(new Arme.Degats(0, 0));
+	Assert.assertEquals(0, persoRM1.getBlessuresGraves());
+	Assert.assertEquals(0, persoRM1.getBlessuresLegeres());
+
+	//cas d'erreur : dégâts négatifs
+	try
+	{
+	    persoRM1.etreBlesse(new Arme.Degats(-1, 0));
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:degats:-1 type:0", e.getMessage());
+	}
     }
 
     private boolean reussiteStatistiqueAttaque(Perso p_perso, int p_nd, int p_distance, int p_nbCoups)

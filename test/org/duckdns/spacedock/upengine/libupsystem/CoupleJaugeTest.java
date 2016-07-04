@@ -7,9 +7,7 @@ package org.duckdns.spacedock.upengine.libupsystem;
 
 import org.junit.Assert;
 import static org.junit.Assert.fail;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 /**
  *
@@ -176,6 +174,5 @@ public class CoupleJaugeTest
 	Assert.assertTrue(jauge1.isSonne());
 	Assert.assertTrue(jauge2.isSonne());
 	Assert.assertTrue(jauge3.isSonne());
-
     }
 }

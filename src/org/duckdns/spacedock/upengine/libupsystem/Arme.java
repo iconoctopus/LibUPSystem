@@ -57,7 +57,7 @@ public abstract class Arme
      * maître
      */
     public Arme(int p_indice, QualiteArme p_qualite, EquilibrageArme p_equilibrage)
-    {//TODO ajouter bonus spécifiques des gardes et accessoires de 7th Sea
+    {
 
 	UPReference reference = UPReference.getInstance();
 	String nom = reference.getLblArme(p_indice);
@@ -67,7 +67,7 @@ public abstract class Arme
 	int bonusInitSup = 0;
 
 	//récupération des éléments liés à la qualité et l'équilibrage de l'arme
-	if (p_qualite == QualiteArme.maitre)
+	if (p_qualite == QualiteArme.maitre)//traitement spécial des armes de maître
 	{
 	    nom = nom.concat((String) reference.libelles.libQualite.get(QualiteArme.maitre));
 	    ++bonusLances;
@@ -117,6 +117,8 @@ public abstract class Arme
 		    break;
 	    }
 	}
+
+	//récupération et construction des caractéristiques de l'arme
 	m_desLances = reference.getNbLancesArme(p_indice) + bonusLances;
 	m_desGardes = reference.getNbGardesArme(p_indice) + bonusGardes;
 	m_bonusInit = reference.getBonusInitArme(p_indice) + bonusInitSup;

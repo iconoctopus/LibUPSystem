@@ -83,7 +83,6 @@ class CoupleJauge
 	{
 	    ErrorHandler.paramAberrant("physique:" + p_physique + " volonte:" + p_volonte + " trait minimum:" + p_tailleForceDAme);
 	}
-
     }
 
     /**
@@ -128,7 +127,7 @@ class CoupleJauge
 	    if (p_resultatJet < m_blessuresLegeres)//le jet d'absorption est en dessous du ND des blessures légères
 	    {
 		quotient = ((m_blessuresLegeres) - (p_resultatJet));
-		quotient = quotient / 10; //on compte le nombre de tranches entières de 10, la division entre int va correctement tronquer
+		quotient = quotient / 10; //on compte le nombre de tranches entières de 10, la division entre int va normalement correctement tronquer
 		blessGraves = (int) quotient + 1;//total des blessures graves : une pour avoir raté le jet, et une par tranche de 10
 		m_blessuresLegeres = 0;
 		m_remplissage_interne += blessGraves;
@@ -233,5 +232,4 @@ class CoupleJauge
     {
 	return (m_elimine);
     }
-
 }

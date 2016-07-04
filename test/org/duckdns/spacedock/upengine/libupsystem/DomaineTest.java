@@ -42,12 +42,12 @@ public class DomaineTest
 
 	try
 	{
-	    domaine1.setRang(-11);
+	    domaine1.setRang(0);
 	    fail();
 	}
 	catch (IllegalArgumentException e)
 	{
-	    Assert.assertEquals("paramétre aberrant:rang:-11", e.getMessage());
+	    Assert.assertEquals("paramétre aberrant:rang:0", e.getMessage());
 	}
 
 	try

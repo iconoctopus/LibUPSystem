@@ -17,7 +17,7 @@ public class Domaine
 
     private int m_rang;
 
-    private ArrayList<Competence> m_competences = new ArrayList<>();
+    private final ArrayList<Competence> m_competences = new ArrayList<>();
 
     /**
      * pour l'instant le domaine ignore son nom car il est prévu de le faire
@@ -31,7 +31,7 @@ public class Domaine
      */
     Domaine(int p_indice, int p_rang)
     {
-	if (p_indice >= 0)//on n'a rien à faire là si le domaine ne vaut pas 1
+	if (p_indice >= 0)
 	{
 	    setRang(p_rang);
 	    int nbComps = 0;
@@ -67,7 +67,7 @@ public class Domaine
 
     final void setRang(int p_rang)
     {
-	if (p_rang >= 0)
+	if (p_rang > 0)//les domaines possédés sont toujours supérieurs à 0 car sinon on ne pourrait pas faire de jet
 	{
 	    m_rang = p_rang;
 	}

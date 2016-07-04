@@ -290,7 +290,7 @@ public class Perso
     }
 
     private RollResult effectuerAttaque(int p_phaseActuelle, int p_ND, int p_comp, int p_domaine, int p_modifNbLances, int p_modifNbGardes, int p_modifScore)
-    {//TODO blinder cette méthode
+    {
 	RollResult result = null;
 	if (agirEnCombat(p_phaseActuelle))
 	{
@@ -355,23 +355,27 @@ public class Perso
      */
     public Degats genererDegats(int p_increments)
     {
-	Degats result;
-	Arme arme = m_inventaire.getArmeCourante();
+	Degats result = new Degats(RollUtils.lancer(m_traits[0] + p_increments, 1, isSonne()), 0); //mains nues par défaut
 
-	if (arme == null)//mains nues
+	if (p_increments >= 0)
 	{
-	    result = new Degats(RollUtils.lancer(m_traits[0] + p_increments, 1, isSonne()), 0);
+	    Arme arme = m_inventaire.getArmeCourante();
+
+	    if (arme != null)//armes équipées
+	    {
+		if (arme.getMode() == 0)//arme de corps à corps employée
+		{
+		    result = ((ArmeCaC) arme).genererDegats(p_increments, m_traits[0], isSonne());
+		}
+		else//arme à distance employée
+		{
+		    result = ((ArmeDist) arme).genererDegats(p_increments, isSonne());
+		}
+	    }
 	}
 	else
 	{
-	    if (arme.getMode() == 0)//arme de corps à corps employée
-	    {
-		result = ((ArmeCaC) arme).genererDegats(p_increments, m_traits[0], isSonne());
-	    }
-	    else//arme à distance employée
-	    {
-		result = ((ArmeDist) arme).genererDegats(p_increments, isSonne());
-	    }
+	    ErrorHandler.paramAberrant("increments:" + p_increments);
 	}
 	return result;
     }
@@ -380,22 +384,29 @@ public class Perso
      * inflige des dégâts, via la jauge de Santé après avoir appliqué les effets
      * d'armure
      *
-     * @param degats
+     * @param p_degats
      */
-    public void etreBlesse(Degats degats)
+    public void etreBlesse(Degats p_degats)
     {
-	int redDegats = 0;
-	Armure armure = m_inventaire.getArmureCourante();
-	if (armure != null)
+	if (p_degats.getQuantite() >= 0)
 	{
-	    redDegats = armure.getRedDegats(degats.getTypeArme());
-	}
-	int degatsEffectifs = degats.getQuantite() - redDegats;
+	    int redDegats = 0;
+	    Armure armure = m_inventaire.getArmureCourante();
+	    if (armure != null)
+	    {
+		redDegats = armure.getRedDegats(p_degats.getTypeArme());
+	    }
+	    int degatsEffectifs = p_degats.getQuantite() - redDegats;
 
-	if (degatsEffectifs > 0)
+	    if (degatsEffectifs > 0)
+	    {
+		int resultTest = RollUtils.lancer(m_traits[0], m_traits[0], false);
+		m_jaugeSanteInit.recevoirDegats(degatsEffectifs, resultTest, m_traits[3]);
+	    }
+	}
+	else
 	{
-	    int resultTest = RollUtils.lancer(m_traits[0], m_traits[0], false);
-	    m_jaugeSanteInit.recevoirDegats(degatsEffectifs, resultTest, m_traits[3]);
+	    ErrorHandler.paramAberrant("degats:" + p_degats.getQuantite());
 	}
     }
 
@@ -453,12 +464,16 @@ public class Perso
      * renvoie vrai si le personnage a une action dans la phase active
      * comportement indéfini si demande pour pĥase ultérieure ou antérieure
      *
-     * @param phaseActuelle
+     * @param p_phaseActuelle
      * @return
      */
-    public boolean isActif(int phaseActuelle)
+    public boolean isActif(int p_phaseActuelle)
     {
-	return ((m_actions.size() - m_actionCourante) > 0 && phaseActuelle == m_actions.get(m_actionCourante));
+	if (p_phaseActuelle <= 0 || p_phaseActuelle > 10)
+	{
+	    ErrorHandler.paramAberrant("phase:" + p_phaseActuelle);
+	}
+	return ((m_actions.size() - m_actionCourante) > 0 && p_phaseActuelle == m_actions.get(m_actionCourante));
     }
 
     /**

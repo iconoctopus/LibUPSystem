@@ -1,7 +1,5 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
-import java.util.ArrayList;
-
 /**
  * classe représentant une compétence
  *
@@ -25,9 +23,9 @@ class Competence
      *
      * @param p_rang
      */
-    void setRang(int p_rang)
+    final void setRang(int p_rang)
     {
-	if(p_rang >= 0)
+	if (p_rang >= 0)
 	{
 	    m_rang = p_rang;
 	}
@@ -41,15 +39,15 @@ class Competence
      * pour l'instant la compétence ignore son nom car il est fourni par les
      * classes plus élevées en fonction de son indice. Pour l'instant cette
      * classe est inutile : elle n'encapsule qu'un entier, mais à terme elle
-     * pourra contenir un tableau de spécalités
+     * pourra contenir un tableau de spécalités. Elle est déjà utilisée pour
+     * dériver CompCac qui encapsule l'attaque et la parade avec une catégorie
+     * d'arme donnée
      *
      *
      * @param p_rang
      */
     Competence(int p_rang)
     {
-
 	setRang(p_rang);
-
     }
 }

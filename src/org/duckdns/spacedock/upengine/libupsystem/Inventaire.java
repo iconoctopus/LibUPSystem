@@ -57,14 +57,20 @@ class Inventaire
      */
     Inventaire(ArrayList<Arme> p_armes, ArrayList<Armure> p_armures)
     {
-	if(p_armes != null && p_armures != null)//si les paramétres sont incorects on les rejette mais l'inventaire est quand même créé pour ne pas perturber l'application, il sera toujours possible de le valuer plus tard
+	if (p_armes != null)//si les paramétres sont incorects on les rejette mais l'inventaire est quand même créé pour ne pas perturber l'application, il sera toujours possible de le valuer plus tard
 	{
 	    listArmes = p_armes;
-	    listArmures = p_armures;
 	}
-	else//TODO : simpliste, mieux vaudrait n'ignorer que le paramétre invalide et pas les deux en ce cas
+	else
 	{
 	    listArmes = new ArrayList<>();
+	}
+	if (p_armures != null)
+	{
+	    listArmures = p_armures;
+	}
+	else
+	{
 	    listArmures = new ArrayList<>();
 	}
     }
@@ -95,7 +101,7 @@ class Inventaire
      */
     Arme getArmeCourante()
     {
-	if(m_armeCourante >= 0)
+	if (m_armeCourante >= 0)
 	{
 	    return listArmes.get(m_armeCourante);
 	}
@@ -107,11 +113,11 @@ class Inventaire
 
     /**
      *
-     * @return l'armure couramment portée
+     * @return l'armure actuellement portée
      */
     Armure getArmureCourante()
     {
-	if(m_armureCourante >= 0)
+	if (m_armureCourante >= 0)
 	{
 	    return listArmures.get(m_armureCourante);
 	}

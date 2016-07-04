@@ -252,7 +252,6 @@ final class UPReference
 	{
 	    resultat = m_tableArmureRedDegats.getInt(rang);
 	}
-
 	return resultat;
     }
 
@@ -310,7 +309,6 @@ final class UPReference
      */
     String getLblArme(int p_indice)
     {
-
 	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
 	return arme.getString("nom");
     }
@@ -324,7 +322,6 @@ final class UPReference
     {
 	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
 	return arme.getInt("lance");
-
     }
 
     /**
@@ -334,7 +331,6 @@ final class UPReference
      */
     int getNbGardesArme(int p_indice)
     {
-
 	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
 	return arme.getInt("garde");
 
@@ -527,9 +523,9 @@ final class UPReference
     }
 
     /**
-     * On utilise plutôt getLblComp pour récupérer un libellé de comp. Cette
-     * compétence sert surtout à récupérer le nombre de comps d'un domaine (avec
-     * la size de la liste). Mais autant renvoyer un libellé au passage.
+     * Renvoie la liste des libellés de compétences d'un domaine, peut-être plus
+     * prosaïquement utilisé pour obtenir le nombre de compétence d'un doaine
+     * avec size()
      *
      * @param p_indice
      * @return la liste des libellés des compétences d'un domaine donné par son
@@ -579,23 +575,6 @@ final class UPReference
     {
 	JsonObject domaine = m_arbreDomaines.getJsonObject(p_indice);
 	return domaine.getString("lbl");
-    }
-
-    /**
-     * préférer cette méthode à getListComp pour la récupération d'un libellé de
-     * comp : on pourrait très bien refactorer getListComp pour renvoyer un
-     * simple entier dans le futur et aucune classe ne devrait se baser dessus
-     *
-     *
-     * @param p_indiceDomaine
-     * @param p_indiceComp
-     * @return le libellé d'une compétence
-     */
-    String getLblComp(int p_indiceDomaine, int p_indiceComp)
-    {//TODO si domaine CaC ou CaD appeler la liste des catégories
-	JsonObject domaine = m_arbreDomaines.getJsonObject(p_indiceDomaine);
-	JsonArray tabComp = domaine.getJsonArray("comps");
-	return tabComp.getString(p_indiceComp);
     }
 
     /**

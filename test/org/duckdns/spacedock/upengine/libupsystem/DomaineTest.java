@@ -5,13 +5,9 @@
  */
 package org.duckdns.spacedock.upengine.libupsystem;
 
-import java.util.ArrayList;
-import static org.duckdns.spacedock.upengine.libupsystem.CoupleJaugeTest.jauge3;
 import org.junit.Assert;
 import static org.junit.Assert.fail;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 /**
  *

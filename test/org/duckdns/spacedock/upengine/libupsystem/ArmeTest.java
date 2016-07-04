@@ -18,8 +18,8 @@ import org.junit.rules.ExpectedException;
 public class ArmeTest
 {
 
-    static Arme arme1;
-    static Arme arme2;
+    static ArmeCaC arme1;
+    static ArmeCaC arme2;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -27,8 +27,8 @@ public class ArmeTest
     @BeforeClass
     public static void setUpClass()
     {
-	arme1 = new Arme(0);
-	arme2 = new Arme(1);
+	arme1 = new ArmeCaC(0, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal);
+	arme2 = new ArmeCaC(1, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal);
     }
 
     @Test

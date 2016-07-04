@@ -105,18 +105,17 @@ public abstract class Arme
 	    switch (p_equilibrage)
 	    {
 		case mauvais:
-		    bonusLances = -1;
-		    nom = nom.concat((String) reference.libelles.libQualite.get(EquilibrageArme.mauvais));
+		    bonusInitSup = -1;
+		    nom = nom.concat((String) reference.libelles.libEquilibrage.get(EquilibrageArme.mauvais));
 		    break;
 		case normal:
-		    nom = nom.concat((String) reference.libelles.libQualite.get(EquilibrageArme.normal));
+		    nom = nom.concat((String) reference.libelles.libEquilibrage.get(EquilibrageArme.normal));
 		    break;
 		case bon:
-		    bonusLances = +1;
-		    nom = nom.concat((String) reference.libelles.libQualite.get(EquilibrageArme.bon));
+		    bonusInitSup = +1;
+		    nom = nom.concat((String) reference.libelles.libEquilibrage.get(EquilibrageArme.bon));
 		    break;
 	    }
-
 	}
 	m_desLances = reference.getNbLancesArme(p_indice) + bonusLances;
 	m_desGardes = reference.getNbGardesArme(p_indice) + bonusGardes;

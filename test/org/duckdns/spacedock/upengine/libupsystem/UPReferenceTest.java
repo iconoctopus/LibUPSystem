@@ -157,21 +157,6 @@ public final class UPReferenceTest
     }
 
     @Test
-    public void testGetListCatArmeCac()
-    {
-	ArrayList<String> listTest = new ArrayList<>();
-	listTest.add("mains nues");
-	listTest.add("armes d'escrime");
-	listTest.add("armes à lame longue");
-	listTest.add("haches");
-	listTest.add("armes contondantes");
-	listTest.add("petites armes");
-	listTest.add("armes d'hast");
-
-	Assert.assertEquals(listTest, m_reference.getListCatArme());
-    }
-
-    @Test
     public void testGetNbPointsBouclier()
     {
 	Assert.assertEquals(2, m_reference.getNbPointsBouclier(0, 0));
@@ -190,6 +175,14 @@ public final class UPReferenceTest
 	analyse.add("empathie");
 	analyse.add("investigation");
 	analyse.add("politique");
+
+	cac.add("mains nues");
+	cac.add("armes d'escrime");
+	cac.add("armes à lame longue");
+	cac.add("haches");
+	cac.add("armes contondantes");
+	cac.add("petites armes");
+	cac.add("armes d'hast");
 
 	social.add("art oratoire");
 	social.add("étiquette");

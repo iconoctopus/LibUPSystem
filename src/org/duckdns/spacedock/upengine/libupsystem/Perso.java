@@ -6,7 +6,7 @@ import org.duckdns.spacedock.upengine.libupsystem.Arme.Degats;
 import org.duckdns.spacedock.upengine.libupsystem.RollUtils.RollResult;
 
 //TODO ajouter la possibiité de faire un jet général : de compétence ou de trait et réorienter les jets déjà effectués vers ces nouvelles méthodes
-public abstract class Perso
+public class Perso
 {
 
     /**
@@ -153,30 +153,30 @@ public abstract class Perso
     }
 
     /**
-     * Fait effectuer une attaque au corps à corps au personnage, la génération
-     * des dégâts est séparée et déclenchée depuis l'extérieur afin que le
-     * contrôleur puisse choisir d'utiliser les incréments pour autre chose que
-     * des dégâs. Me personnage attaquera systématiquement avec l'arme courante,
-     * il faut donc la configurer avant. Cette méthode vérifie que l'action est
-     * possible dans la phase courante en fonction de l'init du perso, elle est
-     * donc conçue pour le combat uniquement. On utilise l'arme courante ou les
-     * mains nues. Si l'on veut utiliser une autre arme il faut d'abord la
-     * configurer comme arme courante. Une exception est levée si l'on essaye
-     * d'attaquer en corps à corps avec une arme à distance (rien n'interdit
-     * d'entrer une distance 0 dans l'autre méthode adaptée)
+     * Fait effectuer une attaque au corps à corps au personnage. Le personnage
+     * attaquera systématiquement avec l'arme courante, il faut donc la
+     * configurer avant. Cette méthode vérifie que l'action est possible dans la
+     * phase courante en fonction de l'init du perso, elle est donc conçue pour
+     * le combat uniquement. Si l'on veut utiliser une autre arme il faut
+     * d'abord la configurer comme arme courante. Une exception est levée si
+     * l'on essaye d'attaquer en corps à corps avec une arme à distance (rien
+     * n'interdit d'entrer une distance 0 dans l'autre méthode adaptée). Si
+     * aucune arme n'est équipée on utilise par défaut les mains nues.
+     *
+     * Il est important de garder la génération des dégâts séparée et déclenchée
+     * depuis l'extérieur afin que le contrôleur puisse choisir d'utiliser les
+     * incréments pour autre chose que des dégâs (ciblage, autoriser parade...).
      *
      * @param p_phaseActuelle
      * @param p_ND
-     * @param p_mainsNues booléen pour forcer l'attaque sans arme
      * @return
      */
-    public RollUtils.RollResult attaquerCaC(int p_phaseActuelle, int p_ND, boolean p_mainsNues)
+    public RollUtils.RollResult attaquerCaC(int p_phaseActuelle, int p_ND)
     {
 	Arme arme = m_inventaire.getArmeCourante();
 	int catArm = 0;//mains nues par défaut
-	if (arme != null && !p_mainsNues)//une arme est équipée et l'on veut s'en servir
+	if (arme != null)//une arme est équipée
 	{
-
 	    if (arme.getMode() == 0)//vérification qu'il s'agit bien d'une arme de corps à corps
 	    {
 		catArm = arme.getCategorie();
@@ -185,24 +185,25 @@ public abstract class Perso
 	    {
 		ErrorHandler.mauvaiseMethode("mauvais mode d'attaque");
 	    }
-
 	}
 	return effectuerAttaque(p_phaseActuelle, p_ND, catArm, 3, 0, 0, 0);
     }
 
     /**
-     * Fait effectuer une attaque à distance au personnage, la génération des
-     * dégâts est séparée et déclenchée depuis l'extérieur afin que le
-     * contrôleur puisse choisir d'utiliser les incréments pour autre chose que
-     * des dégâs. Cette méthode vérifie que l'action est possible dans la phase
-     * courante en fonction de l'init du perso, elle est donc conçue pour le
-     * combat uniquement. On utilise l'arme courante ou les mains nues. Si l'on
-     * veut utiliser une autre arme il faut d'abord la configurer comme arme
-     * courante. Une exception est levée si l'on essaye d'attaquer à distance
-     * avec une arme de corps à corps (rien n'interdit d'entrer une distance 0
-     * dans l'autre méthode adaptée). Aucune vérification n'est effectuée sur le
-     * magasin actuel de l'arme. Si celui-ci n'est pas suffisant l'arme lèvera
-     * une exception.
+     * Fait effectuer une attaque à distance au personnage. Cette méthode
+     * vérifie que l'action est possible dans la phase courante en fonction de
+     * l'init du perso, elle est donc conçue pour le combat uniquement. On
+     * utilise l'arme courante ou les mains nues. Si l'on veut utiliser une
+     * autre arme il faut d'abord la configurer comme arme courante. Une
+     * exception est levée si l'on essaye d'attaquer à distance avec une arme de
+     * corps à corps (rien n'interdit d'entrer une distance 0 dans l'autre
+     * méthode adaptée). Aucune vérification n'est effectuée sur le magasin
+     * actuel de l'arme. Si celui-ci n'est pas suffisant l'arme lèvera une
+     * exception.
+     *
+     * Il est important de garder la génération des dégâts séparée et déclenchée
+     * depuis l'extérieur afin que le contrôleur puisse choisir d'utiliser les
+     * incréments pour autre chose que des dégâs (ciblage, autoriser parade...).
      *
      * @param p_phaseActuelle
      * @param p_ND
@@ -335,21 +336,19 @@ public abstract class Perso
     }
 
     /**
-     * génère des dégâts avec l'arme courante en corps à corps, séparée de
-     * l'attaque pour que le contrôleur puisse utiliser les incréments pour
-     * autre chose (comme cibler)
+     * génère des dégâts avec l'arme courante (distance ou corps à corps),
+     * séparée de l'attaque pour que le contrôleur puisse utiliser les
+     * incréments pour autre chose (comme cibler ou permettre une défense)
      *
-     * @param p_mainsNues indique si les dégâts doivent ignorer l'arme portée si
-     * elle existe
      * @param p_increments
      * @return
      */
-    public Degats genererDegatsCaC(int p_increments, boolean p_mainsNues)
+    public Degats genererDegats(int p_increments)
     {
 	Degats result;
 	Arme arme = m_inventaire.getArmeCourante();
 
-	if (p_mainsNues || arme == null)//mains nues
+	if (arme == null)//mains nues
 	{
 	    result = new Degats(RollUtils.lancer(m_traits[0] + p_increments, 1, isSonne()), 0);
 	}
@@ -394,11 +393,11 @@ public abstract class Perso
      *
      * @param p_typeArme
      * @param p_parade catégorie d'arme à employer en parade, ignoré si esquive
-     * @param p_esquive : si l'squive doit être employée, sinon c'est une parade
-     * qui est effectuée
+     * @param p_esquive : si l'esquive doit être employée, sinon c'est une
+     * parade qui est effectuée
      * @return le ND passif calculé à partir des comps et de l'armure
      */
-    public int getNDPassif(int p_typeArme, int p_parade, boolean p_esquive)
+    public int getNDPassif(int p_typeArme, int p_parade, boolean p_esquive)//TODO gérer de même les défenses actives (attention aux restrictions face aux armes à distance) et à terme les interruptions
     {//TODO : gérer quand on n'a pas de compétence
 	int ND = 5;
 

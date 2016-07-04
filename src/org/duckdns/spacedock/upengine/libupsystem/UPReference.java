@@ -718,16 +718,16 @@ final class UPReference
 		equilibrage = p_libelles.getString("equilibrage");
 		JsonArray tabQualite = p_libelles.getJsonArray("lib_qualite");
 		libQualite = new EnumMap(Arme.QualiteArme.class);
-		libQualite.put(Arme.QualiteArme.inferieure, tabQualite.get(0));
-		libQualite.put(Arme.QualiteArme.moyenne, tabQualite.get(1));
-		libQualite.put(Arme.QualiteArme.superieure, tabQualite.get(2));
-		libQualite.put(Arme.QualiteArme.maitre, tabQualite.get(3));
+		libQualite.put(Arme.QualiteArme.inferieure, tabQualite.getString(0));
+		libQualite.put(Arme.QualiteArme.moyenne, tabQualite.getString(1));
+		libQualite.put(Arme.QualiteArme.superieure, tabQualite.getString(2));
+		libQualite.put(Arme.QualiteArme.maitre, tabQualite.getString(3));
 
 		JsonArray tabEquilibrage = p_libelles.getJsonArray("lib_equilibrage");
 		libEquilibrage = new EnumMap(Arme.EquilibrageArme.class);
-		libEquilibrage.put(Arme.EquilibrageArme.mauvais, tabQualite.get(0));
-		libEquilibrage.put(Arme.EquilibrageArme.normal, tabQualite.get(1));
-		libEquilibrage.put(Arme.EquilibrageArme.bon, tabQualite.get(2));
+		libEquilibrage.put(Arme.EquilibrageArme.mauvais, tabQualite.getString(0));
+		libEquilibrage.put(Arme.EquilibrageArme.normal, tabQualite.getString(1));
+		libEquilibrage.put(Arme.EquilibrageArme.bon, tabQualite.getString(2));
 	    }
 	    else
 	    {
@@ -745,8 +745,6 @@ final class UPReference
 		libQualite.put(Arme.QualiteArme.moyenne, "moy");
 		libQualite.put(Arme.QualiteArme.superieure, "sup");
 		libQualite.put(Arme.QualiteArme.maitre, "maitre");
-
-		JsonArray tabEquilibrage = p_libelles.getJsonArray("lib_equilibrage");
 		libEquilibrage = new EnumMap(Arme.EquilibrageArme.class);
 		libEquilibrage.put(Arme.EquilibrageArme.mauvais, "mauvais");
 		libEquilibrage.put(Arme.EquilibrageArme.normal, "normal");

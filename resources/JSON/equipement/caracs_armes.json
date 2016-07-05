@@ -1,11 +1,21 @@
 {
     "armes": [
 	{
-	    "nom": "rapière",
+	    "nom": "cimeterre",
+	    "lance": 4,
+	    "garde": 3,
+	    "bonus_init": 1,
+	    "malus_attaque": 1,
+	    "physique_minimal": 2,
+	    "categorie": 1,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "coutelas",
 	    "lance": 2,
 	    "garde": 3,
 	    "bonus_init": 1,
-	    "malus_attaque": 0,
+	    "malus_attaque": 1,
 	    "physique_minimal": 0,
 	    "categorie": 1,
 	    "type": 0,
@@ -21,11 +31,11 @@
 	    "type": 0,
 	    "mode": 0
 	}, {
-	    "nom": "coutelas",
+	    "nom": "rapière",
 	    "lance": 2,
 	    "garde": 3,
 	    "bonus_init": 1,
-	    "malus_attaque": 1,
+	    "malus_attaque": 0,
 	    "physique_minimal": 0,
 	    "categorie": 1,
 	    "type": 0,
@@ -41,13 +51,53 @@
 	    "type": 0,
 	    "mode": 0
 	}, {
-	    "nom": "cimeterre",
+	    "nom": "epee a deux mains/claymore",
 	    "lance": 4,
+	    "garde": 4,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 3,
+	    "categorie": 2,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "epee batarde (une main)",
+	    "lance": 6,
 	    "garde": 3,
-	    "bonus_init": 1,
-	    "malus_attaque": 1,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 3,
+	    "categorie": 2,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "epee batarde (deux mains)",
+	    "lance": 3,
+	    "garde": 4,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
 	    "physique_minimal": 2,
-	    "categorie": 1,
+	    "categorie": 2,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "epee longue",
+	    "lance": 5,
+	    "garde": 3,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 2,
+	    "categorie": 2,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "Zweihander/Espadon",
+	    "lance": 6,
+	    "garde": 4,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 4,
+	    "categorie": 2,
 	    "type": 0,
 	    "mode": 0
 	}, {

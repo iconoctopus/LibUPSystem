@@ -1,7 +1,7 @@
 {
     "armes": [
 	{
-	    "nom": "rapiere",
+	    "nom": "rapière",
 	    "lance": 2,
 	    "garde": 3,
 	    "bonus_init": 1,
@@ -60,6 +60,16 @@
 	    "categorie": 3,
 	    "type": 0,
 	    "mode": 0
+	}, {
+	    "nom": "sabre",
+	    "lance": 4,
+	    "garde": 3,
+	    "bonus_init": 1,
+	    "malus_attaque": 1,
+	    "physique_minimal": 0,
+	    "categorie": 1,
+	    "type": 0,
+	    "mode": 0
 	},
 	{
 	    "nom": "arc",
@@ -76,10 +86,25 @@
 	    "magasin": 1,
 	    "type": 0,
 	    "mode": 1
+	}, {
+	    "nom": "fusil d'assaut",
+	    "lance": 7,
+	    "garde": 4,
+	    "bonus_init": 1,
+	    "malus_attaque": 0,
+	    "physique_minimal": 0,
+	    "categorie": 3,
+	    "malus_long": 10,
+	    "malus_court": 5,
+	    "portee": 300,
+	    "actions_recharge": 2,
+	    "magasin": 30,
+	    "type": 1,
+	    "mode": 1
 	}],
     "types_armes": ["simple", "perce-armure", "pénétrante", "perce-blindage", "énergétique"],
-    "cat_armes_cac": ["mains nues", "armes d'escrime", "armes à lame longue", "haches", "armes contondantes", "petites armes", "armes d'hast", "armes de jet"],
-    "cat_armes_dist": ["armes de jet"],
+    "cat_armes_cac": ["mains nues", "armes d'escrime", "armes à lame longue", "haches", "armes contondantes", "petites armes", "armes d'hast"],
+    "cat_armes_dist": ["armes de jet", "armes à feu", "armes à énergie", "armes automatiques", "armes lourdes"],
     "mod_armes": ["corps à corps", "distance"]
 
 }

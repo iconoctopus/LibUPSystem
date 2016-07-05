@@ -124,7 +124,7 @@ public class ArmeDist extends Arme
     /**
      * @param m_magasinCourant the m_magasinCourant to set
      */
-    void consommerMun(int p_nbMun)//TODO TU
+    void consommerMun(int p_nbMun)
     {
 	if (p_nbMun > 0 && p_nbMun <= m_magasinCourant)
 	{
@@ -134,5 +134,22 @@ public class ArmeDist extends Arme
 	{
 	    ErrorHandler.paramAberrant("nbMun:" + p_nbMun + " " + "mun courantes:" + m_magasinCourant);
 	}
+    }
+
+    /**
+     * @param p_nbMun quantité de munitions à recharger
+     * @return le nombre d'action que prendra la recharge
+     */
+    int recharger(int p_nbMun)
+    {
+	if (p_nbMun > 0 && (p_nbMun + m_magasinCourant) <= m_magasinMax)
+	{
+	    m_magasinCourant += p_nbMun;
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant("nbMun:" + p_nbMun + " " + "taille magasin:" + m_magasinMax);
+	}
+	return getNbActionsRecharge();
     }
 }

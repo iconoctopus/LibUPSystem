@@ -6,8 +6,8 @@
     "interArme": "en",
     "liaison_standard": "de",
     "liaison_addition": "et",
-    "equilibrage": "equilibrage",
-    "qualite": "qualite",
+    "equilibrage": "équilibrage",
+    "qualite": "qualité",
     "lib_qualite": ["inférieure", "moyenne", "supérieure", "de maître"],
     "lib_equilibrage": ["mauvais", "normal", "bon"]
 }

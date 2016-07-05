@@ -43,7 +43,6 @@ public abstract class Arme
      * le mode d'attaque de l'arme
      */
     private final int m_mode;
-
     /**
      * le nom de l'arme
      */
@@ -58,7 +57,7 @@ public abstract class Arme
      * maître
      */
     public Arme(int p_indice, QualiteArme p_qualite, EquilibrageArme p_equilibrage)
-    {//TODO ajouter bonus spécifiques des gardes et accessoires de 7th Sea
+    {
 
 	UPReference reference = UPReference.getInstance();
 	String nom = reference.getLblArme(p_indice);
@@ -68,7 +67,7 @@ public abstract class Arme
 	int bonusInitSup = 0;
 
 	//récupération des éléments liés à la qualité et l'équilibrage de l'arme
-	if (p_qualite == QualiteArme.maitre)
+	if (p_qualite == QualiteArme.maitre)//traitement spécial des armes de maître
 	{
 	    nom = nom.concat((String) reference.libelles.libQualite.get(QualiteArme.maitre));
 	    ++bonusLances;
@@ -80,6 +79,7 @@ public abstract class Arme
 	    nom = nom.concat(reference.libelles.liaison);
 	    nom = nom.concat(" ");
 	    nom = nom.concat(reference.libelles.qualite);
+	    nom = nom.concat(" ");
 
 	    switch (p_qualite)
 	    {
@@ -105,19 +105,20 @@ public abstract class Arme
 	    switch (p_equilibrage)
 	    {
 		case mauvais:
-		    bonusLances = -1;
-		    nom = nom.concat((String) reference.libelles.libQualite.get(EquilibrageArme.mauvais));
+		    bonusInitSup = -1;
+		    nom = nom.concat((String) reference.libelles.libEquilibrage.get(EquilibrageArme.mauvais));
 		    break;
 		case normal:
-		    nom = nom.concat((String) reference.libelles.libQualite.get(EquilibrageArme.normal));
+		    nom = nom.concat((String) reference.libelles.libEquilibrage.get(EquilibrageArme.normal));
 		    break;
 		case bon:
-		    bonusLances = +1;
-		    nom = nom.concat((String) reference.libelles.libQualite.get(EquilibrageArme.bon));
+		    bonusInitSup = +1;
+		    nom = nom.concat((String) reference.libelles.libEquilibrage.get(EquilibrageArme.bon));
 		    break;
 	    }
-
 	}
+
+	//récupération et construction des caractéristiques de l'arme
 	m_desLances = reference.getNbLancesArme(p_indice) + bonusLances;
 	m_desGardes = reference.getNbGardesArme(p_indice) + bonusGardes;
 	m_bonusInit = reference.getBonusInitArme(p_indice) + bonusInitSup;
@@ -203,7 +204,7 @@ public abstract class Arme
 	 */
 	public Degats(int p_quantite, int p_typeArme)
 	{
-	    if (p_quantite >= 0 && p_typeArme <= 0)
+	    if (p_quantite >= 0 && p_typeArme >= 0)
 	    {
 		m_quantite = p_quantite;
 		m_typeArme = p_typeArme;
@@ -246,5 +247,4 @@ public abstract class Arme
     {
 	mauvais, normal, bon
     };
-
 }

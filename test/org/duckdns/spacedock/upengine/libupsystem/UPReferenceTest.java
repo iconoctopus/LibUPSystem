@@ -9,9 +9,7 @@ import java.util.ArrayList;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 /**
  *
@@ -21,9 +19,6 @@ public final class UPReferenceTest
 {
 
     private static UPReference m_reference;
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     @BeforeClass
     public static void setUpClass()
@@ -140,6 +135,7 @@ public final class UPReferenceTest
     {
 	Assert.assertEquals(1, m_reference.getCategorieArme(0));
 	Assert.assertEquals(3, m_reference.getCategorieArme(1));
+	Assert.assertEquals(0, m_reference.getCategorieArme(3));
     }
 
     @Test
@@ -157,18 +153,61 @@ public final class UPReferenceTest
     }
 
     @Test
-    public void testGetListCatArmeCac()
+    public void testGetModArme()
     {
-	ArrayList<String> listTest = new ArrayList<>();
-	listTest.add("mains nues");
-	listTest.add("armes d'escrime");
-	listTest.add("armes à lame longue");
-	listTest.add("haches");
-	listTest.add("armes contondantes");
-	listTest.add("petites armes");
-	listTest.add("armes d'hast");
+	Assert.assertEquals(0, m_reference.getModArme(0));
+	Assert.assertEquals(1, m_reference.getModArme(3));
+    }
 
-	Assert.assertEquals(listTest, m_reference.getListCatArme());
+    @Test
+    public void testGetLblModArme()
+    {
+	Assert.assertEquals("corps à corps", m_reference.getLblModArme(0));
+	Assert.assertEquals("distance", m_reference.getLblModArme(1));
+    }
+
+    @Test
+    public void testGetLblCatArmeCaC()
+    {
+	Assert.assertEquals("mains nues", m_reference.getLblCatArmeCaC(0));
+	Assert.assertEquals("armes à lame longue", m_reference.getLblCatArmeCaC(2));
+    }
+
+    @Test
+    public void testGetLblCatArmeDist()
+    {
+	Assert.assertEquals("armes lourdes", m_reference.getLblCatArmeDist(4));
+	Assert.assertEquals("armes à énergie", m_reference.getLblCatArmeDist(2));
+    }
+
+    @Test
+    public void testGetMalusCourtArme()
+    {
+	Assert.assertEquals(5, m_reference.getMalusCourtArme(3));
+    }
+
+    @Test
+    public void testGetMalusLongArme()
+    {
+	Assert.assertEquals(10, m_reference.getMalusLongArme(3));
+    }
+
+    @Test
+    public void testGetPorteeArme()
+    {
+	Assert.assertEquals(150, m_reference.getPorteeArme(3));
+    }
+
+    @Test
+    public void testGetNbActionsRechargeArme()
+    {
+	Assert.assertEquals(1, m_reference.getNbActionsRechargeArme(3));
+    }
+
+    @Test
+    public void testGetMagasinArme()
+    {
+	Assert.assertEquals(1, m_reference.getNbActionsRechargeArme(3));
     }
 
     @Test
@@ -185,11 +224,26 @@ public final class UPReferenceTest
     {
 	ArrayList<String> analyse = new ArrayList<>();
 	ArrayList<String> cac = new ArrayList<>();
+	ArrayList<String> dist = new ArrayList<>();
 	ArrayList<String> social = new ArrayList<>();
 
 	analyse.add("empathie");
 	analyse.add("investigation");
 	analyse.add("politique");
+
+	cac.add("mains nues");
+	cac.add("armes d'escrime");
+	cac.add("armes à lame longue");
+	cac.add("haches");
+	cac.add("armes contondantes");
+	cac.add("petites armes");
+	cac.add("armes d'hast");
+
+	dist.add("armes de jet");
+	dist.add("armes à feu");
+	dist.add("armes à énergie");
+	dist.add("armes automatiques");
+	dist.add("armes lourdes");
 
 	social.add("art oratoire");
 	social.add("étiquette");
@@ -198,6 +252,7 @@ public final class UPReferenceTest
 
 	Assert.assertEquals(analyse, m_reference.getListComp(0));
 	Assert.assertEquals(cac, m_reference.getListComp(3));
+	Assert.assertEquals(dist, m_reference.getListComp(4));
 	Assert.assertEquals(social, m_reference.getListComp(8));
     }
 
@@ -206,15 +261,6 @@ public final class UPReferenceTest
     {
 	Assert.assertEquals("analyse", m_reference.getLblDomaine(0));
 	Assert.assertEquals("social", m_reference.getLblDomaine(8));
-    }
-
-    @Test
-    public void testGetLblComp()
-    {
-	Assert.assertEquals("culture", m_reference.getLblComp(5, 0));
-	Assert.assertEquals("occultisme", m_reference.getLblComp(5, 1));
-	Assert.assertEquals("sciences", m_reference.getLblComp(5, 2));
-	Assert.assertEquals("stratégie", m_reference.getLblComp(5, 3));
     }
 
     @Test

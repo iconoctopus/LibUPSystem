@@ -8,7 +8,6 @@ package org.duckdns.spacedock.upengine.libupsystem;
 import java.util.ArrayList;
 import org.duckdns.spacedock.upengine.libupsystem.Armure.PieceArmure;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -42,7 +41,6 @@ public class ArmureTest
 	listPieces.add(piece2);
 	listPieces.add(piece3);
 	listPieces.add(piece4);
-
     }
 
     @Before

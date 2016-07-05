@@ -6,7 +6,7 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
 /**
- * Compétence spécialisée dans l'attaque au corps à corps, qui comprend deux
+ * Compétence spécialisée dans le combat au corps à corps, qui comprend deux
  * sous compétences : pour attaque et parade (le combat à distance ne nécessite
  * pas de compétence spéciale) son indice dans le tableau de domaine correspond
  * à la catégorie d'arme
@@ -62,9 +62,9 @@ class CompCac extends Competence
      *
      * @return
      */
-    void setParade(int p_rang)
+    final void setParade(int p_rang)
     {
-	if(p_rang >= 0)
+	if (p_rang >= 0)
 	{
 	    m_rangParade = p_rang;
 	}

@@ -101,6 +101,26 @@
 	    "type": 0,
 	    "mode": 0
 	}, {
+	    "nom": "hachette",
+	    "lance": 3,
+	    "garde": 3,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 0,
+	    "categorie": 3,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "hache à deux mains",
+	    "lance": 5,
+	    "garde": 4,
+	    "bonus_init": 0,
+	    "malus_attaque": 1,
+	    "physique_minimal": 3,
+	    "categorie": 3,
+	    "type": 0,
+	    "mode": 0
+	}, {
 	    "nom": "hache d'arme",
 	    "lance": 6,
 	    "garde": 3,

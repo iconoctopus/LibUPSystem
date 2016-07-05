@@ -1,6 +1,16 @@
 {
     "armes": [
 	{
+	    "nom": "main nue",
+	    "lance": 0,
+	    "garde": 1,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 0,
+	    "categorie": 0,
+	    "type": 0,
+	    "mode": 0
+	}, {
 	    "nom": "cimeterre",
 	    "lance": 4,
 	    "garde": 3,

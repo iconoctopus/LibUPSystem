@@ -130,7 +130,97 @@
 	    "categorie": 3,
 	    "type": 0,
 	    "mode": 0
-	}, 
+	}, {
+	    "nom": "arme improvisee (petite)",
+	    "lance": 1,
+	    "garde": 1,
+	    "bonus_init": 0,
+	    "malus_attaque": 1,
+	    "physique_minimal": 0,
+	    "categorie": 4,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "arme improvisee (moyenne)",
+	    "lance": 2,
+	    "garde": 2,
+	    "bonus_init": 0,
+	    "malus_attaque": 2,
+	    "physique_minimal": 0,
+	    "categorie": 4,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "arme improvisee (grande)",
+	    "lance": 2,
+	    "garde": 3,
+	    "bonus_init": -2,
+	    "malus_attaque": 3,
+	    "physique_minimal": 3,
+	    "categorie": 4,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "baton",
+	    "lance": 3,
+	    "garde": 2,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 0,
+	    "categorie": 4,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "fleau d'arme",
+	    "lance": 4,
+	    "garde": 4,
+	    "bonus_init": 0,
+	    "malus_attaque": 2,
+	    "physique_minimal": 2,
+	    "categorie": 4,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "gourdin",
+	    "lance": 2,
+	    "garde": 2,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 0,
+	    "categorie": 4,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "marteau",
+	    "lance": 3,
+	    "garde": 3,
+	    "bonus_init": 0,
+	    "malus_attaque": 1,
+	    "physique_minimal": 0,
+	    "categorie": 4,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "masse",
+	    "lance": 2,
+	    "garde": 3,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 0,
+	    "categorie": 4,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "morgenstern",
+	    "lance": 2,
+	    "garde": 4,
+	    "bonus_init": 0,
+	    "malus_attaque": 1,
+	    "physique_minimal": 2,
+	    "categorie": 4,
+	    "type": 0,
+	    "mode": 0
+	},
 	{
 	    "nom": "arc",
 	    "lance": 2,

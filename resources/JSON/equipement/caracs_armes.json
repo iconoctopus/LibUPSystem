@@ -447,7 +447,7 @@
 	    "type": 0,
 	    "mode": 1
 	}, {
-	    "nom": "fusil d'assaut",
+	    "nom": "fusil",
 	    "lance": 7,
 	    "garde": 4,
 	    "bonus_init": 1,

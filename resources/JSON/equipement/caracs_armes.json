@@ -281,8 +281,8 @@
 	    "type": 0,
 	    "mode": 0
 	}, {
-	    "nom": "chakram",
-	    "lance": 3,
+	    "nom": "main gauche",
+	    "lance": 2,
 	    "garde": 2,
 	    "bonus_init": 2,
 	    "malus_attaque": 0,
@@ -290,23 +290,58 @@
 	    "categorie": 5,
 	    "type": 0,
 	    "mode": 0
-	},
-	{
-	    "nom": "main gauche",
+	}, {
+	    "nom": "fourche",
+	    "lance": 3,
+	    "garde": 3,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 2,
+	    "categorie": 6,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "hallebarde",
+	    "lance": 4,
+	    "garde": 4,
+	    "bonus_init": 0,
+	    "malus_attaque": 1,
+	    "physique_minimal": 3,
+	    "categorie": 6,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "javeline",
 	    "lance": 2,
-	    "garde": 2,
-	    "bonus_init": 2,
+	    "garde": 3,
+	    "bonus_init": 0,
 	    "malus_attaque": 0,
 	    "physique_minimal": 0,
-	    "categorie": 0,
-            "malus_long": 10,
-	    "malus_court": 5,
-	    "portee": 25,
-	    "actions_recharge": 1,
-	    "magasin": 1,
+	    "categorie": 6,
 	    "type": 0,
-	    "mode": 1
+	    "mode": 0
 	}, {
+	    "nom": "lance",
+	    "lance": 3,
+	    "garde": 4,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 3,
+	    "categorie": 6,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "vouge",
+	    "lance": 2,
+	    "garde": 3,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 0,
+	    "categorie": 6,
+	    "type": 0,
+	    "mode": 0
+	},
+        {
 	    "nom": "arc",
 	    "lance": 2,
 	    "garde": 3,
@@ -317,6 +352,21 @@
 	    "malus_long": 10,
 	    "malus_court": 5,
 	    "portee": 150,
+	    "actions_recharge": 1,
+	    "magasin": 1,
+	    "type": 0,
+	    "mode": 1
+	}, {
+	    "nom": "chakram",
+	    "lance": 3,
+	    "garde": 2,
+	    "bonus_init": 2,
+	    "malus_attaque": 0,
+	    "physique_minimal": 0,
+	    "categorie": 0,
+            "malus_long": 10,
+	    "malus_court": 5,
+	    "portee": 25,
 	    "actions_recharge": 1,
 	    "magasin": 1,
 	    "type": 0,

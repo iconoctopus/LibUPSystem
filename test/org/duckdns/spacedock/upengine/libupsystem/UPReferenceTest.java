@@ -53,37 +53,25 @@ public final class UPReferenceTest
     @Test
     public void testGetRedDegatsNominal()
     {
-	Assert.assertEquals(0, m_reference.getArmureRedDegats(0));
-	Assert.assertEquals(0, m_reference.getArmureRedDegats(1));
-	Assert.assertEquals(15, m_reference.getArmureRedDegats(32));
-	Assert.assertEquals(10, m_reference.getArmureRedDegats(25));
-	Assert.assertEquals(5, m_reference.getArmureRedDegats(11));
-	Assert.assertEquals(10, m_reference.getArmureRedDegats(16));
-	Assert.assertEquals(5, m_reference.getArmureRedDegats(6));
+	Assert.assertEquals(0, m_reference.getArmureRedDegats(0, 0, 0));
+	Assert.assertEquals(0, m_reference.getArmureRedDegats(2, 4, 3));
+	Assert.assertEquals(15, m_reference.getArmureRedDegats(8, 0, 3));
+	Assert.assertEquals(10, m_reference.getArmureRedDegats(103, 4, 0));//arrondi 103/5 = 21
+	Assert.assertEquals(5, m_reference.getArmureRedDegats(21, 2, 1));//arrondi 21/2 = 11
+	Assert.assertEquals(10, m_reference.getArmureRedDegats(32, 3, 2));
+	Assert.assertEquals(5, m_reference.getArmureRedDegats(19, 3, 1));//arrondi 19/3 = 6
     }
 
     @Test
     public void testGetBonusNDNominal()
     {
-	Assert.assertEquals(0, m_reference.getArmureBonusND(0));
-	Assert.assertEquals(5, m_reference.getArmureBonusND(1));
-	Assert.assertEquals(15, m_reference.getArmureBonusND(32));
-	Assert.assertEquals(15, m_reference.getArmureBonusND(25));
-	Assert.assertEquals(10, m_reference.getArmureBonusND(11));
-	Assert.assertEquals(10, m_reference.getArmureBonusND(16));
-	Assert.assertEquals(5, m_reference.getArmureBonusND(6));
-    }
-
-    @Test
-    public void testGetPointsArmureEffectifsNominal()
-    {
-	Assert.assertEquals(2, m_reference.getPtsArmureEffectifs(4, 3, 4), 0);
-	Assert.assertEquals(10, m_reference.getPtsArmureEffectifs(0, 0, 10), 0);
-	Assert.assertEquals(8, m_reference.getPtsArmureEffectifs(0, 3, 2), 0);
-	Assert.assertEquals(1, m_reference.getPtsArmureEffectifs(4, 0, 7), 0);
-	Assert.assertEquals(2, m_reference.getPtsArmureEffectifs(2, 1, 3), 0);
-	Assert.assertEquals(3, m_reference.getPtsArmureEffectifs(3, 2, 6), 0);
-	Assert.assertEquals(3, m_reference.getPtsArmureEffectifs(3, 1, 9), 0);
+	Assert.assertEquals(0, m_reference.getArmureBonusND(0, 0, 0));
+	Assert.assertEquals(5, m_reference.getArmureBonusND(2, 4, 3));
+	Assert.assertEquals(15, m_reference.getArmureBonusND(8, 0, 3));
+	Assert.assertEquals(15, m_reference.getArmureBonusND(103, 4, 0));//arrondi 103/5 = 21
+	Assert.assertEquals(10, m_reference.getArmureBonusND(21, 2, 1));//arrondi 21/2 = 11
+	Assert.assertEquals(10, m_reference.getArmureBonusND(32, 3, 2));
+	Assert.assertEquals(5, m_reference.getArmureBonusND(19, 3, 1));//arrondi 19/3 = 6
     }
 
     @Test

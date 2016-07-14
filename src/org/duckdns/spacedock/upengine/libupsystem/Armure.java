@@ -110,9 +110,7 @@ public class Armure
      */
     int getRedDegats(int p_typArm)
     {
-	int pointsEffectifs = UPReference.getInstance().getPtsArmureEffectifs(p_typArm, m_type, m_points);
-
-	return UPReference.getInstance().getArmureRedDegats(pointsEffectifs);
+	return UPReference.getInstance().getArmureRedDegats(m_points, p_typArm, m_type);
     }
 
     /**
@@ -123,9 +121,7 @@ public class Armure
      */
     int getBonusND(int p_typArm)
     {
-	int pointsEffectifs = UPReference.getInstance().getPtsArmureEffectifs(p_typArm, m_type, m_points);
-
-	return UPReference.getInstance().getArmureBonusND(pointsEffectifs);
+	return UPReference.getInstance().getArmureBonusND(m_points, p_typArm, m_type);
     }
 
     /**

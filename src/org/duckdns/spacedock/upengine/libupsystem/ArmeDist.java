@@ -10,7 +10,7 @@ package org.duckdns.spacedock.upengine.libupsystem;
  * @author iconoctopus
  */
 public class ArmeDist extends Arme
-{//TODO ceci est une première approche à magasin infini : il faut devoir recharger au travers d'une méthode dans Perso
+{
 
     /**
      * le malus à portée courte

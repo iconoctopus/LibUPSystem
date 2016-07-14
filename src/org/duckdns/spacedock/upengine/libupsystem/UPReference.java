@@ -8,8 +8,6 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 
-//TODO : vu la taille de cette classe il pourrait s'avérer judicieux de la splitter en plusieurs (peut être système, armes et armures) et, si ses méthodes deviennent publiques (probable), de carrément la mettre dans son propre sous package
-//TODO : pour plus de propreté objet, rendre privée getPtsArmureEffectifs et l'appeler depuis les méthodes finales que sont getArmureRedDegats et getArmureBonusND (comme pour getRang) : le calcul devrait être fait ici et pas dans la classe armure (dont le code devrait du coup être importé ici)
 /**
  * Classe permetant l'accès aux éléments de référence du UP!System
  *
@@ -243,11 +241,13 @@ final class UPReference
      * @param p_points les points d'armure
      * @return la réduction de dégâts offerte par l'armure
      */
-    int getArmureRedDegats(int p_points)
+    int getArmureRedDegats(int p_points, int p_typeArme, int p_typeArmure)
     {
+	int pointsEffectifs = getPtsArmureEffectifs(p_points, p_typeArme, p_typeArmure);
+
 	int resultat = 0;
 
-	int rang = getRang(p_points);
+	int rang = getRang(pointsEffectifs);
 	if (rang >= 0)//impossible si l'on est arrivé jusque là mais on ne sait jamais
 	{
 	    resultat = m_tableArmureRedDegats.getInt(rang);
@@ -260,11 +260,13 @@ final class UPReference
      * @param p_points les points d'armure
      * @return le bonus au ND offert par l'armure
      */
-    int getArmureBonusND(int p_points)
+    int getArmureBonusND(int p_points, int p_typeArme, int p_typeArmure)
     {
+	int pointsEffectifs = getPtsArmureEffectifs(p_points, p_typeArme, p_typeArmure);
+
 	int resultat = 0;
 
-	int rang = getRang(p_points);
+	int rang = getRang(pointsEffectifs);
 	if (rang >= 0)//impossible si l'on est arrivé jusque là mais on ne sait jamais
 	{
 	    resultat = m_tableArmureBonusND.getInt(rang);
@@ -279,7 +281,7 @@ final class UPReference
      * @return les points d'armure à effectivement utiliser face à un type
      * d'arme donné en fonction du type d'armure
      */
-    int getPtsArmureEffectifs(int p_typeArme, int p_typeArmure, int p_nbPts)
+    private int getPtsArmureEffectifs(int p_nbPts, int p_typeArme, int p_typeArmure)
     {
 	double coeff = 0;
 
@@ -287,8 +289,8 @@ final class UPReference
 	coeff = tabPourType.getJsonNumber(p_typeArme).doubleValue();
 
 	double preResult = (((double) p_nbPts) * coeff);
-	long preIntResult = Math.round(preResult);//TODO partout ailleurs le simple cast vers int ne fait que tronquer, remplacer toutes ses occurences par un appel à math.round() comme ici
-	return (int) preIntResult;
+	long IntResult = Math.round(preResult);//TODO partout ailleurs le simple cast vers int ne fait que tronquer, remplacer toutes ses occurences par un appel à math.round() comme ici
+	return (int) IntResult;
     }
 
     /**

@@ -1,6 +1,16 @@
 {
     "armes": [
 	{
+	    "nom": "adaga (lame)",
+	    "lance": 2,
+	    "garde": 3,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 0,
+	    "categorie": 1,
+	    "type": 0,
+	    "mode": 0
+	}, {
 	    "nom": "cimeterre",
 	    "lance": 4,
 	    "garde": 3,
@@ -21,7 +31,37 @@
 	    "type": 0,
 	    "mode": 0
 	}, {
+	    "nom": "darn dao",
+	    "lance": 2,
+	    "garde": 3,
+	    "bonus_init": 1,
+	    "malus_attaque": 0,
+	    "physique_minimal": 0,
+	    "categorie": 1,
+	    "type": 0,
+	    "mode": 0
+	}, {
 	    "nom": "epee courte",
+	    "lance": 3,
+	    "garde": 3,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 0,
+	    "categorie": 1,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "kastane",
+	    "lance": 5,
+	    "garde": 3,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 0,
+	    "categorie": 1,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "manopole",
 	    "lance": 3,
 	    "garde": 3,
 	    "bonus_init": 0,
@@ -46,6 +86,36 @@
 	    "garde": 3,
 	    "bonus_init": 1,
 	    "malus_attaque": 1,
+	    "physique_minimal": 0,
+	    "categorie": 1,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "shi zi jian",
+	    "lance": 2,
+	    "garde": 3,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 0,
+	    "categorie": 1,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "shuan gao",
+	    "lance": 3,
+	    "garde": 3,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 0,
+	    "categorie": 1,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "tulwar",
+	    "lance": 2,
+	    "garde": 3,
+	    "bonus_init": 1,
+	    "malus_attaque": 0,
 	    "physique_minimal": 0,
 	    "categorie": 1,
 	    "type": 0,

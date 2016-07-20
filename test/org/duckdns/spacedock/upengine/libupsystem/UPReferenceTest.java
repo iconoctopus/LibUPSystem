@@ -203,7 +203,7 @@ public final class UPReferenceTest
     @Test
     public void testGetPorteeArme()
     {
-	Assert.assertEquals(150, m_reference.getPorteeArme(73));
+	Assert.assertEquals(300, m_reference.getPorteeArme(73));
     }
 
     @Test
@@ -215,7 +215,7 @@ public final class UPReferenceTest
     @Test
     public void testGetMagasinArme()
     {
-	Assert.assertEquals(10, m_reference.getNbActionsRechargeArme(73));
+	Assert.assertEquals(1, m_reference.getNbActionsRechargeArme(73));
     }
 
     @Test
@@ -246,6 +246,7 @@ public final class UPReferenceTest
 	cac.add("armes contondantes");
 	cac.add("petites armes");
 	cac.add("armes d'hast");
+        cac.add("armes à chaînes");
 
 	dist.add("armes de jet");
 	dist.add("armes à feu");

@@ -653,7 +653,7 @@
 	    "mode": 1
 	}, {
 	    "nom": "chu ko nu",
-	    "lance": 52,
+	    "lance": 2,
 	    "garde": 3,
 	    "bonus_init": 0,
 	    "malus_attaque": 0,
@@ -662,7 +662,7 @@
 	    "malus_long": 10,
 	    "malus_court": 5,
 	    "portee": 60,
-	    "actions_recharge": 0,
+	    "actions_recharge": 1,
 	    "magasin": 18,
 	    "type": 1,
 	    "mode": 1

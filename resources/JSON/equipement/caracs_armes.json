@@ -261,6 +261,16 @@
 	    "type": 0,
 	    "mode": 0
 	}, {
+	    "nom": "arme lourde de corps à corps",
+	    "lance": 6,
+	    "garde": 5,
+	    "bonus_init": -10,
+	    "malus_attaque": 0,
+	    "physique_minimal": 3,
+	    "categorie": 4,
+	    "type": 0,
+	    "mode": 0
+	}, {
 	    "nom": "baton",
 	    "lance": 3,
 	    "garde": 2,

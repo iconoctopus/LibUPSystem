@@ -461,6 +461,16 @@
 	    "type": 0,
 	    "mode": 0
 	}, {
+	    "nom": "hu tsa",
+	    "lance": 2,
+	    "garde": 4,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 2,
+	    "categorie": 6,
+	    "type": 0,
+	    "mode": 0
+	}, {
 	    "nom": "javeline",
 	    "lance": 2,
 	    "garde": 3,
@@ -484,6 +494,36 @@
 	    "nom": "vouge",
 	    "lance": 2,
 	    "garde": 3,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 0,
+	    "categorie": 6,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "shua tou quiang",
+	    "lance": 3,
+	    "garde": 4,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 2,
+	    "categorie": 6,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "shuan pian yue",
+	    "lance": 4,
+	    "garde": 4,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 2,
+	    "categorie": 6,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "shuan pian yue ya chan",
+	    "lance": 4,
+	    "garde": 4,
 	    "bonus_init": 0,
 	    "malus_attaque": 0,
 	    "physique_minimal": 0,

@@ -109,7 +109,7 @@ public class PersoTest
     {
 	Assert.assertEquals((int) persoRM1.getActions().get(0), (int) persoRM1.getInitTotale());//son init de base
 
-	persoRM1.getListArmes().add(new ArmeCaC(0, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.bon));
+	persoRM1.getListArmes().add(new ArmeCaC(7, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.bon));
 	persoRM1.setArmeCourante(persoRM1.getListArmes().size() - 1);
 
 	Assert.assertEquals((int) persoRM1.getActions().get(0) + 10, (int) persoRM1.getInitTotale());//son init améliorée par une rapière bien équilibrée
@@ -313,7 +313,7 @@ public class PersoTest
 
 	//test en corps avec hache de mauvaise qualité et deux incréments
 	arme = new ArmeCaC(1, Arme.QualiteArme.inferieure, Arme.EquilibrageArme.normal);
-	Assert.assertEquals(31, degatsStatistiques(3, arme, 2));
+	Assert.assertEquals(29, degatsStatistiques(3, arme, 2));
 
 	//test en corps à corps à mains nues sans incréments
 	Assert.assertEquals(11, degatsStatistiques(5, null, 0));

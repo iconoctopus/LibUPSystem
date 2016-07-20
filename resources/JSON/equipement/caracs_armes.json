@@ -321,6 +321,16 @@
 	    "type": 0,
 	    "mode": 0
 	}, {
+	    "nom": "tieh shan gong",
+	    "lance": 0,
+	    "garde": 2,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 0,
+	    "categorie": 4,
+	    "type": 0,
+	    "mode": 0
+	}, {
 	    "nom": "brise lame",
 	    "lance": 2,
 	    "garde": 2,

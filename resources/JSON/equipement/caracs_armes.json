@@ -340,6 +340,36 @@
 	    "categorie": 6,
 	    "type": 0,
 	    "mode": 0
+	}, {
+	    "nom": "jiu jie bien",
+	    "lance": 6,
+	    "garde": 3,
+	    "bonus_init": 0,
+	    "malus_attaque": 1,
+	    "physique_minimal": 0,
+	    "categorie": 7,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "sa tjat koen",
+	    "lance": 3,
+	    "garde": 3,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 0,
+	    "categorie": 7,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "seurn tjat koen",
+	    "lance": 2,
+	    "garde": 3,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 0,
+	    "categorie": 7,
+	    "type": 0,
+	    "mode": 0
 	},
         {
 	    "nom": "arbalète",
@@ -523,7 +553,7 @@
 	    "mode": 1
 	} ],
     "types_armes": ["simple", "perce-armure", "pénétrante", "perce-blindage", "énergétique"],
-    "cat_armes_cac": ["mains nues", "armes d'escrime", "armes à lame longue", "haches", "armes contondantes", "petites armes", "armes d'hast"],
+    "cat_armes_cac": ["mains nues", "armes d'escrime", "armes à lame longue", "haches", "armes contondantes", "petites armes", "armes d'hast", "armes à chaînes"],
     "cat_armes_dist": ["armes de jet", "armes à feu", "armes à énergie", "armes automatiques", "armes lourdes"],
     "mod_armes": ["corps à corps", "distance"]
 

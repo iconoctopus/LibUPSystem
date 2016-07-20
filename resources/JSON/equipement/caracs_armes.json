@@ -361,6 +361,46 @@
 	    "type": 0,
 	    "mode": 0
 	}, {
+	    "nom": "niur er jan dao",
+	    "lance": 2,
+	    "garde": 2,
+	    "bonus_init": 2,
+	    "malus_attaque": 0,
+	    "physique_minimal": 0,
+	    "categorie": 5,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "panzerfaust",
+	    "lance": 2,
+	    "garde": 2,
+	    "bonus_init": 2,
+	    "malus_attaque": 0,
+	    "physique_minimal": 0,
+	    "categorie": 5,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "paku",
+	    "lance": 1,
+	    "garde": 1,
+	    "bonus_init": 2,
+	    "malus_attaque": 0,
+	    "physique_minimal": 0,
+	    "categorie": 5,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "shuang huang",
+	    "lance": 2,
+	    "garde": 2,
+	    "bonus_init": 2,
+	    "malus_attaque": 0,
+	    "physique_minimal": 0,
+	    "categorie": 5,
+	    "type": 0,
+	    "mode": 0
+	}, {
 	    "nom": "fourche",
 	    "lance": 3,
 	    "garde": 3,

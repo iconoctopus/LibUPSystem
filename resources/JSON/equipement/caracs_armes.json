@@ -41,7 +41,7 @@
 	    "type": 0,
 	    "mode": 0
 	}, {
-	    "nom": "epee courte",
+	    "nom": "épée courte",
 	    "lance": 3,
 	    "garde": 3,
 	    "bonus_init": 0,
@@ -141,7 +141,7 @@
 	    "type": 0,
 	    "mode": 0
 	}, {
-	    "nom": "epee a deux mains/claymore",
+	    "nom": "épée à deux mains/claymore",
 	    "lance": 4,
 	    "garde": 4,
 	    "bonus_init": 0,
@@ -151,7 +151,7 @@
 	    "type": 0,
 	    "mode": 0
 	}, {
-	    "nom": "epee batarde (une main)",
+	    "nom": "épée bâtarde (une main)",
 	    "lance": 6,
 	    "garde": 3,
 	    "bonus_init": 0,
@@ -161,7 +161,7 @@
 	    "type": 0,
 	    "mode": 0
 	}, {
-	    "nom": "epee batarde (deux mains)",
+	    "nom": "épée bâtarde (deux mains)",
 	    "lance": 3,
 	    "garde": 4,
 	    "bonus_init": 0,
@@ -171,7 +171,7 @@
 	    "type": 0,
 	    "mode": 0
 	}, {
-	    "nom": "epee longue",
+	    "nom": "épée longue",
 	    "lance": 5,
 	    "garde": 3,
 	    "bonus_init": 0,
@@ -231,7 +231,7 @@
 	    "type": 0,
 	    "mode": 0
 	}, {
-	    "nom": "arme improvisee (petite)",
+	    "nom": "arme improvisée (petite)",
 	    "lance": 1,
 	    "garde": 1,
 	    "bonus_init": 0,
@@ -241,7 +241,7 @@
 	    "type": 0,
 	    "mode": 0
 	}, {
-	    "nom": "arme improvisee (moyenne)",
+	    "nom": "arme improvisée (moyenne)",
 	    "lance": 2,
 	    "garde": 2,
 	    "bonus_init": 0,
@@ -251,7 +251,7 @@
 	    "type": 0,
 	    "mode": 0
 	}, {
-	    "nom": "arme improvisee (grande)",
+	    "nom": "arme improvisée (grande)",
 	    "lance": 2,
 	    "garde": 3,
 	    "bonus_init": -2,
@@ -271,7 +271,7 @@
 	    "type": 0,
 	    "mode": 0
 	}, {
-	    "nom": "baton",
+	    "nom": "bâton",
 	    "lance": 3,
 	    "garde": 2,
 	    "bonus_init": 0,
@@ -281,7 +281,7 @@
 	    "type": 0,
 	    "mode": 0
 	}, {
-	    "nom": "fleau d'arme",
+	    "nom": "fléau d'arme",
 	    "lance": 4,
 	    "garde": 4,
 	    "bonus_init": 0,
@@ -737,21 +737,6 @@
 	    "type": 1,
 	    "mode": 1
 	}, {
-	    "nom": "arquebuse",
-	    "lance": 4,
-	    "garde": 4,
-	    "bonus_init": 0,
-	    "malus_attaque": 0,
-	    "physique_minimal": 0,
-	    "categorie": 1,
-	    "malus_long": 20,
-	    "malus_court": 15,
-	    "portee": 80,
-	    "actions_recharge": 10,
-	    "magasin": 1,
-	    "type": 1,
-	    "mode": 1
-	}, {
 	    "nom": "fusil",
 	    "lance": 7,
 	    "garde": 4,
@@ -797,7 +782,7 @@
 	    "type": 1,
 	    "mode": 1
 	}, {
-	    "nom": "pistolet leger",
+	    "nom": "pistolet léger",
 	    "lance": 3,
 	    "garde": 4,
 	    "bonus_init": 1,

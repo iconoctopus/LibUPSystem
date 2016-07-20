@@ -121,6 +121,26 @@
 	    "type": 0,
 	    "mode": 0
 	}, {
+	    "nom": "dao",
+	    "lance": 5,
+	    "garde": 3,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 2,
+	    "categorie": 2,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "dilmekiri",
+	    "lance": 3,
+	    "garde": 4,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 3,
+	    "categorie": 2,
+	    "type": 0,
+	    "mode": 0
+	}, {
 	    "nom": "epee a deux mains/claymore",
 	    "lance": 4,
 	    "garde": 4,
@@ -157,6 +177,16 @@
 	    "bonus_init": 0,
 	    "malus_attaque": 0,
 	    "physique_minimal": 2,
+	    "categorie": 2,
+	    "type": 0,
+	    "mode": 0
+	}, {
+	    "nom": "kan dao",
+	    "lance": 4,
+	    "garde": 3,
+	    "bonus_init": 0,
+	    "malus_attaque": -1,
+	    "physique_minimal": 0,
 	    "categorie": 2,
 	    "type": 0,
 	    "mode": 0

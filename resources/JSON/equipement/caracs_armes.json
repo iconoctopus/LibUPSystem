@@ -497,6 +497,21 @@
 	    "type": 1,
 	    "mode": 1
 	}, {
+	    "nom": "arbalète de poing",
+	    "lance": 2,
+	    "garde": 2,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 0,
+	    "categorie": 0,
+	    "malus_long": 10,
+	    "malus_court": 5,
+	    "portee": 30,
+	    "actions_recharge": 3,
+	    "magasin": 1,
+	    "type": 1,
+	    "mode": 1
+	}, {
 	    "nom": "arbalète lourde",
 	    "lance": 4,
 	    "garde": 4,
@@ -552,9 +567,24 @@
             "malus_long": 10,
 	    "malus_court": 5,
 	    "portee": 25,
-	    "actions_recharge": 1,
+	    "actions_recharge": 0,
 	    "magasin": 1,
 	    "type": 0,
+	    "mode": 1
+	}, {
+	    "nom": "chu ko nu",
+	    "lance": 52,
+	    "garde": 3,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 0,
+	    "categorie": 0,
+	    "malus_long": 10,
+	    "malus_court": 5,
+	    "portee": 60,
+	    "actions_recharge": 0,
+	    "magasin": 18,
+	    "type": 1,
 	    "mode": 1
 	}, {
 	    "nom": "fronde",
@@ -570,6 +600,21 @@
 	    "actions_recharge": 1,
 	    "magasin": 1,
 	    "type": 0,
+	    "mode": 1
+	}, {
+	    "nom": "mei far chen",
+	    "lance": 1,
+	    "garde": 1,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 0,
+	    "categorie": 0,
+	    "malus_long": 0,
+	    "malus_court": 0,
+	    "portee": 2,
+	    "actions_recharge": 0,
+	    "magasin": 1,
+	    "type": 1,
 	    "mode": 1
 	}, {
 	    "nom": "sarbacane",

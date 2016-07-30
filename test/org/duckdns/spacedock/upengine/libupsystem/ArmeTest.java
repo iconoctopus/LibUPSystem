@@ -25,10 +25,10 @@ public class ArmeTest
     @BeforeClass
     public static void setUpClass()
     {
-	arme1 = new ArmeCaC(0, Arme.QualiteArme.superieure, Arme.EquilibrageArme.mauvais);
-	arme2 = new ArmeCaC(1, Arme.QualiteArme.inferieure, Arme.EquilibrageArme.bon);
-	arme3 = new ArmeCaC(1, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais);
-	arme4 = new ArmeDist(3, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal);
+	arme1 = new ArmeCaC(7, Arme.QualiteArme.superieure, Arme.EquilibrageArme.mauvais);
+	arme2 = new ArmeCaC(22, Arme.QualiteArme.inferieure, Arme.EquilibrageArme.bon);
+	arme3 = new ArmeCaC(22, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais);
+	arme4 = new ArmeDist(60, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal);
     }
 
     @Test

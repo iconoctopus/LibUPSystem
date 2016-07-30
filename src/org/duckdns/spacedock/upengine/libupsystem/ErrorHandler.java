@@ -5,7 +5,6 @@
  */
 package org.duckdns.spacedock.upengine.libupsystem;
 
-//TODO: complètement refaire le fichier properties dont les noms ne correspondent à rien et aller dans les autres classes traquer les chaînes en dur qui sont encore nombreuses
 /**
  * Classe de sucre syntactique pour centraliser le message d'erreur sur
  * paramétre envoyé par toutes les méthodes de toutes les classes y étant

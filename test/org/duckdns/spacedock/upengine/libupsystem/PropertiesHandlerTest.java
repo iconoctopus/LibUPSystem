@@ -5,7 +5,6 @@
  */
 package org.duckdns.spacedock.upengine.libupsystem;
 
-import org.duckdns.spacedock.upengine.libupsystem.PropertiesHandler;
 import java.io.IOException;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -39,6 +38,6 @@ public final class PropertiesHandlerTest
     @Test
     public void testGetExceptionMessageNominal()
     {
-	Assert.assertEquals("paramétre aberrant:", m_handler.getErrorMessage("param_inf_0"));
+	Assert.assertEquals("paramétre aberrant:", m_handler.getErrorMessage("param_aberr"));
     }
 }

@@ -211,7 +211,7 @@ public abstract class Arme
 	    }
 	    else
 	    {
-		ErrorHandler.paramAberrant("degats:" + p_quantite + " type:" + p_typeArme);
+		ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("degats") + ":" + p_quantite + " " + PropertiesHandler.getInstance().getString("type") + ":" + p_typeArme);
 	    }
 	}
 

@@ -53,7 +53,7 @@ public class Domaine
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant("indice:" + p_indice);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("indice") + ":" + p_indice);
 	}
     }
 
@@ -73,7 +73,7 @@ public class Domaine
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant("rang:" + p_rang);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("rang") + ":" + p_rang);
 	}
     }
 
@@ -112,9 +112,11 @@ public class Domaine
     RollResult effectuerJetComp(int p_comp, int p_trait, int p_nd, int p_modifNbDesLances, int p_modifNbDesGardes, int p_modifScore, boolean p_isSonne)
     {//TODO : cette fonction fonctionne bien spour les jets d'attaques grâce à getRang() qui abrite la valeur d'attaque, il faudrait un traitement particulier pour les parades actives
 	int result = 0;
-	int comp = getCompetences().get(p_comp).getRang();
-	if (getRang() > 0 && comp >= 0 && p_trait >= 0)
+
+	if (getRang() > 0 && p_comp >= 0 && p_trait >= 0)
 	{
+	    int comp = getCompetences().get(p_comp).getRang();
+
 	    int bonus = p_modifScore;
 	    int lances = getRang() + comp + p_modifNbDesLances;
 	    int gardes = p_trait + p_modifNbDesGardes;
@@ -145,9 +147,9 @@ public class Domaine
 	{
 	    String message = "";
 
-	    message = message.concat("Trait=" + p_trait);
-	    message = message.concat(", Dom=" + getRang());
-	    message = message.concat(", Comp=" + comp);
+	    message = message.concat(PropertiesHandler.getInstance().getString("trait") + ":" + p_trait);
+	    message = message.concat(" " + PropertiesHandler.getInstance().getString("dom") + ":" + getRang());
+	    message = message.concat(" " + PropertiesHandler.getInstance().getString("indice") + " " + PropertiesHandler.getInstance().getString("comp") + ":" + p_comp);
 	    ErrorHandler.paramAberrant(message);
 	}
 	return RollUtils.extraireIncrements(result, p_nd);

@@ -45,7 +45,7 @@ public final class RollUtils
      * @param p_non_relance_dix
      * @return le score obtenu
      */
-    public static int lancer(int p_nbLances, int p_nbGardes, boolean p_non_relance_dix)
+    public static int lancer(int p_nbLances, int p_nbGardes, boolean p_non_relance_dix)//todo tester les cas d'erreur sur cette méthode
     {
 	int i, total = 0;
 	if (p_nbLances >= 0 && p_nbGardes >= 0)
@@ -97,8 +97,8 @@ public final class RollUtils
 	{
 	    String message = "";
 
-	    message = message.concat("Lancés=" + p_nbLances);
-	    message = message.concat(", Gardés=" + p_nbGardes);
+	    message = message.concat(PropertiesHandler.getInstance().getString("lances") + ":" + p_nbLances);
+	    message = message.concat(" " + PropertiesHandler.getInstance().getString("gardes") + ":" + p_nbGardes);
 	    ErrorHandler.paramAberrant(message);
 	}
 	return total;

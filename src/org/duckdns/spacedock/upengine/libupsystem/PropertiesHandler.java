@@ -1,6 +1,5 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
-import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +15,7 @@ final class PropertiesHandler
 {
 
     /**
-     * message d'erreur par défaut pour les paramétres inférieurs à 0
+     * message d'erreur par défaut
      */
     private final static String m_propertiesErrorMessage = "erreur d'accès à un fichier de propriétés";
 
@@ -26,6 +25,11 @@ final class PropertiesHandler
     private boolean m_exceptionsRecovered;
 
     /**
+     * si les propriétés des chaînes ont pu être récupérées
+     */
+    private boolean m_stringsRecovered;
+
+    /**
      * instance statique unique
      */
     private static PropertiesHandler m_instance;
@@ -33,7 +37,12 @@ final class PropertiesHandler
     /**
      * Textes des exceptions
      */
-    private final Properties m_exceptionProperties;
+    private Properties m_exceptionsProperties;
+
+    /**
+     * Textes des chaînes générales (pas d'erreurs)
+     */
+    private Properties m_stringsProperties;
 
     /**
      * pseudo-constructeur statique permettant d'accéder à l'instance (la crée
@@ -45,7 +54,7 @@ final class PropertiesHandler
      */
     static PropertiesHandler getInstance()
     {
-	if(m_instance == null)
+	if (m_instance == null)
 	{
 	    m_instance = new PropertiesHandler();
 	}
@@ -64,28 +73,44 @@ final class PropertiesHandler
      */
     private PropertiesHandler()
     {
-	m_exceptionProperties = new Properties();
+	try
+	{
+	    m_exceptionsProperties = readProperties("strings/exceptions.properties");
+	    m_exceptionsRecovered = true;
+	}
+	catch (IOException e)
+	{
+	    m_exceptionsRecovered = false;
+	}
 
+	try
+	{
+	    m_stringsProperties = readProperties("strings/generalstrings.properties");
+	    m_stringsRecovered = true;
+	}
+	catch (IOException e)
+	{
+	    m_stringsRecovered = false;
+	}
+
+    }
+
+    private Properties readProperties(String p_path) throws IOException
+    {
 	//InputStream in = PropertiesHandler.class.getClassLoader().getResourceAsStream("strings/exceptions.properties");
 	/*on utilise le classloader pour récupérer le fichier de propriétés ailleurs que dans le même package : il utilise le classpath.
 	 *On utilise le classloader du thread afin d'être davantage sur qu'il explorera tout le classpath, contrairement au classloader
 	 *de la classe (utilisé dans le bout de code commenté ci-dessus). J'ignore si cela marche bien avec les threads android.
 	 */
 	InputStream in;
+	in = Thread.currentThread().getContextClassLoader().getResourceAsStream(p_path);
 
-	try
-	{
+	//on construit l'objet propriété demandé avant de le renvoyer
+	Properties result = new Properties();
+	result.load(in);
+	in.close();
 
-	    in = Thread.currentThread().getContextClassLoader().getResourceAsStream("strings/exceptions.properties");
-	    m_exceptionProperties.load(in);
-	    in.close();
-	    m_exceptionsRecovered = true;
-	}
-	catch(IOException e)
-	{
-	    m_exceptionsRecovered = false;
-	}
-
+	return result;
     }
 
     /**
@@ -96,9 +121,29 @@ final class PropertiesHandler
     String getErrorMessage(String p_property)
     {
 	String result;
-	if(m_exceptionsRecovered)
+	if (m_exceptionsRecovered)
 	{
-	    result = m_exceptionProperties.getProperty(p_property);
+	    result = m_exceptionsProperties.getProperty(p_property);
+	}
+	else
+	{
+	    result = m_propertiesErrorMessage;
+	}
+	return result;
+    }
+
+    /**
+     *
+     * @param p_property
+     * @return la chaîne d'usage général (pas de traitement d'erreurs ici)
+     * indiquée en paramétre
+     */
+    String getString(String p_property)
+    {
+	String result;
+	if (m_stringsRecovered)
+	{
+	    result = m_stringsProperties.getProperty(p_property);
 	}
 	else
 	{

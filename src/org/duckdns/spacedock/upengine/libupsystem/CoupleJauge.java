@@ -60,7 +60,7 @@ class CoupleJauge
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant("physique:" + p_physique + " volonte:" + p_volonte + " mental:" + p_mental + " coordination:" + p_coordination);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("physique") + ":" + p_physique + " " + PropertiesHandler.getInstance().getString("volonte") + ":" + p_volonte + " " + PropertiesHandler.getInstance().getString("mental") + ":" + p_mental + " " + PropertiesHandler.getInstance().getString("coordination") + ":" + p_coordination);
 	}
     }
 
@@ -81,7 +81,7 @@ class CoupleJauge
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant("physique:" + p_physique + " volonte:" + p_volonte + " trait minimum:" + p_tailleForceDAme);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("physique") + ":" + p_physique + " " + PropertiesHandler.getInstance().getString("volonte") + ":" + p_volonte + " " + PropertiesHandler.getInstance().getString("traitmin") + ":" + p_tailleForceDAme);
 	}
     }
 
@@ -158,7 +158,7 @@ class CoupleJauge
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant("degats:" + p_degats + " jet:" + p_resultatJet + " volonte:" + p_volonte);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("degats") + ":" + p_degats + " " + PropertiesHandler.getInstance().getString("resultjet") + ":" + p_resultatJet + " " + PropertiesHandler.getInstance().getString("volonte") + ":" + p_volonte);
 	}
 	return m_remplissage_externe;
 

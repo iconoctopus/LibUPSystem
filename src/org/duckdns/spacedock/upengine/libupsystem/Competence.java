@@ -31,7 +31,7 @@ class Competence
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant("rang:" + p_rang);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("rang") + ":" + p_rang);
 	}
     }
 

@@ -238,8 +238,10 @@ final class UPReference
 
     /**
      *
-     * @param p_points les points d'armure
-     * @return la réduction de dégâts offerte par l'armure
+     * @param p_points
+     * @param p_typeArme
+     * @param p_typeArmure
+     * @return la réduction aux dégâts de l'armure par rapport au type d'arme
      */
     int getArmureRedDegats(int p_points, int p_typeArme, int p_typeArmure)
     {
@@ -258,7 +260,9 @@ final class UPReference
     /**
      *
      * @param p_points les points d'armure
-     * @return le bonus au ND offert par l'armure
+     * @param p_typeArme
+     * @param p_typeArmure
+     * @return le bonus au ND offert par l'armure sur ce type d'arme
      */
     int getArmureBonusND(int p_points, int p_typeArme, int p_typeArmure)
     {

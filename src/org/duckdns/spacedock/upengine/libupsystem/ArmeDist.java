@@ -68,7 +68,7 @@ public class ArmeDist extends Arme
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant("increments:" + p_nbIncrements);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("increments") + ":" + p_nbIncrements);
 	}
 	return new Degats(degatsBruts, super.getTypeArme());
     }
@@ -132,7 +132,7 @@ public class ArmeDist extends Arme
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant("nbMun:" + p_nbMun + " " + "mun courantes:" + m_magasinCourant);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("nbCoups") + ":" + p_nbMun + " " + PropertiesHandler.getInstance().getString("muncourantes") + ":" + m_magasinCourant);
 	}
     }
 
@@ -148,7 +148,7 @@ public class ArmeDist extends Arme
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant("nbMun:" + p_nbMun + " " + "taille magasin:" + m_magasinMax);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("nbCoups") + ":" + p_nbMun + " " + PropertiesHandler.getInstance().getString("taillemagasin") + ":" + m_magasinMax);
 	}
 	return getNbActionsRecharge();
     }

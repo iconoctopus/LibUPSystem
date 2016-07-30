@@ -92,7 +92,7 @@ public class ArmeTest
 	}
 	catch (IllegalArgumentException e)
 	{
-	    Assert.assertEquals("paramétre aberrant:degats:-1 type:2", e.getMessage());
+	    Assert.assertEquals("paramétre aberrant:dégâts:-1 type:2", e.getMessage());
 	}
 
 	try
@@ -102,7 +102,7 @@ public class ArmeTest
 	}
 	catch (IllegalArgumentException e)
 	{
-	    Assert.assertEquals("paramétre aberrant:degats:2 type:-1", e.getMessage());
+	    Assert.assertEquals("paramétre aberrant:dégâts:2 type:-1", e.getMessage());
 	}
 
 	try
@@ -112,7 +112,7 @@ public class ArmeTest
 	}
 	catch (IllegalArgumentException e)
 	{
-	    Assert.assertEquals("paramétre aberrant:increments:2 physique:-1", e.getMessage());
+	    Assert.assertEquals("paramétre aberrant:incréments:2 physique:-1", e.getMessage());
 	}
 
 	try
@@ -122,7 +122,7 @@ public class ArmeTest
 	}
 	catch (IllegalArgumentException e)
 	{
-	    Assert.assertEquals("paramétre aberrant:increments:-2 physique:1", e.getMessage());
+	    Assert.assertEquals("paramétre aberrant:incréments:-2 physique:1", e.getMessage());
 	}
     }
 
@@ -137,7 +137,7 @@ public class ArmeTest
 	}
 	catch (IllegalArgumentException e)
 	{
-	    Assert.assertEquals("paramétre aberrant:nbMun:2 taille magasin:1", e.getMessage());
+	    Assert.assertEquals("paramétre aberrant:nombre de coups:2 taille du magasin:1", e.getMessage());
 	}
 
 	try
@@ -147,7 +147,7 @@ public class ArmeTest
 	}
 	catch (IllegalArgumentException e)
 	{
-	    Assert.assertEquals("paramétre aberrant:nbMun:1 mun courantes:0", e.getMessage());
+	    Assert.assertEquals("paramétre aberrant:nombre de coups:1 munitions courantes:0", e.getMessage());
 	}
 
 	Assert.assertEquals(1, arme4.recharger(1));

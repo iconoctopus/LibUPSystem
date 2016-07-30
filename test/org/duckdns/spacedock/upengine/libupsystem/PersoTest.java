@@ -233,7 +233,7 @@ public class PersoTest
 	}
 	catch (IllegalArgumentException e)
 	{
-	    Assert.assertEquals("paramétre aberrant:distance:100 nbCoups:21", e.getMessage());
+	    Assert.assertEquals("paramétre aberrant:distance:100 nombre de coups:21", e.getMessage());
 	}
 
 	//cas d'erreur : nb de balles nul
@@ -248,7 +248,7 @@ public class PersoTest
 	}
 	catch (IllegalArgumentException e)
 	{
-	    Assert.assertEquals("paramétre aberrant:distance:0 nbCoups:0", e.getMessage());
+	    Assert.assertEquals("paramétre aberrant:distance:0 nombre de coups:0", e.getMessage());
 	}
 
 	//cas d'erreur : distance négative
@@ -263,7 +263,7 @@ public class PersoTest
 	}
 	catch (IllegalArgumentException e)
 	{
-	    Assert.assertEquals("paramétre aberrant:distance:-1 nbCoups:1", e.getMessage());
+	    Assert.assertEquals("paramétre aberrant:distance:-1 nombre de coups:1", e.getMessage());
 	}
 
 	//cas d'erreur hors portée sur arc
@@ -285,7 +285,7 @@ public class PersoTest
 	}
 	catch (IllegalArgumentException e)
 	{
-	    Assert.assertEquals("paramétre aberrant:nbMun:20 mun courantes:15", e.getMessage());
+	    Assert.assertEquals("paramétre aberrant:nombre de coups:20 munitions courantes:15", e.getMessage());
 	}
 
 	//cas d'erreur arme pas assez chargée pour faire feu : arme vide
@@ -299,7 +299,7 @@ public class PersoTest
 	}
 	catch (IllegalArgumentException e)
 	{
-	    Assert.assertEquals("paramétre aberrant:nbMun:1 mun courantes:0", e.getMessage());
+	    Assert.assertEquals("paramétre aberrant:nombre de coups:1 munitions courantes:0", e.getMessage());
 	}
     }
 
@@ -330,7 +330,7 @@ public class PersoTest
 	}
 	catch (IllegalArgumentException e)
 	{
-	    Assert.assertEquals("paramétre aberrant:increments:-1", e.getMessage());
+	    Assert.assertEquals("paramétre aberrant:incréments:-1", e.getMessage());
 	}
     }
 
@@ -360,7 +360,7 @@ public class PersoTest
 	}
 	catch (IllegalArgumentException e)
 	{
-	    Assert.assertEquals("paramétre aberrant:degats:-1 type:0", e.getMessage());
+	    Assert.assertEquals("paramétre aberrant:dégâts:-1 type:0", e.getMessage());
 	}
     }
 

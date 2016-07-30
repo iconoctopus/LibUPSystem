@@ -55,7 +55,7 @@ public class Perso
     {
 	if (p_RM < 1)
 	{
-	    ErrorHandler.paramAberrant("rang:" + p_RM);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("rang") + ":" + p_RM);
 	}
 	//configuration des traits
 	m_traits = new int[5];
@@ -92,7 +92,7 @@ public class Perso
 	//configuration d'un inventaire vide
 	m_inventaire = new Inventaire();
 
-	m_libellePerso = "PersoRM" + p_RM;
+	m_libellePerso = PropertiesHandler.getInstance().getString("lbl_perso_std") + p_RM;
     }
 
     /**
@@ -191,7 +191,7 @@ public class Perso
 	    }
 	    else
 	    {
-		ErrorHandler.mauvaiseMethode("mauvais mode d'attaque");
+		ErrorHandler.mauvaisModeAttaque();
 	    }
 	}
 	return effectuerAttaque(p_phaseActuelle, p_ND, catArm, 3, 0, 0, 0);
@@ -270,7 +270,7 @@ public class Perso
 			}
 			else
 			{
-			    ErrorHandler.paramAberrant("rafale sur arme à coup par coup");
+			    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("nbCoups") + ":" + p_nbCoups);
 			}
 
 		    }
@@ -279,12 +279,12 @@ public class Perso
 	    }
 	    else
 	    {
-		ErrorHandler.paramAberrant("distance:" + p_distance + " nbCoups:" + p_nbCoups);
+		ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("distance") + ":" + p_distance + " " + PropertiesHandler.getInstance().getString("nbCoups") + ":" + p_nbCoups);
 	    }
 	}
 	else
 	{
-	    ErrorHandler.mauvaiseMethode("mauvais mode d'attaque");
+	    ErrorHandler.mauvaisModeAttaque();
 	}
 	return result;
     }
@@ -340,7 +340,7 @@ public class Perso
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant("phase:" + p_phaseActuelle);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("phase") + ":" + p_phaseActuelle);
 	}
 	return result;
     }
@@ -375,7 +375,7 @@ public class Perso
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant("increments:" + p_increments);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("increments") + ":" + p_increments);
 	}
 	return result;
     }
@@ -406,7 +406,7 @@ public class Perso
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant("degats:" + p_degats.getQuantite());
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("degats") + ":" + p_degats.getQuantite());
 	}
     }
 
@@ -471,7 +471,7 @@ public class Perso
     {
 	if (p_phaseActuelle <= 0 || p_phaseActuelle > 10)
 	{
-	    ErrorHandler.paramAberrant("phase:" + p_phaseActuelle);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("phase") + ":" + p_phaseActuelle);
 	}
 	return ((m_actions.size() - m_actionCourante) > 0 && p_phaseActuelle == m_actions.get(m_actionCourante));
     }

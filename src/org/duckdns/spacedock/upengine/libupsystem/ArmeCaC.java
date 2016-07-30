@@ -34,7 +34,7 @@ public class ArmeCaC extends Arme
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant("increments:" + p_nbIncrements + " physique:" + p_physique);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("increments") + ":" + p_nbIncrements + " " + PropertiesHandler.getInstance().getString("physique") + ":" + p_physique);
 	}
 	return new Degats(degatsBruts, super.getTypeArme());
     }

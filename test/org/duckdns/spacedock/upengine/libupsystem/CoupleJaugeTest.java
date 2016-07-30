@@ -94,7 +94,7 @@ public class CoupleJaugeTest
 	}
 	catch (IllegalArgumentException e)
 	{
-	    Assert.assertEquals("paramétre aberrant:physique:3 volonte:2 trait minimum:-1", e.getMessage());
+	    Assert.assertEquals("paramétre aberrant:physique:3 volonté:2 trait le plus faible:-1", e.getMessage());
 	}
 
 	try
@@ -104,7 +104,7 @@ public class CoupleJaugeTest
 	}
 	catch (IllegalArgumentException e)
 	{
-	    Assert.assertEquals("paramétre aberrant:degats:-1 jet:20 volonte:2", e.getMessage());
+	    Assert.assertEquals("paramétre aberrant:dégâts:-1 résultat du jet:20 volonté:2", e.getMessage());
 	}
     }
 

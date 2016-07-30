@@ -99,50 +99,58 @@ public final class UPReferenceTest
     public void testGetNbLancesArme()
     {
 	Assert.assertEquals(2, m_reference.getNbLancesArme(0));
-	Assert.assertEquals(6, m_reference.getNbLancesArme(1));
+	Assert.assertEquals(3, m_reference.getNbLancesArme(20));
+        Assert.assertEquals(2, m_reference.getNbLancesArme(42));
     }
 
     @Test
     public void testGetNbGardesArme()
     {
 	Assert.assertEquals(3, m_reference.getNbGardesArme(0));
-	Assert.assertEquals(3, m_reference.getNbGardesArme(1));
+	Assert.assertEquals(3, m_reference.getNbGardesArme(20));
+        Assert.assertEquals(2, m_reference.getNbGardesArme(42));
     }
 
     @Test
     public void testGetBonusInitArme()
     {
-	Assert.assertEquals(1, m_reference.getBonusInitArme(0));
-	Assert.assertEquals(0, m_reference.getBonusInitArme(1));
+	Assert.assertEquals(0, m_reference.getBonusInitArme(0));
+	Assert.assertEquals(0, m_reference.getBonusInitArme(20));
+        Assert.assertEquals(2, m_reference.getBonusInitArme(42));
     }
 
     @Test
     public void testGetMalusAttaqueArme()
     {
 	Assert.assertEquals(0, m_reference.getMalusAttaqueArme(0));
-	Assert.assertEquals(0, m_reference.getMalusAttaqueArme(1));
+	Assert.assertEquals(0, m_reference.getMalusAttaqueArme(20));
+        Assert.assertEquals(0, m_reference.getMalusAttaqueArme(42));
     }
 
     @Test
     public void testGetPhysMinArme()
     {
 	Assert.assertEquals(0, m_reference.getPhysMinArme(0));
-	Assert.assertEquals(2, m_reference.getPhysMinArme(1));
+	Assert.assertEquals(0, m_reference.getPhysMinArme(20));
+        Assert.assertEquals(0, m_reference.getPhysMinArme(42));
     }
 
     @Test
     public void testGetCategorieArme()
     {
 	Assert.assertEquals(1, m_reference.getCategorieArme(0));
-	Assert.assertEquals(3, m_reference.getCategorieArme(1));
-	Assert.assertEquals(0, m_reference.getCategorieArme(3));
+	Assert.assertEquals(3, m_reference.getCategorieArme(20));
+        Assert.assertEquals(5, m_reference.getCategorieArme(42));
+	Assert.assertEquals(0, m_reference.getCategorieArme(60));
     }
 
     @Test
     public void testGetTypeArme()
     {
 	Assert.assertEquals(0, m_reference.getTypeArme(0));
-	Assert.assertEquals(0, m_reference.getTypeArme(1));
+	Assert.assertEquals(0, m_reference.getTypeArme(20));
+        Assert.assertEquals(0, m_reference.getTypeArme(42));
+        Assert.assertEquals(1, m_reference.getTypeArme(73));
     }
 
     @Test
@@ -156,7 +164,7 @@ public final class UPReferenceTest
     public void testGetModArme()
     {
 	Assert.assertEquals(0, m_reference.getModArme(0));
-	Assert.assertEquals(1, m_reference.getModArme(3));
+	Assert.assertEquals(1, m_reference.getModArme(60));
     }
 
     @Test
@@ -183,31 +191,31 @@ public final class UPReferenceTest
     @Test
     public void testGetMalusCourtArme()
     {
-	Assert.assertEquals(5, m_reference.getMalusCourtArme(3));
+	Assert.assertEquals(5, m_reference.getMalusCourtArme(73));
     }
 
     @Test
     public void testGetMalusLongArme()
     {
-	Assert.assertEquals(10, m_reference.getMalusLongArme(3));
+	Assert.assertEquals(10, m_reference.getMalusLongArme(73));
     }
 
     @Test
     public void testGetPorteeArme()
     {
-	Assert.assertEquals(150, m_reference.getPorteeArme(3));
+	Assert.assertEquals(300, m_reference.getPorteeArme(73));
     }
 
     @Test
     public void testGetNbActionsRechargeArme()
     {
-	Assert.assertEquals(1, m_reference.getNbActionsRechargeArme(3));
+	Assert.assertEquals(1, m_reference.getNbActionsRechargeArme(73));
     }
 
     @Test
     public void testGetMagasinArme()
     {
-	Assert.assertEquals(1, m_reference.getNbActionsRechargeArme(3));
+	Assert.assertEquals(1, m_reference.getNbActionsRechargeArme(73));
     }
 
     @Test
@@ -238,6 +246,7 @@ public final class UPReferenceTest
 	cac.add("armes contondantes");
 	cac.add("petites armes");
 	cac.add("armes d'hast");
+        cac.add("armes à chaînes");
 
 	dist.add("armes de jet");
 	dist.add("armes à feu");

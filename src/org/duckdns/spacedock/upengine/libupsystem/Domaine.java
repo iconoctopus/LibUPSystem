@@ -110,7 +110,7 @@ public class Domaine
      * @return
      */
     RollResult effectuerJetComp(int p_comp, int p_trait, int p_nd, int p_modifNbDesLances, int p_modifNbDesGardes, int p_modifScore, boolean p_isSonne)
-    {//TODO : cette fonction fonctionne bien spour les jets d'attaques grâce à getRang() qui abrite la valeur d'attaque, il faudrait un traitement particulier pour les parades actives
+    {
 	int result = 0;
 
 	if (getRang() > 0 && p_comp >= 0 && p_trait >= 0)

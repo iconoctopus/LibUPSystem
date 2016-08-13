@@ -185,7 +185,7 @@ public abstract class Arme
      * des collections.
      */
     public static class Degats
-    {//TODO : c'est ici que la localisation d'une attaque pourra être insérée pour être communiquée à la cible
+    {
 
 	/**
 	 * le total des dégâts infligés

@@ -26,7 +26,7 @@ public final class RollUtils
 	{
 	    double quotient = ((double) (p_score) - (double) (p_ND));
 	    quotient = quotient / 5.0;
-	    int increments = (int) quotient;
+	    int increments = (int) quotient;//on caste simplement pour tronquer car les incréments sont par tranches entières
 	    result = new RollResult(increments, true);
 	}
 	else
@@ -96,7 +96,6 @@ public final class RollUtils
 	else
 	{
 	    String message = "";
-
 	    message = message.concat(PropertiesHandler.getInstance().getString("lances") + ":" + p_nbLances);
 	    message = message.concat(" " + PropertiesHandler.getInstance().getString("gardes") + ":" + p_nbGardes);
 	    ErrorHandler.paramAberrant(message);

@@ -293,7 +293,7 @@ final class UPReference
 	coeff = tabPourType.getJsonNumber(p_typeArme).doubleValue();
 
 	double preResult = (((double) p_nbPts) * coeff);
-	long IntResult = Math.round(preResult);//TODO partout ailleurs le simple cast vers int ne fait que tronquer, remplacer toutes ses occurences par un appel à math.round() comme ici
+	long IntResult = Math.round(preResult);
 	return (int) IntResult;
     }
 

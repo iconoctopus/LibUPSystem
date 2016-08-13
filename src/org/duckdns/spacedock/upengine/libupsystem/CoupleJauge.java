@@ -151,7 +151,7 @@ class CoupleJauge
 		    m_remplissage_externe -= m_remplissage_interne - ecart_IntExt;
 		    if (m_remplissage_externe < 0)//jauge vide, on corrige tout nombre négatif
 		    {
-			m_remplissage_externe = 0;//TODO à terme gérer le remplissage de cette valeur avec le système de soins
+			m_remplissage_externe = 0;
 		    }
 		}
 	    }

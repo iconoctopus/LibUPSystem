@@ -3,7 +3,6 @@ package org.duckdns.spacedock.upengine.libupsystem;
 import java.util.ArrayList;
 import java.util.Iterator;
 //TODO : gérer les boucliers, la référence est prête, ajouter une autre classe interne, peut être en créant une interface ou une superclasse dont hériteraient bouclier et PieceArmure
-//TODO : la localisation n'est pas encore gérée
 //TODO : gérer retrait de pièces d'armure
 //TODO : rien n'interdit pour l'instant de porter plusieurs casques/masques! Enrichir les pièces avec une localisation à la place du nbmax et tester sur le nb de pièces par localisation plutôt. Cela prépare le terrain aux règles de localisation.
 
@@ -214,15 +213,6 @@ public class Armure
 	int getnbMax()
 	{
 	    return m_nbmax;
-	}
-
-	/**
-	 * @return the m_libelle
-	 */
-	@Override
-	public String toString()//TODO : un peu simpliste mais fait le boulot. A terme avec les types de technologie cela deviendra bizarre
-	{
-	    return m_libelle;
 	}
 
 	/**

@@ -142,19 +142,16 @@ public class Perso
      * constructeur mais par la suite contrôlée de l'extérieur
      */
     public final void genInit()
-    {//TODO mieux trier le tableau, couteux en l'état
-
+    {
 	int initiative = m_jaugeSanteInit.getRemplissage_externe();
 	m_actionCourante = 0;
 	ArrayList<Integer> tabResult = new ArrayList<>();
 	if (initiative > 0)
 	{
-
 	    for (int i = 0; i < initiative; i++)
 	    {
 		tabResult.add(RollUtils.lancer(1, 1, true));
 	    }
-
 	}
 	Collections.sort(tabResult);
 	m_actions = tabResult;
@@ -326,7 +323,7 @@ public class Perso
      * cours
      */
     public boolean agirEnCombat(int p_phaseActuelle)
-    {//TODO : gérer ici les interruptions
+    {
 	boolean result = false;
 	if (p_phaseActuelle > 0 && p_phaseActuelle < 11)
 	{
@@ -418,7 +415,7 @@ public class Perso
      * parade qui est effectuée
      * @return le ND passif calculé à partir des comps et de l'armure
      */
-    public int getNDPassif(int p_typeArme, int p_parade, boolean p_esquive)//TODO gérer de même les défenses actives (attention aux restrictions face aux armes à distance) et à terme les interruptions
+    public int getNDPassif(int p_typeArme, int p_parade, boolean p_esquive)
     {//TODO : gérer quand on n'a pas de compétence
 	int ND = 5;
 

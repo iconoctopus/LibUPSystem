@@ -15,7 +15,7 @@ import org.junit.Test;
  * @author iconoctopus
  */
 public class ArmeTest
-{//TODO mieux séparer les différents tests en différentes méthodes
+{
 
     static ArmeCaC arme1;
     static ArmeCaC arme2;

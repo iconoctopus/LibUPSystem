@@ -171,7 +171,7 @@ public class Armure
 	 * @param p_materiau
 	 */
 	PieceArmure(int p_idPiece, int p_type, int p_materiau)
-	{
+	{//TODO si le type n'est pas "ancienne" alors il faut ignorer le matériau est utiliser celui par défaut tout en créant un nouveau matériau "technologique" (pour les libellés éventuels) et créer le libellé de la pièce avec le bon type ("casque blindé") par dérogation
 	    m_idPiece = p_idPiece;
 	    m_type = p_type;
 	    m_materiau = p_materiau;
@@ -213,6 +213,16 @@ public class Armure
 	int getnbMax()
 	{
 	    return m_nbmax;
+	}
+
+	/**
+	 * -	* @return the m_libelle -
+	 */
+	@Override
+
+	public String toString()
+	{
+	    return m_libelle;
 	}
 
 	/**

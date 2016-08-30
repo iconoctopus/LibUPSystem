@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import org.duckdns.spacedock.upengine.libupsystem.Armure.PieceArmure;
 import org.junit.After;
 import org.junit.Assert;
+import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -25,22 +26,25 @@ public class ArmureTest
     static Armure.PieceArmure piece3;
     static Armure.PieceArmure piece4;
     static Armure.PieceArmure piece5;
+    static Armure.PieceArmure bouclier1;
+    static Armure.PieceArmure bouclier2;
     static ArrayList<PieceArmure> listPieces = new ArrayList<>();
     static Armure armure;
 
     @BeforeClass
     public static void setUpClass()
     {
-	piece1 = new Armure.PieceArmure(0, 0, 0);
-	piece2 = new Armure.PieceArmure(0, 1, 3);
-	piece3 = new Armure.PieceArmure(7, 2, 0);
-	piece4 = new Armure.PieceArmure(7, 3, 3);
-	piece5 = new Armure.PieceArmure(4, 0, 1);
+	piece1 = new Armure.PieceArmure(0, 0, 0, false);
+	piece2 = new Armure.PieceArmure(0, 1, 3, false);
+	piece3 = new Armure.PieceArmure(7, 2, 0, false);
+	piece4 = new Armure.PieceArmure(7, 3, 3, false);
+	piece5 = new Armure.PieceArmure(4, 0, 1, false);
+	bouclier1 = new Armure.PieceArmure(3, 3, 1, true);
+	bouclier2 = new Armure.PieceArmure(0, 0, 0, true);
 
 	listPieces.add(piece1);
-	listPieces.add(piece2);
 	listPieces.add(piece3);
-	listPieces.add(piece4);
+
     }
 
     @Before
@@ -101,14 +105,33 @@ public class ArmureTest
 	Assert.assertEquals(0, piece5.getType());
 	Assert.assertEquals(2, piece5.getnbMax());
 	Assert.assertEquals("brassière en lamelles ou maille", piece5.toString());
+
+	Assert.assertEquals(3, bouclier1.getIdPiece());
+	Assert.assertEquals(0, bouclier1.getMalusEsquive());
+	Assert.assertEquals(0, bouclier1.getMalusParade());
+	Assert.assertEquals(1, bouclier1.getMateriau());
+	Assert.assertEquals(4, bouclier1.getNbpoints());
+	Assert.assertEquals(3, bouclier1.getType());
+	Assert.assertEquals(1, bouclier1.getnbMax());
+	Assert.assertEquals("pavois en bois", bouclier1.toString());
+
+	Assert.assertEquals(0, bouclier2.getIdPiece());
+	Assert.assertEquals(0, bouclier2.getMalusEsquive());
+	Assert.assertEquals(0, bouclier2.getMalusParade());
+	Assert.assertEquals(0, bouclier2.getMateriau());
+	Assert.assertEquals(2, bouclier2.getNbpoints());
+	Assert.assertEquals(0, bouclier2.getType());
+	Assert.assertEquals(1, bouclier2.getnbMax());
+	Assert.assertEquals("targe en métal", bouclier2.toString());
     }
 
     @Test
     public void testArmure()
     {
-
 	Assert.assertEquals(10, armure.getMalusEsquive());
 	Assert.assertEquals(0, armure.getMalusParade());
+	Assert.assertEquals("heaume complet en plates", armure.getListPieces().get(0).toString());
+	Assert.assertEquals("cuirasse en plates", armure.getListPieces().get(1).toString());
     }
 
     @Test
@@ -126,7 +149,7 @@ public class ArmureTest
     }
 
     @Test
-    public void testAddPiece()
+    public void testAddRemovePiece()
     {
 	armure.addPiece(piece5);
 	Assert.assertEquals(0, armure.getRedDegats(4));
@@ -136,6 +159,28 @@ public class ArmureTest
 	Assert.assertEquals(2, armure.getMalusParade());
 	armure.addPiece(piece5);
 	Assert.assertEquals(4, armure.getMalusParade());
-    }
 
+	try
+	{
+	    armure.addPiece(piece5);
+	    fail();
+	}
+	catch (IllegalStateException e)
+	{
+	    Assert.assertEquals("emploi de la mauvaise méthode dans ce contexte:ajout de pièce d'armure:brassière en lamelles ou maille", e.getMessage());
+	}
+
+	armure.removePiece(3);
+	armure.addPiece(piece5);
+	armure.removePiece(3);
+
+	armure.addPiece(bouclier1);
+	Assert.assertEquals(5, armure.getRedDegats(3));
+	Assert.assertEquals(15, armure.getRedDegats(2));
+	Assert.assertEquals(15, armure.getBonusND(2));
+	Assert.assertEquals(10, armure.getBonusND(3));
+	Assert.assertEquals(10, armure.getMalusEsquive());
+	Assert.assertEquals(2, armure.getMalusParade());
+
+    }
 }

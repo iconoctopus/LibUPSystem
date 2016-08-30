@@ -115,6 +115,10 @@ final class UPReference
      * liste des libellés des matériaux des boucliers
      */
     private final JsonArray m_listLblMatBoucliers;
+    /**
+     * liste des pieces d'armures couvrant la tete
+     */
+    private final JsonArray m_listPiecesDoubles;
 
     /**
      * pseudo constructeur statique renvoyant l'instance unique et la
@@ -150,6 +154,7 @@ final class UPReference
 	m_listLblTypArmures = object.getJsonArray("types_armures");
 	m_tabBoucliers = object.getJsonArray("boucliers");
 	m_listLblMatBoucliers = object.getJsonArray("materiaux_boucliers");
+	m_listPiecesDoubles = object.getJsonArray("pieces_tete");
 
 	//chargement des règles de calcul de l'initiative
 	object = loadJsonFile("JSON/tables_systeme/tab_init.json");
@@ -510,7 +515,7 @@ final class UPReference
      * @param p_materiau
      * @return les points d'armure du bouclier de type et matériau spécifiés
      */
-    int getNbPointsBouclier(int p_bouclier, int p_materiau)
+    int getPointsBouclier(int p_bouclier, int p_materiau)
     {
 	JsonObject objetIntermediaire = m_tabBoucliers.getJsonObject(p_bouclier);
 	JsonArray tabIntermediaire = objetIntermediaire.getJsonArray("points");
@@ -519,10 +524,21 @@ final class UPReference
 
     /**
      *
+     * @param p_bouclier
+     * @return le libellé du bouclier spécifié
+     */
+    String getLblBouclier(int p_bouclier)
+    {
+	JsonObject objetIntermediaire = m_tabBoucliers.getJsonObject(p_bouclier);
+	return objetIntermediaire.getString("lbl");
+    }
+
+    /**
+     *
      * @param p_indice
      * @return le label du matériau de bouclier de type spécifié
      */
-    String getLblMatBouclier(int p_indice)
+    String getLblMateriauBouclier(int p_indice)
     {
 	return m_listLblMatBoucliers.getString(p_indice);
 
@@ -669,6 +685,22 @@ final class UPReference
     }
 
     /**
+     *
+     * @return la liste des pieces d'armure de tete
+     */
+    ArrayList<Integer> getPiecesDoubles()
+    {
+
+	ArrayList<Integer> res = new ArrayList<>();
+
+	for (int i = 0; i < m_listPiecesDoubles.size(); ++i)
+	{
+	    res.add(m_listPiecesDoubles.getInt(i));
+	}
+	return res;
+    }
+
+    /**
      * Classe encapsulant les libellés autres que ceux utilisés dans les
      * caractéristiques et l'équipement (surtout utilisé pour l'entrée sortie)
      */
@@ -734,7 +766,6 @@ final class UPReference
 		libEquilibrage.put(Arme.EquilibrageArme.mauvais, "mauvais");
 		libEquilibrage.put(Arme.EquilibrageArme.normal, "normal");
 		libEquilibrage.put(Arme.EquilibrageArme.bon, "bon");
-
 	    }
 	}
     }

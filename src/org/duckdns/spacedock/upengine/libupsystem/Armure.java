@@ -2,9 +2,6 @@ package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-//TODO : gérer les boucliers, la référence est prête, ajouter une autre classe interne, peut être en créant une interface ou une superclasse dont hériteraient bouclier et PieceArmure
-//TODO : gérer retrait de pièces d'armure
-//TODO : rien n'interdit pour l'instant de porter plusieurs casques/masques! Enrichir les pièces avec une localisation à la place du nbmax et tester sur le nb de pièces par localisation plutôt. Cela prépare le terrain aux règles de localisation.
 
 /**
  * classe représentant une armure et encapsulant les traitements des effets de
@@ -83,6 +80,50 @@ public class Armure
 		m_type = type;//on considère toujours le meilleur type porté, cela évoluera avec la localisation
 	    }
 	}
+	else
+	{
+	    ErrorHandler.ajoutPieceArmure(p_piece.toString());
+	}
+    }
+
+    /**
+     * retire la pièce possédant l'indice passé en paramétre dans la liste des
+     * pièces de cette armure
+     *
+     * @param p_indice
+     */
+    final void removePiece(int p_indice)
+    {
+	PieceArmure piece = m_listPieces.get(p_indice);
+
+	m_points -= piece.getNbpoints();
+	m_malusEsquive -= piece.getMalusEsquive();
+	m_malusParade -= piece.getMalusParade();
+	m_listPieces.remove(p_indice);
+	if (m_type == piece.getType())//le type de l'armure provenait de la pièce portée, il faut donc le réévaluer
+	{
+	    int typeCourant = 0;
+	    for (Iterator i = m_listPieces.iterator(); i.hasNext();)//on parcourt la liste des pièces courantes pour trouver le type max
+	    {
+
+		PieceArmure pieceCourante = (PieceArmure) i.next();
+
+		if (pieceCourante.getType() > typeCourant)
+		{
+		    typeCourant = pieceCourante.getType();
+		}
+	    }
+	    m_type = typeCourant;
+	}
+    }
+
+    /**
+     *
+     * @return une copie de la liste des pièces de cette armure
+     */
+    ArrayList<PieceArmure> getListPieces()
+    {
+	return new ArrayList<>(m_listPieces);
     }
 
     /**
@@ -162,6 +203,10 @@ public class Armure
 	 * le malus de parade infligé par cette pièce
 	 */
 	private final int m_malusParade;
+	/**
+	 * si la pièce est un boucliere
+	 */
+	private final boolean m_isBouclier;
 
 	/**
 	 * costructeur de pièces d'armure
@@ -170,17 +215,19 @@ public class Armure
 	 * @param p_type
 	 * @param p_materiau
 	 */
-	PieceArmure(int p_idPiece, int p_type, int p_materiau)
+	PieceArmure(int p_idPiece, int p_type, int p_materiau, boolean p_isBouclier)
 	{//TODO si le type n'est pas "ancienne" alors il faut ignorer le matériau est utiliser celui par défaut tout en créant un nouveau matériau "technologique" (pour les libellés éventuels) et créer le libellé de la pièce avec le bon type ("casque blindé") par dérogation
 	    m_idPiece = p_idPiece;
 	    m_type = p_type;
 	    m_materiau = p_materiau;
+	    m_isBouclier = p_isBouclier;
 	    UPReference reference = UPReference.getInstance();
-	    m_nbpoints = reference.getPtsArmure(m_idPiece, m_materiau);
-	    m_libelle = reference.getLblPiece(m_idPiece) + " " + reference.libelles.interArme + " " + reference.getLblMateriauArmure(m_materiau);
-	    m_malusEsquive = reference.getMalusEsquive(m_idPiece, m_materiau);
-	    m_malusParade = reference.getMalusParade(m_idPiece, m_materiau);
-	    m_nbmax = reference.getNbMaxPieces(m_idPiece);
+
+	    m_nbpoints = p_isBouclier ? reference.getPointsBouclier(p_idPiece, p_materiau) : reference.getPtsArmure(m_idPiece, m_materiau);
+	    m_libelle = p_isBouclier ? reference.getLblBouclier(m_idPiece) + " " + reference.libelles.interArme + " " + reference.getLblMateriauBouclier(m_materiau) : reference.getLblPiece(m_idPiece) + " " + reference.libelles.interArme + " " + reference.getLblMateriauArmure(m_materiau);
+	    m_malusEsquive = p_isBouclier ? 0 : reference.getMalusEsquive(m_idPiece, m_materiau);
+	    m_malusParade = p_isBouclier ? 0 : reference.getMalusParade(m_idPiece, m_materiau);
+	    m_nbmax = p_isBouclier ? 1 : reference.getNbMaxPieces(m_idPiece);
 	}
 
 	/**
@@ -247,6 +294,14 @@ public class Armure
 	int getType()
 	{
 	    return m_type;
+	}
+
+	/**
+	 * @return the m_isBouclier
+	 */
+	boolean isBouclier()
+	{
+	    return m_isBouclier;
 	}
     }
 }

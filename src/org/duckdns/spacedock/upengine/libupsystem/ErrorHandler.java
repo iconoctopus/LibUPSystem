@@ -52,4 +52,16 @@ class ErrorHandler
 	mauvaiseMethode(PropertiesHandler.getInstance().getErrorMessage("mode_att"));
     }
 
+    static void ajoutPieceArmure(String p_lblPiece)
+    {
+	String message = "";
+	mauvaiseMethode(PropertiesHandler.getInstance().getErrorMessage("ajout").concat(p_lblPiece));
+    }
+
+    static void retraitPieceArmure(String p_lblPiece)
+    {
+	String message = "";
+	mauvaiseMethode(PropertiesHandler.getInstance().getErrorMessage("retrait").concat(p_lblPiece));
+    }
+
 }

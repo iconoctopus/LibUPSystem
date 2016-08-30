@@ -64,8 +64,10 @@
 	    "lbl": "pavois",
 	    "points": [5, 4]
 	}],
+    "pieces_doubles": [3, 4, 5, 6],
     "ajustements": [[1, 0.5, 0.33, 0.25, 0.2], [2, 1, 0.5, 0.33, 0.25], [3, 2, 1, 0.5, 0.33], [4, 3, 2, 1, 0.5]],
     "materiaux_armures": ["plates", "lamelles ou maille", "cuir clouté", "cuir bouilli"],
-    "materiaux_boucliers": ["metal", "bois"],
-    "types_armures": ["ancienne", "moderne", "blindage", "énergétique"]
+    "materiaux_boucliers": ["métal", "bois"],
+    "types_armures": ["ancienne", "moderne", "blindage", "énergétique"],
+    "localisations": ["tete", "corps", "bras", "main", "jambe", "pied", "bouclier"]
 }

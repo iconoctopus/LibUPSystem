@@ -88,7 +88,7 @@ public final class UPReferenceTest
     {
 	Assert.assertEquals(2, m_reference.getNbLancesArme(0));
 	Assert.assertEquals(3, m_reference.getNbLancesArme(20));
-        Assert.assertEquals(2, m_reference.getNbLancesArme(42));
+	Assert.assertEquals(2, m_reference.getNbLancesArme(42));
     }
 
     @Test
@@ -96,7 +96,7 @@ public final class UPReferenceTest
     {
 	Assert.assertEquals(3, m_reference.getNbGardesArme(0));
 	Assert.assertEquals(3, m_reference.getNbGardesArme(20));
-        Assert.assertEquals(2, m_reference.getNbGardesArme(42));
+	Assert.assertEquals(2, m_reference.getNbGardesArme(42));
     }
 
     @Test
@@ -104,7 +104,7 @@ public final class UPReferenceTest
     {
 	Assert.assertEquals(0, m_reference.getBonusInitArme(0));
 	Assert.assertEquals(0, m_reference.getBonusInitArme(20));
-        Assert.assertEquals(2, m_reference.getBonusInitArme(42));
+	Assert.assertEquals(2, m_reference.getBonusInitArme(42));
     }
 
     @Test
@@ -112,7 +112,7 @@ public final class UPReferenceTest
     {
 	Assert.assertEquals(0, m_reference.getMalusAttaqueArme(0));
 	Assert.assertEquals(0, m_reference.getMalusAttaqueArme(20));
-        Assert.assertEquals(0, m_reference.getMalusAttaqueArme(42));
+	Assert.assertEquals(0, m_reference.getMalusAttaqueArme(42));
     }
 
     @Test
@@ -120,7 +120,7 @@ public final class UPReferenceTest
     {
 	Assert.assertEquals(0, m_reference.getPhysMinArme(0));
 	Assert.assertEquals(0, m_reference.getPhysMinArme(20));
-        Assert.assertEquals(0, m_reference.getPhysMinArme(42));
+	Assert.assertEquals(0, m_reference.getPhysMinArme(42));
     }
 
     @Test
@@ -128,7 +128,7 @@ public final class UPReferenceTest
     {
 	Assert.assertEquals(1, m_reference.getCategorieArme(0));
 	Assert.assertEquals(3, m_reference.getCategorieArme(20));
-        Assert.assertEquals(5, m_reference.getCategorieArme(42));
+	Assert.assertEquals(5, m_reference.getCategorieArme(42));
 	Assert.assertEquals(0, m_reference.getCategorieArme(60));
     }
 
@@ -137,8 +137,8 @@ public final class UPReferenceTest
     {
 	Assert.assertEquals(0, m_reference.getTypeArme(0));
 	Assert.assertEquals(0, m_reference.getTypeArme(20));
-        Assert.assertEquals(0, m_reference.getTypeArme(42));
-        Assert.assertEquals(1, m_reference.getTypeArme(73));
+	Assert.assertEquals(0, m_reference.getTypeArme(42));
+	Assert.assertEquals(1, m_reference.getTypeArme(73));
     }
 
     @Test
@@ -207,12 +207,21 @@ public final class UPReferenceTest
     }
 
     @Test
-    public void testGetNbPointsBouclier()
+    public void testGetPointsBouclier()
     {
-	Assert.assertEquals(2, m_reference.getNbPointsBouclier(0, 0));
-	Assert.assertEquals(1, m_reference.getNbPointsBouclier(0, 1));
-	Assert.assertEquals(5, m_reference.getNbPointsBouclier(3, 0));
-	Assert.assertEquals(4, m_reference.getNbPointsBouclier(3, 1));
+	Assert.assertEquals(2, m_reference.getPointsBouclier(0, 0));
+	Assert.assertEquals(1, m_reference.getPointsBouclier(0, 1));
+	Assert.assertEquals(5, m_reference.getPointsBouclier(3, 0));
+	Assert.assertEquals(4, m_reference.getPointsBouclier(3, 1));
+    }
+
+    @Test
+    public void testGetLblBouclier()
+    {
+	Assert.assertEquals("targe", m_reference.getLblBouclier(0));
+	Assert.assertEquals("bouclier", m_reference.getLblBouclier(1));
+	Assert.assertEquals("écu", m_reference.getLblBouclier(2));
+	Assert.assertEquals("pavois", m_reference.getLblBouclier(3));
     }
 
     @Test
@@ -234,7 +243,7 @@ public final class UPReferenceTest
 	cac.add("armes contondantes");
 	cac.add("petites armes");
 	cac.add("armes d'hast");
-        cac.add("armes à chaînes");
+	cac.add("armes à chaînes");
 
 	dist.add("armes de jet");
 	dist.add("armes à feu");
@@ -310,5 +319,15 @@ public final class UPReferenceTest
 	Assert.assertEquals(1, m_reference.getNbMaxPieces(7));
 	Assert.assertEquals(2, m_reference.getNbMaxPieces(4));
 	Assert.assertEquals(2, m_reference.getNbMaxPieces(5));
+    }
+
+    @Test
+    public void testGetListPiecesDoubles()
+    {
+	ArrayList<Integer> list = m_reference.getPiecesDoubles();
+	Assert.assertEquals(4, list.size());
+	Assert.assertEquals(3, (int) list.get(0));
+	Assert.assertEquals(4, (int) list.get(1));
+	Assert.assertEquals(6, (int) list.get(3));
     }
 }

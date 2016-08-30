@@ -45,8 +45,13 @@ public class PersoTest
 	Assert.assertEquals(0, persoRM1.getBlessuresLegeres());
 	Assert.assertEquals(0, persoRM1.getBlessuresLegeresMentales());
 	Assert.assertEquals(0, persoRM1.getListArmes().size());
-	Assert.assertEquals(10, persoRM1.getNDPassif(0, 1, false));//TODO tester en ajoutant de l'armure
-	Assert.assertEquals(10, persoRM1.getNDPassif(0, 1, true));//TODO tester en ajoutant de l'armure
+	Assert.assertEquals(10, persoRM1.getNDPassif(0, 1, false));
+	Assert.assertEquals(10, persoRM1.getNDPassif(0, 1, true));
+	Armure armure = new Armure();
+	armure.addPiece(new Armure.PieceArmure(0, 0, 0, false), Armure.Lateralisation.GAUCHE);
+	persoRM1.setArmure(armure);
+	Assert.assertEquals(15, persoRM1.getNDPassif(0, 1, false));
+	Assert.assertEquals(15, persoRM1.getNDPassif(0, 1, true));
 	Assert.assertEquals(0, persoRM1.getPointsDeFatigue());
 	Assert.assertTrue(persoRM1.isSonne());
 	Assert.assertFalse(persoRM1.isInconscient());
@@ -65,8 +70,13 @@ public class PersoTest
 	Assert.assertEquals(0, persoRM3.getBlessuresLegeres());
 	Assert.assertEquals(0, persoRM3.getBlessuresLegeresMentales());
 	Assert.assertEquals(0, persoRM3.getListArmes().size());
-	Assert.assertEquals(25, persoRM3.getNDPassif(0, 1, false));//TODO tester en ajoutant de l'armure
-	Assert.assertEquals(25, persoRM3.getNDPassif(0, 1, true));//TODO tester en ajoutant de l'armure
+	Assert.assertEquals(25, persoRM3.getNDPassif(0, 1, false));
+	Assert.assertEquals(25, persoRM3.getNDPassif(0, 1, true));
+	armure = new Armure();
+	armure.addPiece(new Armure.PieceArmure(0, 3, 0, false), Armure.Lateralisation.GAUCHE);
+	persoRM3.setArmure(armure);
+	Assert.assertEquals(35, persoRM3.getNDPassif(0, 1, false));
+	Assert.assertEquals(35, persoRM3.getNDPassif(0, 1, true));
 	Assert.assertEquals(0, persoRM3.getPointsDeFatigue());
 	Assert.assertFalse(persoRM3.isSonne());
 	Assert.assertFalse(persoRM3.isInconscient());
@@ -85,8 +95,8 @@ public class PersoTest
 	Assert.assertEquals(0, persoRM5.getBlessuresLegeres());
 	Assert.assertEquals(0, persoRM5.getBlessuresLegeresMentales());
 	Assert.assertEquals(0, persoRM5.getListArmes().size());
-	Assert.assertEquals(35, persoRM5.getNDPassif(0, 1, false));//TODO tester en ajoutant de l'armure
-	Assert.assertEquals(35, persoRM5.getNDPassif(0, 1, true));//TODO tester en ajoutant de l'armure
+	Assert.assertEquals(35, persoRM5.getNDPassif(0, 1, false));
+	Assert.assertEquals(35, persoRM5.getNDPassif(0, 1, true));
 	Assert.assertEquals(0, persoRM5.getPointsDeFatigue());
 	Assert.assertFalse(persoRM3.isSonne());
 	Assert.assertFalse(persoRM3.isInconscient());
@@ -220,7 +230,21 @@ public class PersoTest
 	Assert.assertTrue(reussiteStatistiqueAttaque(persoRM5, 56, 120, 13));//deux groupes entiers de 5 balles
 	Assert.assertFalse(reussiteStatistiqueAttaque(persoRM5, 60, 40, 13));
 
-	//TODO ajouter cas d'erreur : rafale avec arme ayant plusieurs munitions mais incapable de tirer en mode automatique (comme un pistolet)
+	//cas d'erreur : rafale avec arme ayant plusieurs munitions mais incapable de tirer en mode automatique (pistolet)
+	try
+	{
+	    persoRM5.getListArmes().add(new ArmeDist(72, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
+	    persoRM5.setArmeCourante(persoRM5.getListArmes().size() - 1);
+	    ((ArmeDist) persoRM5.getArmeCourante()).recharger(9);
+	    persoRM5.genInit();
+	    persoRM5.attaquerDist(persoRM5.getActions().get(0), 0, 10, 9);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:nombre de coups:9", e.getMessage());
+	}
+
 	//cas d'erreur : plus de 20 balles
 	try
 	{

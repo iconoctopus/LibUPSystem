@@ -61,7 +61,7 @@
 	    "type": 0,
 	    "mode": 0
 	}, {
-	    "nom": "manopole",
+	    "nom": "manople",
 	    "lance": 3,
 	    "garde": 3,
 	    "bonus_init": 0,
@@ -141,7 +141,7 @@
 	    "type": 0,
 	    "mode": 0
 	}, {
-	    "nom": "épée à deux mains/claymore",
+	    "nom": "épée à deux mains",
 	    "lance": 4,
 	    "garde": 4,
 	    "bonus_init": 0,
@@ -191,7 +191,7 @@
 	    "type": 0,
 	    "mode": 0
 	}, {
-	    "nom": "Zweihander/Espadon",
+	    "nom": "Espadon",
 	    "lance": 6,
 	    "garde": 4,
 	    "bonus_init": 0,
@@ -571,7 +571,7 @@
 	    "type": 0,
 	    "mode": 0
 	},
-        {
+	{
 	    "nom": "arbalète",
 	    "lance": 5,
 	    "garde": 3,
@@ -654,7 +654,7 @@
 	    "malus_attaque": 0,
 	    "physique_minimal": 0,
 	    "categorie": 0,
-            "malus_long": 10,
+	    "malus_long": 10,
 	    "malus_court": 5,
 	    "portee": 25,
 	    "actions_recharge": 0,
@@ -767,7 +767,7 @@
 	    "type": 1,
 	    "mode": 1
 	}, {
-	    "nom": "pistolet (7eme mer)",
+	    "nom": "pistolet à rouet",
 	    "lance": 3,
 	    "garde": 4,
 	    "bonus_init": 1,
@@ -901,7 +901,7 @@
 	    "magasin": 100,
 	    "type": 3,
 	    "mode": 1
-	} ],
+	}],
     "types_armes": ["simple", "perce-armure", "pénétrante", "perce-blindage", "énergétique"],
     "cat_armes_cac": ["mains nues", "armes d'escrime", "armes à lame longue", "haches", "armes contondantes", "petites armes", "armes d'hast", "armes à chaînes"],
     "cat_armes_dist": ["armes de jet", "armes à feu", "armes à énergie", "armes automatiques", "armes lourdes"],

@@ -410,12 +410,12 @@ public class Perso
     /**
      *
      * @param p_typeArme
-     * @param p_parade catégorie d'arme à employer en parade, ignoré si esquive
+     * @param p_catArme catégorie d'arme à employer en parade, ignoré si esquive
      * @param p_esquive : si l'esquive doit être employée, sinon c'est une
      * parade qui est effectuée
-     * @return le ND passif calculé à partir des comps et de l'm_armure
+     * @return le ND passif calculé à partir des comps et de l'armure
      */
-    public int getNDPassif(int p_typeArme, int p_parade, boolean p_esquive)
+    public int getNDPassif(int p_typeArme, int p_catArme, boolean p_esquive)
     {//TODO : gérer quand on n'a pas de compétence
 	int ND = 5;
 
@@ -426,7 +426,7 @@ public class Perso
 	if (!p_esquive)
 	{
 	    //calcul de la valeur issue de la compétence parade
-	    rang = m_listDomaines.get(3).getCompetences().get(p_parade).getRang();
+	    rang = m_listDomaines.get(3).getCompetences().get(p_catArme).getRang();
 
 	    //ajout des bonus  et malus d'm_armure
 	    if (armure != null)

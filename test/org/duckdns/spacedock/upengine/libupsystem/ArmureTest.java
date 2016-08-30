@@ -5,8 +5,6 @@
  */
 package org.duckdns.spacedock.upengine.libupsystem;
 
-import java.util.ArrayList;
-import org.duckdns.spacedock.upengine.libupsystem.Armure.PieceArmure;
 import org.junit.After;
 import org.junit.Assert;
 import static org.junit.Assert.fail;
@@ -134,9 +132,7 @@ public class ArmureTest
     @Test
     public void testGetBonusND()
     {
-
 	Assert.assertEquals(15, armure.getBonusND(0));
-
     }
 
     @Test

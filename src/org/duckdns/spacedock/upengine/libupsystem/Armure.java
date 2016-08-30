@@ -34,7 +34,7 @@ public class Armure
      * liste des localisations et leurs occupations, c'est un tableau de
      * tableaux car il ya des localisations doubles
      */
-    private ArrayList<ArrayList<PieceArmure>> m_diagrammeOccupation;
+    private final ArrayList<ArrayList<PieceArmure>> m_diagrammeOccupation;
 
     /**
      * constructeur d'armure

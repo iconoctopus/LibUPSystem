@@ -29,22 +29,32 @@ public class Armure
      * le malus de parade de l'armure, provient de la somme de ceux des pièces
      */
     private int m_malusParade;
+
     /**
-     * liste des pièces incorporées dans l'armure
+     * liste des localisations et leurs occupations, c'est un tableau de
+     * tableaux car il ya des localisations doubles
      */
-    private final ArrayList<PieceArmure> m_listPieces = new ArrayList<>();
+    private ArrayList<ArrayList<PieceArmure>> m_diagrammeOccupation;
 
     /**
      * constructeur d'armure
      *
      * @param p_listPieces la liste des pièces initiales de cette armure
      */
-    Armure(ArrayList<PieceArmure> p_listPieces)
+    Armure()
     {
-	Iterator iterator = p_listPieces.iterator();
-	while (iterator.hasNext())
+	//construction du diagramme d'occupation
+	UPReference reference = UPReference.getInstance();
+	int locaNumber = reference.getLocaNumber();
+	m_diagrammeOccupation = new ArrayList<>();
+	for (int i = 0; i < locaNumber; i++)
 	{
-	    addPiece((PieceArmure) iterator.next());
+	    m_diagrammeOccupation.add(new ArrayList<PieceArmure>());
+	    m_diagrammeOccupation.get(i).add(null);//initialisé à null car non occupé par défaut
+	    if (reference.isLocaDouble(i))//si c'est une localisation double on ajoute une case pour le deuxième exeplaire éventuel
+	    {
+		m_diagrammeOccupation.get(i).add(null);
+	    }
 	}
     }
 
@@ -53,35 +63,37 @@ public class Armure
      * maximal de pièces d'un certain type
      *
      * @param p_piece
+     * @param p_cote le côté gauche ou droit (enum déclaré dans cette classe)
+     * ignoré si pièce unique
      */
-    final void addPiece(PieceArmure p_piece)
+    final void addPiece(PieceArmure p_piece, Lateralisation p_cote)
     {
-	int nbmax = p_piece.getnbMax();
+	int loca = p_piece.getLocalisation();
 	int type = p_piece.getType();
-	int id = p_piece.getIdPiece();
-	int dejaPortees = 0;
+	int cote;
 
-	for (Iterator i = m_listPieces.iterator(); i.hasNext();)//on parcourt la liste des pièces courantes pour vérifier combien de pièces du même type sont déjà portées
+	if (!UPReference.getInstance().isLocaDouble(p_piece.getLocalisation()))
 	{
-	    PieceArmure pieceCourante = (PieceArmure) i.next();
-	    if (pieceCourante.getIdPiece() == id)
-	    {
-		++dejaPortees;
-	    }
+	    cote = 0;//par défaut, GAUCHE valant 0, on applique cette valeur aux pièce non latéralisées, ignorant le paramétre
 	}
-	if (dejaPortees < nbmax)//on peut encore ajouter une pièce de ce type
+	else//la pièce est latéralisée on utilise donc le paramétre
 	{
-	    m_listPieces.add(p_piece);
+	    cote = (p_cote == Lateralisation.GAUCHE) ? 0 : 1;
+	}
+
+	if (m_diagrammeOccupation.get(loca).get(cote) == null)
+	{//l'emplacement est libre, on y installe la pièce
 	    m_points += p_piece.getNbpoints();
 	    m_malusEsquive += p_piece.getMalusEsquive();
 	    m_malusParade += p_piece.getMalusParade();
 	    if (m_type < type)
 	    {
-		m_type = type;//on considère toujours le meilleur type porté, cela évoluera avec la localisation
+		m_type = type;//on considère toujours le meilleur type porté pour les coups non-ciblés
 	    }
+	    m_diagrammeOccupation.get(loca).set(cote, p_piece);
 	}
 	else
-	{
+	{//erreur : l'emplacement n'est pas libre
 	    ErrorHandler.ajoutPieceArmure(p_piece.toString());
 	}
     }
@@ -92,25 +104,29 @@ public class Armure
      *
      * @param p_indice
      */
-    final void removePiece(int p_indice)
+    final void removePiece(int p_localisation, Lateralisation p_cote)
     {
-	PieceArmure piece = m_listPieces.get(p_indice);
+	int cote = p_cote == Lateralisation.GAUCHE ? 0 : 1;
+	PieceArmure piece = m_diagrammeOccupation.get(p_localisation).get(cote);
 
 	m_points -= piece.getNbpoints();
 	m_malusEsquive -= piece.getMalusEsquive();
 	m_malusParade -= piece.getMalusParade();
-	m_listPieces.remove(p_indice);
+	m_diagrammeOccupation.get(p_localisation).set(cote, null);//on supprime la pièce
+
 	if (m_type == piece.getType())//le type de l'armure provenait de la pièce portée, il faut donc le réévaluer
 	{
 	    int typeCourant = 0;
-	    for (Iterator i = m_listPieces.iterator(); i.hasNext();)//on parcourt la liste des pièces courantes pour trouver le type max
-	    {
-
-		PieceArmure pieceCourante = (PieceArmure) i.next();
-
-		if (pieceCourante.getType() > typeCourant)
-		{
-		    typeCourant = pieceCourante.getType();
+	    for (Iterator i = m_diagrammeOccupation.iterator(); i.hasNext();)//on parcourt la liste des pièces courantes pour trouver le type max
+	    {//parcours des localisations
+		ArrayList<PieceArmure> locaCourante = (ArrayList<PieceArmure>) i.next();
+		for (Iterator j = locaCourante.iterator(); j.hasNext();)
+		{//parcours du côté gauche puis droit
+		    PieceArmure pieceCourante = (PieceArmure) j.next();
+		    if (pieceCourante.getType() > typeCourant)
+		    {//si le type de la pièce considérée est meilleur que le dernier retenu
+			typeCourant = pieceCourante.getType();
+		    }
 		}
 	    }
 	    m_type = typeCourant;
@@ -121,9 +137,9 @@ public class Armure
      *
      * @return une copie de la liste des pièces de cette armure
      */
-    ArrayList<PieceArmure> getListPieces()
+    ArrayList<ArrayList<PieceArmure>> getListPieces()
     {
-	return new ArrayList<>(m_listPieces);
+	return new ArrayList<>(m_diagrammeOccupation);
     }
 
     /**
@@ -192,9 +208,9 @@ public class Armure
 	 */
 	private final int m_nbpoints;
 	/**
-	 * le nombre max de pièces de ce type pouvant être portées
+	 * la localisation de la pièce
 	 */
-	private final int m_nbmax;
+	private final int m_localisation;
 	/**
 	 * le malus d'esquive infligé par cette piècé
 	 */
@@ -216,18 +232,24 @@ public class Armure
 	 * @param p_materiau
 	 */
 	PieceArmure(int p_idPiece, int p_type, int p_materiau, boolean p_isBouclier)
-	{//TODO si le type n'est pas "ancienne" alors il faut ignorer le matériau est utiliser celui par défaut tout en créant un nouveau matériau "technologique" (pour les libellés éventuels) et créer le libellé de la pièce avec le bon type ("casque blindé") par dérogation
+	{
 	    m_idPiece = p_idPiece;
 	    m_type = p_type;
-	    m_materiau = p_materiau;
-	    m_isBouclier = p_isBouclier;
 	    UPReference reference = UPReference.getInstance();
-
-	    m_nbpoints = p_isBouclier ? reference.getPointsBouclier(p_idPiece, p_materiau) : reference.getPtsArmure(m_idPiece, m_materiau);
-	    m_libelle = p_isBouclier ? reference.getLblBouclier(m_idPiece) + " " + reference.libelles.interArme + " " + reference.getLblMateriauBouclier(m_materiau) : reference.getLblPiece(m_idPiece) + " " + reference.libelles.interArme + " " + reference.getLblMateriauArmure(m_materiau);
-	    m_malusEsquive = p_isBouclier ? 0 : reference.getMalusEsquive(m_idPiece, m_materiau);
-	    m_malusParade = p_isBouclier ? 0 : reference.getMalusParade(m_idPiece, m_materiau);
-	    m_nbmax = p_isBouclier ? 1 : reference.getNbMaxPieces(m_idPiece);
+	    m_materiau = p_materiau;
+	    if (p_type == 0)
+	    {
+		m_libelle = reference.getLblPiece(m_idPiece, p_isBouclier) + " " + reference.libelles.interArme + " " + reference.getLblMateriauArmure(m_materiau, p_isBouclier);
+	    }
+	    else
+	    {
+		m_libelle = reference.getLblPiece(m_idPiece, p_isBouclier) + " " + reference.getLblTypeArmure(p_type);
+	    }
+	    m_isBouclier = p_isBouclier;
+	    m_nbpoints = reference.getPtsArmure(p_idPiece, p_materiau, p_isBouclier);
+	    m_malusEsquive = reference.getMalusEsquive(m_idPiece, m_materiau, p_isBouclier);
+	    m_malusParade = reference.getMalusParade(m_idPiece, m_materiau, p_isBouclier);
+	    m_localisation = reference.getLocalisation(m_idPiece, p_isBouclier);
 	}
 
 	/**
@@ -255,11 +277,11 @@ public class Armure
 	}
 
 	/**
-	 * @return the m_idPiece
+	 * @return the m_localisation
 	 */
-	int getnbMax()
+	int getLocalisation()
 	{
-	    return m_nbmax;
+	    return m_localisation;
 	}
 
 	/**
@@ -303,5 +325,10 @@ public class Armure
 	{
 	    return m_isBouclier;
 	}
+    }
+
+    public enum Lateralisation
+    {
+	GAUCHE, DROITE
     }
 }

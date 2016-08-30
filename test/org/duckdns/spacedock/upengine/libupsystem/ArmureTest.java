@@ -28,7 +28,6 @@ public class ArmureTest
     static Armure.PieceArmure piece5;
     static Armure.PieceArmure bouclier1;
     static Armure.PieceArmure bouclier2;
-    static ArrayList<PieceArmure> listPieces = new ArrayList<>();
     static Armure armure;
 
     @BeforeClass
@@ -41,16 +40,14 @@ public class ArmureTest
 	piece5 = new Armure.PieceArmure(4, 0, 1, false);
 	bouclier1 = new Armure.PieceArmure(3, 3, 1, true);
 	bouclier2 = new Armure.PieceArmure(0, 0, 0, true);
-
-	listPieces.add(piece1);
-	listPieces.add(piece3);
-
     }
 
     @Before
     public void setUp()
     {
-	armure = new Armure(listPieces);
+	armure = new Armure();
+	armure.addPiece(piece1, Armure.Lateralisation.GAUCHE);
+	armure.addPiece(piece3, Armure.Lateralisation.GAUCHE);
     }
 
     @After
@@ -67,8 +64,8 @@ public class ArmureTest
 	Assert.assertEquals(0, piece1.getMateriau());
 	Assert.assertEquals(3, piece1.getNbpoints());
 	Assert.assertEquals(0, piece1.getType());
-	Assert.assertEquals(1, piece1.getnbMax());
-	Assert.assertEquals("heaume complet en plates", piece1.toString());
+	Assert.assertEquals(0, piece1.getLocalisation());
+	Assert.assertEquals("casque complet en plates", piece1.toString());
 
 	Assert.assertEquals(0, piece2.getIdPiece());
 	Assert.assertEquals(0, piece2.getMalusEsquive());
@@ -76,8 +73,8 @@ public class ArmureTest
 	Assert.assertEquals(3, piece2.getMateriau());
 	Assert.assertEquals(1, piece2.getNbpoints());
 	Assert.assertEquals(1, piece2.getType());
-	Assert.assertEquals(1, piece2.getnbMax());
-	Assert.assertEquals("heaume complet en cuir bouilli", piece2.toString());
+	Assert.assertEquals(0, piece2.getLocalisation());
+	Assert.assertEquals("casque complet moderne", piece2.toString());
 
 	Assert.assertEquals(7, piece3.getIdPiece());
 	Assert.assertEquals(10, piece3.getMalusEsquive());
@@ -85,8 +82,8 @@ public class ArmureTest
 	Assert.assertEquals(0, piece3.getMateriau());
 	Assert.assertEquals(6, piece3.getNbpoints());
 	Assert.assertEquals(2, piece3.getType());
-	Assert.assertEquals(1, piece3.getnbMax());
-	Assert.assertEquals("cuirasse en plates", piece3.toString());
+	Assert.assertEquals(1, piece3.getLocalisation());
+	Assert.assertEquals("cuirasse avec blindage", piece3.toString());
 
 	Assert.assertEquals(7, piece4.getIdPiece());
 	Assert.assertEquals(1, piece4.getMalusEsquive());
@@ -94,8 +91,8 @@ public class ArmureTest
 	Assert.assertEquals(3, piece4.getMateriau());
 	Assert.assertEquals(2, piece4.getNbpoints());
 	Assert.assertEquals(3, piece4.getType());
-	Assert.assertEquals(1, piece4.getnbMax());
-	Assert.assertEquals("cuirasse en cuir bouilli", piece4.toString());
+	Assert.assertEquals(1, piece4.getLocalisation());
+	Assert.assertEquals("cuirasse énergétique", piece4.toString());
 
 	Assert.assertEquals(4, piece5.getIdPiece());
 	Assert.assertEquals(0, piece5.getMalusEsquive());
@@ -103,7 +100,7 @@ public class ArmureTest
 	Assert.assertEquals(1, piece5.getMateriau());
 	Assert.assertEquals(2, piece5.getNbpoints());
 	Assert.assertEquals(0, piece5.getType());
-	Assert.assertEquals(2, piece5.getnbMax());
+	Assert.assertEquals(2, piece5.getLocalisation());
 	Assert.assertEquals("brassière en lamelles ou maille", piece5.toString());
 
 	Assert.assertEquals(3, bouclier1.getIdPiece());
@@ -112,8 +109,8 @@ public class ArmureTest
 	Assert.assertEquals(1, bouclier1.getMateriau());
 	Assert.assertEquals(4, bouclier1.getNbpoints());
 	Assert.assertEquals(3, bouclier1.getType());
-	Assert.assertEquals(1, bouclier1.getnbMax());
-	Assert.assertEquals("pavois en bois", bouclier1.toString());
+	Assert.assertEquals(6, bouclier1.getLocalisation());
+	Assert.assertEquals("pavois énergétique", bouclier1.toString());
 
 	Assert.assertEquals(0, bouclier2.getIdPiece());
 	Assert.assertEquals(0, bouclier2.getMalusEsquive());
@@ -121,7 +118,7 @@ public class ArmureTest
 	Assert.assertEquals(0, bouclier2.getMateriau());
 	Assert.assertEquals(2, bouclier2.getNbpoints());
 	Assert.assertEquals(0, bouclier2.getType());
-	Assert.assertEquals(1, bouclier2.getnbMax());
+	Assert.assertEquals(6, bouclier2.getLocalisation());
 	Assert.assertEquals("targe en métal", bouclier2.toString());
     }
 
@@ -130,8 +127,8 @@ public class ArmureTest
     {
 	Assert.assertEquals(10, armure.getMalusEsquive());
 	Assert.assertEquals(0, armure.getMalusParade());
-	Assert.assertEquals("heaume complet en plates", armure.getListPieces().get(0).toString());
-	Assert.assertEquals("cuirasse en plates", armure.getListPieces().get(1).toString());
+	Assert.assertEquals("casque complet en plates", armure.getListPieces().get(0).get(0).toString());
+	Assert.assertEquals("cuirasse avec blindage", armure.getListPieces().get(1).get(0).toString());
     }
 
     @Test
@@ -151,18 +148,18 @@ public class ArmureTest
     @Test
     public void testAddRemovePiece()
     {
-	armure.addPiece(piece5);
+	armure.addPiece(piece5, Armure.Lateralisation.GAUCHE);
 	Assert.assertEquals(0, armure.getRedDegats(4));
 	Assert.assertEquals(10, armure.getRedDegats(1));
 	Assert.assertEquals(15, armure.getBonusND(0));
 	Assert.assertEquals(10, armure.getMalusEsquive());
 	Assert.assertEquals(2, armure.getMalusParade());
-	armure.addPiece(piece5);
+	armure.addPiece(piece5, Armure.Lateralisation.DROITE);
 	Assert.assertEquals(4, armure.getMalusParade());
 
 	try
 	{
-	    armure.addPiece(piece5);
+	    armure.addPiece(piece5, Armure.Lateralisation.GAUCHE);
 	    fail();
 	}
 	catch (IllegalStateException e)
@@ -170,17 +167,24 @@ public class ArmureTest
 	    Assert.assertEquals("emploi de la mauvaise méthode dans ce contexte:ajout de pièce d'armure:brassière en lamelles ou maille", e.getMessage());
 	}
 
-	armure.removePiece(3);
-	armure.addPiece(piece5);
-	armure.removePiece(3);
+	armure.removePiece(piece5.getLocalisation(), Armure.Lateralisation.GAUCHE);
+	try
+	{
+	    armure.removePiece(piece5.getLocalisation(), Armure.Lateralisation.GAUCHE);
+	    fail();
+	}
+	catch (NullPointerException e)
+	{
+	}
+	armure.addPiece(piece5, Armure.Lateralisation.GAUCHE);
+	armure.removePiece(piece5.getLocalisation(), Armure.Lateralisation.GAUCHE);
 
-	armure.addPiece(bouclier1);
+	armure.addPiece(bouclier1, Armure.Lateralisation.GAUCHE);
 	Assert.assertEquals(5, armure.getRedDegats(3));
 	Assert.assertEquals(15, armure.getRedDegats(2));
 	Assert.assertEquals(15, armure.getBonusND(2));
 	Assert.assertEquals(10, armure.getBonusND(3));
 	Assert.assertEquals(10, armure.getMalusEsquive());
 	Assert.assertEquals(2, armure.getMalusParade());
-
     }
 }

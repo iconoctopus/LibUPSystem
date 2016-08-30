@@ -116,16 +116,18 @@ final class UPReference
      */
     private final JsonArray m_listLblMatBoucliers;
     /**
-     * liste des pieces d'armures couvrant la tete
+     * liste des localisation possédant deux exemplaires
      */
-    private final JsonArray m_listPiecesDoubles;
-
+    private final JsonArray m_listLocaDoubles;
     /**
-     * pseudo constructeur statique renvoyant l'instance unique et la
-     * construisant si absente
-     *
-     * @return
+     * indice de localisation du bouclier
      */
+    private final int m_locaBouclier = 6;
+    /**
+     * liste des libellés des localisations
+     */
+    private final JsonArray m_listLblLoca;
+
     static UPReference getInstance()
     {
 	if (m_instance == null)
@@ -154,7 +156,8 @@ final class UPReference
 	m_listLblTypArmures = object.getJsonArray("types_armures");
 	m_tabBoucliers = object.getJsonArray("boucliers");
 	m_listLblMatBoucliers = object.getJsonArray("materiaux_boucliers");
-	m_listPiecesDoubles = object.getJsonArray("pieces_tete");
+	m_listLblLoca = object.getJsonArray("localisations");
+	m_listLocaDoubles = object.getJsonArray("loca_doubles");
 
 	//chargement des règles de calcul de l'initiative
 	object = loadJsonFile("JSON/tables_systeme/tab_init.json");
@@ -510,41 +513,6 @@ final class UPReference
     }
 
     /**
-     *
-     * @param p_bouclier
-     * @param p_materiau
-     * @return les points d'armure du bouclier de type et matériau spécifiés
-     */
-    int getPointsBouclier(int p_bouclier, int p_materiau)
-    {
-	JsonObject objetIntermediaire = m_tabBoucliers.getJsonObject(p_bouclier);
-	JsonArray tabIntermediaire = objetIntermediaire.getJsonArray("points");
-	return tabIntermediaire.getInt(p_materiau);
-    }
-
-    /**
-     *
-     * @param p_bouclier
-     * @return le libellé du bouclier spécifié
-     */
-    String getLblBouclier(int p_bouclier)
-    {
-	JsonObject objetIntermediaire = m_tabBoucliers.getJsonObject(p_bouclier);
-	return objetIntermediaire.getString("lbl");
-    }
-
-    /**
-     *
-     * @param p_indice
-     * @return le label du matériau de bouclier de type spécifié
-     */
-    String getLblMateriauBouclier(int p_indice)
-    {
-	return m_listLblMatBoucliers.getString(p_indice);
-
-    }
-
-    /**
      * Renvoie la liste des libellés de compétences d'un domaine, peut-être plus
      * prosaïquement utilisé pour obtenir le nombre de compétence d'un doaine
      * avec size()
@@ -603,24 +571,46 @@ final class UPReference
      *
      * @param p_idPiece
      * @param p_materiau
+     * @param p_isBouclier
      * @return le nombre de points d'armure d'une pièce d'un matériau spécifiés
      * par leurs indices
      */
-    int getPtsArmure(int p_idPiece, int p_materiau)
+    int getPtsArmure(int p_idPiece, int p_materiau, boolean p_isBouclier)
     {
-	JsonObject piece = m_tabPiecesArmures.getJsonObject(p_idPiece);
-	JsonArray tabPoints = piece.getJsonArray("points");
-	return tabPoints.getInt(p_materiau);
+	int res = 0;
+	if (p_isBouclier)
+	{
+	    JsonObject objetIntermediaire = m_tabBoucliers.getJsonObject(p_idPiece);
+	    JsonArray tabIntermediaire = objetIntermediaire.getJsonArray("points");
+	    res = tabIntermediaire.getInt(p_materiau);
+	}
+	else
+	{
+	    JsonObject piece = m_tabPiecesArmures.getJsonObject(p_idPiece);
+	    JsonArray tabPoints = piece.getJsonArray("points");
+	    res = tabPoints.getInt(p_materiau);
+	}
+	return res;
     }
 
     /**
      *
      * @param p_indice
+     * @param p_isBouclier
      * @return le libellé d'un matériau d'armure
      */
-    String getLblMateriauArmure(int p_indice)
+    String getLblMateriauArmure(int p_indice, boolean p_isBouclier)
     {
-	return m_listLblMatArmures.getString(p_indice);
+	String res = "";
+	if (p_isBouclier)
+	{
+	    res = m_listLblMatBoucliers.getString(p_indice);
+	}
+	else
+	{
+	    res = m_listLblMatArmures.getString(p_indice);
+	}
+	return res;
     }
 
     /**
@@ -632,72 +622,128 @@ final class UPReference
     {
 
 	return m_listLblTypArmures.getString(p_indice);
-
     }
 
     /**
      *
      * @param p_indice
+     * @return le libllé d'une localisation
+     */
+    String getLblLoca(int p_indice)
+    {
+	return m_listLblLoca.getString(p_indice);
+    }
+
+    /**
+     *
+     * @param p_indice
+     * @param p_isBouclier
      * @return le libellé d'une pièce d'armure
      */
-    String getLblPiece(int p_indice)
+    String getLblPiece(int p_indice, boolean p_isBouclier)
     {
-	JsonObject piece = m_tabPiecesArmures.getJsonObject(p_indice);
-	return piece.getString("lbl");
+	String res = "";
+	if (p_isBouclier)
+	{
+	    JsonObject objetIntermediaire = m_tabBoucliers.getJsonObject(p_indice);
+	    res = objetIntermediaire.getString("lbl");
+	}
+	else
+	{
+
+	    JsonObject piece = m_tabPiecesArmures.getJsonObject(p_indice);
+	    res = piece.getString("lbl");
+	}
+	return res;
     }
 
     /**
      *
      * @param p_indicePiece
      * @param p_materiau
+     * @param p_isBouclier
      * @return le malus d'esquive d'une pièce d'un matériau donné
      */
-    int getMalusEsquive(int p_indicePiece, int p_materiau)
+    int getMalusEsquive(int p_indicePiece, int p_materiau, boolean p_isBouclier)
     {
-	JsonObject piece = m_tabPiecesArmures.getJsonObject(p_indicePiece);
-	JsonArray tabMalus = piece.getJsonArray("malus_esquive");
-	return tabMalus.getInt(p_materiau);
+	int res = 0;
+	if (!p_isBouclier)
+	{
+	    JsonObject piece = m_tabPiecesArmures.getJsonObject(p_indicePiece);
+	    JsonArray tabMalus = piece.getJsonArray("malus_esquive");
+	    res = tabMalus.getInt(p_materiau);
+	}
+	return res;
     }
 
     /**
      *
      * @param p_indicePiece
      * @param p_materiau
+     * @param p_isBouclier
      * @return le malus de parade d'une pièce d'un matériau donné
      */
-    int getMalusParade(int p_indicePiece, int p_materiau)
+    int getMalusParade(int p_indicePiece, int p_materiau, boolean p_isBouclier)
     {
-	JsonObject piece = m_tabPiecesArmures.getJsonObject(p_indicePiece);
-	JsonArray tabMalus = piece.getJsonArray("malus_parade");
-	return tabMalus.getInt(p_materiau);
-
+	int res = 0;
+	if (!p_isBouclier)
+	{
+	    JsonObject piece = m_tabPiecesArmures.getJsonObject(p_indicePiece);
+	    JsonArray tabMalus = piece.getJsonArray("malus_parade");
+	    res = tabMalus.getInt(p_materiau);
+	}
+	return res;
     }
 
     /**
      *
      * @param p_indice
-     * @return le nb max de pièces d'une sorte
+     * @param p_isBouclier
+     * @return la localisation d'une pièce
      */
-    int getNbMaxPieces(int p_indice)
+    int getLocalisation(int p_indice, boolean p_isBouclier)
     {
-	JsonObject piece = m_tabPiecesArmures.getJsonObject(p_indice);
-	return piece.getInt("nbmax");
+	int res = 0;
+	if (p_isBouclier)
+	{
+	    res = m_locaBouclier;
+	}
+	else
+	{
+	    JsonObject piece = m_tabPiecesArmures.getJsonObject(p_indice);
+	    res = piece.getInt("loca");
+	}
+	return res;
     }
 
     /**
      *
-     * @return la liste des pieces d'armure de tete
+     * @return vrai si la localisation est en deux exemplaires
      */
-    ArrayList<Integer> getPiecesDoubles()
+    boolean isLocaDouble(int p_indice)
     {
 
-	ArrayList<Integer> res = new ArrayList<>();
+	boolean res = false;
+	int i = 0;
 
-	for (int i = 0; i < m_listPiecesDoubles.size(); ++i)
+	while (i < m_listLocaDoubles.size() && !res)
 	{
-	    res.add(m_listPiecesDoubles.getInt(i));
+	    if (m_listLocaDoubles.getInt(i) == p_indice)
+	    {
+		res = true;
+	    }
+	    ++i;
 	}
 	return res;
+    }
+
+    /**
+     *
+     * @return le nombre de localisations existant
+     */
+    int getLocaNumber()
+    {
+	return m_listLblLoca.size();
     }
 
     /**

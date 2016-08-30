@@ -209,19 +209,19 @@ public final class UPReferenceTest
     @Test
     public void testGetPointsBouclier()
     {
-	Assert.assertEquals(2, m_reference.getPointsBouclier(0, 0));
-	Assert.assertEquals(1, m_reference.getPointsBouclier(0, 1));
-	Assert.assertEquals(5, m_reference.getPointsBouclier(3, 0));
-	Assert.assertEquals(4, m_reference.getPointsBouclier(3, 1));
+	Assert.assertEquals(2, m_reference.getPtsArmure(0, 0, true));
+	Assert.assertEquals(1, m_reference.getPtsArmure(0, 1, true));
+	Assert.assertEquals(5, m_reference.getPtsArmure(3, 0, true));
+	Assert.assertEquals(4, m_reference.getPtsArmure(3, 1, true));
     }
 
     @Test
     public void testGetLblBouclier()
     {
-	Assert.assertEquals("targe", m_reference.getLblBouclier(0));
-	Assert.assertEquals("bouclier", m_reference.getLblBouclier(1));
-	Assert.assertEquals("écu", m_reference.getLblBouclier(2));
-	Assert.assertEquals("pavois", m_reference.getLblBouclier(3));
+	Assert.assertEquals("targe", m_reference.getLblPiece(0, true));
+	Assert.assertEquals("bouclier", m_reference.getLblPiece(1, true));
+	Assert.assertEquals("écu", m_reference.getLblPiece(2, true));
+	Assert.assertEquals("pavois", m_reference.getLblPiece(3, true));
     }
 
     @Test
@@ -272,10 +272,10 @@ public final class UPReferenceTest
     @Test
     public void testGetPtsArmure()
     {
-	Assert.assertEquals(3, m_reference.getPtsArmure(0, 0));
-	Assert.assertEquals(1, m_reference.getPtsArmure(0, 3));
-	Assert.assertEquals(6, m_reference.getPtsArmure(7, 0));
-	Assert.assertEquals(2, m_reference.getPtsArmure(7, 3));
+	Assert.assertEquals(3, m_reference.getPtsArmure(0, 0, false));
+	Assert.assertEquals(1, m_reference.getPtsArmure(0, 3, false));
+	Assert.assertEquals(6, m_reference.getPtsArmure(7, 0, false));
+	Assert.assertEquals(2, m_reference.getPtsArmure(7, 3, false));
     }
 
     @Test
@@ -288,46 +288,61 @@ public final class UPReferenceTest
     @Test
     public void testGetLblPiece()
     {
-	Assert.assertEquals("heaume complet", m_reference.getLblPiece(0));
-	Assert.assertEquals("cuirasse", m_reference.getLblPiece(7));
+	Assert.assertEquals("casque complet", m_reference.getLblPiece(0, false));
+	Assert.assertEquals("cuirasse", m_reference.getLblPiece(7, false));
     }
 
     @Test
     public void testGetMalusEsquive()
     {
-	Assert.assertEquals(0, m_reference.getMalusEsquive(0, 0));
-	Assert.assertEquals(0, m_reference.getMalusEsquive(0, 3));
-	Assert.assertEquals(10, m_reference.getMalusEsquive(7, 0));
-	Assert.assertEquals(1, m_reference.getMalusEsquive(7, 3));
+	Assert.assertEquals(0, m_reference.getMalusEsquive(0, 0, false));
+	Assert.assertEquals(0, m_reference.getMalusEsquive(0, 3, false));
+	Assert.assertEquals(10, m_reference.getMalusEsquive(7, 0, false));
+	Assert.assertEquals(1, m_reference.getMalusEsquive(7, 3, false));
+	Assert.assertEquals(0, m_reference.getMalusEsquive(1, 1, true));
     }
 
     @Test
     public void testGetMalusParade()
     {
-	Assert.assertEquals(0, m_reference.getMalusParade(0, 0));
-	Assert.assertEquals(0, m_reference.getMalusParade(0, 3));
-	Assert.assertEquals(0, m_reference.getMalusParade(7, 0));
-	Assert.assertEquals(0, m_reference.getMalusParade(7, 3));
-	Assert.assertEquals(3, m_reference.getMalusParade(4, 0));
-	Assert.assertEquals(2, m_reference.getMalusParade(4, 2));
+	Assert.assertEquals(0, m_reference.getMalusParade(0, 0, false));
+	Assert.assertEquals(0, m_reference.getMalusParade(0, 3, false));
+	Assert.assertEquals(0, m_reference.getMalusParade(7, 0, false));
+	Assert.assertEquals(0, m_reference.getMalusParade(7, 3, false));
+	Assert.assertEquals(3, m_reference.getMalusParade(4, 0, false));
+	Assert.assertEquals(2, m_reference.getMalusParade(4, 2, false));
+	Assert.assertEquals(0, m_reference.getMalusEsquive(0, 0, true));
     }
 
     @Test
-    public void testGetNbMaxPieces()
+    public void testGetLocalisation()
     {
-	Assert.assertEquals(1, m_reference.getNbMaxPieces(0));
-	Assert.assertEquals(1, m_reference.getNbMaxPieces(7));
-	Assert.assertEquals(2, m_reference.getNbMaxPieces(4));
-	Assert.assertEquals(2, m_reference.getNbMaxPieces(5));
+	Assert.assertEquals(0, m_reference.getLocalisation(0, false));
+	Assert.assertEquals(1, m_reference.getLocalisation(7, false));
+	Assert.assertEquals(2, m_reference.getLocalisation(4, false));
+	Assert.assertEquals(4, m_reference.getLocalisation(5, false));
     }
 
     @Test
-    public void testGetListPiecesDoubles()
+    public void isPieceDouble()
     {
-	ArrayList<Integer> list = m_reference.getPiecesDoubles();
-	Assert.assertEquals(4, list.size());
-	Assert.assertEquals(3, (int) list.get(0));
-	Assert.assertEquals(4, (int) list.get(1));
-	Assert.assertEquals(6, (int) list.get(3));
+	Assert.assertEquals(true, m_reference.isLocaDouble(3));
+	Assert.assertEquals(true, m_reference.isLocaDouble(5));
+	Assert.assertEquals(false, m_reference.isLocaDouble(0));
     }
+
+    @Test
+    public void testGetLblLoca()
+    {
+	Assert.assertEquals("tête", m_reference.getLblLoca(0));
+	Assert.assertEquals("main", m_reference.getLblLoca(3));
+	Assert.assertEquals("bouclier", m_reference.getLblLoca(6));
+    }
+
+    @Test
+    public void testGetLocaNumber()
+    {
+	Assert.assertEquals(7, m_reference.getLocaNumber());
+    }
+
 }

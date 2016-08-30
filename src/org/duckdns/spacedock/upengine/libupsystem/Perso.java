@@ -379,7 +379,7 @@ public class Perso
 
     /**
      * inflige des dégâts, via la jauge de Santé après avoir appliqué les effets
-     * d'armure
+     * d'm_armure
      *
      * @param p_degats
      */
@@ -388,7 +388,7 @@ public class Perso
 	if (p_degats.getQuantite() >= 0)
 	{
 	    int redDegats = 0;
-	    Armure armure = m_inventaire.getArmureCourante();
+	    Armure armure = m_inventaire.getArmure();
 	    if (armure != null)
 	    {
 		redDegats = armure.getRedDegats(p_degats.getTypeArme());
@@ -413,7 +413,7 @@ public class Perso
      * @param p_parade catégorie d'arme à employer en parade, ignoré si esquive
      * @param p_esquive : si l'esquive doit être employée, sinon c'est une
      * parade qui est effectuée
-     * @return le ND passif calculé à partir des comps et de l'armure
+     * @return le ND passif calculé à partir des comps et de l'm_armure
      */
     public int getNDPassif(int p_typeArme, int p_parade, boolean p_esquive)
     {//TODO : gérer quand on n'a pas de compétence
@@ -421,14 +421,14 @@ public class Perso
 
 	int rang = 0;
 	int effetArmure = 0;
-	Armure armure = m_inventaire.getArmureCourante();
+	Armure armure = m_inventaire.getArmure();
 
 	if (!p_esquive)
 	{
 	    //calcul de la valeur issue de la compétence parade
 	    rang = m_listDomaines.get(3).getCompetences().get(p_parade).getRang();
 
-	    //ajout des bonus  et malus d'armure
+	    //ajout des bonus  et malus d'm_armure
 	    if (armure != null)
 	    {
 		effetArmure += armure.getBonusND(p_typeArme);
@@ -440,7 +440,7 @@ public class Perso
 	    //calcul de la valeur issue de la compétence esquive
 	    rang = m_listDomaines.get(2).getCompetences().get(0).getRang();
 
-	    //ajout des bonus  et malus d'armure
+	    //ajout des bonus  et malus d'm_armure
 	    if (armure != null)
 	    {
 		effetArmure += armure.getBonusND(p_typeArme);
@@ -543,22 +543,16 @@ public class Perso
 
     /**
      *
-     * @return cette liste est directement éditable, il vaudrait mieux la
-     * confiner au CharacterAssembly
+     * @return l'armure courante
      */
-    public ArrayList<Armure> getListArmures()
+    public Armure getArmure()
     {
-	return m_inventaire.listArmures;
+	return m_inventaire.getArmure();
     }
 
-    public Armure getArmureCourante()
+    public void setArmure(Armure p_armure)
     {
-	return m_inventaire.getArmureCourante();
-    }
-
-    public void setArmureCourante(int p_armure)
-    {
-	m_inventaire.setArmureCourante(p_armure);
+	m_inventaire.setArmure(p_armure);
     }
 
     /**

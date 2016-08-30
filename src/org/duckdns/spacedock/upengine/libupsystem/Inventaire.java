@@ -23,30 +23,23 @@ class Inventaire
      */
     final ArrayList<Arme> listArmes;
     /**
-     * liste des armures portées, visible par le package pour être facilement
-     * manipulable pour l'instant car de toute façon sera transmis sous forme de
-     * liste quand interrogé par le contrôleur
+     * m_armure portée
+     *
      */
-    final ArrayList<Armure> listArmures;
+    Armure m_armure;
     /**
      * indice de l'arme courante dans la liste des armes, -1 par défaut
      * signifiant mains nues (rien)
      */
     private int m_armeCourante = -1;
-    /**
-     * indice de l'armure courante dans la liste des armes, -1 par défaut
-     * signifiant aucune
-     */
-    private int m_armureCourante = -1;
 
     /**
      * constructeur sans éléments initiaux : on initialise quand même pour
-     * assurer que l'ajou sera possible
+     * assurer que l'ajout sera possible
      */
     Inventaire()
     {
 	listArmes = new ArrayList<>();
-	listArmures = new ArrayList<>();
     }
 
     /**
@@ -55,7 +48,7 @@ class Inventaire
      * @param p_armes
      * @param p_armures
      */
-    Inventaire(ArrayList<Arme> p_armes, ArrayList<Armure> p_armures)
+    Inventaire(ArrayList<Arme> p_armes, Armure p_armure)
     {
 	if (p_armes != null)//si les paramétres sont incorects on les rejette mais l'inventaire est quand même créé pour ne pas perturber l'application, il sera toujours possible de le valuer plus tard
 	{
@@ -65,14 +58,7 @@ class Inventaire
 	{
 	    listArmes = new ArrayList<>();
 	}
-	if (p_armures != null)
-	{
-	    listArmures = p_armures;
-	}
-	else
-	{
-	    listArmures = new ArrayList<>();
-	}
+	m_armure = p_armure;
     }
 
     /**
@@ -86,13 +72,23 @@ class Inventaire
     }
 
     /**
-     * indiquer l'indice de l'armure à enfiler
      *
-     * @param p_indice
+     *
+     * @param p_armure
      */
-    void setArmureCourante(int p_indice)
+    void setArmure(Armure p_armure)
     {
-	m_armureCourante = p_indice;
+	m_armure = p_armure;
+    }
+
+    /**
+     *
+     *
+     * @returns m_armure
+     */
+    Armure getArmure()
+    {
+	return (m_armure);
     }
 
     /**
@@ -104,22 +100,6 @@ class Inventaire
 	if (m_armeCourante >= 0)
 	{
 	    return listArmes.get(m_armeCourante);
-	}
-	else
-	{
-	    return null;
-	}
-    }
-
-    /**
-     *
-     * @return l'armure actuellement portée
-     */
-    Armure getArmureCourante()
-    {
-	if (m_armureCourante >= 0)
-	{
-	    return listArmures.get(m_armureCourante);
 	}
 	else
 	{

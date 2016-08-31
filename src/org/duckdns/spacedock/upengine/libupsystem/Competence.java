@@ -27,13 +27,11 @@ class Competence
     }
 
     /**
-     * compte comme rang d'attaque dans les CompCac
      *
      * @param p_rang
      */
     final void setRang(int p_rang)
     {
-
 	if (p_rang >= 0)
 	{
 	    m_rang = p_rang;
@@ -73,13 +71,14 @@ class Competence
     }
 
     /**
-     * Classe encapsulant une compétence (pincipalement rang, indice, nom et
-     * spécialités) La gestion des spécialités est encore embryonnaire : la
-     * compétence en possède une liste mais celles-ci ne sont en aucun cas
-     * gérées par le système
+     * Classe encapsulant une compétence (pincipalement rang et spécialités) La
+     * gestion des spécialités est encore embryonnaire : la compétence en
+     * possède une liste mais celles-ci ne sont en aucun cas gérées par le
+     * système
      *
      *
      * @param p_rang
+     * @param p_specialites
      */
     Competence(int p_rang, ArrayList<String> p_specialites)
     {

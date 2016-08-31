@@ -37,6 +37,14 @@ public class ArmeDist extends Arme
      */
     private int m_magasinCourant;
 
+    /**
+     * constructeur appelant dans UPReference les spécificités des arms à
+     * distance
+     *
+     * @param p_indice
+     * @param p_qualite
+     * @param p_equilibrage
+     */
     public ArmeDist(int p_indice, QualiteArme p_qualite, EquilibrageArme p_equilibrage)
     {
 	super(p_indice, p_qualite, p_equilibrage);
@@ -52,10 +60,11 @@ public class ArmeDist extends Arme
     }
 
     /**
-     * génère les dégâts infligés avec cette arme en combat à distance
+     * génère les dégâts infligés avec cette arme en combat à distance sous la
+     * forme d'un objet dégâts, le physique n'est pas un facteur ici car on est
+     * à distance
      *
      * @param p_nbIncrements
-     * @param p_physique le physique du personnage
      * @param p_isSonne
      * @return
      */
@@ -122,7 +131,8 @@ public class ArmeDist extends Arme
     }
 
     /**
-     * @param m_magasinCourant the m_magasinCourant to set
+     *
+     * @param p_nbMun
      */
     void consommerMun(int p_nbMun)
     {

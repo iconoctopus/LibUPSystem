@@ -45,7 +45,7 @@ public final class RollUtils
      * @param p_non_relance_dix
      * @return le score obtenu
      */
-    public static int lancer(int p_nbLances, int p_nbGardes, boolean p_non_relance_dix)//todo tester les cas d'erreur sur cette méthode
+    public static int lancer(int p_nbLances, int p_nbGardes, boolean p_non_relance_dix)
     {
 	int i, total = 0;
 	if (p_nbLances >= 0 && p_nbGardes >= 0)

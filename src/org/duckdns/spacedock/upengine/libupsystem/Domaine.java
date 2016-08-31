@@ -24,14 +24,10 @@ class Domaine
     private final ArrayList<Competence> m_competences = new ArrayList<>();
 
     /**
-     * pour l'instant le domaine ignore son nom car il est prévu de le faire
-     * exposer par les classes supérieures notamment le Perso.
-     *
      * Dans ce constructeur par défaut on initialise les comps à 0
      *
-     *
+     * @param p_indice
      * @param p_rang
-     * @param p_competences
      */
     Domaine(int p_indice, int p_rang)
     {
@@ -59,6 +55,10 @@ class Domaine
 	return m_rang;
     }
 
+    /**
+     *
+     * @param p_rang
+     */
     final void setRang(int p_rang)
     {
 	if (p_rang > 0)//les domaines possédés sont toujours supérieurs à 0 car sinon on ne pourrait pas faire de jet

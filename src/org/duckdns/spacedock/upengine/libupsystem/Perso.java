@@ -6,7 +6,7 @@ import org.duckdns.spacedock.upengine.libupsystem.Arme.Degats;
 import org.duckdns.spacedock.upengine.libupsystem.RollUtils.RollResult;
 
 public class Perso
-{//TODO repasser par les commentaires de javadoc : les paramétres doivent avoir changé un peu partout ainsi que les valeurs de retour
+{
 
     /**
      * les actions du personnage dans ce tour sous la forme de la phase dans
@@ -45,11 +45,26 @@ public class Perso
      */
     private final ArbreDomaines m_arbreDomaines;
 
+    /**
+     * Constructeur de Perso prenant des caractéristiques en paramétres. Il est
+     * possible de le modifier par la suite on peut l'initialiser avec presque
+     * rien, c'est le constructeur du cas général
+     *
+     * @param p_traits
+     * @param p_arbre
+     */
     public Perso(int[] p_traits, ArbreDomaines p_arbre)
     {
 	if (p_traits.length != 5)
 	{
 	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("nbtraits") + ":" + p_traits.length);
+	}
+	for (int i = 0; i < p_traits.length; ++i)
+	{
+	    if (p_traits[i] < 0)
+	    {
+		ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("trait") + ":" + p_traits[i]);
+	    }
 	}
 	m_traits = p_traits;
 	m_arbreDomaines = p_arbre;
@@ -252,7 +267,7 @@ public class Perso
 		arme.consommerMun(p_nbCoups);//on consomme les coups, une exception sera levée si il n'y a pas assez de munitions, le code appelant devrait vérifier systématiquement cela
 		if (p_distance <= arme.getPortee())//échec auto si distance > portée
 		{
-		    if (p_distance <= arme.getPortee() / 2)//TODO mieux arrondir et tester cas pile la moitié
+		    if (p_distance <= (int) Math.round((double) arme.getPortee() / (double) 2))
 		    {//portée courte
 			modDist -= arme.getMalusCourt();
 		    }
@@ -309,6 +324,22 @@ public class Perso
 	return result;
     }
 
+    /**
+     * Méthode où les éléments communs d'attaque se déroulent : les méthodes
+     * précédentes ont calculé les bonus/malus et diverses conditions de
+     * l'attaque spécifiques à leur situation (distance ou CaC), celle-ci va
+     * prendre en compte tous les éléments communs et aire exécuter le jet à la
+     * méthode afférente
+     *
+     * @param p_phaseActuelle
+     * @param p_ND
+     * @param p_comp
+     * @param p_domaine
+     * @param p_modifNbLances
+     * @param p_modifNbGardes
+     * @param p_modifScore
+     * @return
+     */
     private RollResult effectuerAttaque(int p_phaseActuelle, int p_ND, int p_comp, int p_domaine, int p_modifNbLances, int p_modifNbGardes, int p_modifScore)
     {
 	RollResult result = null;
@@ -432,13 +463,15 @@ public class Perso
     /**
      *
      * @param p_typeArme
-     * @param p_catArme catégorie d'arme à employer en parade, ignoré si esquive
+     * @param p_catArme catégorie d'arme à employer en parade, ignoré si
+     * esquive, attnetion ce n'est pas le numéro index de comp mais bien la
+     * catégorie d'arme
      * @param p_esquive : si l'esquive doit être employée, sinon c'est une
      * parade qui est effectuée
      * @return le ND passif calculé à partir des comps et de l'armure
      */
     public int getNDPassif(int p_typeArme, int p_catArme, boolean p_esquive)
-    {//TODO : gérer quand on n'a pas de compétence
+    {
 	int ND = 5;
 
 	int rang = 0;
@@ -461,7 +494,7 @@ public class Perso
 	{
 	    //calcul de la valeur issue de la compétence esquive
 	    rang = m_arbreDomaines.getRangComp(2, 0);
-	    //ajout des bonus  et malus d'm_armure
+	    //ajout des bonus  et malus d'armure
 	    if (armure != null)
 	    {
 		effetArmure += armure.getBonusND(p_typeArme);
@@ -469,12 +502,31 @@ public class Perso
 	    }
 	}
 
-	ND = rang * 5 + 5 + effetArmure;
-	if (rang >= 3)
+	if (rang > 0)
 	{
-	    ND += 5;
+	    ND = rang * 5 + 5;
+	    if (rang >= 3)
+	    {
+		ND += 5;
+	    }
 	}
-
+	else
+	{
+	    if (!p_esquive)
+	    {
+		rang = m_arbreDomaines.getRangDomaine(3);
+	    }
+	    else
+	    {
+		rang = m_arbreDomaines.getRangDomaine(2);
+	    }
+	    ND = rang * 5 - 5;
+	    if (ND < 5)
+	    {
+		ND = 5;
+	    }
+	}
+	ND += effetArmure;
 	return ND;
     }
 
@@ -526,6 +578,10 @@ public class Perso
 	return m_libellePerso;
     }
 
+    /**
+     *
+     * @param libellePerso
+     */
     public void setLibellePerso(String libellePerso)
     {
 	this.m_libellePerso = libellePerso;
@@ -533,8 +589,7 @@ public class Perso
 
     /**
      *
-     * @return cette liste est directement éditable, il vaudrait mieux la
-     * confiner au CharacterAssembly
+     * @return cette liste n'est pas directement éditable mais une copie
      */
     public ArrayList<Arme> getListArmes()
     {
@@ -546,9 +601,88 @@ public class Perso
 	return m_inventaire.getArmeCourante();
     }
 
+    /**
+     *
+     * @param p_indice
+     */
     public void setArmeCourante(int p_indice)
     {
 	m_inventaire.setArmeCourante(p_indice);
+    }
+
+    /**
+     *
+     * @param p_domaine
+     * @param p_rang
+     */
+    public void setRangDomaine(int p_domaine, int p_rang)
+    {
+	m_arbreDomaines.setRangDomaine(p_domaine, p_rang);
+    }
+
+    /**
+     *
+     * @param p_domaine
+     * @return
+     */
+    public int getRangDomaine(int p_domaine)
+    {
+	return m_arbreDomaines.getRangDomaine(p_domaine);
+    }
+
+    /**
+     *
+     * @param p_domaine
+     * @param p_comp
+     * @param p_rang
+     */
+    public void setRangComp(int p_domaine, int p_comp, int p_rang)
+    {
+	m_arbreDomaines.setRangComp(p_domaine, p_comp, p_rang);
+    }
+
+    /**
+     *
+     * @param p_domaine
+     * @param p_comp
+     * @return
+     */
+    public int getRangComp(int p_domaine, int p_comp)
+    {
+	return m_arbreDomaines.getRangComp(p_domaine, p_comp);
+    }
+
+    /**
+     *
+     * @param p_domaine
+     * @param p_comp
+     * @return
+     */
+    public ArrayList<String> getSpecialites(int p_domaine, int p_comp)
+    {
+	return m_arbreDomaines.getSpecialites(p_domaine, p_comp);
+    }
+
+    /**
+     *
+     * @param p_domaine
+     * @param p_comp
+     * @param p_specialite
+     */
+    public void addSpecialite(int p_domaine, int p_comp, String p_specialite)
+    {
+	m_arbreDomaines.addSpecialite(p_domaine, p_comp, p_specialite);
+    }
+
+    /**
+     *
+     * @param p_domaine
+     * @param p_comp
+     * @param p_indiceSpe
+     */
+    public void removeSpecialite(int p_domaine, int p_comp, int p_indiceSpe)
+    {
+	m_arbreDomaines.removeSpecialite(p_domaine, p_comp, p_indiceSpe);
     }
 
     /**
@@ -560,6 +694,10 @@ public class Perso
 	return m_inventaire.getArmure();
     }
 
+    /**
+     *
+     * @param p_armure
+     */
     public void setArmure(Armure p_armure)
     {
 	m_inventaire.setArmure(p_armure);
@@ -648,5 +786,25 @@ public class Perso
     public ArrayList<Integer> getActions()
     {
 	return new ArrayList<>(m_actions);
+    }
+
+    /**
+     *
+     * @param p_indice
+     * @param p_valeur
+     */
+    public void setTrait(int p_indice, int p_valeur)
+    {
+	m_traits[p_indice] = p_valeur;
+    }
+
+    /**
+     *
+     * @param p_indice
+     * @return la valeur du trait
+     */
+    public int getTrait(int p_indice)
+    {
+	return m_traits[p_indice];
     }
 }

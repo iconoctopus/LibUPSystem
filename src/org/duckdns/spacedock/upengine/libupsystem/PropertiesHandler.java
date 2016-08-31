@@ -49,8 +49,6 @@ final class PropertiesHandler
      * si elle n'existe pas)
      *
      * @return l'instance unique
-     * @throws FileNotFoundException
-     * @throws IOException
      */
     static PropertiesHandler getInstance()
     {
@@ -68,8 +66,6 @@ final class PropertiesHandler
      * qu'il ne soit pas nécessaire de le faire de façon synchrone durant le
      * reste de l'exécution
      *
-     * @throws FileNotFoundException
-     * @throws IOException
      */
     private PropertiesHandler()
     {
@@ -92,7 +88,6 @@ final class PropertiesHandler
 	{
 	    m_stringsRecovered = false;
 	}
-
     }
 
     private Properties readProperties(String p_path) throws IOException

@@ -12,6 +12,13 @@ package org.duckdns.spacedock.upengine.libupsystem;
 public class ArmeCaC extends Arme
 {
 
+    /**
+     * constructeur identique à celui de la superclasse
+     *
+     * @param p_indice
+     * @param p_qualite
+     * @param p_equilibrage
+     */
     public ArmeCaC(int p_indice, QualiteArme p_qualite, EquilibrageArme p_equilibrage)
     {
 	super(p_indice, p_qualite, p_equilibrage);

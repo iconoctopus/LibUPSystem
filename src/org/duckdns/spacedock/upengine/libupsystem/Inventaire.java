@@ -151,4 +151,9 @@ class Inventaire
 	    return null;
 	}
     }
+
+    public enum Lateralisation
+    {
+	GAUCHE, DROITE
+    }
 }

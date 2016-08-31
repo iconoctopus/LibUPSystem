@@ -128,6 +128,11 @@ final class UPReference
      */
     private final JsonArray m_listLblLoca;
 
+    /**
+     *
+     * @return l'instance unique de la référence, la construit si elle n'existe
+     * pas
+     */
     static UPReference getInstance()
     {
 	if (m_instance == null)
@@ -287,7 +292,7 @@ final class UPReference
     }
 
     /**
-     *
+     * @param p_nbPts les points d'armure à modifier
      * @param p_typeArme type d'arme considéré
      * @param p_typeArmure type d'armure considéré
      * @return les points d'armure à effectivement utiliser face à un type

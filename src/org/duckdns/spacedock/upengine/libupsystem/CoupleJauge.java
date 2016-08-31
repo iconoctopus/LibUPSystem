@@ -75,9 +75,7 @@ class CoupleJauge
     {
 	if (p_physique >= 0 && p_volonte >= 0 && p_tailleForceDAme >= 0)
 	{
-
 	    instancier(p_physique + p_volonte, p_tailleForceDAme, p_volonte);
-
 	}
 	else
 	{
@@ -111,8 +109,8 @@ class CoupleJauge
      * externe au passage
      *
      * @param p_degats
-     * @param p_resultatJet le resultat du jet d'absorption
-     * @param p_volonte
+     * @param p_victime sera utilisé pour les deux jets (absorption et
+     * éventuellement inconscience)
      * @return le niveau de remplissage de la jauge externe, ce qui permet de
      * suivre si celle-ci a été réduite
      */
@@ -145,7 +143,6 @@ class CoupleJauge
 			}
 		    }
 		}
-
 		int ecart_IntExt = m_taille_interne - m_taille_externe;
 		if (m_remplissage_interne > ecart_IntExt)//on vide la jauge externe
 		{

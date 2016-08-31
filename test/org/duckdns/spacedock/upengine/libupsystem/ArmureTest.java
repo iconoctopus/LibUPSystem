@@ -19,33 +19,33 @@ import org.junit.Test;
 public class ArmureTest
 {
 
-    static Armure.PieceArmure piece1;
-    static Armure.PieceArmure piece2;
-    static Armure.PieceArmure piece3;
-    static Armure.PieceArmure piece4;
-    static Armure.PieceArmure piece5;
-    static Armure.PieceArmure bouclier1;
-    static Armure.PieceArmure bouclier2;
+    static PieceArmure piece1;
+    static PieceArmure piece2;
+    static PieceArmure piece3;
+    static PieceArmure piece4;
+    static PieceArmure piece5;
+    static PieceArmure bouclier1;
+    static PieceArmure bouclier2;
     static Armure armure;
 
     @BeforeClass
     public static void setUpClass()
     {
-	piece1 = new Armure.PieceArmure(0, 0, 0, false);
-	piece2 = new Armure.PieceArmure(0, 1, 3, false);
-	piece3 = new Armure.PieceArmure(7, 2, 0, false);
-	piece4 = new Armure.PieceArmure(7, 3, 3, false);
-	piece5 = new Armure.PieceArmure(4, 0, 1, false);
-	bouclier1 = new Armure.PieceArmure(3, 3, 1, true);
-	bouclier2 = new Armure.PieceArmure(0, 0, 0, true);
+	piece1 = new PieceArmure(0, 0, 0, false);
+	piece2 = new PieceArmure(0, 1, 3, false);
+	piece3 = new PieceArmure(7, 2, 0, false);
+	piece4 = new PieceArmure(7, 3, 3, false);
+	piece5 = new PieceArmure(4, 0, 1, false);
+	bouclier1 = new PieceArmure(3, 3, 1, true);
+	bouclier2 = new PieceArmure(0, 0, 0, true);
     }
 
     @Before
     public void setUp()
     {
 	armure = new Armure();
-	armure.addPiece(piece1, Armure.Lateralisation.GAUCHE);
-	armure.addPiece(piece3, Armure.Lateralisation.GAUCHE);
+	armure.addPiece(piece1, Inventaire.Lateralisation.GAUCHE);
+	armure.addPiece(piece3, Inventaire.Lateralisation.GAUCHE);
     }
 
     @After
@@ -144,18 +144,18 @@ public class ArmureTest
     @Test
     public void testAddRemovePiece()
     {
-	armure.addPiece(piece5, Armure.Lateralisation.GAUCHE);
+	armure.addPiece(piece5, Inventaire.Lateralisation.GAUCHE);
 	Assert.assertEquals(0, armure.getRedDegats(4));
 	Assert.assertEquals(10, armure.getRedDegats(1));
 	Assert.assertEquals(15, armure.getBonusND(0));
 	Assert.assertEquals(10, armure.getMalusEsquive());
 	Assert.assertEquals(2, armure.getMalusParade());
-	armure.addPiece(piece5, Armure.Lateralisation.DROITE);
+	armure.addPiece(piece5, Inventaire.Lateralisation.DROITE);
 	Assert.assertEquals(4, armure.getMalusParade());
 
 	try
 	{
-	    armure.addPiece(piece5, Armure.Lateralisation.GAUCHE);
+	    armure.addPiece(piece5, Inventaire.Lateralisation.GAUCHE);
 	    fail();
 	}
 	catch (IllegalStateException e)
@@ -163,19 +163,19 @@ public class ArmureTest
 	    Assert.assertEquals("emploi de la mauvaise méthode dans ce contexte:ajout de pièce d'armure:brassière en lamelles ou maille", e.getMessage());
 	}
 
-	armure.removePiece(piece5.getLocalisation(), Armure.Lateralisation.GAUCHE);
+	armure.removePiece(piece5.getLocalisation(), Inventaire.Lateralisation.GAUCHE);
 	try
 	{
-	    armure.removePiece(piece5.getLocalisation(), Armure.Lateralisation.GAUCHE);
+	    armure.removePiece(piece5.getLocalisation(), Inventaire.Lateralisation.GAUCHE);
 	    fail();
 	}
 	catch (NullPointerException e)
 	{
 	}
-	armure.addPiece(piece5, Armure.Lateralisation.GAUCHE);
-	armure.removePiece(piece5.getLocalisation(), Armure.Lateralisation.GAUCHE);
+	armure.addPiece(piece5, Inventaire.Lateralisation.GAUCHE);
+	armure.removePiece(piece5.getLocalisation(), Inventaire.Lateralisation.GAUCHE);
 
-	armure.addPiece(bouclier1, Armure.Lateralisation.GAUCHE);
+	armure.addPiece(bouclier1, Inventaire.Lateralisation.GAUCHE);
 	Assert.assertEquals(5, armure.getRedDegats(3));
 	Assert.assertEquals(15, armure.getRedDegats(2));
 	Assert.assertEquals(15, armure.getBonusND(2));

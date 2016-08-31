@@ -49,7 +49,7 @@ public class PersoTest
 	Assert.assertEquals(10, persoRM1.getNDPassif(0, 1, false));
 	Assert.assertEquals(10, persoRM1.getNDPassif(0, 1, true));
 	Armure armure = new Armure();
-	armure.addPiece(new Armure.PieceArmure(0, 0, 0, false), Armure.Lateralisation.GAUCHE);
+	armure.addPiece(new PieceArmure(0, 0, 0, false), Inventaire.Lateralisation.GAUCHE);
 	persoRM1.setArmure(armure);
 	Assert.assertEquals(15, persoRM1.getNDPassif(0, 1, false));
 	Assert.assertEquals(15, persoRM1.getNDPassif(0, 1, true));
@@ -74,7 +74,7 @@ public class PersoTest
 	Assert.assertEquals(25, persoRM3.getNDPassif(0, 1, false));
 	Assert.assertEquals(25, persoRM3.getNDPassif(0, 1, true));
 	armure = new Armure();
-	armure.addPiece(new Armure.PieceArmure(0, 3, 0, false), Armure.Lateralisation.GAUCHE);
+	armure.addPiece(new PieceArmure(0, 3, 0, false), Inventaire.Lateralisation.GAUCHE);
 	persoRM3.setArmure(armure);
 	Assert.assertEquals(35, persoRM3.getNDPassif(0, 1, false));
 	Assert.assertEquals(35, persoRM3.getNDPassif(0, 1, true));
@@ -99,10 +99,22 @@ public class PersoTest
 	Assert.assertEquals(35, persoRM5.getNDPassif(0, 1, false));
 	Assert.assertEquals(35, persoRM5.getNDPassif(0, 1, true));
 	Assert.assertEquals(0, persoRM5.getPointsDeFatigue());
-	Assert.assertFalse(persoRM3.isSonne());
-	Assert.assertFalse(persoRM3.isInconscient());
-	Assert.assertFalse(persoRM3.isElimine());
+	Assert.assertFalse(persoRM5.isSonne());
+	Assert.assertFalse(persoRM5.isInconscient());
+	Assert.assertFalse(persoRM5.isElimine());
 
+	//test de cas de ND passif ou l'on ne dispose pas de la competence parade
+	persoRM5.setRangComp(3, 1, 0);
+	Assert.assertEquals(20, persoRM5.getNDPassif(0, 0, false));
+	persoRM1.setRangComp(3, 1, 0);
+	persoRM1.setArmure(null);
+	Assert.assertEquals(5, persoRM1.getNDPassif(0, 0, false));
+
+	//test de cas de ND passif ou l'on ne dispose pas de la competence esquive
+	persoRM5.setRangComp(2, 0, 0);
+	Assert.assertEquals(20, persoRM5.getNDPassif(0, 0, true));
+	persoRM1.setRangComp(2, 0, 0);
+	Assert.assertEquals(5, persoRM1.getNDPassif(0, 0, true));
 	try
 	{
 	    new Perso(-11);
@@ -111,6 +123,50 @@ public class PersoTest
 	catch (IllegalArgumentException e)
 	{
 	    Assert.assertEquals("paramétre aberrant:rang:-11", e.getMessage());
+	}
+
+	//Cas d'erreurs dans la création du perso avec caracs
+	ArbreDomaines arbre = new ArbreDomaines();
+	try
+	{
+	    int[] traits =
+	    {
+		1, 1
+	    };
+	    new Perso(traits, arbre);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:nombre de traits:2", e.getMessage());
+	}
+
+	try
+	{
+	    int[] traits =
+	    {
+		1, 1, 1, 1, 1, 1
+	    };
+	    new Perso(traits, arbre);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:nombre de traits:6", e.getMessage());
+	}
+
+	try
+	{
+	    int[] traits =
+	    {
+		0, 1, -12, 1, 1
+	    };
+	    new Perso(traits, arbre);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:trait:-12", e.getMessage());
 	}
 
     }
@@ -182,6 +238,72 @@ public class PersoTest
 	catch (IllegalArgumentException e)
 	{
 	    Assert.assertEquals("paramétre aberrant:phase:11", e.getMessage());
+	}
+    }
+
+    @Test
+    public void testGetSetTrait()
+    {
+	//On en profite pour tester que les bonnes valeurs de création sont employées sur la création de persos par RM
+	Assert.assertEquals(3, persoRM3.getTrait(0));
+	Assert.assertEquals(3, persoRM3.getTrait(1));
+	Assert.assertEquals(2, persoRM3.getTrait(2));
+	Assert.assertEquals(2, persoRM3.getTrait(3));
+	Assert.assertEquals(2, persoRM3.getTrait(4));
+
+	Assert.assertEquals(1, persoRM1.getTrait(0));
+	Assert.assertEquals(1, persoRM1.getTrait(1));
+	Assert.assertEquals(0, persoRM1.getTrait(2));
+	Assert.assertEquals(0, persoRM1.getTrait(3));
+	Assert.assertEquals(0, persoRM1.getTrait(4));
+
+	Assert.assertEquals(5, persoRM5.getTrait(0));
+	Assert.assertEquals(5, persoRM5.getTrait(1));
+	Assert.assertEquals(4, persoRM5.getTrait(2));
+	Assert.assertEquals(4, persoRM5.getTrait(3));
+	Assert.assertEquals(4, persoRM5.getTrait(4));
+
+	persoRM3.setTrait(0, 5);
+	Assert.assertEquals(5, persoRM3.getTrait(0));
+
+	try
+	{
+	    persoRM3.setTrait(-1, 5);
+	    fail();
+	}
+	catch (IndexOutOfBoundsException e)
+	{
+
+	}
+
+	try
+	{
+	    persoRM3.setTrait(6, 5);
+	    fail();
+	}
+	catch (IndexOutOfBoundsException e)
+	{
+
+	}
+
+	try
+	{
+	    persoRM3.getTrait(-1);
+	    fail();
+	}
+	catch (IndexOutOfBoundsException e)
+	{
+
+	}
+
+	try
+	{
+	    persoRM3.getTrait(6);
+	    fail();
+	}
+	catch (IndexOutOfBoundsException e)
+	{
+
 	}
     }
 

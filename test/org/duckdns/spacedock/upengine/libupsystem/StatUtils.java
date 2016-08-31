@@ -72,11 +72,11 @@ final class StatUtils
 	    perso.addArme(new ArmeCaC(3, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais));
 	    perso.rengainer();//on est dans le cas où la méthode appelante veut tester les mains nues, on en profite pour tester que rangainer fonctionne bien
 	}
-	for (int i = 0; i <= 999999; ++i)//un million de lancers
+	for (int i = 0; i <= 99/*999999*/; ++i)//un million de lancers
 	{
 	    total_degats += perso.genererDegats(p_increments).getQuantite();
 	}
-	return (int) (total_degats / 1000000);
+	return (int) (total_degats / 100/*0000*/);
     }
 
     static int nbBlessuresGravesStatistique(int p_degats, int p_rm)

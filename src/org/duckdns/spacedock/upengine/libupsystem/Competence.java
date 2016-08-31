@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * @author iconoctopus
  */
 class Competence
-{//TODO : tester les fonctionalités liées aux spécialités
+{
 
     /**
      * le rang de la compétence, déclenche des jets spéciaux à 3 et 5 ; mutable

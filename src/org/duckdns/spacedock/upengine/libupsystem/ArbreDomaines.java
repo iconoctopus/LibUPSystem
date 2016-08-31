@@ -11,9 +11,8 @@ import java.util.ArrayList;
  *
  * @author iconoctopus
  */
-public class ArbreDomaine
+public class ArbreDomaines
 {
-//TODO ajouter interface pour les spécialités des compétences
 
     private final ArrayList<Domaine> m_listDomaines = new ArrayList<>();
 
@@ -21,11 +20,11 @@ public class ArbreDomaine
      * constructeur d'un arbre de domaines et compétences. Celui-ci est
      * initialement aux caracs minimales.
      */
-    public ArbreDomaine()
+    public ArbreDomaines()
     {
-	for (int i = 0; i < 9; ++i)
+	int nbDomaines = UPReference.getInstance().getListDomaines().size();
+	for (int i = 0; i < nbDomaines; ++i)
 	{
-//TODO : mettre en référence le nombre des domaines et le récupérer ici plutot que d'utiliser la valeur hardcodée ci-dessous
 	    m_listDomaines.add(new Domaine(i, 1));
 	}
     }
@@ -53,5 +52,20 @@ public class ArbreDomaine
     public int getRangComp(int p_domaine, int p_comp)
     {
 	return m_listDomaines.get(p_domaine).getRangCompetence(p_comp);
+    }
+
+    ArrayList<String> getSpecialites(int p_domaine, int p_comp)
+    {
+	return m_listDomaines.get(p_domaine).getSpecialites(p_comp);
+    }
+
+    void addSpecialite(int p_domaine, int p_comp, String p_specialite)
+    {
+	m_listDomaines.get(p_domaine).addSpecialite(p_comp, p_specialite);
+    }
+
+    void removeSpecialite(int p_domaine, int p_comp, int p_indiceSpe)
+    {
+	m_listDomaines.get(p_domaine).removeSpecialite(p_comp, p_indiceSpe);
     }
 }

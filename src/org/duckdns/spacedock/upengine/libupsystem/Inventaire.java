@@ -17,16 +17,13 @@ class Inventaire
 {
 
     /**
-     * liste des armes portées, visible par le package pour être facilement
-     * manipulable pour l'instant car de toute façon sera transmis sous forme de
-     * liste quand interrogé par le contrôleur
+     * liste des armes portées
      */
-    final ArrayList<Arme> listArmes;
+    private final ArrayList<Arme> m_listArmes;
     /**
-     * m_armure portée
-     *
+     * armure portée
      */
-    Armure m_armure;
+    private Armure m_armure;
     /**
      * indice de l'arme courante dans la liste des armes, -1 par défaut
      * signifiant mains nues (rien)
@@ -39,24 +36,24 @@ class Inventaire
      */
     Inventaire()
     {
-	listArmes = new ArrayList<>();
+	m_listArmes = new ArrayList<>();
     }
 
     /**
      * constructeur avec paramétres, ceux-ci sont ignorés si l'un est invalide
      *
      * @param p_armes
-     * @param p_armures
+     * @param p_armure
      */
     Inventaire(ArrayList<Arme> p_armes, Armure p_armure)
     {
 	if (p_armes != null)//si les paramétres sont incorects on les rejette mais l'inventaire est quand même créé pour ne pas perturber l'application, il sera toujours possible de le valuer plus tard
 	{
-	    listArmes = p_armes;
+	    m_listArmes = p_armes;
 	}
 	else
 	{
-	    listArmes = new ArrayList<>();
+	    m_listArmes = new ArrayList<>();
 	}
 	m_armure = p_armure;
     }
@@ -68,7 +65,55 @@ class Inventaire
      */
     void setArmeCourante(int p_indice)
     {
+
 	m_armeCourante = p_indice;
+
+	if (p_indice >= 0 && p_indice < m_listArmes.size())
+	{
+	    m_armeCourante = p_indice;
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("indice") + ":" + p_indice);
+	}
+    }
+
+    /**
+     *
+     * @param p_arme
+     */
+    void addArme(Arme p_arme)
+    {
+	m_listArmes.add(p_arme);
+    }
+
+    /**
+     *
+     * @param p_indice
+     */
+    void removeArme(int p_indice)
+    {
+	m_listArmes.remove(p_indice);
+    }
+
+    /**
+     * indiquer l'indice de l'arme a préparer comme arme actuelle
+     *
+     * @param p_indice
+     */
+    void rangerArmeCourante()
+    {
+	m_armeCourante = -1;
+    }
+
+    /**
+     *
+     * @return une copie de la liste des armes pour empêcher une modification
+     * intempestive
+     */
+    ArrayList<Arme> getListArmes()
+    {
+	return new ArrayList<Arme>(m_listArmes);
     }
 
     /**
@@ -99,7 +144,7 @@ class Inventaire
     {
 	if (m_armeCourante >= 0)
 	{
-	    return listArmes.get(m_armeCourante);
+	    return m_listArmes.get(m_armeCourante);
 	}
 	else
 	{

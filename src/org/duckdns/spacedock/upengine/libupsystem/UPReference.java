@@ -558,13 +558,17 @@ final class UPReference
 
     /**
      *
-     * @param p_indice
-     * @return le libellé d'un domaine
+     * @return la liste complète des domaines, peut être plus prosaïquement
+     * utilisé pour connaître leur nombre total
      */
-    String getLblDomaine(int p_indice)
+    ArrayList<String> getListDomaines()
     {
-	JsonObject domaine = m_arbreDomaines.getJsonObject(p_indice);
-	return domaine.getString("lbl");
+	ArrayList<String> res = new ArrayList<>();
+	for (int i = 0; i < m_arbreDomaines.size(); ++i)
+	{
+	    res.add(m_arbreDomaines.getJsonObject(i).getString("lbl"));
+	}
+	return res;
     }
 
     /**

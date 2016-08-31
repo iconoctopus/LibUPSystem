@@ -271,10 +271,11 @@ public final class UPReferenceTest
     }
 
     @Test
-    public void testGetLblDomaine()
+    public void testGetListDomaine()
     {
-	Assert.assertEquals("analyse", m_reference.getLblDomaine(0));
-	Assert.assertEquals("social", m_reference.getLblDomaine(8));
+	Assert.assertEquals("analyse", m_reference.getListDomaines().get(0));
+	Assert.assertEquals("social", m_reference.getListDomaines().get(8));
+	Assert.assertEquals(9, m_reference.getListDomaines().size());
     }
 
     @Test

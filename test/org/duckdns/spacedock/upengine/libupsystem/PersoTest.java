@@ -5,6 +5,7 @@
  */
 package org.duckdns.spacedock.upengine.libupsystem;
 
+import java.util.ArrayList;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -119,7 +120,7 @@ public class PersoTest
     {
 	Assert.assertEquals((int) persoRM1.getActions().get(0), (int) persoRM1.getInitTotale());//son init de base
 
-	persoRM1.getListArmes().add(new ArmeCaC(7, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.bon));
+	persoRM1.addArme(new ArmeCaC(7, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.bon));
 	persoRM1.setArmeCourante(persoRM1.getListArmes().size() - 1);
 
 	Assert.assertEquals((int) persoRM1.getActions().get(0) + 10, (int) persoRM1.getInitTotale());//son init améliorée par une rapière bien équilibrée
@@ -185,10 +186,80 @@ public class PersoTest
     }
 
     @Test
+    public void testAddRemoveGetSetArme()
+    {
+	//teste que l'ajout se passe bien
+	Perso persoArmeTest = new Perso(3);
+	Arme arme1 = new ArmeCaC(7, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais);
+	Arme arme2 = new ArmeCaC(22, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais);
+	Arme arme3 = new ArmeDist(60, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais);
+
+	persoArmeTest.addArme(arme1);
+	persoArmeTest.addArme(arme2);
+	persoArmeTest.addArme(arme3);
+
+	ArrayList<Arme> listArme = persoArmeTest.getListArmes();
+
+	Assert.assertEquals(arme1, listArme.get(0));
+	Assert.assertEquals(arme2, listArme.get(1));
+	Assert.assertEquals(arme3, listArme.get(2));
+
+	//cas d'erreur sur la désignation de l'arme courante
+	try
+	{
+	    persoArmeTest.setArmeCourante(-1);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:indice:-1", e.getMessage());
+	}
+
+	try
+	{
+	    persoArmeTest.setArmeCourante(3);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:indice:3", e.getMessage());
+	}
+
+	//teste que l'arme courante est correctement désignée
+	persoArmeTest.setArmeCourante(1);
+	Assert.assertEquals(arme2, persoArmeTest.getArmeCourante());
+
+	//teste que la suppression se passe bien
+	persoArmeTest.removeArme(1);
+	listArme = persoArmeTest.getListArmes();
+	Assert.assertEquals(arme1, listArme.get(0));
+	Assert.assertEquals(arme3, listArme.get(1));
+
+	//cas d'erreur sur la suppression
+	try
+	{
+	    persoArmeTest.removeArme(-1);
+	    fail();
+	}
+	catch (IndexOutOfBoundsException e)
+	{
+	}
+
+	try
+	{
+	    persoArmeTest.removeArme(2);
+	    fail();
+	}
+	catch (IndexOutOfBoundsException e)
+	{
+	}
+    }
+
+    @Test
     public void testAttaquer()//sert aussi pour tester tout le système de jets de compétence : il se trouve qu'attaquer est la forme la plus complexe du jet de compétence, une fois tous les bonus et malus pris en compte
     {
 	//cas du physique minimal insuffisant avec une hache et un physique de 1
-	persoRM1.getListArmes().add(new ArmeCaC(22, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal));
+	persoRM1.addArme(new ArmeCaC(22, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal));
 	persoRM1.setArmeCourante(persoRM1.getListArmes().size() - 1);
 	Assert.assertFalse(reussiteStatistiqueAttaque(persoRM1, 1, 0, 0));
 
@@ -197,34 +268,34 @@ public class PersoTest
 	Assert.assertFalse(reussiteStatistiqueAttaque(persoRM3, 35, 0, 0));
 
 	//attaque en prenant en compte le malus à l'attaque du sabre et RM3
-	persoRM3.getListArmes().add(new ArmeCaC(8, Arme.QualiteArme.inferieure, Arme.EquilibrageArme.bon));//la qualité ne devrait pas influer, l'équilibrage non plus, ni ici ni dans les autres tests de cette méthode
+	persoRM3.addArme(new ArmeCaC(8, Arme.QualiteArme.inferieure, Arme.EquilibrageArme.bon));//la qualité ne devrait pas influer, l'équilibrage non plus, ni ici ni dans les autres tests de cette méthode
 	persoRM3.setArmeCourante(persoRM3.getListArmes().size() - 1);
 	Assert.assertTrue(reussiteStatistiqueAttaque(persoRM3, 27, 0, 0));
 	Assert.assertFalse(reussiteStatistiqueAttaque(persoRM3, 32, 0, 0));
 
 	//attaque à distance au fusil d'assaut coup par coup avec RM5 et portée courte
-	persoRM5.getListArmes().add(new ArmeDist(73, Arme.QualiteArme.superieure, Arme.EquilibrageArme.mauvais));
+	persoRM5.addArme(new ArmeDist(73, Arme.QualiteArme.superieure, Arme.EquilibrageArme.mauvais));
 	persoRM5.setArmeCourante(persoRM5.getListArmes().size() - 1);
 	((ArmeDist) persoRM5.getArmeCourante()).recharger(30);
 	Assert.assertTrue(reussiteStatistiqueAttaque(persoRM5, 42, 150, 1));//pile la portée, donc courte
 	Assert.assertFalse(reussiteStatistiqueAttaque(persoRM5, 46, 150, 2));//deux balles ne devraient rien changer, on n'est pas au seuil de rafale courte
 
 	//attaque à distance au fusil d'assaut en rafale courte avec RM3 et portée courte
-	persoRM3.getListArmes().add(new ArmeDist(73, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal));
+	persoRM3.addArme(new ArmeDist(73, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal));
 	persoRM3.setArmeCourante(persoRM3.getListArmes().size() - 1);
 	((ArmeDist) persoRM3.getArmeCourante()).recharger(30);
 	Assert.assertTrue(reussiteStatistiqueAttaque(persoRM3, 27, 100, 3));
 	Assert.assertFalse(reussiteStatistiqueAttaque(persoRM3, 32, 20, 3));
 
 	//attaque à distance au fusil d'assaut en rafale moyenne avec RM3 et portée longue
-	persoRM3.getListArmes().add(new ArmeDist(73, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais));
+	persoRM3.addArme(new ArmeDist(73, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais));
 	persoRM3.setArmeCourante(persoRM3.getListArmes().size() - 1);
 	((ArmeDist) persoRM3.getArmeCourante()).recharger(30);
 	Assert.assertTrue(reussiteStatistiqueAttaque(persoRM3, 24, 200, 8));//donc deux groupes entiers de trois balles
 	Assert.assertFalse(reussiteStatistiqueAttaque(persoRM3, 28, 270, 8));
 
 	//attaque à distance au fusil d'assaut en rafale longue avec RM5 et portée courte
-	persoRM5.getListArmes().add(new ArmeDist(73, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
+	persoRM5.addArme(new ArmeDist(73, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
 	persoRM5.setArmeCourante(persoRM5.getListArmes().size() - 1);
 	((ArmeDist) persoRM5.getArmeCourante()).recharger(30);
 	Assert.assertTrue(reussiteStatistiqueAttaque(persoRM5, 56, 120, 13));//deux groupes entiers de 5 balles
@@ -233,7 +304,7 @@ public class PersoTest
 	//cas d'erreur : rafale avec arme ayant plusieurs munitions mais incapable de tirer en mode automatique (pistolet)
 	try
 	{
-	    persoRM5.getListArmes().add(new ArmeDist(72, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
+	    persoRM5.addArme(new ArmeDist(72, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
 	    persoRM5.setArmeCourante(persoRM5.getListArmes().size() - 1);
 	    ((ArmeDist) persoRM5.getArmeCourante()).recharger(9);
 	    persoRM5.genInit();
@@ -248,7 +319,7 @@ public class PersoTest
 	//cas d'erreur : plus de 20 balles
 	try
 	{
-	    persoRM5.getListArmes().add(new ArmeDist(73, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
+	    persoRM5.addArme(new ArmeDist(73, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
 	    persoRM5.setArmeCourante(persoRM5.getListArmes().size() - 1);
 	    ((ArmeDist) persoRM5.getArmeCourante()).recharger(30);
 	    persoRM5.genInit();
@@ -263,7 +334,7 @@ public class PersoTest
 	//cas d'erreur : nb de balles nul
 	try
 	{
-	    persoRM5.getListArmes().add(new ArmeDist(73, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
+	    persoRM5.addArme(new ArmeDist(73, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
 	    persoRM5.setArmeCourante(persoRM5.getListArmes().size() - 1);
 	    ((ArmeDist) persoRM5.getArmeCourante()).recharger(30);
 	    persoRM5.genInit();
@@ -278,7 +349,7 @@ public class PersoTest
 	//cas d'erreur : distance négative
 	try
 	{
-	    persoRM5.getListArmes().add(new ArmeDist(73, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
+	    persoRM5.addArme(new ArmeDist(73, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
 	    persoRM5.setArmeCourante(persoRM5.getListArmes().size() - 1);
 	    ((ArmeDist) persoRM5.getArmeCourante()).recharger(30);
 	    persoRM5.genInit();
@@ -291,7 +362,7 @@ public class PersoTest
 	}
 
 	//cas d'erreur hors portée sur arc
-	persoRM5.getListArmes().add(new ArmeDist(60, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
+	persoRM5.addArme(new ArmeDist(60, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
 	persoRM5.setArmeCourante(persoRM5.getListArmes().size() - 1);
 	((ArmeDist) persoRM5.getArmeCourante()).recharger(1);
 	persoRM5.genInit();
@@ -300,7 +371,7 @@ public class PersoTest
 	//cas d'erreur arme pas assez chargée pour faire feu : rafale trop grosse
 	try
 	{
-	    persoRM5.getListArmes().add(new ArmeDist(73, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
+	    persoRM5.addArme(new ArmeDist(73, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
 	    persoRM5.setArmeCourante(persoRM5.getListArmes().size() - 1);
 	    ((ArmeDist) persoRM5.getArmeCourante()).recharger(15);
 	    persoRM5.genInit();
@@ -315,7 +386,7 @@ public class PersoTest
 	//cas d'erreur arme pas assez chargée pour faire feu : arme vide
 	try
 	{
-	    persoRM5.getListArmes().add(new ArmeDist(60, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
+	    persoRM5.addArme(new ArmeDist(60, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
 	    persoRM5.setArmeCourante(persoRM5.getListArmes().size() - 1);
 	    persoRM5.genInit();
 	    persoRM5.attaquerDist(persoRM5.getActions().get(0), 0, 0, 1);
@@ -438,8 +509,16 @@ public class PersoTest
     {
 	int total_degats = 0;
 	Perso perso = new Perso(p_rm);
-	perso.getListArmes().add(p_arme);
-	perso.setArmeCourante(perso.getListArmes().size() - 1);
+	if (p_arme != null)
+	{
+	    perso.addArme(p_arme);
+	    perso.setArmeCourante(perso.getListArmes().size() - 1);
+	}
+	else
+	{
+	    perso.addArme(new ArmeCaC(3, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais));
+	    perso.rengainer();//on est dans le cas où la méthode appelante veut tester les mains nues, on en profite pour tester que rangainer fonctionne bien
+	}
 	for (int i = 0; i <= 999999; ++i)//un million de lancers
 	{
 	    total_degats += perso.genererDegats(p_increments).getQuantite();

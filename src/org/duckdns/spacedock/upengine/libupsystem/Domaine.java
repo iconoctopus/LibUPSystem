@@ -13,7 +13,6 @@ import java.util.ArrayList;
  */
 class Domaine
 {
-//TODO ajouter interface pour les spécialités des compétences
 
     private int m_rang;
 
@@ -89,13 +88,43 @@ class Domaine
     void setRangComp(int p_indice, int p_rang)
     {
 	if (p_rang <= m_rang)
-	{//TODO tester que le rang de la comp ne peut dépasser celui du domaine possédant)
+	{
 	    m_competences.get(p_indice).setRang(p_rang);
 	}
 	else
 	{
 	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("rang") + " " + PropertiesHandler.getInstance().getString("comp") + " > " + PropertiesHandler.getInstance().getString("rang") + " " + PropertiesHandler.getInstance().getString("dom"));
 	}
+    }
+
+    /**
+     *
+     * @param p_comp
+     * @returns la liste des spécialités de la comp passée en paramétre
+     */
+    ArrayList<String> getSpecialites(int p_comp)
+    {
+	return m_competences.get(p_comp).getSpecialites();
+    }
+
+    /**
+     *
+     * @param p_comp
+     * @param p_specialite
+     */
+    void addSpecialite(int p_comp, String p_specialite)
+    {
+	m_competences.get(p_comp).addSpecialite(p_specialite);
+    }
+
+    /**
+     *
+     * @param p_comp
+     * @param p_indiceSpe
+     */
+    void removeSpecialite(int p_comp, int p_indiceSpe)
+    {
+	m_competences.get(p_comp).removeSpecialite(p_indiceSpe);
     }
 
     /**

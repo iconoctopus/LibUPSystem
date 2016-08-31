@@ -34,7 +34,7 @@ public class Perso
      * rassemble armes et armures du personnage ainsi que quelques
      * fonctionalités utiles notamment les armes et armures courantes
      */
-    private final Inventaire m_inventaire;
+    private final Inventaire m_inventaire = new Inventaire();
     /**
      * dans l'ordre : 0:Physique ; 1:Coordination ; 2:Mental ; 3:Volonté ;
      * 4:Sociabilité
@@ -43,14 +43,24 @@ public class Perso
     /**
      * arbre des domaines/compétences du personnage
      */
-    private final ArbreDomaine m_arbreDomaine = new ArbreDomaine();
+    private final ArbreDomaines m_arbreDomaines;
+
+    public Perso(int[] p_traits, ArbreDomaines p_arbre)
+    {
+	if (p_traits.length != 5)
+	{
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("nbtraits") + ":" + p_traits.length);
+	}
+	m_traits = p_traits;
+	m_arbreDomaines = p_arbre;
+    }
 
     /**
      * constructeur produisant des PNJ générés par rang de menace (RM)
      *
      * @param p_RM
      */
-    public Perso(int p_RM)//TODO créer un autre constructeur prenant en paramétre des caracs
+    public Perso(int p_RM)
     {
 	if (p_RM < 1)
 	{
@@ -69,25 +79,23 @@ public class Perso
 
 	//configuration des caractéristiques de combat une fois que l'arbre des domaines est généré
 	//configuration du domaine corps à corps
-	m_arbreDomaine.setRangDomaine(3, p_RM);
+	m_arbreDomaines = new ArbreDomaines();
+	m_arbreDomaines.setRangDomaine(3, p_RM);
 	for (int i = 0; i < UPReference.getInstance().getListComp(3).size(); i++)
 	{
-	    m_arbreDomaine.setRangComp(3, i, p_RM);
+	    m_arbreDomaines.setRangComp(3, i, p_RM);
 	}
 
 	//idem pour tout le domaine combat à distance
-	m_arbreDomaine.setRangDomaine(4, p_RM);
+	m_arbreDomaines.setRangDomaine(4, p_RM);
 	for (int i = 0; i < UPReference.getInstance().getListComp(4).size(); i++)
 	{
-	    m_arbreDomaine.setRangComp(4, i, p_RM);
+	    m_arbreDomaines.setRangComp(4, i, p_RM);
 	}
 
 	//on ajoute des rangs en esquive
-	m_arbreDomaine.setRangDomaine(2, p_RM);
-	m_arbreDomaine.setRangComp(2, 0, p_RM);
-
-	//configuration d'un inventaire vide
-	m_inventaire = new Inventaire();
+	m_arbreDomaines.setRangDomaine(2, p_RM);
+	m_arbreDomaines.setRangComp(2, 0, p_RM);
 
 	m_libellePerso = PropertiesHandler.getInstance().getString("lbl_perso_std") + p_RM;
     }
@@ -155,7 +163,7 @@ public class Perso
      */
     public final RollUtils.RollResult effectuerJetComp(int p_ND, int p_comp, int p_domaine, int p_modifNbLances, int p_modifNbGardes, int p_modifScore, int p_trait)
     {
-	return m_arbreDomaine.effectuerJetComp(p_domaine, p_comp, p_trait, p_ND, p_modifNbLances, p_modifNbGardes, p_modifScore, isSonne());
+	return m_arbreDomaines.effectuerJetComp(p_domaine, p_comp, p_trait, p_ND, p_modifNbLances, p_modifNbGardes, p_modifScore, isSonne());
     }
 
     /**
@@ -440,7 +448,7 @@ public class Perso
 	if (!p_esquive)
 	{
 	    //calcul de la valeur issue de la compétence parade
-	    rang = m_arbreDomaine.getRangComp(3, p_catArme * 2 + 1); // la comp de parade est par convention à cat*2+1 là où attaque est à cat*2
+	    rang = m_arbreDomaines.getRangComp(3, p_catArme * 2 + 1); // la comp de parade est par convention à cat*2+1 là où attaque est à cat*2
 
 	    //ajout des bonus  et malus d'm_armure
 	    if (armure != null)
@@ -452,7 +460,7 @@ public class Perso
 	else
 	{
 	    //calcul de la valeur issue de la compétence esquive
-	    rang = m_arbreDomaine.getRangComp(2, 0);
+	    rang = m_arbreDomaines.getRangComp(2, 0);
 	    //ajout des bonus  et malus d'm_armure
 	    if (armure != null)
 	    {
@@ -530,7 +538,7 @@ public class Perso
      */
     public ArrayList<Arme> getListArmes()
     {
-	return m_inventaire.listArmes;
+	return m_inventaire.getListArmes();
     }
 
     public Arme getArmeCourante()
@@ -555,6 +563,32 @@ public class Perso
     public void setArmure(Armure p_armure)
     {
 	m_inventaire.setArmure(p_armure);
+    }
+
+    /**
+     * repasse le personnage en mode mains nues
+     */
+    public void rengainer()
+    {
+	m_inventaire.rangerArmeCourante();;
+    }
+
+    /**
+     *
+     * @param p_arme
+     */
+    public void addArme(Arme p_arme)
+    {
+	m_inventaire.addArme(p_arme);
+    }
+
+    /**
+     *
+     * @param p_indice
+     */
+    void removeArme(int p_indice)
+    {
+	m_inventaire.removeArme(p_indice);
     }
 
     /**

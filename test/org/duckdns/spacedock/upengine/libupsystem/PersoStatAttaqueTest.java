@@ -5,14 +5,8 @@
  */
 package org.duckdns.spacedock.upengine.libupsystem;
 
-import static org.duckdns.spacedock.upengine.libupsystem.PersoNonStatTest.persoRM1;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *

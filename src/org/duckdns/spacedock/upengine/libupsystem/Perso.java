@@ -5,7 +5,6 @@ import java.util.Collections;
 import org.duckdns.spacedock.upengine.libupsystem.Arme.Degats;
 import org.duckdns.spacedock.upengine.libupsystem.RollUtils.RollResult;
 
-//TODO ajouter la possibiité de faire un jet général : de compétence ou de trait et réorienter les jets déjà effectués vers ces nouvelles méthodes
 public class Perso
 {
 
@@ -158,6 +157,40 @@ public class Perso
     }
 
     /**
+     * fait effectuer au personnage un jet de l'une de ses compétences. Appelé
+     * en interne par les méthodes d'attaque qui effectuent les pré-traitements
+     * pour aboutir aux caractéristiques finales du jet.
+     *
+     * @param p_ND
+     * @param p_comp
+     * @param p_domaine
+     * @param p_modifNbLances
+     * @param p_modifNbGardes
+     * @param p_modifScore
+     * @param p_trait
+     * @return le résultat du jet
+     */
+    public final RollUtils.RollResult effectuerJetComp(int p_ND, int p_comp, int p_domaine, int p_modifNbLances, int p_modifNbGardes, int p_modifScore, int p_trait)
+    {
+	return m_listDomaines.get(p_domaine).effectuerJetComp(p_comp, p_trait, p_ND, p_modifNbLances, p_modifNbGardes, p_modifScore, isSonne());
+    }
+
+    /**
+     * fait effectuer au personnage un jet avec l'un de ses traits purs.
+     *
+     * @param p_ND
+     * @param p_modifNbLances
+     * @param p_modifNbGardes
+     * @param p_modifScore
+     * @param p_trait
+     * @return le résultat du jet
+     */
+    public final RollUtils.RollResult effectuerJetTrait(int p_ND, int p_modifNbLances, int p_modifNbGardes, int p_modifScore, int p_trait)
+    {
+	return RollUtils.extraireIncrements(RollUtils.lancer(m_traits[p_trait], m_traits[p_trait], isSonne()), p_ND);
+    }
+
+    /**
      * Fait effectuer une attaque au corps à corps au personnage. Le personnage
      * attaquera systématiquement avec l'arme courante, il faut donc la
      * configurer avant. Cette méthode vérifie que l'action est possible dans la
@@ -176,7 +209,7 @@ public class Perso
      * @param p_ND
      * @return
      */
-    public RollUtils.RollResult attaquerCaC(int p_phaseActuelle, int p_ND)
+    public final RollUtils.RollResult attaquerCaC(int p_phaseActuelle, int p_ND)
     {
 	Arme arme = m_inventaire.getArmeCourante();
 	int catArm = 0;//mains nues par défaut
@@ -218,12 +251,11 @@ public class Perso
      */
     public RollResult attaquerDist(int p_phaseActuelle, int p_ND, int p_distance, int p_nbCoups)
     {
-	RollResult result = new RollResult(0, false);//raté par défaut
+	RollResult result = new RollResult(0, false, 0);//raté par défaut
 	ArmeDist arme = (ArmeDist) m_inventaire.getArmeCourante();
 	int modDist = 0;
 	if (arme.getMode() == 1)//vérification qu'il s'agit bien d'une arme à distance
 	{
-
 	    if (p_distance >= 0 && p_nbCoups > 0 && p_nbCoups <= 20)
 	    {
 		arme.consommerMun(p_nbCoups);//on consomme les coups, une exception sera levée si il n'y a pas assez de munitions, le code appelant devrait vérifier systématiquement cela
@@ -309,7 +341,7 @@ public class Perso
 		modDesLances -= arme.getMalusAttaque();
 	    }
 	    modFinal += (ecartPhyMin * 10);
-	    result = m_listDomaines.get(p_domaine).effectuerJetComp(p_comp, m_traits[1], p_ND, modDesLances, modDesGardes, modFinal, isSonne());
+	    result = effectuerJetComp(p_ND, p_comp, p_domaine, modDesLances, modDesGardes, modFinal, m_traits[1]);
 	}
 	return result;
     }
@@ -397,8 +429,7 @@ public class Perso
 
 	    if (degatsEffectifs > 0)
 	    {
-		int resultTest = RollUtils.lancer(m_traits[0], m_traits[0], false);
-		m_jaugeSanteInit.recevoirDegats(degatsEffectifs, resultTest, m_traits[3]);
+		m_jaugeSanteInit.recevoirDegats(degatsEffectifs, this);
 	    }
 	}
 	else

@@ -27,11 +27,11 @@ public final class RollUtils
 	    double quotient = ((double) (p_score) - (double) (p_ND));
 	    quotient = quotient / 5.0;
 	    int increments = (int) quotient;//on caste simplement pour tronquer car les incréments sont par tranches entières
-	    result = new RollResult(increments, true);
+	    result = new RollResult(increments, true, p_score);
 	}
 	else
 	{
-	    result = new RollResult(0, false);
+	    result = new RollResult(0, false, p_score);
 	}
 	return result;
     }
@@ -115,6 +115,7 @@ public final class RollUtils
 
 	private final int m_nbIncrements;
 	private final boolean m_jetReussi;
+	private final int m_scoreBrut;
 
 	public int getNbIncrements()
 	{
@@ -126,10 +127,16 @@ public final class RollUtils
 	    return m_jetReussi;
 	}
 
-	public RollResult(int p_increments, boolean p_reussite)
+	public int getScoreBrut()
+	{
+	    return m_scoreBrut;
+	}
+
+	public RollResult(int p_increments, boolean p_reussite, int p_scoreBrut)
 	{
 	    this.m_nbIncrements = p_increments;
 	    this.m_jetReussi = p_reussite;
+	    this.m_scoreBrut = p_scoreBrut;
 	}
     }
 }

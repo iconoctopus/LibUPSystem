@@ -55,9 +55,11 @@ public class CoupleJaugeTest
 	Assert.assertEquals(8, jauge2.getRemplissage_externe());
 	Assert.assertEquals(4, jauge3.getRemplissage_externe());
 
-	jauge1.recevoirDegats(1000, 2, 2);
-	jauge2.recevoirDegats(1000, 2, 2);
-	jauge3.recevoirDegats(1000, 2, 2);
+	Perso persotest = new Perso(3);
+
+	jauge1.recevoirDegats(1000, persotest);
+	jauge2.recevoirDegats(1000, persotest);
+	jauge3.recevoirDegats(1000, persotest);
 
 	Assert.assertEquals(2, jauge1.getTaille_interne());
 	Assert.assertEquals(8, jauge2.getTaille_interne());
@@ -99,12 +101,12 @@ public class CoupleJaugeTest
 
 	try
 	{
-	    jauge3.recevoirDegats(-1, 20, 2);
+	    jauge3.recevoirDegats(-1, persotest);
 	    fail();
 	}
 	catch (IllegalArgumentException e)
 	{
-	    Assert.assertEquals("paramétre aberrant:dégâts:-1 résultat du jet:20 volonté:2", e.getMessage());
+	    Assert.assertEquals("paramétre aberrant:dégâts:-1", e.getMessage());
 	}
     }
 
@@ -143,9 +145,11 @@ public class CoupleJaugeTest
 	Assert.assertEquals(2, jauge2.getRemplissage_externe());
 	Assert.assertEquals(3, jauge3.getRemplissage_externe());
 
-	jauge1.recevoirDegats(1000, 2, 2);
-	jauge2.recevoirDegats(1000, 2, 2);
-	jauge3.recevoirDegats(1000, 2, 2);
+	Perso persotest = new Perso(3);
+
+	jauge1.recevoirDegats(1000, persotest);
+	jauge2.recevoirDegats(1000, persotest);
+	jauge3.recevoirDegats(1000, persotest);
 
 	Assert.assertEquals(2, jauge1.getTaille_interne());
 	Assert.assertEquals(8, jauge2.getTaille_interne());

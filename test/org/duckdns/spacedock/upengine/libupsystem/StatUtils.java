@@ -18,7 +18,7 @@ final class StatUtils
 	int nbReussites = 0;
 	int nbEchecs = 0;
 	int compteurActions = 0;
-	for (int i = 0; i <= 999999; ++i)//un million de lancers
+	for (int i = 0; i <= 99999; ++i)//cent mille lancers
 	{
 	    boolean reussite = false;
 
@@ -72,17 +72,17 @@ final class StatUtils
 	    perso.addArme(new ArmeCaC(3, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais));
 	    perso.rengainer();//on est dans le cas où la méthode appelante veut tester les mains nues, on en profite pour tester que rangainer fonctionne bien
 	}
-	for (int i = 0; i <= 999999; ++i)//un million de lancers
+	for (int i = 0; i <= 99999; ++i)//cent mille lancers
 	{
 	    total_degats += perso.genererDegats(p_increments).getQuantite();
 	}
-	return (int) (total_degats / 1000000);
+	return (int) (total_degats / 100000);
     }
 
     static int nbBlessuresGravesStatistique(int p_degats, int p_rm)
     {
 	int nbBlessuresGraves = 0;
-	for (int i = 0; i <= 99999; ++i)//un million de lancers
+	for (int i = 0; i <= 99999; ++i)//cent mille lancers
 	{//on crée ici un nouveau perso pour chaque test : sinon les blessures s'accumulent entre deux boucles et ils meurrent au final...
 	    Perso perso = new Perso(p_rm);
 	    perso.etreBlesse(new Arme.Degats(p_degats, 0));

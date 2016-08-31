@@ -16,7 +16,7 @@ public class PersoStatDegatsMoyensTest
 {
 
     @Test
-    public void testStatDegatsLegers()
+    public void testStatDegatsMoyens()
     {
 	int nbGraves = StatUtils.nbBlessuresGravesStatistique(30, 3);
 	Assert.assertTrue(nbGraves == 1 || nbGraves == 2);

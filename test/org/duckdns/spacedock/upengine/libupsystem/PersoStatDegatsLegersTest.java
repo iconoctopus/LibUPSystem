@@ -16,12 +16,6 @@ public class PersoStatDegatsLegersTest
 {
 
     @Test
-    public void testSuccess()
-    {
-	Assert.assertTrue(true);
-    }
-
-    @Test
     public void testStatDegatsLegers()
     {
 	int nbGraves = StatUtils.nbBlessuresGravesStatistique(30, 1);

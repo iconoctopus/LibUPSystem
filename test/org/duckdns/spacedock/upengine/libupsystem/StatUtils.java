@@ -82,12 +82,12 @@ final class StatUtils
     static int nbBlessuresGravesStatistique(int p_degats, int p_rm)
     {
 	int nbBlessuresGraves = 0;
-	for (int i = 0; i <= 0; ++i)//un million de lancers
+	for (int i = 0; i <= 999999; ++i)//un million de lancers
 	{//on crée ici un nouveau perso pour chaque test : sinon les blessures s'accumulent entre deux boucles et ils meurrent au final...
 	    Perso perso = new Perso(p_rm);
 	    perso.etreBlesse(new Arme.Degats(p_degats, 0));
 	    nbBlessuresGraves += perso.getBlessuresGraves();
 	}
-	return (int) (nbBlessuresGraves / 1);
+	return (int) (nbBlessuresGraves / 1000000);
     }
 }

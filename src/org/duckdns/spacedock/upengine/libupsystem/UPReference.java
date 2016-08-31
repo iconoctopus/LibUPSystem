@@ -514,23 +514,23 @@ final class UPReference
 
     /**
      * Renvoie la liste des libellés de compétences d'un domaine, peut-être plus
-     * prosaïquement utilisé pour obtenir le nombre de compétence d'un doaine
+     * prosaïquement utilisé pour obtenir le nombre de compétence d'un domaine
      * avec size()
      *
      * @param p_indice
      * @return la liste des libellés des compétences d'un domaine donné par son
-     * indice avec un traitement spécial pour le corps à corps où il y a juste
-     * la liste des catégories d'armes
+     * indice
      */
     ArrayList<String> getListComp(int p_indice)
     {
 	ArrayList<String> res = new ArrayList<>();
 
-	if (p_indice == 3)//domaine corps à corps : on renvoie la liste des catégories d'armes de corps à corps
+	if (p_indice == 3)//domaine corps à corps : on renvoie la liste des catégories d'armes de corps à corps dédoublée en parade et attaque
 	{
 	    for (int i = 0; i < m_listLblCatArmCaC.size(); ++i)
 	    {
-		res.add(m_listLblCatArmCaC.getString(i));
+		res.add(libelles.attaque + " " + m_listLblCatArmCaC.getString(i));
+		res.add(libelles.parade + " " + m_listLblCatArmCaC.getString(i));
 	    }
 	}
 	else
@@ -762,6 +762,8 @@ final class UPReference
 	public final String addition;
 	public final String qualite;
 	public final String equilibrage;
+	public final String attaque;
+	public final String parade;
 
 	public final EnumMap libQualite;
 	public final EnumMap libEquilibrage;
@@ -779,6 +781,9 @@ final class UPReference
 		addition = p_libelles.getString("liaison_addition");
 		qualite = p_libelles.getString("qualite");
 		equilibrage = p_libelles.getString("equilibrage");
+		attaque = p_libelles.getString("attaque");
+		parade = p_libelles.getString("parade");
+
 		JsonArray tabQualite = p_libelles.getJsonArray("lib_qualite");
 		libQualite = new EnumMap(Arme.QualiteArme.class);
 		libQualite.put(Arme.QualiteArme.inferieure, tabQualite.getString(0));
@@ -803,6 +808,8 @@ final class UPReference
 		addition = "et";
 		qualite = "qualite";
 		equilibrage = "equilibrage";
+		attaque = "attaque";
+		parade = "parade";
 		libQualite = new EnumMap(Arme.QualiteArme.class);
 		libQualite.put(Arme.QualiteArme.inferieure, "inf");
 		libQualite.put(Arme.QualiteArme.moyenne, "moy");

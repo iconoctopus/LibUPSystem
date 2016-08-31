@@ -236,14 +236,22 @@ public final class UPReferenceTest
 	analyse.add("investigation");
 	analyse.add("politique");
 
-	cac.add("mains nues");
-	cac.add("armes d'escrime");
-	cac.add("armes à lame longue");
-	cac.add("haches");
-	cac.add("armes contondantes");
-	cac.add("petites armes");
-	cac.add("armes d'hast");
-	cac.add("armes à chaînes");
+	cac.add("attaque mains nues");
+	cac.add("parade mains nues");
+	cac.add("attaque armes d'escrime");
+	cac.add("parade armes d'escrime");
+	cac.add("attaque armes à lame longue");
+	cac.add("parade armes à lame longue");
+	cac.add("attaque haches");
+	cac.add("parade haches");
+	cac.add("attaque armes contondantes");
+	cac.add("parade armes contondantes");
+	cac.add("attaque petites armes");
+	cac.add("parade petites armes");
+	cac.add("attaque armes d'hast");
+	cac.add("parade armes d'hast");
+	cac.add("attaque armes à chaînes");
+	cac.add("parade armes à chaînes");
 
 	dist.add("armes de jet");
 	dist.add("armes à feu");
@@ -344,5 +352,4 @@ public final class UPReferenceTest
     {
 	Assert.assertEquals(7, m_reference.getLocaNumber());
     }
-
 }

@@ -21,15 +21,45 @@ public class DomaineTest
     {
 	Domaine domaine1 = new Domaine(0, 1);
 	Domaine domaine2 = new Domaine(8, 5);
+	Domaine domaineCac = new Domaine(3, 3);
 
 	Assert.assertEquals(1, domaine1.getRang());
-	Assert.assertEquals(3, domaine1.getCompetences().size());
+	domaine1.getRangCompetence(2);
+	try
+	{
+	    domaine1.getRangCompetence(3);
+	    fail();
+	}
+	catch (IndexOutOfBoundsException e)
+	{
+
+	}
 
 	Assert.assertEquals(5, domaine2.getRang());
-	Assert.assertEquals(4, domaine2.getCompetences().size());
+	domaine2.getRangCompetence(3);
+	try
+	{
+	    domaine2.getRangCompetence(4);
+	    fail();
+	}
+	catch (IndexOutOfBoundsException e)
+	{
+
+	}
+
+	Assert.assertEquals(3, domaineCac.getRang());
+	domaineCac.getRangCompetence(15);
+	try
+	{
+	    domaine2.getRangCompetence(16);
+	    fail();
+	}
+	catch (IndexOutOfBoundsException e)
+	{
+
+	}
 
 	Domaine domaine3;
-
 	try
 	{
 	    domaine3 = new Domaine(-1, 1);

@@ -6,17 +6,22 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.util.ArrayList;
-import org.duckdns.spacedock.upengine.libupsystem.RollUtils.RollResult;
 
 /**
  *
  * @author iconoctopus
  */
-public class Domaine
+class Domaine
 {
+//TODO ajouter interface pour les spécialités des compétences
 
     private int m_rang;
 
+    /**
+     * la liste des compétences du domaine. Pour le corps à corps les comps
+     * d'attaque ont l'indice catégorie * 2 et les comps de parade l'indice
+     * catégorie * 2 +1
+     */
     private final ArrayList<Competence> m_competences = new ArrayList<>();
 
     /**
@@ -36,19 +41,9 @@ public class Domaine
 	    setRang(p_rang);
 	    int nbComps = 0;
 	    nbComps = UPReference.getInstance().getListComp(p_indice).size();
-	    if (p_indice != 3)//cas général
+	    for (int i = 0; i < nbComps; ++i)
 	    {
-		for (int i = 0; i < nbComps; ++i)
-		{
-		    m_competences.add(new Competence(0));
-		}
-	    }
-	    else//traitement particulier du corps à corps avec les CompCac
-	    {
-		for (int i = 0; i < nbComps; ++i)
-		{
-		    m_competences.add(new CompCac(0, 0));
-		}
+		m_competences.add(new Competence(0, null));
 	    }
 	}
 	else
@@ -78,23 +73,29 @@ public class Domaine
     }
 
     /**
-     * @return the m_competences
+     * @param p_comp l'indice de la compétence visée
+     * @return le rang de la competence en question
      */
-    ArrayList<Competence> getCompetences()
+    int getRangCompetence(int p_comp)
     {
-	return m_competences;
+	return m_competences.get(p_comp).getRang();
     }
 
     /**
-     * met à jour le rang d'une compétence, surcharger pour mettre à jour la
-     * liste de spécialités quand ce sera géré
      *
      * @param p_indice
      * @param p_rang
      */
-    void setComp(int p_indice, int p_rang)
+    void setRangComp(int p_indice, int p_rang)
     {
-	getCompetences().set(p_indice, new Competence(p_rang));
+	if (p_rang <= m_rang)
+	{//TODO tester que le rang de la comp ne peut dépasser celui du domaine possédant)
+	    m_competences.get(p_indice).setRang(p_rang);
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("rang") + " " + PropertiesHandler.getInstance().getString("comp") + " > " + PropertiesHandler.getInstance().getString("rang") + " " + PropertiesHandler.getInstance().getString("dom"));
+	}
     }
 
     /**
@@ -109,13 +110,13 @@ public class Domaine
      * @param p_isSonne
      * @return
      */
-    RollResult effectuerJetComp(int p_comp, int p_trait, int p_nd, int p_modifNbDesLances, int p_modifNbDesGardes, int p_modifScore, boolean p_isSonne)
+    RollUtils.RollResult effectuerJetComp(int p_comp, int p_trait, int p_nd, int p_modifNbDesLances, int p_modifNbDesGardes, int p_modifScore, boolean p_isSonne)
     {
 	int result = 0;
 
 	if (getRang() > 0 && p_comp >= 0 && p_trait >= 0)
 	{
-	    int comp = getCompetences().get(p_comp).getRang();
+	    int comp = m_competences.get(p_comp).getRang();
 
 	    int bonus = p_modifScore;
 	    int lances = getRang() + comp + p_modifNbDesLances;

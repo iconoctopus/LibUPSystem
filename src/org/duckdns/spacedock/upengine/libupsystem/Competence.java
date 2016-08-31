@@ -1,19 +1,27 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
+import java.util.ArrayList;
+
 /**
  * classe représentant une compétence
  *
  * @author iconoctopus
  */
 class Competence
-{//TODO : gérer les spécialités via un tableau les contenant
+{//TODO : tester les fonctionalités liées aux spécialités
 
     /**
-     * le rang de la compétence, déclenche des jets spéciaux à 3 et 5
+     * le rang de la compétence, déclenche des jets spéciaux à 3 et 5 ; mutable
+     * pour monter à l'XP ou baisser si malheur
      */
     private int m_rang;
 
-    int getRang()
+    /**
+     * la liste des spécialités de la compétence
+     */
+    private final ArrayList<String> m_specialites;
+
+    final int getRang()
     {
 	return m_rang;
     }
@@ -25,6 +33,7 @@ class Competence
      */
     final void setRang(int p_rang)
     {
+
 	if (p_rang >= 0)
 	{
 	    m_rang = p_rang;
@@ -36,18 +45,52 @@ class Competence
     }
 
     /**
-     * pour l'instant la compétence ignore son nom car il est fourni par les
-     * classes plus élevées en fonction de son indice. Pour l'instant cette
-     * classe est inutile : elle n'encapsule qu'un entier, mais à terme elle
-     * pourra contenir un tableau de spécalités. Elle est déjà utilisée pour
-     * dériver CompCac qui encapsule l'attaque et la parade avec une catégorie
-     * d'arme donnée
+     *
+     * @param p_lbl
+     */
+    final void addSpecialite(String p_lbl)
+    {
+	m_specialites.add(p_lbl);
+    }
+
+    /**
+     *
+     * @param p_indice
+     */
+    final void removeSpecialite(int p_indice)
+    {
+	m_specialites.remove(p_indice);
+    }
+
+    /**
+     *
+     * @return une copie seulement pour plus de sécurité, l'ajout ou la
+     * suppression de spécialité n'étant possible que via l'interface dédiée
+     */
+    final ArrayList<String> getSpecialites()
+    {
+	return new ArrayList<String>(m_specialites);
+    }
+
+    /**
+     * Classe encapsulant une compétence (pincipalement rang, indice, nom et
+     * spécialités) La gestion des spécialités est encore embryonnaire : la
+     * compétence en possède une liste mais celles-ci ne sont en aucun cas
+     * gérées par le système
      *
      *
      * @param p_rang
      */
-    Competence(int p_rang)
+    Competence(int p_rang, ArrayList<String> p_specialites)
     {
 	setRang(p_rang);
+	if (p_specialites != null)
+	{
+	    m_specialites = p_specialites;
+	}
+	else
+	{
+	    m_specialites = new ArrayList<String>();
+	}
     }
 }

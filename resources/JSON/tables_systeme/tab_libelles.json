@@ -9,5 +9,7 @@
     "equilibrage": "équilibrage",
     "qualite": "qualité",
     "lib_qualite": ["inférieure", "moyenne", "supérieure", "de maître"],
-    "lib_equilibrage": ["mauvais", "normal", "bon"]
+    "lib_equilibrage": ["mauvais", "normal", "bon"],
+    "attaque": "attaque",
+    "parade": "parade"
 }

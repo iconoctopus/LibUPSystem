@@ -21,17 +21,7 @@ public class CompetenceTest
     {
 	try
 	{
-	    new Competence(-11);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:rang:-11", e.getMessage());
-	}
-
-	try
-	{
-	    new CompCac(1, -11);
+	    new Competence(-11, null);
 	    fail();
 	}
 	catch (IllegalArgumentException e)

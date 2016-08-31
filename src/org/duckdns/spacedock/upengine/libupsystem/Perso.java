@@ -6,7 +6,7 @@ import org.duckdns.spacedock.upengine.libupsystem.Arme.Degats;
 import org.duckdns.spacedock.upengine.libupsystem.RollUtils.RollResult;
 
 public class Perso
-{
+{//TODO repasser par les commentaires de javadoc : les paramétres doivent avoir changé un peu partout ainsi que les valeurs de retour
 
     /**
      * les actions du personnage dans ce tour sous la forme de la phase dans
@@ -43,7 +43,7 @@ public class Perso
     /**
      * arbre des domaines/compétences du personnage
      */
-    private final ArrayList<Domaine> m_listDomaines = new ArrayList<>();//TODO : remplacer cela par un objet spécialisé genre "ArbreDomaine" et lui faire embarquer la méthode initDomaines et d'autres utilitaires, notamment d'initialisation
+    private final ArbreDomaine m_arbreDomaine = new ArbreDomaine();
 
     /**
      * constructeur produisant des PNJ générés par rang de menace (RM)
@@ -68,25 +68,23 @@ public class Perso
 	initPerso();
 
 	//configuration des caractéristiques de combat une fois que l'arbre des domaines est généré
-	m_listDomaines.get(3).setRang(p_RM);
-
 	//configuration du domaine corps à corps
-	m_listDomaines.get(3).setRang(p_RM);
-	for (Competence i : m_listDomaines.get(3).getCompetences())
+	m_arbreDomaine.setRangDomaine(3, p_RM);
+	for (int i = 0; i < UPReference.getInstance().getListComp(3).size(); i++)
 	{
-	    ((CompCac) i).setAttaque(p_RM);
-	    ((CompCac) i).setParade(p_RM);
+	    m_arbreDomaine.setRangComp(3, i, p_RM);
 	}
 
 	//idem pour tout le domaine combat à distance
-	m_listDomaines.get(4).setRang(p_RM);
-	for (Competence i : m_listDomaines.get(4).getCompetences())
+	m_arbreDomaine.setRangDomaine(4, p_RM);
+	for (int i = 0; i < UPReference.getInstance().getListComp(4).size(); i++)
 	{
-	    i.setRang(p_RM);
+	    m_arbreDomaine.setRangComp(4, i, p_RM);
 	}
 
 	//on ajoute des rangs en esquive
-	m_listDomaines.get(2).getCompetences().get(0).setRang(p_RM);
+	m_arbreDomaine.setRangDomaine(2, p_RM);
+	m_arbreDomaine.setRangComp(2, 0, p_RM);
 
 	//configuration d'un inventaire vide
 	m_inventaire = new Inventaire();
@@ -99,23 +97,8 @@ public class Perso
      */
     private void initPerso()
     {
-	initDomaines();
 	initJauges();
 	genInit();
-    }
-
-    /**
-     * initialise la liste des domaines
-     */
-    private void initDomaines()//TODO déplacer ce code dans une classe ArbreDomaine qui l'utiliserait dans son constructeur
-    {//TODO : mettre en référence le nombre des domaines et le récupérer ici plutot que d'utiliser la valeur hardcodée ci-dessous
-
-	for (int i = 0; i < 9; ++i)
-	{
-
-	    m_listDomaines.add(new Domaine(i, 1));
-
-	}
     }
 
     /**
@@ -172,7 +155,7 @@ public class Perso
      */
     public final RollUtils.RollResult effectuerJetComp(int p_ND, int p_comp, int p_domaine, int p_modifNbLances, int p_modifNbGardes, int p_modifScore, int p_trait)
     {
-	return m_listDomaines.get(p_domaine).effectuerJetComp(p_comp, p_trait, p_ND, p_modifNbLances, p_modifNbGardes, p_modifScore, isSonne());
+	return m_arbreDomaine.effectuerJetComp(p_domaine, p_comp, p_trait, p_ND, p_modifNbLances, p_modifNbGardes, p_modifScore, isSonne());
     }
 
     /**
@@ -224,7 +207,7 @@ public class Perso
 		ErrorHandler.mauvaisModeAttaque();
 	    }
 	}
-	return effectuerAttaque(p_phaseActuelle, p_ND, catArm, 3, 0, 0, 0);
+	return effectuerAttaque(p_phaseActuelle, p_ND, catArm * 2, 3, 0, 0, 0);//par convention les comp d'attaque de CaC sont à cat*2, les parades sont à Cat*2+1
     }
 
     /**
@@ -457,7 +440,7 @@ public class Perso
 	if (!p_esquive)
 	{
 	    //calcul de la valeur issue de la compétence parade
-	    rang = m_listDomaines.get(3).getCompetences().get(p_catArme).getRang();
+	    rang = m_arbreDomaine.getRangComp(3, p_catArme * 2 + 1); // la comp de parade est par convention à cat*2+1 là où attaque est à cat*2
 
 	    //ajout des bonus  et malus d'm_armure
 	    if (armure != null)
@@ -469,8 +452,7 @@ public class Perso
 	else
 	{
 	    //calcul de la valeur issue de la compétence esquive
-	    rang = m_listDomaines.get(2).getCompetences().get(0).getRang();
-
+	    rang = m_arbreDomaine.getRangComp(2, 0);
 	    //ajout des bonus  et malus d'm_armure
 	    if (armure != null)
 	    {
@@ -539,17 +521,6 @@ public class Perso
     public void setLibellePerso(String libellePerso)
     {
 	this.m_libellePerso = libellePerso;
-    }
-
-    /**
-     * renvoie une copie de la liste des domaines pour ne pas risquer une
-     * édition malencontreuse
-     *
-     * @return
-     */
-    public ArrayList<Domaine> GetDomaines()
-    {
-	return new ArrayList<Domaine>(m_listDomaines);
     }
 
     /**

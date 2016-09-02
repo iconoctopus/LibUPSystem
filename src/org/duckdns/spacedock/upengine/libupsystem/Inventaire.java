@@ -76,7 +76,7 @@ class Inventaire
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("indice") + ":" + p_indice);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("commonutils").getString("indice") + ":" + p_indice);
 	}
     }
 

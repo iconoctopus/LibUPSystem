@@ -45,7 +45,7 @@ class Domaine
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("indice") + ":" + p_indice);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("commonutils").getString("indice") + ":" + p_indice);
 	}
     }
 
@@ -181,7 +181,7 @@ class Domaine
 
 	    message = message.concat(PropertiesHandler.getInstance("libupsystem").getString("trait") + ":" + p_trait);
 	    message = message.concat(" " + PropertiesHandler.getInstance("libupsystem").getString("dom") + ":" + getRang());
-	    message = message.concat(" " + PropertiesHandler.getInstance("libupsystem").getString("indice") + " " + PropertiesHandler.getInstance("libupsystem").getString("comp") + ":" + p_comp);
+	    message = message.concat(" " + PropertiesHandler.getInstance("commonutils").getString("indice") + " " + PropertiesHandler.getInstance("libupsystem").getString("comp") + ":" + p_comp);
 	    ErrorHandler.paramAberrant(message);
 	}
 	return RollUtils.extraireIncrements(result, p_nd);

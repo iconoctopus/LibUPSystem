@@ -1,6 +1,8 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.util.Random;
+import org.duckdns.spacedock.commonutils.ErrorHandler;
+import org.duckdns.spacedock.commonutils.PropertiesHandler;
 
 /**
  * classe de méthodes statiques techniques effectuant la réalité des jets
@@ -96,8 +98,8 @@ public final class RollUtils
 	else
 	{
 	    String message = "";
-	    message = message.concat(PropertiesHandler.getInstance().getString("lances") + ":" + p_nbLances);
-	    message = message.concat(" " + PropertiesHandler.getInstance().getString("gardes") + ":" + p_nbGardes);
+	    message = message.concat(PropertiesHandler.getInstance("libupsystem").getString("lances") + ":" + p_nbLances);
+	    message = message.concat(" " + PropertiesHandler.getInstance("libupsystem").getString("gardes") + ":" + p_nbGardes);
 	    ErrorHandler.paramAberrant(message);
 	}
 	return total;

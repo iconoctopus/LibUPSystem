@@ -1,6 +1,8 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.util.ArrayList;
+import org.duckdns.spacedock.commonutils.ErrorHandler;
+import org.duckdns.spacedock.commonutils.PropertiesHandler;
 
 /**
  * classe représentant une compétence
@@ -38,7 +40,7 @@ class Competence
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("rang") + ":" + p_rang);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("rang") + ":" + p_rang);
 	}
     }
 

@@ -2,6 +2,7 @@ package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import org.duckdns.spacedock.commonutils.ErrorHandler;
 import org.duckdns.spacedock.upengine.libupsystem.Inventaire.Lateralisation;
 
 /**
@@ -95,7 +96,7 @@ public class Armure
 	}
 	else
 	{//erreur : l'emplacement n'est pas libre
-	    ErrorHandler.ajoutPieceArmure(p_piece.toString());
+	    UPErrorHandler.ajoutPieceArmure(p_piece.toString());
 	}
     }
 

@@ -6,6 +6,8 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.util.ArrayList;
+import org.duckdns.spacedock.commonutils.ErrorHandler;
+import org.duckdns.spacedock.commonutils.PropertiesHandler;
 
 /**
  *
@@ -43,7 +45,7 @@ class Domaine
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("indice") + ":" + p_indice);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("indice") + ":" + p_indice);
 	}
     }
 
@@ -67,7 +69,7 @@ class Domaine
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("rang") + ":" + p_rang);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("rang") + ":" + p_rang);
 	}
     }
 
@@ -93,7 +95,7 @@ class Domaine
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("rang") + " " + PropertiesHandler.getInstance().getString("comp") + " > " + PropertiesHandler.getInstance().getString("rang") + " " + PropertiesHandler.getInstance().getString("dom"));
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("rang") + " " + PropertiesHandler.getInstance("libupsystem").getString("comp") + " > " + PropertiesHandler.getInstance("libupsystem").getString("rang") + " " + PropertiesHandler.getInstance("libupsystem").getString("dom"));
 	}
     }
 
@@ -177,9 +179,9 @@ class Domaine
 	{
 	    String message = "";
 
-	    message = message.concat(PropertiesHandler.getInstance().getString("trait") + ":" + p_trait);
-	    message = message.concat(" " + PropertiesHandler.getInstance().getString("dom") + ":" + getRang());
-	    message = message.concat(" " + PropertiesHandler.getInstance().getString("indice") + " " + PropertiesHandler.getInstance().getString("comp") + ":" + p_comp);
+	    message = message.concat(PropertiesHandler.getInstance("libupsystem").getString("trait") + ":" + p_trait);
+	    message = message.concat(" " + PropertiesHandler.getInstance("libupsystem").getString("dom") + ":" + getRang());
+	    message = message.concat(" " + PropertiesHandler.getInstance("libupsystem").getString("indice") + " " + PropertiesHandler.getInstance("libupsystem").getString("comp") + ":" + p_comp);
 	    ErrorHandler.paramAberrant(message);
 	}
 	return RollUtils.extraireIncrements(result, p_nd);

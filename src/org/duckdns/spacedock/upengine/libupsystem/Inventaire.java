@@ -6,6 +6,8 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.util.ArrayList;
+import org.duckdns.spacedock.commonutils.ErrorHandler;
+import org.duckdns.spacedock.commonutils.PropertiesHandler;
 
 /**
  * encapsule l'équipement d'un personnage, pour l'instant très simple mais
@@ -74,7 +76,7 @@ class Inventaire
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("indice") + ":" + p_indice);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("indice") + ":" + p_indice);
 	}
     }
 

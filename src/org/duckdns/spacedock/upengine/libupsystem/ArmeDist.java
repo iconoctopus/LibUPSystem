@@ -5,6 +5,9 @@
  */
 package org.duckdns.spacedock.upengine.libupsystem;
 
+import org.duckdns.spacedock.commonutils.ErrorHandler;
+import org.duckdns.spacedock.commonutils.PropertiesHandler;
+
 /**
  *
  * @author iconoctopus
@@ -77,7 +80,7 @@ public class ArmeDist extends Arme
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("increments") + ":" + p_nbIncrements);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("increments") + ":" + p_nbIncrements);
 	}
 	return new Degats(degatsBruts, super.getTypeArme());
     }
@@ -142,7 +145,7 @@ public class ArmeDist extends Arme
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("nbCoups") + ":" + p_nbMun + " " + PropertiesHandler.getInstance().getString("muncourantes") + ":" + m_magasinCourant);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("nbCoups") + ":" + p_nbMun + " " + PropertiesHandler.getInstance("libupsystem").getString("muncourantes") + ":" + m_magasinCourant);
 	}
     }
 
@@ -158,7 +161,7 @@ public class ArmeDist extends Arme
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("nbCoups") + ":" + p_nbMun + " " + PropertiesHandler.getInstance().getString("taillemagasin") + ":" + m_magasinMax);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("nbCoups") + ":" + p_nbMun + " " + PropertiesHandler.getInstance("libupsystem").getString("taillemagasin") + ":" + m_magasinMax);
 	}
 	return getNbActionsRecharge();
     }

@@ -78,7 +78,7 @@
 	     minus the .jar extension. It should not have spaces.
 	     <property name="store.jar.name" value="MyJarName"/>
 	-->
-	<property name="store.jar.name" value="libupsystem.portable"/>
+	<property name="store.jar.name" value="${application.title}.portable"/>
 
 
 	<!-- don't edit below this line -->
@@ -107,5 +107,4 @@
 
 	<delete file="${store.dir}/temp_final.jar"/>
     </target>
-
 </project>

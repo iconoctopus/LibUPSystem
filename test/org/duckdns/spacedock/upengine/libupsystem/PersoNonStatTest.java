@@ -10,7 +10,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.fail;
-import static org.junit.Assert.fail;
 
 /**
  *
@@ -379,7 +378,7 @@ public class PersoNonStatTest
     }
 
     @Test
-    public void testAttaquer()//sert aussi pour tester tout le système de jets de compétence : il se trouve qu'attaquer est la forme la plus complexe du jet de compétence, une fois tous les bonus et malus pris en compte
+    public void testErreurAttaquer()
     {
 	//cas d'erreur : rafale avec arme ayant plusieurs munitions mais incapable de tirer en mode automatique (pistolet)
 	try

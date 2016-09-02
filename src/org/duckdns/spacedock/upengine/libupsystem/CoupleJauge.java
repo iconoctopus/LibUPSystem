@@ -1,5 +1,8 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
+import org.duckdns.spacedock.commonutils.ErrorHandler;
+import org.duckdns.spacedock.commonutils.PropertiesHandler;
+
 /**
  * représente l'un des couples de jauges vitales d'un personnage : santé/init ou
  * fatigue/force d'âme. Abrite les mécanismes d'encaisement des dégâts.
@@ -60,7 +63,7 @@ class CoupleJauge
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("physique") + ":" + p_physique + " " + PropertiesHandler.getInstance().getString("volonte") + ":" + p_volonte + " " + PropertiesHandler.getInstance().getString("mental") + ":" + p_mental + " " + PropertiesHandler.getInstance().getString("coordination") + ":" + p_coordination);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("physique") + ":" + p_physique + " " + PropertiesHandler.getInstance("libupsystem").getString("volonte") + ":" + p_volonte + " " + PropertiesHandler.getInstance("libupsystem").getString("mental") + ":" + p_mental + " " + PropertiesHandler.getInstance("libupsystem").getString("coordination") + ":" + p_coordination);
 	}
     }
 
@@ -79,7 +82,7 @@ class CoupleJauge
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("physique") + ":" + p_physique + " " + PropertiesHandler.getInstance().getString("volonte") + ":" + p_volonte + " " + PropertiesHandler.getInstance().getString("traitmin") + ":" + p_tailleForceDAme);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("physique") + ":" + p_physique + " " + PropertiesHandler.getInstance("libupsystem").getString("volonte") + ":" + p_volonte + " " + PropertiesHandler.getInstance("libupsystem").getString("traitmin") + ":" + p_tailleForceDAme);
 	}
     }
 
@@ -156,7 +159,7 @@ class CoupleJauge
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("degats") + ":" + p_degats);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("degats") + ":" + p_degats);
 	}
 	return m_remplissage_externe;
     }

@@ -5,6 +5,9 @@
  */
 package org.duckdns.spacedock.upengine.libupsystem;
 
+import org.duckdns.spacedock.commonutils.ErrorHandler;
+import org.duckdns.spacedock.commonutils.PropertiesHandler;
+
 /**
  *
  * @author iconoctopus
@@ -41,7 +44,7 @@ public class ArmeCaC extends Arme
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("increments") + ":" + p_nbIncrements + " " + PropertiesHandler.getInstance().getString("physique") + ":" + p_physique);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("increments") + ":" + p_nbIncrements + " " + PropertiesHandler.getInstance("libupsystem").getString("physique") + ":" + p_physique);
 	}
 	return new Degats(degatsBruts, super.getTypeArme());
     }

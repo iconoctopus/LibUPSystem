@@ -2,6 +2,8 @@ package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import org.duckdns.spacedock.commonutils.ErrorHandler;
+import org.duckdns.spacedock.commonutils.PropertiesHandler;
 import org.duckdns.spacedock.upengine.libupsystem.Arme.Degats;
 import org.duckdns.spacedock.upengine.libupsystem.RollUtils.RollResult;
 
@@ -57,13 +59,13 @@ public class Perso
     {
 	if (p_traits.length != 5)
 	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("nbtraits") + ":" + p_traits.length);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("nbtraits") + ":" + p_traits.length);
 	}
 	for (int i = 0; i < p_traits.length; ++i)
 	{
 	    if (p_traits[i] < 0)
 	    {
-		ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("trait") + ":" + p_traits[i]);
+		ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("trait") + ":" + p_traits[i]);
 	    }
 	}
 	m_traits = p_traits;
@@ -79,7 +81,7 @@ public class Perso
     {
 	if (p_RM < 1)
 	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("rang") + ":" + p_RM);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("rang") + ":" + p_RM);
 	}
 	//configuration des traits
 	m_traits = new int[5];
@@ -112,7 +114,7 @@ public class Perso
 	m_arbreDomaines.setRangDomaine(2, p_RM);
 	m_arbreDomaines.setRangComp(2, 0, p_RM);
 
-	m_libellePerso = PropertiesHandler.getInstance().getString("lbl_perso_std") + p_RM;
+	m_libellePerso = PropertiesHandler.getInstance("libupsystem").getString("lbl_perso_std") + p_RM;
     }
 
     /**
@@ -227,7 +229,7 @@ public class Perso
 	    }
 	    else
 	    {
-		ErrorHandler.mauvaisModeAttaque();
+		UPErrorHandler.mauvaisModeAttaque();//TODO ce cas d'erreur n'est pas testé
 	    }
 	}
 	return effectuerAttaque(p_phaseActuelle, p_ND, catArm * 2, 3, 0, 0, 0);//par convention les comp d'attaque de CaC sont à cat*2, les parades sont à Cat*2+1
@@ -305,7 +307,7 @@ public class Perso
 			}
 			else
 			{
-			    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("nbCoups") + ":" + p_nbCoups);
+			    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("nbCoups") + ":" + p_nbCoups);
 			}
 
 		    }
@@ -314,12 +316,12 @@ public class Perso
 	    }
 	    else
 	    {
-		ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("distance") + ":" + p_distance + " " + PropertiesHandler.getInstance().getString("nbCoups") + ":" + p_nbCoups);
+		ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("distance") + ":" + p_distance + " " + PropertiesHandler.getInstance("libupsystem").getString("nbCoups") + ":" + p_nbCoups);
 	    }
 	}
 	else
 	{
-	    ErrorHandler.mauvaisModeAttaque();
+	    UPErrorHandler.mauvaisModeAttaque();
 	}
 	return result;
     }
@@ -391,7 +393,7 @@ public class Perso
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("phase") + ":" + p_phaseActuelle);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("phase") + ":" + p_phaseActuelle);
 	}
 	return result;
     }
@@ -426,7 +428,7 @@ public class Perso
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("increments") + ":" + p_increments);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("increments") + ":" + p_increments);
 	}
 	return result;
     }
@@ -456,7 +458,7 @@ public class Perso
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("degats") + ":" + p_degats.getQuantite());
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("degats") + ":" + p_degats.getQuantite());
 	}
     }
 
@@ -541,7 +543,7 @@ public class Perso
     {
 	if (p_phaseActuelle <= 0 || p_phaseActuelle > 10)
 	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("phase") + ":" + p_phaseActuelle);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("phase") + ":" + p_phaseActuelle);
 	}
 	return ((m_actions.size() - m_actionCourante) > 0 && p_phaseActuelle == m_actions.get(m_actionCourante));
     }

@@ -1,12 +1,10 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.EnumMap;
-import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
-import javax.json.JsonReader;
+import static org.duckdns.spacedock.commonutils.JSONHandler.loadJsonFile;
 
 /**
  * Classe permetant l'accès aux éléments de référence du UP!System
@@ -151,7 +149,7 @@ final class UPReference
 	JsonObject object;
 
 	//chargement des règles d'armure
-	object = loadJsonFile("JSON/equipement/caracs_armures.json");
+	object = loadJsonFile("libupsystem", "equipement/caracs_armures.json");
 	m_tableArmureBonusND = object.getJsonArray("bonusND");
 	m_tableArmureRedDegats = object.getJsonArray("red_degats");
 	m_tableArmureRangs = object.getJsonArray("rangs");
@@ -165,12 +163,12 @@ final class UPReference
 	m_listLocaDoubles = object.getJsonArray("loca_doubles");
 
 	//chargement des règles de calcul de l'initiative
-	object = loadJsonFile("JSON/tables_systeme/tab_init.json");
+	object = loadJsonFile("libupsystem", "tables_systeme/tab_init.json");
 	m_tableInitCoord = object.getJsonArray("coordination");
 	m_tableInitMental = object.getJsonArray("mental");
 
 	//chargement des libellés des caractéristiques particulières
-	object = loadJsonFile("JSON/tables_systeme/tab_caracs.json");
+	object = loadJsonFile("libupsystem", "tables_systeme/tab_caracs.json");
 	m_tableTraits = object.getJsonArray("traits");
 	m_lblCompAttaque = object.getString("lbl_attaque");
 	m_lblCompParade = object.getString("lbl_parade");
@@ -180,28 +178,16 @@ final class UPReference
 	m_arbreDomaines = object.getJsonArray("arbre_domaines");
 
 	//chargement des libellés divers
-	object = loadJsonFile("JSON/tables_systeme/tab_libelles.json");
+	object = loadJsonFile("libupsystem", "tables_systeme/tab_libelles.json");
 	libelles = new CollectionLibelles(object);
 
 	//chargement ded règles des armes
-	object = loadJsonFile("JSON/equipement/caracs_armes.json");
+	object = loadJsonFile("libupsystem", "equipement/caracs_armes.json");
 	m_tabArmes = object.getJsonArray("armes");
 	m_listLblTypArm = object.getJsonArray("types_armes");
 	m_listLblCatArmCaC = object.getJsonArray("cat_armes_cac");
 	m_listLblCatArmDist = object.getJsonArray("cat_armes_dist");
 	m_listLblModArm = object.getJsonArray("mod_armes");
-    }
-
-    /**
-     *
-     * @param p_filePath chemin de package vers le fichier JSON
-     * @return un objet JSON lu dans le fichier
-     */
-    private JsonObject loadJsonFile(String p_filePath)
-    {
-	InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(p_filePath);//on utilise le classloader du thread et pas de la classe pour plus de sûreté
-	JsonReader reader = Json.createReader(in);
-	return (reader.readObject());
     }
 
     /**

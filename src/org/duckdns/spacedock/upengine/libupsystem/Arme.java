@@ -1,5 +1,8 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
+import org.duckdns.spacedock.commonutils.ErrorHandler;
+import org.duckdns.spacedock.commonutils.PropertiesHandler;
+
 /**
  * Classe représentant une arme et permettant de générer des dégâts avec
  * celle-ci.Elle est abstraite car l'on ne doit pouvoir instancier que ses
@@ -211,7 +214,7 @@ public abstract class Arme
 	    }
 	    else
 	    {
-		ErrorHandler.paramAberrant(PropertiesHandler.getInstance().getString("degats") + ":" + p_quantite + " " + PropertiesHandler.getInstance().getString("type") + ":" + p_typeArme);
+		ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("degats") + ":" + p_quantite + " " + PropertiesHandler.getInstance("libupsystem").getString("type") + ":" + p_typeArme);
 	    }
 	}
 

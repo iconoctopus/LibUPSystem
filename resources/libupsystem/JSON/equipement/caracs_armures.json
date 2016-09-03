@@ -53,21 +53,25 @@
 	}],
     "boucliers": [{
 	    "lbl": "targe",
-	    "points": [2, 1]
+	    "points": [2, 1],
+	    "loca": 3
 	}, {
 	    "lbl": "bouclier",
-	    "points": [3, 2]
+	    "points": [3, 2],
+	    "loca": 3
 	}, {
 	    "lbl": "écu",
-	    "points": [4, 3]
+	    "points": [4, 3],
+	    "loca": 3
 	}, {
 	    "lbl": "pavois",
-	    "points": [5, 4]
+	    "points": [5, 4],
+	    "loca": 3
 	}],
     "loca_doubles": [2, 3, 4, 5],
     "ajustements": [[1, 0.5, 0.33, 0.25, 0.2], [2, 1, 0.5, 0.33, 0.25], [3, 2, 1, 0.5, 0.33], [4, 3, 2, 1, 0.5]],
     "materiaux_armures": ["plates", "lamelles ou maille", "cuir clouté", "cuir bouilli"],
     "materiaux_boucliers": ["métal", "bois"],
     "types_armures": ["ancienne", "moderne", "avec blindage", "énergétique"],
-    "localisations": ["tête", "corps", "bras", "main", "jambe", "pied", "bouclier"]
+    "localisations": ["tête", "corps", "bras", "main", "jambe", "pied"]
 }

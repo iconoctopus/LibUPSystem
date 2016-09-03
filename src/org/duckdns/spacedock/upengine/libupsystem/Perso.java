@@ -591,29 +591,6 @@ public class Perso
 
     /**
      *
-     * @return cette liste n'est pas directement éditable mais une copie
-     */
-    public ArrayList<Arme> getListArmes()
-    {
-	return m_inventaire.getListArmes();
-    }
-
-    public Arme getArmeCourante()
-    {
-	return m_inventaire.getArmeCourante();
-    }
-
-    /**
-     *
-     * @param p_indice
-     */
-    public void setArmeCourante(int p_indice)
-    {
-	m_inventaire.setArmeCourante(p_indice);
-    }
-
-    /**
-     *
      * @param p_domaine
      * @param p_rang
      */
@@ -687,48 +664,9 @@ public class Perso
 	m_arbreDomaines.removeSpecialite(p_domaine, p_comp, p_indiceSpe);
     }
 
-    /**
-     *
-     * @return l'armure courante
-     */
-    public Armure getArmure()
+    public Inventaire getInventaire()
     {
-	return m_inventaire.getArmure();
-    }
-
-    /**
-     *
-     * @param p_armure
-     */
-    public void setArmure(Armure p_armure)
-    {
-	m_inventaire.setArmure(p_armure);
-    }
-
-    /**
-     * repasse le personnage en mode mains nues
-     */
-    public void rengainer()
-    {
-	m_inventaire.rangerArmeCourante();;
-    }
-
-    /**
-     *
-     * @param p_arme
-     */
-    public void addArme(Arme p_arme)
-    {
-	m_inventaire.addArme(p_arme);
-    }
-
-    /**
-     *
-     * @param p_indice
-     */
-    void removeArme(int p_indice)
-    {
-	m_inventaire.removeArme(p_indice);
+	return m_inventaire;
     }
 
     /**

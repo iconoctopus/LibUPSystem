@@ -47,6 +47,10 @@ public abstract class Arme
      */
     private final int m_mode;
     /**
+     * le nombre de mains nécessaire au maniement de l'arme
+     */
+    private final int m_NbMainsArme;
+    /**
      * le nom de l'arme
      */
     private final String m_nom;
@@ -125,12 +129,12 @@ public abstract class Arme
 	m_desLances = reference.getNbLancesArme(p_indice) + bonusLances;
 	m_desGardes = reference.getNbGardesArme(p_indice) + bonusGardes;
 	m_bonusInit = reference.getBonusInitArme(p_indice) + bonusInitSup;
-
 	m_typeArme = reference.getTypeArme(p_indice);
 	m_malusAttaque = reference.getMalusAttaqueArme(p_indice);
 	m_physMin = reference.getPhysMinArme(p_indice);
 	m_nom = nom;
 	m_categorie = reference.getCategorieArme(p_indice);
+	m_NbMainsArme = reference.getNbMainsArme(p_indice);
 	m_mode = reference.getModArme(p_indice);
     }
 
@@ -172,6 +176,11 @@ public abstract class Arme
     public int getMode()
     {
 	return m_mode;
+    }
+
+    public int getNbMainsArme()
+    {
+	return m_NbMainsArme;
     }
 
     @Override

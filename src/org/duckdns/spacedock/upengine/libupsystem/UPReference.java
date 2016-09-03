@@ -11,7 +11,7 @@ import static org.duckdns.spacedock.commonutils.JSONHandler.loadJsonFile;
  *
  * @author iconoctopus
  */
-final class UPReference
+public final class UPReference
 {
 
     /**
@@ -114,14 +114,6 @@ final class UPReference
      */
     private final JsonArray m_listLblMatBoucliers;
     /**
-     * liste des localisation possédant deux exemplaires
-     */
-    private final JsonArray m_listLocaDoubles;
-    /**
-     * indice de localisation du bouclier
-     */
-    private final int m_locaBouclier = 6;
-    /**
      * liste des libellés des localisations
      */
     private final JsonArray m_listLblLoca;
@@ -131,7 +123,7 @@ final class UPReference
      * @return l'instance unique de la référence, la construit si elle n'existe
      * pas
      */
-    static UPReference getInstance()
+    public static UPReference getInstance()
     {
 	if (m_instance == null)
 	{
@@ -160,7 +152,6 @@ final class UPReference
 	m_tabBoucliers = object.getJsonArray("boucliers");
 	m_listLblMatBoucliers = object.getJsonArray("materiaux_boucliers");
 	m_listLblLoca = object.getJsonArray("localisations");
-	m_listLocaDoubles = object.getJsonArray("loca_doubles");
 
 	//chargement des règles de calcul de l'initiative
 	object = loadJsonFile("libupsystem", "tables_systeme/tab_init.json");
@@ -197,10 +188,8 @@ final class UPReference
      */
     int getInitModCoord(int p_coordination)
     {
-
-//le tableau est indexé à partir de 0, pas la coordination
+	//le tableau est indexé à partir de 0, pas la coordination
 	return m_tableInitCoord.getInt(p_coordination);
-
     }
 
     /**
@@ -210,10 +199,8 @@ final class UPReference
      */
     int getInitModMental(int p_mental)
     {
-
 	//le tableau est indexé à partir de 0, pas le mental
 	return m_tableInitMental.getInt(p_mental);
-
     }
 
     /**
@@ -301,7 +288,7 @@ final class UPReference
      * @param p_indice l'indice du trait tel que défini dan le fichier JSON
      * @return le libelle du trait indicé
      */
-    public String getLibelleTrait(int p_indice)
+    String getLibelleTrait(int p_indice)
     {
 	return m_tableTraits.getString(p_indice);
 
@@ -409,6 +396,16 @@ final class UPReference
     /**
      *
      * @param p_indice
+     * @return le nombre de mains utilisées par une arme
+     */
+    int getNbMainsArme(int p_indice)
+    {
+	return m_tabArmes.getJsonObject(p_indice).getInt("mains");
+    }
+
+    /**
+     *
+     * @param p_indice
      * @return le mode d'attaque d'une arme représentée par son index
      */
     int getModArme(int p_indice)
@@ -432,7 +429,7 @@ final class UPReference
      * @param p_indice
      * @return
      */
-    String getLblCatArmeCaC(int p_indice)
+    public String getLblCatArmeCaC(int p_indice)
     {
 	return m_listLblCatArmCaC.getString(p_indice);
     }
@@ -699,36 +696,10 @@ final class UPReference
     int getLocalisation(int p_indice, boolean p_isBouclier)
     {
 	int res = 0;
-	if (p_isBouclier)
-	{
-	    res = m_locaBouclier;
-	}
-	else
-	{
-	    JsonObject piece = m_tabPiecesArmures.getJsonObject(p_indice);
-	    res = piece.getInt("loca");
-	}
-	return res;
-    }
 
-    /**
-     *
-     * @return vrai si la localisation est en deux exemplaires
-     */
-    boolean isLocaDouble(int p_indice)
-    {
+	JsonObject piece = m_tabPiecesArmures.getJsonObject(p_indice);
+	res = piece.getInt("loca");
 
-	boolean res = false;
-	int i = 0;
-
-	while (i < m_listLocaDoubles.size() && !res)
-	{
-	    if (m_listLocaDoubles.getInt(i) == p_indice)
-	    {
-		res = true;
-	    }
-	    ++i;
-	}
 	return res;
     }
 

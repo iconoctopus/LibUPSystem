@@ -156,6 +156,13 @@ public final class UPReferenceTest
     }
 
     @Test
+    public void testGetNbMainsArme()
+    {
+	Assert.assertEquals(1, m_reference.getNbMainsArme(7));
+	Assert.assertEquals(2, m_reference.getNbMainsArme(14));
+    }
+
+    @Test
     public void testGetLblModArme()
     {
 	Assert.assertEquals("corps à corps", m_reference.getLblModArme(0));
@@ -330,14 +337,6 @@ public final class UPReferenceTest
 	Assert.assertEquals(1, m_reference.getLocalisation(7, false));
 	Assert.assertEquals(2, m_reference.getLocalisation(4, false));
 	Assert.assertEquals(4, m_reference.getLocalisation(5, false));
-    }
-
-    @Test
-    public void isPieceDouble()
-    {
-	Assert.assertEquals(true, m_reference.isLocaDouble(3));
-	Assert.assertEquals(true, m_reference.isLocaDouble(5));
-	Assert.assertEquals(false, m_reference.isLocaDouble(0));
     }
 
     @Test

@@ -9,6 +9,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 1,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "cimeterre",
@@ -19,6 +20,7 @@
 	    "physique_minimal": 2,
 	    "categorie": 1,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "coutelas",
@@ -29,6 +31,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 1,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "darn dao",
@@ -39,6 +42,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 1,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "épée courte",
@@ -49,6 +53,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 1,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "kastane",
@@ -59,6 +64,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 1,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "manople",
@@ -69,6 +75,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 1,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "rapière",
@@ -79,6 +86,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 1,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "sabre",
@@ -89,6 +97,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 1,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "shi zi jian",
@@ -99,6 +108,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 1,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "shuan gao",
@@ -109,6 +119,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 1,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "tulwar",
@@ -119,6 +130,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 1,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "dao",
@@ -129,6 +141,7 @@
 	    "physique_minimal": 2,
 	    "categorie": 2,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "dilmekiri",
@@ -139,6 +152,7 @@
 	    "physique_minimal": 3,
 	    "categorie": 2,
 	    "type": 0,
+	    "mains": 2,
 	    "mode": 0
 	}, {
 	    "nom": "épée à deux mains",
@@ -149,6 +163,7 @@
 	    "physique_minimal": 3,
 	    "categorie": 2,
 	    "type": 0,
+	    "mains": 2,
 	    "mode": 0
 	}, {
 	    "nom": "épée bâtarde (une main)",
@@ -159,6 +174,7 @@
 	    "physique_minimal": 3,
 	    "categorie": 2,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "épée bâtarde (deux mains)",
@@ -169,6 +185,7 @@
 	    "physique_minimal": 2,
 	    "categorie": 2,
 	    "type": 0,
+	    "mains": 2,
 	    "mode": 0
 	}, {
 	    "nom": "épée longue",
@@ -179,6 +196,7 @@
 	    "physique_minimal": 2,
 	    "categorie": 2,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "kan dao",
@@ -189,6 +207,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 2,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "Espadon",
@@ -199,6 +218,7 @@
 	    "physique_minimal": 4,
 	    "categorie": 2,
 	    "type": 0,
+	    "mains": 2,
 	    "mode": 0
 	}, {
 	    "nom": "hachette",
@@ -209,6 +229,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 3,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "hache à deux mains",
@@ -219,6 +240,7 @@
 	    "physique_minimal": 3,
 	    "categorie": 3,
 	    "type": 0,
+	    "mains": 2,
 	    "mode": 0
 	}, {
 	    "nom": "hache d'arme",
@@ -229,6 +251,7 @@
 	    "physique_minimal": 2,
 	    "categorie": 3,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "arme improvisée (petite)",
@@ -239,6 +262,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 4,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "arme improvisée (moyenne)",
@@ -249,6 +273,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 4,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "arme improvisée (grande)",
@@ -259,6 +284,7 @@
 	    "physique_minimal": 3,
 	    "categorie": 4,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "arme lourde de corps à corps",
@@ -269,6 +295,7 @@
 	    "physique_minimal": 3,
 	    "categorie": 4,
 	    "type": 0,
+	    "mains": 2,
 	    "mode": 0
 	}, {
 	    "nom": "bâton",
@@ -279,6 +306,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 4,
 	    "type": 0,
+	    "mains": 2,
 	    "mode": 0
 	}, {
 	    "nom": "fléau d'arme",
@@ -289,6 +317,7 @@
 	    "physique_minimal": 2,
 	    "categorie": 4,
 	    "type": 0,
+	    "mains": 2,
 	    "mode": 0
 	}, {
 	    "nom": "gourdin",
@@ -299,6 +328,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 4,
 	    "type": 0,
+	    "mains": 2,
 	    "mode": 0
 	}, {
 	    "nom": "marteau",
@@ -309,6 +339,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 4,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "masse",
@@ -319,6 +350,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 4,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "morgenstern",
@@ -329,6 +361,7 @@
 	    "physique_minimal": 2,
 	    "categorie": 4,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "tieh shan gong",
@@ -339,6 +372,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 4,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "brise lame",
@@ -349,6 +383,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 5,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "canif",
@@ -359,6 +394,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 5,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "chakram",
@@ -369,6 +405,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 5,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "couteau",
@@ -379,6 +416,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 5,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "dague",
@@ -389,6 +427,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 5,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "katar",
@@ -399,6 +438,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 5,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "main gauche",
@@ -409,6 +449,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 5,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "niur er jan dao",
@@ -419,6 +460,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 5,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "panzerfaust",
@@ -429,6 +471,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 5,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "paku",
@@ -439,6 +482,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 5,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "shuang huang",
@@ -449,6 +493,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 5,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "fourche",
@@ -459,6 +504,7 @@
 	    "physique_minimal": 2,
 	    "categorie": 6,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "hallebarde",
@@ -469,6 +515,7 @@
 	    "physique_minimal": 3,
 	    "categorie": 6,
 	    "type": 0,
+	    "mains": 2,
 	    "mode": 0
 	}, {
 	    "nom": "hu tsa",
@@ -479,6 +526,7 @@
 	    "physique_minimal": 2,
 	    "categorie": 6,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "javeline",
@@ -489,6 +537,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 6,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "lance",
@@ -499,6 +548,7 @@
 	    "physique_minimal": 3,
 	    "categorie": 6,
 	    "type": 0,
+	    "mains": 2,
 	    "mode": 0
 	}, {
 	    "nom": "vouge",
@@ -509,6 +559,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 6,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "shua tou quiang",
@@ -519,6 +570,7 @@
 	    "physique_minimal": 2,
 	    "categorie": 6,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "shuan pian yue",
@@ -529,6 +581,7 @@
 	    "physique_minimal": 2,
 	    "categorie": 6,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "shuan pian yue ya chan",
@@ -539,6 +592,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 6,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "jiu jie bien",
@@ -549,6 +603,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 7,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "sa tjat koen",
@@ -559,6 +614,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 7,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	}, {
 	    "nom": "seurn tjat koen",
@@ -569,6 +625,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 7,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 0
 	},
 	{
@@ -585,6 +642,7 @@
 	    "actions_recharge": 3,
 	    "magasin": 1,
 	    "type": 1,
+	    "mains": 2,
 	    "mode": 1
 	}, {
 	    "nom": "arbalète de poing",
@@ -600,6 +658,7 @@
 	    "actions_recharge": 3,
 	    "magasin": 1,
 	    "type": 1,
+	    "mains": 1,
 	    "mode": 1
 	}, {
 	    "nom": "arbalète lourde",
@@ -615,6 +674,7 @@
 	    "actions_recharge": 4,
 	    "magasin": 1,
 	    "type": 1,
+	    "mains": 2,
 	    "mode": 1
 	}, {
 	    "nom": "arc",
@@ -630,6 +690,7 @@
 	    "actions_recharge": 1,
 	    "magasin": 1,
 	    "type": 0,
+	    "mains": 2,
 	    "mode": 1
 	}, {
 	    "nom": "arc long",
@@ -645,6 +706,7 @@
 	    "actions_recharge": 1,
 	    "magasin": 1,
 	    "type": 0,
+	    "mains": 2,
 	    "mode": 1
 	}, {
 	    "nom": "chakram",
@@ -660,6 +722,7 @@
 	    "actions_recharge": 0,
 	    "magasin": 1,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 1
 	}, {
 	    "nom": "chu ko nu",
@@ -675,6 +738,7 @@
 	    "actions_recharge": 1,
 	    "magasin": 18,
 	    "type": 1,
+	    "mains": 1,
 	    "mode": 1
 	}, {
 	    "nom": "fronde",
@@ -690,6 +754,7 @@
 	    "actions_recharge": 1,
 	    "magasin": 1,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 1
 	}, {
 	    "nom": "mei far chen",
@@ -705,6 +770,7 @@
 	    "actions_recharge": 0,
 	    "magasin": 1,
 	    "type": 1,
+	    "mains": 1,
 	    "mode": 1
 	}, {
 	    "nom": "sarbacane",
@@ -720,6 +786,7 @@
 	    "actions_recharge": 1,
 	    "magasin": 1,
 	    "type": 0,
+	    "mains": 1,
 	    "mode": 1
 	}, {
 	    "nom": "arquebuse",
@@ -735,6 +802,7 @@
 	    "actions_recharge": 10,
 	    "magasin": 1,
 	    "type": 1,
+	    "mains": 1,
 	    "mode": 1
 	}, {
 	    "nom": "fusil",
@@ -750,6 +818,7 @@
 	    "actions_recharge": 1,
 	    "magasin": 10,
 	    "type": 1,
+	    "mains": 2,
 	    "mode": 1
 	}, {
 	    "nom": "mousqueton",
@@ -765,6 +834,7 @@
 	    "actions_recharge": 6,
 	    "magasin": 1,
 	    "type": 1,
+	    "mains": 1,
 	    "mode": 1
 	}, {
 	    "nom": "pistolet à rouet",
@@ -780,6 +850,7 @@
 	    "actions_recharge": 5,
 	    "magasin": 1,
 	    "type": 1,
+	    "mains": 1,
 	    "mode": 1
 	}, {
 	    "nom": "pistolet léger",
@@ -795,6 +866,7 @@
 	    "actions_recharge": 1,
 	    "magasin": 6,
 	    "type": 1,
+	    "mains": 1,
 	    "mode": 1
 	}, {
 	    "nom": "pistolet lourd",
@@ -810,6 +882,7 @@
 	    "actions_recharge": 1,
 	    "magasin": 9,
 	    "type": 1,
+	    "mains": 1,
 	    "mode": 1
 	}, {
 	    "nom": "fusil d'assaut",
@@ -825,6 +898,7 @@
 	    "actions_recharge": 1,
 	    "magasin": 30,
 	    "type": 1,
+	    "mains": 2,
 	    "mode": 1
 	}, {
 	    "nom": "mitrailleuse légère",
@@ -840,6 +914,7 @@
 	    "actions_recharge": 1,
 	    "magasin": 100,
 	    "type": 1,
+	    "mains": 2,
 	    "mode": 1
 	}, {
 	    "nom": "pistolet mitrallleur",
@@ -855,6 +930,7 @@
 	    "actions_recharge": 1,
 	    "magasin": 20,
 	    "type": 1,
+	    "mains": 1,
 	    "mode": 1
 	}, {
 	    "nom": "canon d'assaut",
@@ -870,6 +946,7 @@
 	    "actions_recharge": 1,
 	    "magasin": 10,
 	    "type": 3,
+	    "mains": 2,
 	    "mode": 1
 	}, {
 	    "nom": "lance missile",
@@ -885,6 +962,7 @@
 	    "actions_recharge": 1,
 	    "magasin": 1,
 	    "type": 0,
+	    "mains": 2,
 	    "mode": 1
 	}, {
 	    "nom": "mitrailleuse lourde",
@@ -900,6 +978,7 @@
 	    "actions_recharge": 1,
 	    "magasin": 100,
 	    "type": 3,
+	    "mains": 2,
 	    "mode": 1
 	}],
     "types_armes": ["simple", "perce-armure", "pénétrante", "perce-blindage", "énergétique"],

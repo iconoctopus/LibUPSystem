@@ -57,7 +57,7 @@ public class PieceArmure
      * @param p_materiau
      * @param p_isBouclier car ils ont leurs propres règles
      */
-    PieceArmure(int p_idPiece, int p_type, int p_materiau, boolean p_isBouclier)
+    public PieceArmure(int p_idPiece, int p_type, int p_materiau, boolean p_isBouclier)
     {
 	m_idPiece = p_idPiece;
 	m_type = p_type;

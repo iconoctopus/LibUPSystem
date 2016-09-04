@@ -120,7 +120,7 @@ public class ArmureEtPieceArmureTest
 	Assert.assertEquals(0, armure.getMalusParade());
     }
 
-    @Test//TODO ajouter un cas de plus pour chacune des deux méthodes ci-dessous, si possible pile au milieu du tableau, là on teste juste le full et le rien...
+    @Test
     public void testGetBonusND()
     {
 	Assert.assertEquals(15, armure.getBonusND(0));

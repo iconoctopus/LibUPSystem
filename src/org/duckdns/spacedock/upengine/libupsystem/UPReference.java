@@ -210,16 +210,12 @@ public final class UPReference
      */
     private int getRang(int p_points)
     {
-	int res = 0;
-
 	int i = -1;//on commence avec i en dehors du tableau (0 points d'armure, pas de bonus) et l'on teste si on peut l'augmenter, quand on ne peut plus l'augmenter on le renvoie.
 	while (i <= 4 && p_points >= m_tableArmureRangs.getInt(i + 1))
 	{
 	    ++i;
 	}
-	res = i;
-
-	return (res);
+	return (i);
     }
 
     /**
@@ -273,10 +269,8 @@ public final class UPReference
      */
     private int getPtsArmureEffectifs(int p_nbPts, int p_typeArme, int p_typeArmure)
     {
-	double coeff = 0;
-
 	JsonArray tabPourType = m_tableAjustementArmure.getJsonArray(p_typeArmure);
-	coeff = tabPourType.getJsonNumber(p_typeArme).doubleValue();
+	double coeff = tabPourType.getJsonNumber(p_typeArme).doubleValue();
 
 	double preResult = (((double) p_nbPts) * coeff);
 	long IntResult = Math.round(preResult);
@@ -569,7 +563,7 @@ public final class UPReference
      */
     int getPtsArmure(int p_idPiece, int p_materiau, boolean p_isBouclier)
     {
-	int res = 0;
+	int res;
 	if (p_isBouclier)
 	{
 	    JsonObject objetIntermediaire = m_tabBoucliers.getJsonObject(p_idPiece);
@@ -593,7 +587,7 @@ public final class UPReference
      */
     String getLblMateriauArmure(int p_indice, boolean p_isBouclier)
     {
-	String res = "";
+	String res;
 	if (p_isBouclier)
 	{
 	    res = m_listLblMatBoucliers.getString(p_indice);
@@ -634,7 +628,7 @@ public final class UPReference
      */
     String getLblPiece(int p_indice, boolean p_isBouclier)
     {
-	String res = "";
+	String res;
 	if (p_isBouclier)
 	{
 	    JsonObject objetIntermediaire = m_tabBoucliers.getJsonObject(p_indice);
@@ -713,7 +707,7 @@ public final class UPReference
      * Classe encapsulant les libellés autres que ceux utilisés dans les
      * caractéristiques et l'équipement (surtout utilisé pour l'entrée sortie)
      */
-    final class CollectionLibelles
+    public final class CollectionLibelles
     {
 
 	public final String typarm;

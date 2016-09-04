@@ -16,13 +16,13 @@ import org.duckdns.spacedock.commonutils.PropertiesHandler;
  * @author iconoctopus
  */
 public class Inventaire
-{//TODO gérer la latéralisation avec la notion de main principale et secondaire et les bonus afférents (en lien avec combat à deux armes) pour l'instant une seule à la fois
+{
 
     /**
      * le diagramme contenant les pièces d'armures et armes portées par le
      * personnage
      */
-    private EnumMap<ZoneEmplacement, Emplacement> m_diagrammeEmplacement;
+    private final EnumMap<ZoneEmplacement, Emplacement> m_diagrammeEmplacement;
 
     /**
      * main considérée comme portant l'arme principale
@@ -165,6 +165,7 @@ public class Inventaire
     /**
      * ajoute un bouclier dans la main indiquée
      *
+     * @param p_bouclier
      * @param p_cote
      */
     public void addBouclier(PieceArmure p_bouclier, Lateralisation p_cote)

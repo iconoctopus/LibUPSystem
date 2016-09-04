@@ -219,18 +219,11 @@ public class Perso
      */
     public final RollUtils.RollResult attaquerCaC(int p_phaseActuelle, int p_ND)
     {
-	Arme arme = m_inventaire.getArmeCourante();
+	ArmeCaC arme = (ArmeCaC) m_inventaire.getArmeCourante();
 	int catArm = 0;//mains nues par défaut
 	if (arme != null)//une arme est équipée
 	{
-	    if (arme.getMode() == 0)//vérification qu'il s'agit bien d'une arme de corps à corps
-	    {
-		catArm = arme.getCategorie();
-	    }
-	    else
-	    {
-		UPErrorHandler.mauvaisModeAttaque();//TODO ce cas d'erreur n'est pas testé
-	    }
+	    catArm = arme.getCategorie();
 	}
 	return effectuerAttaque(p_phaseActuelle, p_ND, catArm * 2, 3, 0, 0, 0);//par convention les comp d'attaque de CaC sont à cat*2, les parades sont à Cat*2+1
     }
@@ -262,66 +255,59 @@ public class Perso
 	RollResult result = new RollResult(0, false, 0);//raté par défaut
 	ArmeDist arme = (ArmeDist) m_inventaire.getArmeCourante();
 	int modDist = 0;
-	if (arme.getMode() == 1)//vérification qu'il s'agit bien d'une arme à distance
+	if (p_distance >= 0 && p_nbCoups > 0 && p_nbCoups <= 20)
 	{
-	    if (p_distance >= 0 && p_nbCoups > 0 && p_nbCoups <= 20)
+	    arme.consommerMun(p_nbCoups);//on consomme les coups, une exception sera levée si il n'y a pas assez de munitions, le code appelant devrait vérifier systématiquement cela
+	    if (p_distance <= arme.getPortee())//échec auto si distance > portée
 	    {
-		arme.consommerMun(p_nbCoups);//on consomme les coups, une exception sera levée si il n'y a pas assez de munitions, le code appelant devrait vérifier systématiquement cela
-		if (p_distance <= arme.getPortee())//échec auto si distance > portée
-		{
-		    if (p_distance <= (int) Math.round((double) arme.getPortee() / (double) 2))
-		    {//portée courte
-			modDist -= arme.getMalusCourt();
-		    }
-		    else
-		    {//portée longue
-			modDist -= arme.getMalusLong();
-		    }
-		    //tir effectif, maintenant il faut calculer l'éventuel bonus de rafale
-		    int bonusDesLancesRafale = 0;
-		    int bonusDesGardesRafale = 0;
+		if (p_distance <= (int) Math.round((double) arme.getPortee() / (double) 2))
+		{//portée courte
+		    modDist -= arme.getMalusCourt();
+		}
+		else
+		{//portée longue
+		    modDist -= arme.getMalusLong();
+		}
+		//tir effectif, maintenant il faut calculer l'éventuel bonus de rafale
+		int bonusDesLancesRafale = 0;
+		int bonusDesGardesRafale = 0;
 
-		    if (p_nbCoups > 1)
+		if (p_nbCoups > 1)
+		{
+		    if (arme.getCategorie() == 3)//rafales acceptées, sinon lever une exception
 		    {
-			if (arme.getCategorie() == 3)//rafales acceptées, sinon lever une exception
+			if (p_nbCoups >= 3)//les bonus commmencent à partir de 3 balles
 			{
-			    if (p_nbCoups >= 3)//les bonus commmencent à partir de 3 balles
+			    if (p_nbCoups < 4)//rafale courte
 			    {
-				if (p_nbCoups < 4)//rafale courte
+				bonusDesLancesRafale = 2;
+			    }
+			    else
+			    {
+				if (p_nbCoups < 10)//rafale moyenne
 				{
-				    bonusDesLancesRafale = 2;
+				    int preResult = (p_nbCoups / 3);//division entre int donc troncature
+				    bonusDesLancesRafale = preResult * 2;
 				}
-				else
+				else//rafale longue
 				{
-				    if (p_nbCoups < 10)//rafale moyenne
-				    {
-					int preResult = (p_nbCoups / 3);//division entre int donc troncature
-					bonusDesLancesRafale = preResult * 2;
-				    }
-				    else//rafale longue
-				    {
-					bonusDesLancesRafale = bonusDesGardesRafale = (p_nbCoups / 5);//division entre int donc troncature
-				    }
+				    bonusDesLancesRafale = bonusDesGardesRafale = (p_nbCoups / 5);//division entre int donc troncature
 				}
 			    }
 			}
-			else
-			{
-			    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("nbCoups") + ":" + p_nbCoups);
-			}
-
 		    }
-		    result = effectuerAttaque(p_phaseActuelle, p_ND, arme.getCategorie(), 4, bonusDesLancesRafale, bonusDesGardesRafale, modDist);
+		    else
+		    {
+			ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("nbCoups") + ":" + p_nbCoups);
+		    }
+
 		}
-	    }
-	    else
-	    {
-		ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("distance") + ":" + p_distance + " " + PropertiesHandler.getInstance("libupsystem").getString("nbCoups") + ":" + p_nbCoups);
+		result = effectuerAttaque(p_phaseActuelle, p_ND, arme.getCategorie(), 4, bonusDesLancesRafale, bonusDesGardesRafale, modDist);
 	    }
 	}
 	else
 	{
-	    UPErrorHandler.mauvaisModeAttaque();//TODO ce cas d'erreur n'est jamais testé
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("distance") + ":" + p_distance + " " + PropertiesHandler.getInstance("libupsystem").getString("nbCoups") + ":" + p_nbCoups);
 	}
 	return result;
     }
@@ -470,9 +456,8 @@ public class Perso
      */
     public int getNDPassif(int p_typeArme, int p_catArme, boolean p_esquive)
     {
-	int ND = 5;
-
-	int rang = 0;
+	int ND;
+	int rang;
 	int effetArmure = 0;
 	Armure armure = m_inventaire.getArmure();
 

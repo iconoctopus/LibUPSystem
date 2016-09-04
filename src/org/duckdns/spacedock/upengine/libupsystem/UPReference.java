@@ -186,7 +186,7 @@ public final class UPReference
      * @param p_coordination la valeur de coordination
      * @return le modificateur de coordination à l'initiative
      */
-    int getInitModCoord(int p_coordination)
+    public int getInitModCoord(int p_coordination)
     {
 	//le tableau est indexé à partir de 0, pas la coordination
 	return m_tableInitCoord.getInt(p_coordination);
@@ -197,7 +197,7 @@ public final class UPReference
      * @param p_mental la valeur de mental
      * @return le modificateur à l'initiative issu du mental
      */
-    int getInitModMental(int p_mental)
+    public int getInitModMental(int p_mental)
     {
 	//le tableau est indexé à partir de 0, pas le mental
 	return m_tableInitMental.getInt(p_mental);
@@ -225,7 +225,7 @@ public final class UPReference
      * @param p_typeArmure
      * @return la réduction aux dégâts de l'armure par rapport au type d'arme
      */
-    int getArmureRedDegats(int p_points, int p_typeArme, int p_typeArmure)
+    public int getArmureRedDegats(int p_points, int p_typeArme, int p_typeArmure)
     {
 	int pointsEffectifs = getPtsArmureEffectifs(p_points, p_typeArme, p_typeArmure);
 
@@ -246,7 +246,7 @@ public final class UPReference
      * @param p_typeArmure
      * @return le bonus au ND offert par l'armure sur ce type d'arme
      */
-    int getArmureBonusND(int p_points, int p_typeArme, int p_typeArmure)
+    public int getArmureBonusND(int p_points, int p_typeArme, int p_typeArmure)
     {
 	int pointsEffectifs = getPtsArmureEffectifs(p_points, p_typeArme, p_typeArmure);
 
@@ -282,7 +282,7 @@ public final class UPReference
      * @param p_indice l'indice du trait tel que défini dan le fichier JSON
      * @return le libelle du trait indicé
      */
-    String getLibelleTrait(int p_indice)
+    public String getLibelleTrait(int p_indice)
     {
 	return m_tableTraits.getString(p_indice);
 
@@ -293,7 +293,7 @@ public final class UPReference
      * @param p_indice
      * @return le libellé d'une arme
      */
-    String getLblArme(int p_indice)
+    public String getLblArme(int p_indice)
     {
 	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
 	return arme.getString("nom");
@@ -304,7 +304,7 @@ public final class UPReference
      * @param p_indice
      * @return le nb de dés lancés par une arme
      */
-    int getNbLancesArme(int p_indice)
+    public int getNbLancesArme(int p_indice)
     {
 	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
 	return arme.getInt("lance");
@@ -315,7 +315,7 @@ public final class UPReference
      * @param p_indice
      * @return le nombre de dés gardés d'une arme
      */
-    int getNbGardesArme(int p_indice)
+    public int getNbGardesArme(int p_indice)
     {
 	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
 	return arme.getInt("garde");
@@ -327,7 +327,7 @@ public final class UPReference
      * @param p_indice
      * @return le bonus d'init de l'arme
      */
-    int getBonusInitArme(int p_indice)
+    public int getBonusInitArme(int p_indice)
     {
 	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
 	return arme.getInt("bonus_init");
@@ -338,7 +338,7 @@ public final class UPReference
      * @param p_indice
      * @return le malus aux jets d'attaque de l'arme
      */
-    int getMalusAttaqueArme(int p_indice)
+    public int getMalusAttaqueArme(int p_indice)
     {
 	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
 	return arme.getInt("malus_attaque");
@@ -349,7 +349,7 @@ public final class UPReference
      * @param p_indice
      * @return le physique minimal de l'arme
      */
-    int getPhysMinArme(int p_indice)
+    public int getPhysMinArme(int p_indice)
     {
 	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
 	return arme.getInt("physique_minimal");
@@ -360,7 +360,7 @@ public final class UPReference
      * @param p_indice
      * @return l'indice de catégorie de l'arme
      */
-    int getCategorieArme(int p_indice)
+    public int getCategorieArme(int p_indice)
     {
 	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
 	return arme.getInt("categorie");
@@ -371,7 +371,7 @@ public final class UPReference
      * @param p_indice
      * @return l'indice du type de l'arme
      */
-    int getTypeArme(int p_indice)
+    public int getTypeArme(int p_indice)
     {
 	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
 	return arme.getInt("type");
@@ -382,7 +382,7 @@ public final class UPReference
      * @param p_indice
      * @return le libellé d'un type d'arme représenté par son index
      */
-    String getLblTypeArme(int p_indice)
+    public String getLblTypeArme(int p_indice)
     {
 	return m_listLblTypArm.getString(p_indice);
     }
@@ -392,7 +392,7 @@ public final class UPReference
      * @param p_indice
      * @return le nombre de mains utilisées par une arme
      */
-    int getNbMainsArme(int p_indice)
+    public int getNbMainsArme(int p_indice)
     {
 	return m_tabArmes.getJsonObject(p_indice).getInt("mains");
     }
@@ -402,7 +402,7 @@ public final class UPReference
      * @param p_indice
      * @return le mode d'attaque d'une arme représentée par son index
      */
-    int getModArme(int p_indice)
+    public int getModArme(int p_indice)
     {
 	return m_tabArmes.getJsonObject(p_indice).getInt("mode");
     }
@@ -412,7 +412,7 @@ public final class UPReference
      * @param p_indice
      * @return le libellé du mode d'attaque représenté par son index
      */
-    String getLblModArme(int p_indice)
+    public String getLblModArme(int p_indice)
     {
 	return m_listLblModArm.getString(p_indice);
     }
@@ -434,7 +434,7 @@ public final class UPReference
      * @param p_indice
      * @return
      */
-    String getLblCatArmeDist(int p_indice)
+    public String getLblCatArmeDist(int p_indice)
     {
 	return m_listLblCatArmDist.getString(p_indice);
     }
@@ -445,7 +445,7 @@ public final class UPReference
      * @param p_indice
      * @return
      */
-    int getMalusCourtArme(int p_indice)
+    public int getMalusCourtArme(int p_indice)
     {
 	return m_tabArmes.getJsonObject(p_indice).getInt("malus_court");
     }
@@ -456,7 +456,7 @@ public final class UPReference
      * @param p_indice
      * @return
      */
-    int getMalusLongArme(int p_indice)
+    public int getMalusLongArme(int p_indice)
     {
 	return m_tabArmes.getJsonObject(p_indice).getInt("malus_long");
     }
@@ -467,7 +467,7 @@ public final class UPReference
      * @param p_indice
      * @return
      */
-    int getPorteeArme(int p_indice)
+    public int getPorteeArme(int p_indice)
     {
 	return m_tabArmes.getJsonObject(p_indice).getInt("portee");
     }
@@ -478,7 +478,7 @@ public final class UPReference
      * @param p_indice
      * @return
      */
-    int getNbActionsRechargeArme(int p_indice)
+    public int getNbActionsRechargeArme(int p_indice)
     {
 	return m_tabArmes.getJsonObject(p_indice).getInt("actions_recharge");
     }
@@ -489,7 +489,7 @@ public final class UPReference
      * @param p_indice
      * @return
      */
-    int getMagasinArme(int p_indice)
+    public int getMagasinArme(int p_indice)
     {
 	return m_tabArmes.getJsonObject(p_indice).getInt("magasin");
     }
@@ -503,7 +503,7 @@ public final class UPReference
      * @return la liste des libellés des compétences d'un domaine donné par son
      * indice
      */
-    ArrayList<String> getListComp(int p_indice)
+    public ArrayList<String> getListComp(int p_indice)
     {
 	ArrayList<String> res = new ArrayList<>();
 
@@ -543,7 +543,7 @@ public final class UPReference
      * @return la liste complète des domaines, peut être plus prosaïquement
      * utilisé pour connaître leur nombre total
      */
-    ArrayList<String> getListDomaines()
+    public ArrayList<String> getListDomaines()
     {
 	ArrayList<String> res = new ArrayList<>();
 	for (int i = 0; i < m_arbreDomaines.size(); ++i)
@@ -561,7 +561,7 @@ public final class UPReference
      * @return le nombre de points d'armure d'une pièce d'un matériau spécifiés
      * par leurs indices
      */
-    int getPtsArmure(int p_idPiece, int p_materiau, boolean p_isBouclier)
+    public int getPtsArmure(int p_idPiece, int p_materiau, boolean p_isBouclier)
     {
 	int res;
 	if (p_isBouclier)
@@ -585,7 +585,7 @@ public final class UPReference
      * @param p_isBouclier
      * @return le libellé d'un matériau d'armure
      */
-    String getLblMateriauArmure(int p_indice, boolean p_isBouclier)
+    public String getLblMateriauArmure(int p_indice, boolean p_isBouclier)
     {
 	String res;
 	if (p_isBouclier)
@@ -604,9 +604,8 @@ public final class UPReference
      * @param p_indice
      * @return le libllé d'un type d'armure
      */
-    String getLblTypeArmure(int p_indice)
+    public String getLblTypeArmure(int p_indice)
     {
-
 	return m_listLblTypArmures.getString(p_indice);
     }
 
@@ -615,7 +614,7 @@ public final class UPReference
      * @param p_indice
      * @return le libllé d'une localisation
      */
-    String getLblLoca(int p_indice)
+    public String getLblLoca(int p_indice)
     {
 	return m_listLblLoca.getString(p_indice);
     }
@@ -626,7 +625,7 @@ public final class UPReference
      * @param p_isBouclier
      * @return le libellé d'une pièce d'armure
      */
-    String getLblPiece(int p_indice, boolean p_isBouclier)
+    public String getLblPiece(int p_indice, boolean p_isBouclier)
     {
 	String res;
 	if (p_isBouclier)
@@ -650,7 +649,7 @@ public final class UPReference
      * @param p_isBouclier
      * @return le malus d'esquive d'une pièce d'un matériau donné
      */
-    int getMalusEsquive(int p_indicePiece, int p_materiau, boolean p_isBouclier)
+    public int getMalusEsquive(int p_indicePiece, int p_materiau, boolean p_isBouclier)
     {
 	int res = 0;
 	if (!p_isBouclier)
@@ -669,7 +668,7 @@ public final class UPReference
      * @param p_isBouclier
      * @return le malus de parade d'une pièce d'un matériau donné
      */
-    int getMalusParade(int p_indicePiece, int p_materiau, boolean p_isBouclier)
+    public int getMalusParade(int p_indicePiece, int p_materiau, boolean p_isBouclier)
     {
 	int res = 0;
 	if (!p_isBouclier)
@@ -687,7 +686,7 @@ public final class UPReference
      * @param p_isBouclier
      * @return la localisation d'une pièce
      */
-    int getLocalisation(int p_indice, boolean p_isBouclier)
+    public int getLocalisation(int p_indice, boolean p_isBouclier)
     {
 	JsonArray tab;
 
@@ -701,6 +700,111 @@ public final class UPReference
 	}
 	JsonObject piece = tab.getJsonObject(p_indice);
 	return piece.getInt("loca");
+    }
+
+    /**
+     * la liste des noms de toutes les armes
+     *
+     * @return
+     */
+    public ArrayList<String> getListLblArme()
+    {
+	ArrayList<String> res = new ArrayList<>();
+	for (int i = 0; i < m_tabArmes.size(); ++i)
+	{
+	    res.add(m_tabArmes.getJsonObject(i).getString("lbl"));
+	}
+	return res;
+    }
+
+    /**
+     * la liste des noms de toutes les pieces d'armures
+     *
+     * @return
+     */
+    public ArrayList<String> getListLblPieceArmure()
+    {
+	ArrayList<String> res = new ArrayList<>();
+	for (int i = 0; i < m_tabPiecesArmures.size(); ++i)
+	{
+	    res.add(m_tabPiecesArmures.getJsonObject(i).getString("lbl"));
+	}
+	return res;
+    }
+
+    /**
+     * la liste des noms de tous les matériaux d'armure
+     *
+     * @return
+     */
+    public ArrayList<String> getListLblMateriauArmure()
+    {
+	ArrayList<String> res = new ArrayList<>();
+	for (int i = 0; i < m_listLblMatArmures.size(); ++i)
+	{
+	    res.add(m_listLblMatArmures.getString(i));
+	}
+	return res;
+    }
+
+    /**
+     * la liste des noms de tous les types d'armure
+     *
+     * @return
+     */
+    public ArrayList<String> getListLblTypeArmure()
+    {
+	ArrayList<String> res = new ArrayList<>();
+	for (int i = 0; i < m_listLblTypArmures.size(); ++i)
+	{
+	    res.add(m_listLblTypArmures.getString(i));
+	}
+	return res;
+    }
+
+    /**
+     * la liste des noms de tous les types d'arme
+     *
+     * @return
+     */
+    public ArrayList<String> getListLblTypeArme()
+    {
+	ArrayList<String> res = new ArrayList<>();
+	for (int i = 0; i < m_listLblTypArm.size(); ++i)
+	{
+	    res.add(m_listLblTypArm.getString(i));
+	}
+	return res;
+    }
+
+    /**
+     * la liste des noms de tous les matériaux de boucliers
+     *
+     * @return
+     */
+    public ArrayList<String> getListLblMateriauBouclier()
+    {
+	ArrayList<String> res = new ArrayList<>();
+	for (int i = 0; i < m_listLblMatBoucliers.size(); ++i)
+	{
+	    res.add(m_listLblMatBoucliers.getString(i));
+	}
+	return res;
+    }
+
+    /**
+     * la liste des noms de tous les boucliers
+     *
+     * @return
+     */
+    public ArrayList<String> getListLblBouclier()
+    {
+	ArrayList<String> res = new ArrayList<>();
+	for (int i = 0; i < m_tabBoucliers.size(); ++i)
+	{
+	    res.add(m_tabBoucliers.getJsonObject(i).getString("lbl"));
+	}
+	return res;
     }
 
     /**

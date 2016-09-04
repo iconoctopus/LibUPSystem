@@ -346,4 +346,46 @@ public final class UPReferenceTest
 	Assert.assertEquals("tête", m_reference.getLblLoca(0));
 	Assert.assertEquals("main", m_reference.getLblLoca(3));
     }
+
+    public void testGetListLblArme()
+    {
+	Assert.assertEquals("épée à deux mains", m_reference.getListLblArme().get(14));
+	Assert.assertEquals("rapière", m_reference.getListLblArme().get(7));
+    }
+
+    public void testGetListLblPieceArmure()
+    {
+	Assert.assertEquals("masque facial", m_reference.getListLblPieceArmure().get(2));
+	Assert.assertEquals("jambière", m_reference.getListLblPieceArmure().get(5));
+    }
+
+    public void testGetListLblMateriauArmure()
+    {
+	Assert.assertEquals("lamelles ou maille", m_reference.getListLblMateriauArmure().get(1));
+	Assert.assertEquals("cuir clouté", m_reference.getListLblMateriauArmure().get(2));
+    }
+
+    public void testGetListLblTypeArmure()
+    {
+	Assert.assertEquals("moderne", m_reference.getListLblTypeArmure().get(1));
+	Assert.assertEquals("avec blindage", m_reference.getListLblTypeArmure().get(2));
+    }
+
+    public void testGetListLblTypeArme()
+    {
+	Assert.assertEquals("perce-armure", m_reference.getListLblTypeArme().get(1));
+	Assert.assertEquals("perce-blindage", m_reference.getListLblTypeArme().get(3));
+    }
+
+    public void testGetListLblMateriauBouclier()
+    {
+	Assert.assertEquals("métal", m_reference.getListLblMateriauBouclier().get(1));
+	Assert.assertEquals("bois", m_reference.getListLblMateriauBouclier().get(0));
+    }
+
+    public void testGetListLblBouclier()
+    {
+	Assert.assertEquals("bouclier", m_reference.getListLblBouclier().get(1));
+	Assert.assertEquals("targe", m_reference.getListLblBouclier().get(0));
+    }
 }

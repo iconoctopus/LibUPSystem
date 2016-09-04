@@ -158,16 +158,45 @@ public class Inventaire
 	}
 	else
 	{
-	    EmplacementMain main = (EmplacementMain) m_diagrammeEmplacement.get(p_zone);
+
+	}
+    }
+
+    /**
+     * ajoute un bouclier dans la main indiquée
+     *
+     * @param p_cote
+     */
+    public void addBouclier(PieceArmure p_bouclier, Lateralisation p_cote)
+    {
+
+	if (p_bouclier.isBouclier())
+	{
+	    EmplacementMain main;
+
+	    //identification de la main
+	    if (p_cote == Lateralisation.DROITE)
+	    {
+		main = (EmplacementMain) m_diagrammeEmplacement.get(ZoneEmplacement.MAINDROITE);
+	    }
+	    else
+	    {
+		main = (EmplacementMain) m_diagrammeEmplacement.get(ZoneEmplacement.MAINGAUCHE);
+	    }
+
 	    if (!main.isOccupeArmeBouclier())
 	    {
-		main.setBouclier(p_piece);
+		main.setBouclier(p_bouclier);
 	    }
 	    else
 	    {
 		//exception emplacement non libre
 		ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("emplacement_pas_libre"));
 	    }
+	}
+	else
+	{
+	    ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("pas_bouclier"));
 	}
     }
 
@@ -177,31 +206,46 @@ public class Inventaire
      *
      * @param p_zone
      */
-    public void removePieceArmure(ZoneEmplacement p_zone, boolean p_bouclier)
+    public void removePieceArmure(ZoneEmplacement p_zone)
     {
-	if (!p_bouclier)
+	Emplacement emplacement = m_diagrammeEmplacement.get(p_zone);
+	if (emplacement.isOccupeArmure())
 	{
-	    Emplacement emplacement = m_diagrammeEmplacement.get(p_zone);
-	    if (emplacement.isOccupeArmure())
-	    {
-		emplacement.removePiece();
-	    }
-	    else
-	    {
-		ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("emplacement_non_occupe"));
-	    }
+	    emplacement.removePiece();
 	}
 	else
 	{
-	    EmplacementMain main = (EmplacementMain) m_diagrammeEmplacement.get(p_zone);
-	    if (main.isOccupeArmeBouclier())
-	    {
-		main.removeArmeBouclier();
-	    }
-	    else
-	    {
-		ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("emplacement_non_occupe"));
-	    }
+	    ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("emplacement_non_occupe"));
+	}
+    }
+
+    /**
+     * retire un bouclier de la main indiquée
+     *
+     * @param p_cote
+     */
+    public void removeBouclier(Lateralisation p_cote)
+    {
+	EmplacementMain main;
+
+	//identification de la main
+	if (p_cote == Lateralisation.DROITE)
+	{
+	    main = (EmplacementMain) m_diagrammeEmplacement.get(ZoneEmplacement.MAINDROITE);
+	}
+	else
+	{
+	    main = (EmplacementMain) m_diagrammeEmplacement.get(ZoneEmplacement.MAINGAUCHE);
+	}
+
+	//retrait du bouclier
+	if (main.isOccupeArmeBouclier())
+	{
+	    main.removeArmeBouclier();
+	}
+	else
+	{
+	    ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("emplacement_non_occupe"));
 	}
     }
 

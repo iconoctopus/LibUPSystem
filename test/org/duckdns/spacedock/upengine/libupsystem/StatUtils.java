@@ -34,7 +34,7 @@ final class StatUtils
 		{
 		    reussite = true;
 		}
-		((ArmeDist) p_perso.getArmeCourante()).recharger(p_nbCoups);
+		((ArmeDist) p_perso.getInventaire().getArmeCourante()).recharger(p_nbCoups);
 	    }
 	    else
 	    {
@@ -64,13 +64,12 @@ final class StatUtils
 	Perso perso = new Perso(p_rm);
 	if (p_arme != null)
 	{
-	    perso.addArme(p_arme);
-	    perso.setArmeCourante(perso.getListArmes().size() - 1);
+	    perso.getInventaire().addArme(p_arme, Inventaire.Lateralisation.DROITE);
 	}
 	else
 	{
-	    perso.addArme(new ArmeCaC(3, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais));
-	    perso.rengainer();//on est dans le cas où la méthode appelante veut tester les mains nues, on en profite pour tester que rangainer fonctionne bien
+	    perso.getInventaire().addArme(new ArmeCaC(3, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais), Inventaire.Lateralisation.DROITE);
+	    perso.getInventaire().removeArme(Inventaire.Lateralisation.DROITE);//on est dans le cas où la méthode appelante veut tester les mains nues, on en profite pour tester que rangainer fonctionne bien
 	}
 	for (int i = 0; i <= 99999; ++i)//cent mille lancers
 	{

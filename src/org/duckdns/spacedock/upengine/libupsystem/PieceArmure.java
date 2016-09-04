@@ -111,7 +111,7 @@ public class PieceArmure
     }
 
     /**
-     * -	* @return the m_libelle -
+     * @return the m_libelle -
      */
     @Override
 

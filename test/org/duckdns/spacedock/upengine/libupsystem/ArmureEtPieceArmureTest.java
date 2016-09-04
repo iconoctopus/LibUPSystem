@@ -100,7 +100,7 @@ public class ArmureEtPieceArmureTest
 	Assert.assertEquals(1, bouclier1.getMateriau());
 	Assert.assertEquals(4, bouclier1.getNbpoints());
 	Assert.assertEquals(3, bouclier1.getType());
-	Assert.assertEquals(6, bouclier1.getLocalisation());
+	Assert.assertEquals(3, bouclier1.getLocalisation());
 	Assert.assertEquals("pavois énergétique", bouclier1.toString());
 
 	Assert.assertEquals(0, bouclier2.getIdPiece());
@@ -109,7 +109,7 @@ public class ArmureEtPieceArmureTest
 	Assert.assertEquals(0, bouclier2.getMateriau());
 	Assert.assertEquals(2, bouclier2.getNbpoints());
 	Assert.assertEquals(0, bouclier2.getType());
-	Assert.assertEquals(6, bouclier2.getLocalisation());
+	Assert.assertEquals(3, bouclier2.getLocalisation());
 	Assert.assertEquals("targe en métal", bouclier2.toString());
     }
 

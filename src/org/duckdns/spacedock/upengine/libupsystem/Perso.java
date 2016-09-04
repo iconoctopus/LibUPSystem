@@ -443,12 +443,8 @@ public class Perso
     {
 	if (p_degats.getQuantite() >= 0)
 	{
-	    int redDegats = 0;
 	    Armure armure = m_inventaire.getArmure();
-	    if (armure != null)
-	    {
-		redDegats = armure.getRedDegats(p_degats.getTypeArme());
-	    }
+	    int redDegats = armure.getRedDegats(p_degats.getTypeArme());
 	    int degatsEffectifs = p_degats.getQuantite() - redDegats;
 
 	    if (degatsEffectifs > 0)
@@ -485,23 +481,18 @@ public class Perso
 	    //calcul de la valeur issue de la compétence parade
 	    rang = m_arbreDomaines.getRangComp(3, p_catArme * 2 + 1); // la comp de parade est par convention à cat*2+1 là où attaque est à cat*2
 
-	    //ajout des bonus  et malus d'm_armure
-	    if (armure != null)
-	    {
-		effetArmure += armure.getBonusND(p_typeArme);
-		effetArmure -= armure.getMalusParade();
-	    }
+	    //ajout des bonus  et malus d'armure
+	    effetArmure += armure.getBonusND(p_typeArme);
+	    effetArmure -= armure.getMalusParade();
 	}
 	else
 	{
 	    //calcul de la valeur issue de la compétence esquive
 	    rang = m_arbreDomaines.getRangComp(2, 0);
 	    //ajout des bonus  et malus d'armure
-	    if (armure != null)
-	    {
-		effetArmure += armure.getBonusND(p_typeArme);
-		effetArmure -= armure.getMalusEsquive();
-	    }
+	    effetArmure += armure.getBonusND(p_typeArme);
+	    effetArmure -= armure.getMalusEsquive();
+
 	}
 
 	if (rang > 0)

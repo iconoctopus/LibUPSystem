@@ -40,17 +40,12 @@ public class PersoNonStatTest
 	    Assert.assertTrue(persoRM1.getActions().get(i) < 11 && persoRM1.getActions().get(i) > 0);
 	}
 	Assert.assertTrue(persoRM1.isActif(persoRM1.getActions().get(0)));
-	Assert.assertEquals(null, persoRM1.getArmeCourante());
-	Assert.assertEquals(null, persoRM1.getArmure());
 	Assert.assertEquals(0, persoRM1.getBlessuresGraves());
 	Assert.assertEquals(0, persoRM1.getBlessuresLegeres());
 	Assert.assertEquals(0, persoRM1.getBlessuresLegeresMentales());
-	Assert.assertEquals(0, persoRM1.getListArmes().size());
 	Assert.assertEquals(10, persoRM1.getNDPassif(0, 1, false));
 	Assert.assertEquals(10, persoRM1.getNDPassif(0, 1, true));
-	Armure armure = new Armure();
-	armure.addPiece(new PieceArmure(0, 0, 0, false), Inventaire.Lateralisation.GAUCHE);
-	persoRM1.setArmure(armure);
+	persoRM1.getInventaire().addPieceArmure(new PieceArmure(0, 0, 0, false), Inventaire.ZoneEmplacement.TETE);
 	Assert.assertEquals(15, persoRM1.getNDPassif(0, 1, false));
 	Assert.assertEquals(15, persoRM1.getNDPassif(0, 1, true));
 	Assert.assertEquals(0, persoRM1.getPointsDeFatigue());
@@ -65,17 +60,12 @@ public class PersoNonStatTest
 	    Assert.assertTrue(persoRM3.getActions().get(i) < 11 && persoRM3.getActions().get(i) > 0);
 	}
 	Assert.assertTrue(persoRM3.isActif(persoRM3.getActions().get(0)));
-	Assert.assertEquals(null, persoRM3.getArmeCourante());
-	Assert.assertEquals(null, persoRM3.getArmure());
 	Assert.assertEquals(0, persoRM3.getBlessuresGraves());
 	Assert.assertEquals(0, persoRM3.getBlessuresLegeres());
 	Assert.assertEquals(0, persoRM3.getBlessuresLegeresMentales());
-	Assert.assertEquals(0, persoRM3.getListArmes().size());
 	Assert.assertEquals(25, persoRM3.getNDPassif(0, 1, false));
 	Assert.assertEquals(25, persoRM3.getNDPassif(0, 1, true));
-	armure = new Armure();
-	armure.addPiece(new PieceArmure(0, 3, 0, false), Inventaire.Lateralisation.GAUCHE);
-	persoRM3.setArmure(armure);
+	persoRM3.getInventaire().addPieceArmure(new PieceArmure(0, 3, 0, false), Inventaire.ZoneEmplacement.TETE);
 	Assert.assertEquals(35, persoRM3.getNDPassif(0, 1, false));
 	Assert.assertEquals(35, persoRM3.getNDPassif(0, 1, true));
 	Assert.assertEquals(0, persoRM3.getPointsDeFatigue());
@@ -90,12 +80,9 @@ public class PersoNonStatTest
 	    Assert.assertTrue(persoRM5.getActions().get(i) < 11 && persoRM5.getActions().get(i) > 0);
 	}
 	Assert.assertTrue(persoRM5.isActif(persoRM5.getActions().get(0)));
-	Assert.assertEquals(null, persoRM5.getArmeCourante());
-	Assert.assertEquals(null, persoRM5.getArmure());
 	Assert.assertEquals(0, persoRM5.getBlessuresGraves());
 	Assert.assertEquals(0, persoRM5.getBlessuresLegeres());
 	Assert.assertEquals(0, persoRM5.getBlessuresLegeresMentales());
-	Assert.assertEquals(0, persoRM5.getListArmes().size());
 	Assert.assertEquals(35, persoRM5.getNDPassif(0, 1, false));
 	Assert.assertEquals(35, persoRM5.getNDPassif(0, 1, true));
 	Assert.assertEquals(0, persoRM5.getPointsDeFatigue());
@@ -107,7 +94,7 @@ public class PersoNonStatTest
 	persoRM5.setRangComp(3, 1, 0);
 	Assert.assertEquals(20, persoRM5.getNDPassif(0, 0, false));
 	persoRM1.setRangComp(3, 1, 0);
-	persoRM1.setArmure(null);
+	persoRM1.getInventaire().removePieceArmure(Inventaire.ZoneEmplacement.TETE);
 	Assert.assertEquals(5, persoRM1.getNDPassif(0, 0, false));
 
 	//test de cas de ND passif ou l'on ne dispose pas de la competence esquive
@@ -176,9 +163,7 @@ public class PersoNonStatTest
     {
 	Assert.assertEquals((int) persoRM1.getActions().get(0), (int) persoRM1.getInitTotale());//son init de base
 
-	persoRM1.addArme(new ArmeCaC(7, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.bon));
-	persoRM1.setArmeCourante(persoRM1.getListArmes().size() - 1);
-
+	persoRM1.getInventaire().addArme(new ArmeCaC(7, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.bon), Inventaire.Lateralisation.DROITE);
 	Assert.assertEquals((int) persoRM1.getActions().get(0) + 10, (int) persoRM1.getInitTotale());//son init améliorée par une rapière bien équilibrée
     }
 
@@ -308,85 +293,14 @@ public class PersoNonStatTest
     }
 
     @Test
-    public void testAddRemoveGetSetArme()
-    {
-	//teste que l'ajout se passe bien
-	Perso persoArmeTest = new Perso(3);
-	Arme arme1 = new ArmeCaC(7, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais);
-	Arme arme2 = new ArmeCaC(22, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais);
-	Arme arme3 = new ArmeDist(60, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais);
-
-	persoArmeTest.addArme(arme1);
-	persoArmeTest.addArme(arme2);
-	persoArmeTest.addArme(arme3);
-
-	ArrayList<Arme> listArme = persoArmeTest.getListArmes();
-
-	Assert.assertEquals(arme1, listArme.get(0));
-	Assert.assertEquals(arme2, listArme.get(1));
-	Assert.assertEquals(arme3, listArme.get(2));
-
-	//cas d'erreur sur la désignation de l'arme courante
-	try
-	{
-	    persoArmeTest.setArmeCourante(-1);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:indice:-1", e.getMessage());
-	}
-
-	try
-	{
-	    persoArmeTest.setArmeCourante(3);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:indice:3", e.getMessage());
-	}
-
-	//teste que l'arme courante est correctement désignée
-	persoArmeTest.setArmeCourante(1);
-	Assert.assertEquals(arme2, persoArmeTest.getArmeCourante());
-
-	//teste que la suppression se passe bien
-	persoArmeTest.removeArme(1);
-	listArme = persoArmeTest.getListArmes();
-	Assert.assertEquals(arme1, listArme.get(0));
-	Assert.assertEquals(arme3, listArme.get(1));
-
-	//cas d'erreur sur la suppression
-	try
-	{
-	    persoArmeTest.removeArme(-1);
-	    fail();
-	}
-	catch (IndexOutOfBoundsException e)
-	{
-	}
-
-	try
-	{
-	    persoArmeTest.removeArme(2);
-	    fail();
-	}
-	catch (IndexOutOfBoundsException e)
-	{
-	}
-    }
-
-    @Test
     public void testErreurAttaquer()
     {
 	//cas d'erreur : rafale avec arme ayant plusieurs munitions mais incapable de tirer en mode automatique (pistolet)
+	persoRM5.getInventaire().addArme(new ArmeDist(72, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon), Inventaire.Lateralisation.DROITE);
+	((ArmeDist) persoRM5.getInventaire().getArmeCourante()).recharger(9);
+	persoRM5.genInit();
 	try
 	{
-	    persoRM5.addArme(new ArmeDist(72, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
-	    persoRM5.setArmeCourante(persoRM5.getListArmes().size() - 1);
-	    ((ArmeDist) persoRM5.getArmeCourante()).recharger(9);
-	    persoRM5.genInit();
 	    persoRM5.attaquerDist(persoRM5.getActions().get(0), 0, 10, 9);
 	    fail();
 	}
@@ -396,12 +310,12 @@ public class PersoNonStatTest
 	}
 
 	//cas d'erreur : plus de 20 balles
+	persoRM5.getInventaire().removeArme(Inventaire.Lateralisation.DROITE);
+	persoRM5.getInventaire().addArme(new ArmeDist(73, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon), Inventaire.Lateralisation.DROITE);
+	((ArmeDist) persoRM5.getInventaire().getArmeCourante()).recharger(30);
+	persoRM5.genInit();
 	try
 	{
-	    persoRM5.addArme(new ArmeDist(73, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
-	    persoRM5.setArmeCourante(persoRM5.getListArmes().size() - 1);
-	    ((ArmeDist) persoRM5.getArmeCourante()).recharger(30);
-	    persoRM5.genInit();
 	    persoRM5.attaquerDist(persoRM5.getActions().get(0), 0, 100, 21);
 	    fail();
 	}
@@ -411,12 +325,12 @@ public class PersoNonStatTest
 	}
 
 	//cas d'erreur : nb de balles nul
+	persoRM5.getInventaire().removeArme(Inventaire.Lateralisation.DROITE);
+	persoRM5.getInventaire().addArme(new ArmeDist(73, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon), Inventaire.Lateralisation.DROITE);
+	((ArmeDist) persoRM5.getInventaire().getArmeCourante()).recharger(30);
+	persoRM5.genInit();
 	try
 	{
-	    persoRM5.addArme(new ArmeDist(73, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
-	    persoRM5.setArmeCourante(persoRM5.getListArmes().size() - 1);
-	    ((ArmeDist) persoRM5.getArmeCourante()).recharger(30);
-	    persoRM5.genInit();
 	    persoRM5.attaquerDist(persoRM5.getActions().get(0), 0, 0, 0);
 	    fail();
 	}
@@ -426,12 +340,12 @@ public class PersoNonStatTest
 	}
 
 	//cas d'erreur : distance négative
+	persoRM5.getInventaire().removeArme(Inventaire.Lateralisation.DROITE);
+	persoRM5.getInventaire().addArme(new ArmeDist(73, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon), Inventaire.Lateralisation.DROITE);
+	((ArmeDist) persoRM5.getInventaire().getArmeCourante()).recharger(30);
+	persoRM5.genInit();
 	try
 	{
-	    persoRM5.addArme(new ArmeDist(73, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
-	    persoRM5.setArmeCourante(persoRM5.getListArmes().size() - 1);
-	    ((ArmeDist) persoRM5.getArmeCourante()).recharger(30);
-	    persoRM5.genInit();
 	    persoRM5.attaquerDist(persoRM5.getActions().get(0), 0, -1, 1);
 	    fail();
 	}
@@ -441,19 +355,19 @@ public class PersoNonStatTest
 	}
 
 	//cas d'erreur hors portée sur arc
-	persoRM5.addArme(new ArmeDist(60, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
-	persoRM5.setArmeCourante(persoRM5.getListArmes().size() - 1);
-	((ArmeDist) persoRM5.getArmeCourante()).recharger(1);
+	persoRM5.getInventaire().removeArme(Inventaire.Lateralisation.DROITE);
+	persoRM5.getInventaire().addArme(new ArmeDist(60, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon), Inventaire.Lateralisation.DROITE);
+	((ArmeDist) persoRM5.getInventaire().getArmeCourante()).recharger(1);
 	persoRM5.genInit();
 	Assert.assertFalse(persoRM5.attaquerDist(persoRM5.getActions().get(0), 0, 200, 1).isJetReussi());
 
 	//cas d'erreur arme pas assez chargée pour faire feu : rafale trop grosse
+	persoRM5.getInventaire().removeArme(Inventaire.Lateralisation.DROITE);
+	persoRM5.getInventaire().addArme(new ArmeDist(73, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon), Inventaire.Lateralisation.DROITE);
+	((ArmeDist) persoRM5.getInventaire().getArmeCourante()).recharger(15);
+	persoRM5.genInit();
 	try
 	{
-	    persoRM5.addArme(new ArmeDist(73, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
-	    persoRM5.setArmeCourante(persoRM5.getListArmes().size() - 1);
-	    ((ArmeDist) persoRM5.getArmeCourante()).recharger(15);
-	    persoRM5.genInit();
 	    persoRM5.attaquerDist(persoRM5.getActions().get(0), 0, 0, 20);
 	    fail();
 	}
@@ -463,11 +377,11 @@ public class PersoNonStatTest
 	}
 
 	//cas d'erreur arme pas assez chargée pour faire feu : arme vide
+	persoRM5.getInventaire().removeArme(Inventaire.Lateralisation.DROITE);
+	persoRM5.getInventaire().addArme(new ArmeDist(60, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon), Inventaire.Lateralisation.DROITE);
+	persoRM5.genInit();
 	try
 	{
-	    persoRM5.addArme(new ArmeDist(60, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon));
-	    persoRM5.setArmeCourante(persoRM5.getListArmes().size() - 1);
-	    persoRM5.genInit();
 	    persoRM5.attaquerDist(persoRM5.getActions().get(0), 0, 0, 1);
 	    fail();
 	}

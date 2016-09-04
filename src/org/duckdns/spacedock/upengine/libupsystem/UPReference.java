@@ -695,21 +695,18 @@ public final class UPReference
      */
     int getLocalisation(int p_indice, boolean p_isBouclier)
     {
-	int res = 0;
+	JsonArray tab;
 
-	JsonObject piece = m_tabPiecesArmures.getJsonObject(p_indice);
-	res = piece.getInt("loca");
-
-	return res;
-    }
-
-    /**
-     *
-     * @return le nombre de localisations existant
-     */
-    int getLocaNumber()
-    {
-	return m_listLblLoca.size();
+	if (!p_isBouclier)
+	{
+	    tab = m_tabPiecesArmures;
+	}
+	else
+	{
+	    tab = m_tabBoucliers;
+	}
+	JsonObject piece = tab.getJsonObject(p_indice);
+	return piece.getInt("loca");
     }
 
     /**

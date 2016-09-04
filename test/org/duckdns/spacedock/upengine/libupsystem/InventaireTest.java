@@ -101,7 +101,6 @@ public class InventaireTest
     @Test
     public void testAddRemoveGetPieceArmureEtBouclier()
     {
-
 	Inventaire inventaire = new Inventaire();
 
 	PieceArmure casque = new PieceArmure(0, 1, 0, false);
@@ -138,7 +137,7 @@ public class InventaireTest
 	Assert.assertEquals(ganteletGauche, inventaire.getPieceArmure(Inventaire.ZoneEmplacement.MAINGAUCHE));
 
 	//suppression de l'une des pièce d'armure et vérification qu'elle est effective
-	inventaire.removePieceArmure(Inventaire.ZoneEmplacement.PIEDGAUCHE, false);
+	inventaire.removePieceArmure(Inventaire.ZoneEmplacement.PIEDGAUCHE);
 	Assert.assertEquals(null, inventaire.getPieceArmure(Inventaire.ZoneEmplacement.PIEDGAUCHE));
 
 	//récupération de l'armure totale (avec le trou dans la liste au niveau du pied gauche)
@@ -163,7 +162,7 @@ public class InventaireTest
 	//Erreur : retrait de zone libre
 	try
 	{
-	    inventaire.removePieceArmure(Inventaire.ZoneEmplacement.PIEDGAUCHE, false);
+	    inventaire.removePieceArmure(Inventaire.ZoneEmplacement.PIEDGAUCHE);
 	    fail();
 	}
 	catch (IllegalStateException e)
@@ -184,7 +183,7 @@ public class InventaireTest
 
 	//test de l'ajout d'un bouclier
 	PieceArmure bouclier = new PieceArmure(0, 2, 0, true);
-	inventaire.addPieceArmure(bouclier, Inventaire.ZoneEmplacement.MAINGAUCHE);
+	inventaire.addBouclier(bouclier, Inventaire.Lateralisation.GAUCHE);
 	Assert.assertEquals(bouclier, inventaire.getBouclier(Inventaire.Lateralisation.GAUCHE));
 
 	Assert.assertEquals(6, inventaire.getArmure().getMalusParade());
@@ -193,7 +192,7 @@ public class InventaireTest
 	Assert.assertEquals(5, inventaire.getArmure().getRedDegats(3));
 
 	//on retire le bouclier, tout doit redevenir comme avant
-	inventaire.removePieceArmure(Inventaire.ZoneEmplacement.MAINGAUCHE, true);
+	inventaire.removeBouclier(Inventaire.Lateralisation.GAUCHE);
 	Assert.assertEquals(10, inventaire.getArmure().getBonusND(1));
 	Assert.assertEquals(10, inventaire.getArmure().getRedDegats(1));
 	Assert.assertEquals(15, inventaire.getArmure().getBonusND(0));
@@ -203,7 +202,7 @@ public class InventaireTest
 
 	//on remet le bouclier, on ne peut pas ajouter d'arme dans la même main
 	Arme arme1Main = new ArmeCaC(7, Arme.QualiteArme.superieure, Arme.EquilibrageArme.mauvais);
-	inventaire.addPieceArmure(bouclier, Inventaire.ZoneEmplacement.MAINGAUCHE);
+	inventaire.addBouclier(bouclier, Inventaire.Lateralisation.GAUCHE);
 	try
 	{
 	    inventaire.addArme(arme1Main, Inventaire.Lateralisation.GAUCHE);
@@ -237,12 +236,24 @@ public class InventaireTest
 	//erreur : ajout d'un bouclier dans la main portant l'arme
 	try
 	{
-	    inventaire.addPieceArmure(bouclier, Inventaire.ZoneEmplacement.MAINDROITE);
+	    inventaire.addBouclier(bouclier, Inventaire.Lateralisation.DROITE);
 	    fail();
 	}
 	catch (IllegalStateException e)
 	{
 	    Assert.assertEquals("emploi de la mauvaise méthode dans ce contexte:l'emplacement n'est pas libre", e.getMessage());
 	}
+    }
+
+    @Test
+    public void testArmureVide()
+    {
+	//tout doit valoir 0
+	Assert.assertEquals(0, new Inventaire().getArmure().getBonusND(1));
+	Assert.assertEquals(0, new Inventaire().getArmure().getRedDegats(1));
+	Assert.assertEquals(0, new Inventaire().getArmure().getBonusND(0));
+	Assert.assertEquals(0, new Inventaire().getArmure().getRedDegats(2));
+	Assert.assertEquals(0, new Inventaire().getArmure().getMalusParade());
+	Assert.assertEquals(0, new Inventaire().getArmure().getMalusEsquive());
     }
 }

@@ -337,6 +337,7 @@ public final class UPReferenceTest
 	Assert.assertEquals(1, m_reference.getLocalisation(7, false));
 	Assert.assertEquals(2, m_reference.getLocalisation(4, false));
 	Assert.assertEquals(4, m_reference.getLocalisation(5, false));
+	Assert.assertEquals(3, m_reference.getLocalisation(0, true));
     }
 
     @Test
@@ -344,12 +345,5 @@ public final class UPReferenceTest
     {
 	Assert.assertEquals("tête", m_reference.getLblLoca(0));
 	Assert.assertEquals("main", m_reference.getLblLoca(3));
-	Assert.assertEquals("bouclier", m_reference.getLblLoca(6));
-    }
-
-    @Test
-    public void testGetLocaNumber()
-    {
-	Assert.assertEquals(7, m_reference.getLocaNumber());
     }
 }

@@ -44,8 +44,8 @@ public class Inventaire
 	m_diagrammeEmplacement.put(ZoneEmplacement.MAINGAUCHE, new EmplacementMain(3));
 	m_diagrammeEmplacement.put(ZoneEmplacement.JAMBEDROITE, new Emplacement(4));
 	m_diagrammeEmplacement.put(ZoneEmplacement.JAMBEGAUCHE, new Emplacement(4));
-	m_diagrammeEmplacement.put(ZoneEmplacement.PIEDDROIT, new Emplacement(4));
-	m_diagrammeEmplacement.put(ZoneEmplacement.PIEDGAUCHE, new Emplacement(4));
+	m_diagrammeEmplacement.put(ZoneEmplacement.PIEDDROIT, new Emplacement(5));
+	m_diagrammeEmplacement.put(ZoneEmplacement.PIEDGAUCHE, new Emplacement(5));
 
 	m_cotePrincipal = Lateralisation.DROITE;
     }
@@ -130,7 +130,7 @@ public class Inventaire
 	else
 	{
 	    //exception main principale non occupée
-	    ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("emplacement_non_occupé"));
+	    ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("emplacement_non_occupe"));
 	}
     }
 
@@ -188,7 +188,7 @@ public class Inventaire
 	    }
 	    else
 	    {
-		ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("emplacement_non_occupé"));
+		ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("emplacement_non_occupe"));
 	    }
 	}
 	else
@@ -200,7 +200,7 @@ public class Inventaire
 	    }
 	    else
 	    {
-		ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("emplacement_non_occupé"));
+		ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("emplacement_non_occupe"));
 	    }
 	}
     }
@@ -389,7 +389,7 @@ public class Inventaire
 	    }
 	    else
 	    {
-		ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("emplacement_non_occupé"));
+		ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("emplacement_non_occupe"));
 	    }
 	}
 
@@ -508,7 +508,7 @@ public class Inventaire
 	    }
 	    else
 	    {
-		ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("emplacement_non_occupé"));
+		ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("emplacement_non_occupe"));
 	    }
 	}
 

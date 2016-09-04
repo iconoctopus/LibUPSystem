@@ -5,9 +5,7 @@
  */
 package org.duckdns.spacedock.upengine.libupsystem;
 
-import org.junit.After;
 import org.junit.Assert;
-import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -16,7 +14,7 @@ import org.junit.Test;
  *
  * @author iconoctopus
  */
-public class ArmureTest
+public class ArmureEtPieceArmureTest
 {
 
     static PieceArmure piece1;
@@ -44,13 +42,8 @@ public class ArmureTest
     public void setUp()
     {
 	armure = new Armure();
-	armure.addPiece(piece1, Inventaire.Lateralisation.GAUCHE);
-	armure.addPiece(piece3, Inventaire.Lateralisation.GAUCHE);
-    }
-
-    @After
-    public void tearDown()
-    {
+	armure.addPiece(piece1);
+	armure.addPiece(piece3);
     }
 
     @Test
@@ -125,11 +118,9 @@ public class ArmureTest
     {
 	Assert.assertEquals(10, armure.getMalusEsquive());
 	Assert.assertEquals(0, armure.getMalusParade());
-	Assert.assertEquals("casque complet en plates", armure.getListPieces().get(0).get(0).toString());
-	Assert.assertEquals("cuirasse avec blindage", armure.getListPieces().get(1).get(0).toString());
     }
 
-    @Test
+    @Test//TODO ajouter un cas de plus pour chacune des deux méthodes ci-dessous, si possible pile au milieu du tableau, là on teste juste le full et le rien...
     public void testGetBonusND()
     {
 	Assert.assertEquals(15, armure.getBonusND(0));
@@ -139,48 +130,5 @@ public class ArmureTest
     public void testGetRedDegats()
     {
 	Assert.assertEquals(0, armure.getRedDegats(4));
-    }
-
-    @Test
-    public void testAddRemovePiece()
-    {
-	armure.addPiece(piece5, Inventaire.Lateralisation.GAUCHE);
-	Assert.assertEquals(0, armure.getRedDegats(4));
-	Assert.assertEquals(10, armure.getRedDegats(1));
-	Assert.assertEquals(15, armure.getBonusND(0));
-	Assert.assertEquals(10, armure.getMalusEsquive());
-	Assert.assertEquals(2, armure.getMalusParade());
-	armure.addPiece(piece5, Inventaire.Lateralisation.DROITE);
-	Assert.assertEquals(4, armure.getMalusParade());
-
-	try
-	{
-	    armure.addPiece(piece5, Inventaire.Lateralisation.GAUCHE);
-	    fail();
-	}
-	catch (IllegalStateException e)
-	{
-	    Assert.assertEquals("emploi de la mauvaise méthode dans ce contexte:ajout de pièce d'armure:brassière en lamelles ou maille", e.getMessage());
-	}
-
-	armure.removePiece(piece5.getLocalisation(), Inventaire.Lateralisation.GAUCHE);
-	try
-	{
-	    armure.removePiece(piece5.getLocalisation(), Inventaire.Lateralisation.GAUCHE);
-	    fail();
-	}
-	catch (NullPointerException e)
-	{
-	}
-	armure.addPiece(piece5, Inventaire.Lateralisation.GAUCHE);
-	armure.removePiece(piece5.getLocalisation(), Inventaire.Lateralisation.GAUCHE);
-
-	armure.addPiece(bouclier1, Inventaire.Lateralisation.GAUCHE);
-	Assert.assertEquals(5, armure.getRedDegats(3));
-	Assert.assertEquals(15, armure.getRedDegats(2));
-	Assert.assertEquals(15, armure.getBonusND(2));
-	Assert.assertEquals(10, armure.getBonusND(3));
-	Assert.assertEquals(10, armure.getMalusEsquive());
-	Assert.assertEquals(2, armure.getMalusParade());
     }
 }

@@ -32,7 +32,7 @@ public final class UPReferenceTest
     }
 
     @Test
-    public void testGetInitModCoordNominal()
+    public void testGetInitModCoord()
     {
 	Assert.assertEquals(5, m_reference.getInitModCoord(6));
 	Assert.assertEquals(3, m_reference.getInitModCoord(3));
@@ -41,7 +41,7 @@ public final class UPReferenceTest
     }
 
     @Test
-    public void testGetInitModMentalNominal()
+    public void testGetInitModMental()
     {
 	Assert.assertEquals(2, m_reference.getInitModMental(6));
 	Assert.assertEquals(0, m_reference.getInitModMental(3));
@@ -51,7 +51,7 @@ public final class UPReferenceTest
     }
 
     @Test
-    public void testGetRedDegatsNominal()
+    public void testGetRedDegats()
     {
 	Assert.assertEquals(0, m_reference.getArmureRedDegats(0, 0, 0));
 	Assert.assertEquals(0, m_reference.getArmureRedDegats(2, 4, 3));
@@ -63,7 +63,7 @@ public final class UPReferenceTest
     }
 
     @Test
-    public void testGetBonusNDNominal()
+    public void testGetBonusND()
     {
 	Assert.assertEquals(0, m_reference.getArmureBonusND(0, 0, 0));
 	Assert.assertEquals(5, m_reference.getArmureBonusND(2, 4, 3));
@@ -75,7 +75,7 @@ public final class UPReferenceTest
     }
 
     @Test
-    public void testGetLibelleTraitNominal()
+    public void testGetLibelleTrait()
     {
 	Assert.assertEquals("physique", m_reference.getLibelleTrait(0));
 	Assert.assertEquals("mental", m_reference.getLibelleTrait(2));

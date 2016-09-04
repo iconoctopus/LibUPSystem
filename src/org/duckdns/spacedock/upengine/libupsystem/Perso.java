@@ -321,7 +321,7 @@ public class Perso
 	}
 	else
 	{
-	    UPErrorHandler.mauvaisModeAttaque();
+	    UPErrorHandler.mauvaisModeAttaque();//TODO ce cas d'erreur n'est jamais testé
 	}
 	return result;
     }

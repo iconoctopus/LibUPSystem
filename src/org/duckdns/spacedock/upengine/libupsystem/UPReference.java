@@ -635,7 +635,6 @@ public final class UPReference
 	}
 	else
 	{
-
 	    JsonObject piece = m_tabPiecesArmures.getJsonObject(p_indice);
 	    res = piece.getString("lbl");
 	}

@@ -43,21 +43,21 @@ public class PersoStatAttaqueTest
 
 	//attaque à distance au fusil d'assaut en rafale courte avec RM3 et portée courte
 	persoRM3.getInventaire().removeArme(Inventaire.Lateralisation.DROITE);
-	persoRM3.getInventaire().addArme(new ArmeDist(73, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal), Inventaire.Lateralisation.DROITE);
+	persoRM3.getInventaire().addArme(new ArmeDist(44, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal), Inventaire.Lateralisation.DROITE);
 	((ArmeDist) persoRM3.getInventaire().getArmeCourante()).recharger(30);
 	Assert.assertTrue(StatUtils.reussiteStatistiqueAttaque(persoRM3, 27, 100, 3));
 	Assert.assertFalse(StatUtils.reussiteStatistiqueAttaque(persoRM3, 32, 20, 3));
 
 	//attaque à distance au fusil d'assaut en rafale moyenne avec RM3 et portée longue
 	persoRM3.getInventaire().removeArme(Inventaire.Lateralisation.DROITE);
-	persoRM3.getInventaire().addArme(new ArmeDist(73, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais), Inventaire.Lateralisation.DROITE);
+	persoRM3.getInventaire().addArme(new ArmeDist(44, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais), Inventaire.Lateralisation.DROITE);
 	((ArmeDist) persoRM3.getInventaire().getArmeCourante()).recharger(30);
 	Assert.assertTrue(StatUtils.reussiteStatistiqueAttaque(persoRM3, 24, 200, 8));//donc deux groupes entiers de trois balles
 	Assert.assertFalse(StatUtils.reussiteStatistiqueAttaque(persoRM3, 28, 270, 8));
 
 	//attaque à distance au fusil d'assaut en rafale longue avec RM5 et portée courte
 	persoRM5.getInventaire().removeArme(Inventaire.Lateralisation.DROITE);
-	persoRM5.getInventaire().addArme(new ArmeDist(73, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon), Inventaire.Lateralisation.DROITE);
+	persoRM5.getInventaire().addArme(new ArmeDist(44, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon), Inventaire.Lateralisation.DROITE);
 	((ArmeDist) persoRM5.getInventaire().getArmeCourante()).recharger(30);
 	Assert.assertTrue(StatUtils.reussiteStatistiqueAttaque(persoRM5, 56, 120, 13));//deux groupes entiers de 5 balles
 	Assert.assertFalse(StatUtils.reussiteStatistiqueAttaque(persoRM5, 60, 40, 13));

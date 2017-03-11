@@ -1,46 +1,46 @@
 {
-    "rangs": [1, 6, 11, 16, 21, 26],
-    "red_degats": [0, 5, 5, 10, 10, 15],
-    "bonusND": [5, 5, 10, 10, 15, 15],
+    "rangs": [2, 6, 11, 16, 21, 26],
+    "red_degats": [5, 5, 5, 10, 15, 15],
+    "bonusND": [0, 5, 10, 10, 10, 15],
     "pieces": [{
-	    "lbl": "casque complet",
-	    "points": [3, 2, 2, 1],
+	    "lbl": "heaume complet",
+	    "points": [3, 2, 1.5, 1],
 	    "malus_esquive": [0, 0, 0, 0],
 	    "malus_parade": [0, 0, 0, 0],
 	    "loca": 0
 	}, {
-	    "lbl": "casque ouvert",
-	    "points": [2, 1, 1, 1],
+	    "lbl": "heaume ouvert",
+	    "points": [2, 1.5, 1, 0.5],
 	    "malus_esquive": [0, 0, 0, 0],
 	    "malus_parade": [0, 0, 0, 0],
 	    "loca": 0
 	}, {
 	    "lbl": "masque facial",
-	    "points": [1, 1, 1, 0.5],
+	    "points": [2, 1.5, 1, 0.5],
 	    "malus_esquive": [0, 0, 0, 0],
 	    "malus_parade": [0, 0, 0, 0],
 	    "loca": 0
 	}, {
 	    "lbl": "gantelet",
-	    "points": [2, 2, 1, 0.5],
+	    "points": [2, 1.5, 1, 0.5],
 	    "malus_esquive": [0, 0, 0, 0],
 	    "malus_parade": [0, 0, 0, 0],
 	    "loca": 3
 	}, {
 	    "lbl": "brassière",
-	    "points": [2, 2, 2, 1, 0.5],
+	    "points": [3, 2, 1, 0.5],
 	    "malus_esquive": [0, 0, 0, 0],
-	    "malus_parade": [3, 2, 2, 0],
+	    "malus_parade": [0, 0, 0, 0],
 	    "loca": 2
 	}, {
 	    "lbl": "jambière",
-	    "points": [2, 1, 1, 0.5],
-	    "malus_esquive": [2, 2, 1, 0],
+	    "points": [3, 2, 1, 0.5],
+	    "malus_esquive": [0, 0, 0, 0],
 	    "malus_parade": [0, 0, 0, 0],
 	    "loca": 4
 	}, {
 	    "lbl": "botte",
-	    "points": [1, 1, 1, 0.5],
+	    "points": [2, 1.5, 1, 0.5],
 	    "malus_esquive": [1, 1, 1, 0],
 	    "malus_parade": [0, 0, 0, 0],
 	    "loca": 5

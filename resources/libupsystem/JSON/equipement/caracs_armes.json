@@ -606,7 +606,7 @@
 	    "portee": 2000,
 	    "actions_recharge": 1,
 	    "magasin": 10,
-	    "type": 1,
+	    "type": 2,
 	    "mains": 2,
 	    "mode": 1
 	}, {
@@ -638,7 +638,7 @@
 	    "portee": 1000,
 	    "actions_recharge": 1,
 	    "magasin": 500,
-	    "type": 1,
+	    "type": 2,
 	    "mains": 2,
 	    "mode": 1
 	}],

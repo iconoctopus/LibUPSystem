@@ -23,7 +23,7 @@ public class PersoStatAttaqueTest
 	Perso persoRM5 = new Perso(5);
 
 	//cas du physique minimal insuffisant avec une hache et un physique de 1
-	persoRM1.getInventaire().addArme(new ArmeCaC(22, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal), Inventaire.Lateralisation.DROITE);
+	persoRM1.getInventaire().addArme(new ArmeCaC(10, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal), Inventaire.Lateralisation.DROITE);
 	Assert.assertFalse(StatUtils.reussiteStatistiqueAttaque(persoRM1, 1, 0, 0));
 
 	//attaque à mains nues avec RM3
@@ -36,7 +36,7 @@ public class PersoStatAttaqueTest
 	Assert.assertFalse(StatUtils.reussiteStatistiqueAttaque(persoRM3, 32, 0, 0));
 
 	//attaque à distance au fusil d'assaut coup par coup avec RM5 et portée courte
-	persoRM5.getInventaire().addArme(new ArmeDist(73, Arme.QualiteArme.superieure, Arme.EquilibrageArme.mauvais), Inventaire.Lateralisation.DROITE);
+	persoRM5.getInventaire().addArme(new ArmeDist(44, Arme.QualiteArme.superieure, Arme.EquilibrageArme.mauvais), Inventaire.Lateralisation.DROITE);
 	((ArmeDist) persoRM5.getInventaire().getArmeCourante()).recharger(30);
 	Assert.assertTrue(StatUtils.reussiteStatistiqueAttaque(persoRM5, 42, 150, 1));//pile la portée, donc courte
 	Assert.assertFalse(StatUtils.reussiteStatistiqueAttaque(persoRM5, 46, 150, 2));//deux balles ne devraient rien changer, on n'est pas au seuil de rafale courte

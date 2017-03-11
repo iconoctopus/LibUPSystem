@@ -274,7 +274,7 @@ public class Perso
 
 		if (p_nbCoups > 1)
 		{
-		    if (arme.getCategorie() == 3)//rafales acceptées, sinon lever une exception
+		    if (arme.getCategorie() == 4)//rafales acceptées, sinon lever une exception
 		    {
 			if (p_nbCoups >= 3)//les bonus commmencent à partir de 3 balles
 			{

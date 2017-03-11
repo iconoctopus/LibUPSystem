@@ -56,7 +56,7 @@ public class ArmureEtPieceArmureTest
 	Assert.assertEquals(3, piece1.getNbpoints());
 	Assert.assertEquals(0, piece1.getType());
 	Assert.assertEquals(0, piece1.getLocalisation());
-	Assert.assertEquals("casque complet en plates", piece1.toString());
+	Assert.assertEquals("heaume complet en plates", piece1.toString());
 
 	Assert.assertEquals(0, piece2.getIdPiece());
 	Assert.assertEquals(0, piece2.getMalusEsquive());
@@ -65,7 +65,7 @@ public class ArmureEtPieceArmureTest
 	Assert.assertEquals(1, piece2.getNbpoints());
 	Assert.assertEquals(1, piece2.getType());
 	Assert.assertEquals(0, piece2.getLocalisation());
-	Assert.assertEquals("casque complet moderne", piece2.toString());
+	Assert.assertEquals("heaume complet moderne", piece2.toString());
 
 	Assert.assertEquals(7, piece3.getIdPiece());
 	Assert.assertEquals(10, piece3.getMalusEsquive());
@@ -87,7 +87,7 @@ public class ArmureEtPieceArmureTest
 
 	Assert.assertEquals(4, piece5.getIdPiece());
 	Assert.assertEquals(0, piece5.getMalusEsquive());
-	Assert.assertEquals(2, piece5.getMalusParade());
+	Assert.assertEquals(0, piece5.getMalusParade());
 	Assert.assertEquals(1, piece5.getMateriau());
 	Assert.assertEquals(2, piece5.getNbpoints());
 	Assert.assertEquals(0, piece5.getType());
@@ -129,6 +129,6 @@ public class ArmureEtPieceArmureTest
     @Test
     public void testGetRedDegats()
     {
-	Assert.assertEquals(0, armure.getRedDegats(4));
+	Assert.assertEquals(5, armure.getRedDegats(4));
     }
 }

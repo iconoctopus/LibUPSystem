@@ -504,7 +504,7 @@
 	    "bonus_init": 1,
 	    "malus_attaque": 0,
 	    "physique_minimal": 0,
-	    "categorie": 1,
+	    "categorie": 2,
 	    "malus_long": 10,
 	    "malus_court": 5,
 	    "portee": 100,

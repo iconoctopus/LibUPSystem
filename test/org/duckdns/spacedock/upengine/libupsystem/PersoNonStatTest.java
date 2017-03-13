@@ -44,6 +44,9 @@ public class PersoNonStatTest
 	Assert.assertEquals(0, persoRM1.getBlessuresLegeresMentales());
 	Assert.assertEquals(10, persoRM1.getNDPassif(0, 1, false));
 	Assert.assertEquals(10, persoRM1.getNDPassif(0, 1, true));
+        persoRM1.getInventaire().addPieceArmure(new PieceArmure(0, 0, 0, false), Inventaire.ZoneEmplacement.TETE);
+ 	Assert.assertEquals(10, persoRM1.getNDPassif(0, 1, false));
+ 	Assert.assertEquals(10, persoRM1.getNDPassif(0, 1, true));
 	persoRM1.getInventaire().addPieceArmure(new PieceArmure(7, 0, 0, false), Inventaire.ZoneEmplacement.CORPS);
 	Assert.assertEquals(15, persoRM1.getNDPassif(0, 1, false));
 	Assert.assertEquals(5, persoRM1.getNDPassif(0, 1, true));
@@ -93,6 +96,7 @@ public class PersoNonStatTest
 	persoRM5.setRangComp(3, 1, 0);
 	Assert.assertEquals(20, persoRM5.getNDPassif(0, 0, false));
 	persoRM1.setRangComp(3, 1, 0);
+        persoRM1.getInventaire().removePieceArmure(Inventaire.ZoneEmplacement.TETE);
 	persoRM1.getInventaire().removePieceArmure(Inventaire.ZoneEmplacement.CORPS);
 	Assert.assertEquals(5, persoRM1.getNDPassif(0, 0, false));
 

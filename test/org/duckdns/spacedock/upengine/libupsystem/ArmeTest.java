@@ -25,10 +25,10 @@ public class ArmeTest
     @BeforeClass
     public static void setUpClass()
     {
-	arme1 = new ArmeCaC(7, Arme.QualiteArme.superieure, Arme.EquilibrageArme.mauvais);
-	arme2 = new ArmeCaC(22, Arme.QualiteArme.inferieure, Arme.EquilibrageArme.bon);
-	arme3 = new ArmeCaC(22, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais);
-	arme4 = new ArmeDist(60, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal);
+	arme1 = new ArmeCaC(3, Arme.QualiteArme.superieure, Arme.EquilibrageArme.mauvais);
+	arme2 = new ArmeCaC(10, Arme.QualiteArme.inferieure, Arme.EquilibrageArme.bon);
+	arme3 = new ArmeCaC(10, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais);
+	arme4 = new ArmeDist(34, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal);
     }
 
     @Test
@@ -48,7 +48,7 @@ public class ArmeTest
 	Assert.assertEquals(3, arme2.getCategorie());
 	Assert.assertEquals(3, arme2.getDesGardes());
 	Assert.assertEquals(5, arme2.getDesLances());
-	Assert.assertEquals(0, arme2.getMalusAttaque());
+	Assert.assertEquals(1, arme2.getMalusAttaque());
 	Assert.assertEquals(0, arme2.getTypeArme());
 	Assert.assertEquals(2, arme2.getphysMin());
 	Assert.assertEquals(0, arme2.getMode());
@@ -58,13 +58,13 @@ public class ArmeTest
 	Assert.assertEquals(3, arme3.getCategorie());
 	Assert.assertEquals(4, arme3.getDesGardes());
 	Assert.assertEquals(7, arme3.getDesLances());
-	Assert.assertEquals(0, arme3.getMalusAttaque());
+	Assert.assertEquals(1, arme3.getMalusAttaque());
 	Assert.assertEquals(0, arme3.getTypeArme());
 	Assert.assertEquals(2, arme3.getphysMin());
 	Assert.assertEquals(0, arme3.getMode());
 	Assert.assertEquals("hache d'arme de maître", arme3.toString());
 
-	Assert.assertEquals(1, arme4.getBonusInit());
+	Assert.assertEquals(0, arme4.getBonusInit());
 	Assert.assertEquals(0, arme4.getCategorie());
 	Assert.assertEquals(3, arme4.getDesGardes());
 	Assert.assertEquals(2, arme4.getDesLances());

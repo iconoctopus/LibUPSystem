@@ -20,10 +20,10 @@ public class InventaireTest
     public void testAddRemoveArme()
     {
 	Inventaire inventaire = new Inventaire();
-	Arme arme1 = new ArmeCaC(7, Arme.QualiteArme.superieure, Arme.EquilibrageArme.mauvais);//rapière
-	Arme arme2 = new ArmeCaC(22, Arme.QualiteArme.inferieure, Arme.EquilibrageArme.bon);//hache d'arme
-	Arme arme3 = new ArmeCaC(14, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal);//épée à deux mains
-	Arme arme4 = new ArmeCaC(1, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal);//cimeterre
+	Arme arme1 = new ArmeCaC(3, Arme.QualiteArme.superieure, Arme.EquilibrageArme.mauvais);//rapière
+	Arme arme2 = new ArmeCaC(10, Arme.QualiteArme.inferieure, Arme.EquilibrageArme.bon);//hache d'arme
+	Arme arme3 = new ArmeCaC(5, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal);//épée à deux mains
+	Arme arme4 = new ArmeCaC(0, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal);//cimeterre
 
 	//erreur : on ne peut pas retirer quelque chose qui n'est pas là
 	try
@@ -136,17 +136,27 @@ public class InventaireTest
 	inventaire.addPieceArmure(ganteletGauche, Inventaire.ZoneEmplacement.MAINGAUCHE);
 	Assert.assertEquals(ganteletGauche, inventaire.getPieceArmure(Inventaire.ZoneEmplacement.MAINGAUCHE));
 
-	//suppression de l'une des pièce d'armure et vérification qu'elle est effective
+        //récupération de l'armure totale (avec les deux bottes)
+	Assert.assertEquals(15, inventaire.getArmure().getBonusND(1));
+	Assert.assertEquals(15, inventaire.getArmure().getRedDegats(1));
+        Assert.assertEquals(10, inventaire.getArmure().getBonusND(2));
+	Assert.assertEquals(5, inventaire.getArmure().getRedDegats(2));
+	Assert.assertEquals(0, inventaire.getArmure().getMalusParade());
+	Assert.assertEquals(12, inventaire.getArmure().getMalusEsquive());	
+
+        //suppression de l'une des pièce d'armure et vérification qu'elle est effective
 	inventaire.removePieceArmure(Inventaire.ZoneEmplacement.PIEDGAUCHE);
 	Assert.assertEquals(null, inventaire.getPieceArmure(Inventaire.ZoneEmplacement.PIEDGAUCHE));
 
 	//récupération de l'armure totale (avec le trou dans la liste au niveau du pied gauche)
 	Assert.assertEquals(10, inventaire.getArmure().getBonusND(1));
-	Assert.assertEquals(10, inventaire.getArmure().getRedDegats(1));
+	Assert.assertEquals(15, inventaire.getArmure().getRedDegats(1));
 	Assert.assertEquals(15, inventaire.getArmure().getBonusND(0));
+        Assert.assertEquals(15, inventaire.getArmure().getRedDegats(0));
+        Assert.assertEquals(10, inventaire.getArmure().getBonusND(2));
 	Assert.assertEquals(5, inventaire.getArmure().getRedDegats(2));
-	Assert.assertEquals(6, inventaire.getArmure().getMalusParade());
-	Assert.assertEquals(15, inventaire.getArmure().getMalusEsquive());
+	Assert.assertEquals(0, inventaire.getArmure().getMalusParade());
+	Assert.assertEquals(11, inventaire.getArmure().getMalusEsquive());
 
 	//Erreur : ajout sur zone occupée
 	try
@@ -186,22 +196,28 @@ public class InventaireTest
 	inventaire.addBouclier(bouclier, Inventaire.Lateralisation.GAUCHE);
 	Assert.assertEquals(bouclier, inventaire.getBouclier(Inventaire.Lateralisation.GAUCHE));
 
-	Assert.assertEquals(6, inventaire.getArmure().getMalusParade());
-	Assert.assertEquals(15, inventaire.getArmure().getMalusEsquive());
+	Assert.assertEquals(0, inventaire.getArmure().getMalusParade());
+	Assert.assertEquals(11, inventaire.getArmure().getMalusEsquive());
 	Assert.assertEquals(15, inventaire.getArmure().getBonusND(2));//le bouclier doit avoir fait augmenter le type général de l'armure en plus de lui avoir fait passer un rang
-	Assert.assertEquals(5, inventaire.getArmure().getRedDegats(3));
+	Assert.assertEquals(15, inventaire.getArmure().getRedDegats(2));
+        Assert.assertEquals(10, inventaire.getArmure().getBonusND(3));
+        Assert.assertEquals(5, inventaire.getArmure().getRedDegats(3));
+        Assert.assertEquals(5, inventaire.getArmure().getBonusND(4));
+        Assert.assertEquals(5, inventaire.getArmure().getRedDegats(4));
 
 	//on retire le bouclier, tout doit redevenir comme avant
 	inventaire.removeBouclier(Inventaire.Lateralisation.GAUCHE);
 	Assert.assertEquals(10, inventaire.getArmure().getBonusND(1));
-	Assert.assertEquals(10, inventaire.getArmure().getRedDegats(1));
+	Assert.assertEquals(15, inventaire.getArmure().getRedDegats(1));
 	Assert.assertEquals(15, inventaire.getArmure().getBonusND(0));
+        Assert.assertEquals(15, inventaire.getArmure().getRedDegats(0));
+        Assert.assertEquals(10, inventaire.getArmure().getBonusND(2));
 	Assert.assertEquals(5, inventaire.getArmure().getRedDegats(2));
-	Assert.assertEquals(6, inventaire.getArmure().getMalusParade());
-	Assert.assertEquals(15, inventaire.getArmure().getMalusEsquive());
+	Assert.assertEquals(0, inventaire.getArmure().getMalusParade());
+	Assert.assertEquals(11, inventaire.getArmure().getMalusEsquive());
 
 	//on remet le bouclier, on ne peut pas ajouter d'arme dans la même main
-	Arme arme1Main = new ArmeCaC(7, Arme.QualiteArme.superieure, Arme.EquilibrageArme.mauvais);
+	Arme arme1Main = new ArmeCaC(3, Arme.QualiteArme.superieure, Arme.EquilibrageArme.mauvais);
 	inventaire.addBouclier(bouclier, Inventaire.Lateralisation.GAUCHE);
 	try
 	{

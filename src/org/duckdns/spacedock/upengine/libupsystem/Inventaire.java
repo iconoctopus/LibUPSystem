@@ -10,8 +10,7 @@ import org.duckdns.spacedock.commonutils.ErrorHandler;
 import org.duckdns.spacedock.commonutils.PropertiesHandler;
 
 /**
- * encapsule l'équipement d'un personnage, pour l'instant très simple mais
- * pourra s'étoffer à terme
+ * encapsule l'équipement d'un personnage
  *
  * @author iconoctopus
  */
@@ -28,6 +27,24 @@ public class Inventaire
      * main considérée comme portant l'arme principale
      */
     private Lateralisation m_cotePrincipal;
+
+    /**
+     * le type d'armure, c'est par défaut le type le plus élevé parmi les pièces
+     * portées (hors localisation)
+     */
+    private int m_typeArmure;
+    /**
+     * les points d'armure, viennent des ajouts de pièces
+     */
+    private int m_pointsArmure;
+    /**
+     * le malus d'esquive de l'armure, provient de la somme de ceux des pièces
+     */
+    private int m_malusEsquive;
+    /**
+     * le malus de parade de l'armure, provient de la somme de ceux des pièces
+     */
+    private int m_malusParade;
 
     /**
      * constructeur sans éléments initiaux : on initialise quand même pour
@@ -47,7 +64,12 @@ public class Inventaire
 	m_diagrammeEmplacement.put(ZoneEmplacement.PIEDDROIT, new Emplacement(5));
 	m_diagrammeEmplacement.put(ZoneEmplacement.PIEDGAUCHE, new Emplacement(5));
 
-	m_cotePrincipal = Lateralisation.DROITE;
+	m_typeArmure = 0;
+	m_malusEsquive = 0;
+	m_malusParade = 0;
+	m_pointsArmure = 0;
+
+	m_cotePrincipal = Lateralisation.DROITE;//par défaut
     }
 
     /**
@@ -125,7 +147,7 @@ public class Inventaire
 	    {
 		autreMain.setArmeDeuxMainsDansMainPrincipaleFalse();
 	    }
-	    mainPrincipale.removeArmeBouclier();
+	    mainPrincipale.removeArme();
 	}
 	else
 	{
@@ -135,20 +157,21 @@ public class Inventaire
     }
 
     /**
-     * méthode ajoutant une piece d'armure dans un des emplacements. Si la pièce
-     * est un bouclier alors l'affectation est particulière
+     * méthode ajoutant une piece d'armure dans un des emplacements. Ne peut
+     * être employée avec un bouclier (c'est le gantelet qui est dans la main)
      *
      * @param p_piece
      * @param p_zone
      */
     public void addPieceArmure(PieceArmure p_piece, ZoneEmplacement p_zone)
     {
-	if (!p_piece.isBouclier())
+	if (!p_piece.isBouclier())//pièce d'armure classique
 	{
 	    Emplacement emplacement = m_diagrammeEmplacement.get(p_zone);
 	    if (!emplacement.isOccupeArmure())
 	    {
 		emplacement.setPiece(p_piece);
+		reScanArmure();
 	    }
 	    else
 	    {
@@ -158,19 +181,20 @@ public class Inventaire
 	}
 	else
 	{
-
+	    //cette méthode ne s'applique pas aux boucliers
+	    ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("est_bouclier"));
 	}
     }
 
     /**
-     * ajoute un bouclier dans la main indiquée
+     * ajoute un bouclier dans la main indiquée (méthode spéciale pour boucliers
+     * car c'est le gantelet qui est dans la main)
      *
      * @param p_bouclier
      * @param p_cote
      */
     public void addBouclier(PieceArmure p_bouclier, Lateralisation p_cote)
     {
-
 	if (p_bouclier.isBouclier())
 	{
 	    EmplacementMain main;
@@ -188,6 +212,7 @@ public class Inventaire
 	    if (!main.isOccupeArmeBouclier())
 	    {
 		main.setBouclier(p_bouclier);
+		reScanArmure();
 	    }
 	    else
 	    {
@@ -202,8 +227,8 @@ public class Inventaire
     }
 
     /**
-     * supprme la piece d'armure de la zone désignée avec traitement particulier
-     * pour les boucliers
+     * supprime la piece d'armure de la zone désignée, ne s'applique pas aux
+     * boucliers (c'est le gantelet qui est dans la main)
      *
      * @param p_zone
      */
@@ -213,6 +238,7 @@ public class Inventaire
 	if (emplacement.isOccupeArmure())
 	{
 	    emplacement.removePiece();
+	    reScanArmure();
 	}
 	else
 	{
@@ -221,7 +247,8 @@ public class Inventaire
     }
 
     /**
-     * retire un bouclier de la main indiquée
+     * retire un bouclier de la main indiquée (méthode spéciale pour boucliers
+     * car c'est le gantelet qui est dans la main)
      *
      * @param p_cote
      */
@@ -242,7 +269,8 @@ public class Inventaire
 	//retrait du bouclier
 	if (main.isOccupeArmeBouclier())
 	{
-	    main.removeArmeBouclier();
+	    main.removeBouclier();
+	    reScanArmure();
 	}
 	else
 	{
@@ -252,16 +280,22 @@ public class Inventaire
 
     /**
      *
-     * @return une armure calculée dynamiquement en fonction des effets portés
+     * recalcule les caracs de l'armure courante
      */
-    public Armure getArmure()
+    private void reScanArmure()
     {
-	Armure result = new Armure();
+	//on commence par réinitialiser l'armure
+	m_typeArmure = 0;
+	m_malusEsquive = 0;
+	m_malusParade = 0;
+	m_pointsArmure = 0;
+
+	//l'armure remise à 0, on peut la faire remonter
 	for (Emplacement e : m_diagrammeEmplacement.values())
 	{
 	    if (e.isOccupeArmure())
 	    {
-		result.addPiece(e.getPiece());
+		scanPiece(e.getPiece());
 	    }
 	    if (e.isMain())
 	    {
@@ -270,12 +304,30 @@ public class Inventaire
 		    PieceArmure bouclier = ((EmplacementMain) e).getBouclier();
 		    if (bouclier != null)
 		    {
-			result.addPiece(bouclier);
+			scanPiece(bouclier);
 		    }
 		}
 	    }
 	}
-	return (result);
+    }
+
+    /**
+     * analyse une pièce d'armure et la prend en compte dans les caracs d'armure
+     * courante
+     *
+     * @param p_piece
+     */
+    private void scanPiece(PieceArmure p_piece)
+    {
+	int type = p_piece.getType();
+	if (m_typeArmure < type)
+	{
+	    m_typeArmure = type;//on considère toujours le meilleur type porté pour les coups non-ciblés
+	}
+
+	m_pointsArmure += p_piece.getNbpoints();
+	m_malusEsquive += p_piece.getMalusEsquive();
+	m_malusParade += p_piece.getMalusParade();
     }
 
     /**
@@ -307,7 +359,7 @@ public class Inventaire
     }
 
     /**
-     * pas de vérification le retour peut très bin être nul
+     * pas de vérification le retour peut très bien être nul
      *
      * @param p_zone
      * @return
@@ -335,6 +387,14 @@ public class Inventaire
 	    main = (EmplacementMain) m_diagrammeEmplacement.get(ZoneEmplacement.MAINGAUCHE);
 	}
 	return main.getBouclier();
+    }
+
+    /**
+     * @return l'armure actuellement portée
+     */
+    Armure getArmure()
+    {
+	return new Armure(m_pointsArmure, m_typeArmure, m_malusEsquive, m_malusParade);
     }
 
     /**
@@ -378,7 +438,7 @@ public class Inventaire
 	 *
 	 * @param p_localisation la seule localisation qu'acceptera ce contenu
 	 */
-	Emplacement(int p_localisation)
+	private Emplacement(int p_localisation)
 	{
 	    m_occupeArmure = false;
 	    m_localisation = p_localisation;
@@ -450,7 +510,7 @@ public class Inventaire
 
     /**
      * classe dérivée spéciale pour les mains afin de contenir en plus une arme
-     * ou un bouclier
+     * ou un bouclier (en plus du gantelet)
      */
     private static class EmplacementMain extends Emplacement
     {
@@ -464,9 +524,13 @@ public class Inventaire
 	 */
 	private PieceArmure m_bouclier;
 	/**
-	 * si une arme ou un bouclier occupe l'emplacement
+	 * si une arme occupe la main
 	 */
-	private boolean m_occupeArmeBouclier;
+	private boolean m_occupeArme;
+	/**
+	 * si un bouclier occupe la main
+	 */
+	private boolean m_occupeBouclier;
 	/**
 	 * si l'autre main (supposée principale) tient une arme à 2 mains
 	 */
@@ -475,10 +539,11 @@ public class Inventaire
 	/**
 	 * construit la main initialement vide
 	 */
-	EmplacementMain(int p_localisation)
+	private EmplacementMain(int p_localisation)
 	{
 	    super(p_localisation);
-	    m_occupeArmeBouclier = false;
+	    m_occupeBouclier = false;
+	    m_occupeArme = false;
 	    m_armeDeuxMainsDansMainPrincipale = false;
 	}
 
@@ -496,7 +561,7 @@ public class Inventaire
 	    else
 	    {
 		m_arme = p_arme;
-		m_occupeArmeBouclier = true;
+		m_occupeArme = true;
 	    }
 	}
 
@@ -530,7 +595,7 @@ public class Inventaire
 		if (p_bouclier.isBouclier())
 		{
 		    m_bouclier = p_bouclier;
-		    m_occupeArmeBouclier = true;
+		    m_occupeBouclier = true;
 		}
 		else
 		{
@@ -540,16 +605,30 @@ public class Inventaire
 	}
 
 	/**
-	 * enlève l'arme ou le bouclier de la main et marque l'emplacement comme
-	 * libre
+	 * enlève l'arme de la main et marque l'emplacement comme libre
 	 */
-	private void removeArmeBouclier()
+	private void removeArme()
 	{
-	    if (isOccupeArmeBouclier())
+	    if (m_occupeArme)
 	    {
 		m_arme = null;
+		m_occupeArme = false;
+	    }
+	    else
+	    {
+		ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("emplacement_non_occupe"));
+	    }
+	}
+
+	/**
+	 * enlève le bouclier de la main et marque l'emplacement comme libre
+	 */
+	private void removeBouclier()
+	{
+	    if (m_occupeBouclier)
+	    {
 		m_bouclier = null;
-		m_occupeArmeBouclier = false;
+		m_occupeBouclier = false;
 	    }
 	    else
 	    {
@@ -579,9 +658,9 @@ public class Inventaire
 	 *
 	 * @return
 	 */
-	boolean isOccupeArmeBouclier()
+	private boolean isOccupeArmeBouclier()
 	{
-	    return m_occupeArmeBouclier || m_armeDeuxMainsDansMainPrincipale;
+	    return m_occupeArme || m_occupeBouclier || m_armeDeuxMainsDansMainPrincipale;
 	}
 
 	@Override

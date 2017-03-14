@@ -6,7 +6,6 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -14,7 +13,7 @@ import org.junit.Test;
  *
  * @author iconoctopus
  */
-public class ArmureEtPieceArmureTest
+public class PieceArmureTest
 {
 
     static PieceArmure piece1;
@@ -36,14 +35,6 @@ public class ArmureEtPieceArmureTest
 	piece5 = new PieceArmure(4, 0, 1, false);
 	bouclier1 = new PieceArmure(3, 3, 1, true);
 	bouclier2 = new PieceArmure(0, 0, 0, true);
-    }
-
-    @Before
-    public void setUp()
-    {
-	armure = new Armure();
-	armure.addPiece(piece1);
-	armure.addPiece(piece3);
     }
 
     @Test
@@ -111,24 +102,5 @@ public class ArmureEtPieceArmureTest
 	Assert.assertEquals(0, bouclier2.getType());
 	Assert.assertEquals(3, bouclier2.getLocalisation());
 	Assert.assertEquals("targe en métal", bouclier2.toString());
-    }
-
-    @Test
-    public void testArmure()
-    {
-	Assert.assertEquals(10, armure.getMalusEsquive());
-	Assert.assertEquals(0, armure.getMalusParade());
-    }
-
-    @Test
-    public void testGetBonusND()
-    {
-	Assert.assertEquals(15, armure.getBonusND(0));
-    }
-
-    @Test
-    public void testGetRedDegats()
-    {
-	Assert.assertEquals(5, armure.getRedDegats(4));
     }
 }

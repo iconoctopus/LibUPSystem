@@ -136,15 +136,15 @@ public class InventaireTest
 	inventaire.addPieceArmure(ganteletGauche, Inventaire.ZoneEmplacement.MAINGAUCHE);
 	Assert.assertEquals(ganteletGauche, inventaire.getPieceArmure(Inventaire.ZoneEmplacement.MAINGAUCHE));
 
-	//récupération de l'armure totale (avec les deux bottes)
+        //récupération de l'armure totale (avec les deux bottes)
 	Assert.assertEquals(15, inventaire.getArmure().getBonusND(1));
 	Assert.assertEquals(15, inventaire.getArmure().getRedDegats(1));
-	Assert.assertEquals(10, inventaire.getArmure().getBonusND(2));
+        Assert.assertEquals(10, inventaire.getArmure().getBonusND(2));
 	Assert.assertEquals(5, inventaire.getArmure().getRedDegats(2));
 	Assert.assertEquals(0, inventaire.getArmure().getMalusParade());
-	Assert.assertEquals(12, inventaire.getArmure().getMalusEsquive());
+	Assert.assertEquals(12, inventaire.getArmure().getMalusEsquive());	
 
-	//suppression de l'une des pièce d'armure et vérification qu'elle est effective
+        //suppression de l'une des pièce d'armure et vérification qu'elle est effective
 	inventaire.removePieceArmure(Inventaire.ZoneEmplacement.PIEDGAUCHE);
 	Assert.assertEquals(null, inventaire.getPieceArmure(Inventaire.ZoneEmplacement.PIEDGAUCHE));
 
@@ -152,8 +152,8 @@ public class InventaireTest
 	Assert.assertEquals(10, inventaire.getArmure().getBonusND(1));
 	Assert.assertEquals(15, inventaire.getArmure().getRedDegats(1));
 	Assert.assertEquals(15, inventaire.getArmure().getBonusND(0));
-	Assert.assertEquals(15, inventaire.getArmure().getRedDegats(0));
-	Assert.assertEquals(10, inventaire.getArmure().getBonusND(2));
+        Assert.assertEquals(15, inventaire.getArmure().getRedDegats(0));
+        Assert.assertEquals(10, inventaire.getArmure().getBonusND(2));
 	Assert.assertEquals(5, inventaire.getArmure().getRedDegats(2));
 	Assert.assertEquals(0, inventaire.getArmure().getMalusParade());
 	Assert.assertEquals(11, inventaire.getArmure().getMalusEsquive());
@@ -200,18 +200,18 @@ public class InventaireTest
 	Assert.assertEquals(11, inventaire.getArmure().getMalusEsquive());
 	Assert.assertEquals(15, inventaire.getArmure().getBonusND(2));//le bouclier doit avoir fait augmenter le type général de l'armure en plus de lui avoir fait passer un rang
 	Assert.assertEquals(15, inventaire.getArmure().getRedDegats(2));
-	Assert.assertEquals(10, inventaire.getArmure().getBonusND(3));
-	Assert.assertEquals(5, inventaire.getArmure().getRedDegats(3));
-	Assert.assertEquals(5, inventaire.getArmure().getBonusND(4));
-	Assert.assertEquals(5, inventaire.getArmure().getRedDegats(4));
+        Assert.assertEquals(10, inventaire.getArmure().getBonusND(3));
+        Assert.assertEquals(5, inventaire.getArmure().getRedDegats(3));
+        Assert.assertEquals(5, inventaire.getArmure().getBonusND(4));
+        Assert.assertEquals(5, inventaire.getArmure().getRedDegats(4));
 
-	//on retire le bouclier, tout doit redevenir comme avant
+        //on retire le bouclier, tout doit redevenir comme avant
 	inventaire.removeBouclier(Inventaire.Lateralisation.GAUCHE);
 	Assert.assertEquals(10, inventaire.getArmure().getBonusND(1));
 	Assert.assertEquals(15, inventaire.getArmure().getRedDegats(1));
 	Assert.assertEquals(15, inventaire.getArmure().getBonusND(0));
-	Assert.assertEquals(15, inventaire.getArmure().getRedDegats(0));
-	Assert.assertEquals(10, inventaire.getArmure().getBonusND(2));
+        Assert.assertEquals(15, inventaire.getArmure().getRedDegats(0));
+        Assert.assertEquals(10, inventaire.getArmure().getBonusND(2));
 	Assert.assertEquals(5, inventaire.getArmure().getRedDegats(2));
 	Assert.assertEquals(0, inventaire.getArmure().getMalusParade());
 	Assert.assertEquals(11, inventaire.getArmure().getMalusEsquive());

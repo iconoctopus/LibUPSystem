@@ -2,76 +2,60 @@
     "rangs": [2, 6, 11, 16, 21, 26],
     "red_degats": [5, 5, 5, 10, 15, 15],
     "bonusND": [0, 5, 10, 10, 10, 15],
+    "malus_armure": [0, 1, 2, 3, 4, 5],
     "pieces": [{
 	    "lbl": "heaume complet",
 	    "points": [3, 2, 1.5, 1],
-	    "malus_esquive": [0, 0, 0, 0],
-	    "malus_parade": [0, 0, 0, 0],
 	    "loca": 0
 	}, {
 	    "lbl": "heaume ouvert",
 	    "points": [2, 1.5, 1, 0.5],
-	    "malus_esquive": [0, 0, 0, 0],
-	    "malus_parade": [0, 0, 0, 0],
 	    "loca": 0
 	}, {
 	    "lbl": "masque facial",
 	    "points": [2, 1.5, 1, 0.5],
-	    "malus_esquive": [0, 0, 0, 0],
-	    "malus_parade": [0, 0, 0, 0],
 	    "loca": 0
 	}, {
 	    "lbl": "gantelet",
 	    "points": [2, 1.5, 1, 0.5],
-	    "malus_esquive": [0, 0, 0, 0],
-	    "malus_parade": [0, 0, 0, 0],
 	    "loca": 3
 	}, {
 	    "lbl": "brassière",
 	    "points": [3, 2, 1, 0.5],
-	    "malus_esquive": [0, 0, 0, 0],
-	    "malus_parade": [0, 0, 0, 0],
 	    "loca": 2
 	}, {
 	    "lbl": "jambière",
 	    "points": [3, 2, 1, 0.5],
-	    "malus_esquive": [0, 0, 0, 0],
-	    "malus_parade": [0, 0, 0, 0],
 	    "loca": 4
 	}, {
 	    "lbl": "botte",
 	    "points": [2, 1.5, 1, 0.5],
-	    "malus_esquive": [1, 1, 1, 0],
-	    "malus_parade": [0, 0, 0, 0],
 	    "loca": 5
 	}, {
 	    "lbl": "cuirasse",
 	    "points": [6, 4, 3, 2],
-	    "malus_esquive": [10, 5, 2, 1],
-	    "malus_parade": [0, 0, 0, 0],
 	    "loca": 1
 	}],
     "boucliers": [{
 	    "lbl": "targe",
-	    "points": [2, 1],
+	    "points": 2,
 	    "loca": 3
 	}, {
 	    "lbl": "bouclier",
-	    "points": [3, 2],
+	    "points": 3,
 	    "loca": 3
 	}, {
 	    "lbl": "écu",
-	    "points": [4, 3],
+	    "points": 4,
 	    "loca": 3
 	}, {
 	    "lbl": "pavois",
-	    "points": [5, 4],
+	    "points": 5,
 	    "loca": 3
 	}],
     "loca_doubles": [2, 3, 4, 5],
     "ajustements": [[1, 0.5, 0.33, 0.25, 0.2], [2, 1, 0.5, 0.33, 0.25], [3, 2, 1, 0.5, 0.33], [4, 3, 2, 1, 0.5]],
     "materiaux_armures": ["plates", "lamelles ou maille", "cuir clouté", "cuir bouilli"],
-    "materiaux_boucliers": ["métal", "bois"],
     "types_armures": ["ancienne", "moderne", "avec blindage", "énergétique"],
     "localisations": ["tête", "corps", "bras", "main", "jambe", "pied"]
 }

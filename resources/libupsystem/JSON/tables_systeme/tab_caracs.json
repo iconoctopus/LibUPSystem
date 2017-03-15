@@ -1,5 +1,5 @@
 {
-    "traits": ["physique", "coordination", "mental", "volonté", "sociabilité"],
+    "traits": ["physique", "coordination", "mental", "volonté", "présence"],
     "lbl_attaque": "attaque",
     "lbl_parade": "parade",
     "lbl_metier": "art & métier",
@@ -11,7 +11,7 @@
 	    "comps": ["art & métier"]
 	}, {
 	    "lbl": "arts physiques",
-	    "comps": ["esquive", "équitation", "sport"]
+	    "comps": ["acrobatie", "athlétisme", "équitation"]
 	}, {
 	    "lbl": "combat au corps à corps",
 	    "comps": []

@@ -13,13 +13,22 @@ class CoupleJauge
 {
 
     /**
-     * la taille max de la juge externe (init ou force d'âme)
+     * niveau actuel de blessures légères
      */
-    private int m_taille_externe;
+    private int m_blessuresLegeres;
     /**
-     * la taille max de la jauge interne (santé ou fatigue)
+     * position du point de choc
      */
-    private int m_taille_interne;
+    private int m_choc;
+    /**
+     * représente l'élimination d'un personnage : mort ou coma
+     */
+    private boolean m_elimine;
+    /**
+     * statut inconscient ou non du personnge, ce statut est cumulatif avec la
+     * mort (être inconscinet n'impliuqe donc pas d'être vivant)
+     */
+    private boolean m_inconscient;
     /**
      * le remplissage de la jauge externe (niveau d'init ou de force d'âme
      * actuel)
@@ -30,22 +39,13 @@ class CoupleJauge
      */
     private int m_remplissage_interne;
     /**
-     * position du point de choc
+     * la taille max de la juge externe (init ou force d'âme)
      */
-    private int m_choc;
+    private int m_taille_externe;
     /**
-     * niveau actuel de blessures légères
+     * la taille max de la jauge interne (santé ou fatigue)
      */
-    private int m_blessuresLegeres;
-    /**
-     * statut inconscient ou non du personnge, ce statut est cumulatif avec la
-     * mort (être inconscinet n'impliuqe donc pas d'être vivant)
-     */
-    private boolean m_inconscient;
-    /**
-     * représente l'élimination d'un personnage : mort ou coma
-     */
-    private boolean m_elimine;
+    private int m_taille_interne;
 
     /**
      * constructeur de jauge de santé/init
@@ -55,7 +55,7 @@ class CoupleJauge
      * @param p_mental le trait mental
      * @param p_coordination le trait coordination
      */
-    CoupleJauge(int p_physique, int p_volonte, int p_mental, int p_coordination)//jauge de santé
+    CoupleJauge(int p_physique, int p_volonte, int p_mental, int p_coordination)
     {
 	if (p_physique >= 0 && p_volonte >= 0 && p_mental >= 0 && p_coordination >= 0)
 	{
@@ -87,23 +87,72 @@ class CoupleJauge
     }
 
     /**
-     * commun aux deux constructeurs. Sert à constituer le CoupleJauge dans les
-     * faits
-     *
-     * @param p_taille_interne
-     * @param p_taille_externe
-     * @param p_choc
+     * @return the m_blessuresLegeres
      */
-    private void instancier(int p_taille_interne, int p_taille_externe, int p_choc)
+    int getBlessuresLegeres()
     {
-	m_taille_externe = p_taille_externe;
-	m_taille_interne = p_taille_interne;
-	m_choc = p_choc;
-	m_remplissage_externe = m_taille_externe;
-	m_remplissage_interne = 0;//au départ on a pas de blessures graves/ points de fatigue
-	m_blessuresLegeres = 0;
-	m_elimine = false;
-	m_inconscient = false;
+	return m_blessuresLegeres;
+    }
+
+    /**
+     * @return the m_remplissage_externe
+     */
+    int getRemplissage_externe()
+    {
+	return m_remplissage_externe;
+    }
+
+    /**
+     * @return the m_remplissage_interne
+     */
+    int getRemplissage_interne()
+    {
+	return m_remplissage_interne;
+    }
+
+    /**
+     * @return the m_taille_externe
+     */
+    int getTaille_externe()
+    {
+	return m_taille_externe;
+    }
+
+    /**
+     * @return the m_taille_interne
+     */
+    int getTaille_interne()
+    {
+	return m_taille_interne;
+    }
+
+    /**
+     *
+     * @return si le personnage est éliminé (coma ou mort)
+     */
+    Boolean isElimine()
+    {
+	return (m_elimine);
+    }
+
+    /**
+     *
+     * @return si le personnage est inconscient, ce statut est cumulatif avec la
+     * mort (être inconscinet n'impliuqe donc pas d'être vivant)
+     */
+    Boolean isInconscient()
+    {
+	return (m_inconscient);
+    }
+
+    /**
+     *
+     * @return le statut sonne ou non, calculé en fonction du remplissage et du
+     * point choc
+     */
+    Boolean isSonne()
+    {
+	return (m_remplissage_interne >= m_choc);
     }
 
     /**
@@ -165,71 +214,22 @@ class CoupleJauge
     }
 
     /**
-     * @return the m_remplissage_externe
-     */
-    int getRemplissage_externe()
-    {
-	return m_remplissage_externe;
-    }
-
-    /**
-     * @return the m_blessuresLegeres
-     */
-    int getBlessuresLegeres()
-    {
-	return m_blessuresLegeres;
-    }
-
-    /**
-     * @return the m_remplissage_interne
-     */
-    int getRemplissage_interne()
-    {
-	return m_remplissage_interne;
-    }
-
-    /**
-     * @return the m_taille_externe
-     */
-    int getTaille_externe()
-    {
-	return m_taille_externe;
-    }
-
-    /**
-     * @return the m_taille_interne
-     */
-    int getTaille_interne()
-    {
-	return m_taille_interne;
-    }
-
-    /**
+     * commun aux deux constructeurs. Sert à constituer le CoupleJauge dans les
+     * faits
      *
-     * @return le statut sonne ou non, calculé en fonction du remplissage et du
-     * point choc
+     * @param p_taille_interne
+     * @param p_taille_externe
+     * @param p_choc
      */
-    Boolean isSonne()
+    private void instancier(int p_taille_interne, int p_taille_externe, int p_choc)
     {
-	return (m_remplissage_interne >= m_choc);
-    }
-
-    /**
-     *
-     * @return si le personnage est inconscient, ce statut est cumulatif avec la
-     * mort (être inconscinet n'impliuqe donc pas d'être vivant)
-     */
-    Boolean isInconscient()
-    {
-	return (m_inconscient);
-    }
-
-    /**
-     *
-     * @return si le personnage est éliminé (coma ou mort)
-     */
-    Boolean isElimine()
-    {
-	return (m_elimine);
+	m_taille_externe = p_taille_externe;
+	m_taille_interne = p_taille_interne;
+	m_choc = p_choc;
+	m_remplissage_externe = m_taille_externe;
+	m_remplissage_interne = 0;//au départ on a pas de blessures graves/ points de fatigue
+	m_blessuresLegeres = 0;
+	m_elimine = false;
+	m_inconscient = false;
     }
 }

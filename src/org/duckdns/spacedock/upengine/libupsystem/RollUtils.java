@@ -112,7 +112,7 @@ public final class RollUtils
      * champs définis : inutile de dégrader les performances avec toute la
      * mécanique des collections.
      */
-    public static class RollResult
+    public static final class RollResult
     {
 
 	private final int m_nbIncrements;

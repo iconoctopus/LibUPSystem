@@ -16,6 +16,15 @@ public class ArmeDist extends Arme
 {
 
     /**
+     * le nombre de coups présents dans l'arme au départ
+     */
+    private int m_magasinCourant;
+    /**
+     * la capacité du magasin de l'arme
+     */
+    private final int m_magasinMax;
+
+    /**
      * le malus à portée courte
      */
     private final int m_malusCourt;
@@ -24,21 +33,13 @@ public class ArmeDist extends Arme
      */
     private final int m_malusLong;
     /**
-     * le malus à portée longue
-     */
-    private final int m_portee;
-    /**
      * le nombre d'actions pour recharger
      */
     private final int m_nbActionsRecharge;
     /**
-     * la capacité du magasin de l'arme
+     * le malus à portée longue
      */
-    private final int m_magasinMax;
-    /**
-     * le nombre de coups présents dans l'arme au départ
-     */
-    private int m_magasinCourant;
+    private final int m_portee;
 
     /**
      * constructeur appelant dans UPReference les spécificités des arms à
@@ -60,6 +61,22 @@ public class ArmeDist extends Arme
 	m_nbActionsRecharge = reference.getNbActionsRechargeArme(p_indice);
 	m_magasinMax = reference.getMagasinArme(p_indice);
 	m_magasinCourant = 0;//par défaut l'arme n'est pas chargée
+    }
+
+    /**
+     *
+     * @param p_nbMun
+     */
+    void consommerMun(int p_nbMun)
+    {
+	if (p_nbMun > 0 && p_nbMun <= m_magasinCourant)
+	{
+	    m_magasinCourant -= p_nbMun;
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("nbCoups") + ":" + p_nbMun + " " + PropertiesHandler.getInstance("libupsystem").getString("muncourantes") + ":" + m_magasinCourant);
+	}
     }
 
     /**
@@ -102,11 +119,11 @@ public class ArmeDist extends Arme
     }
 
     /**
-     * @return the m_portee
+     * @return the m_magasinCourant
      */
-    int getPortee()
+    int getMunCourantes()
     {
-	return m_portee;
+	return m_magasinCourant;
     }
 
     /**
@@ -118,35 +135,19 @@ public class ArmeDist extends Arme
     }
 
     /**
+     * @return the m_portee
+     */
+    int getPortee()
+    {
+	return m_portee;
+    }
+
+    /**
      * @return the m_magasinMax
      */
     int getTailleMAgasin()
     {
 	return m_magasinMax;
-    }
-
-    /**
-     * @return the m_magasinCourant
-     */
-    int getMunCourantes()
-    {
-	return m_magasinCourant;
-    }
-
-    /**
-     *
-     * @param p_nbMun
-     */
-    void consommerMun(int p_nbMun)
-    {
-	if (p_nbMun > 0 && p_nbMun <= m_magasinCourant)
-	{
-	    m_magasinCourant -= p_nbMun;
-	}
-	else
-	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("nbCoups") + ":" + p_nbMun + " " + PropertiesHandler.getInstance("libupsystem").getString("muncourantes") + ":" + m_magasinCourant);
-	}
     }
 
     /**

@@ -14,46 +14,46 @@ public abstract class Arme
 {
 
     /**
-     * le nombre de dés lancés dans la VD
+     * le nombre de mains nécessaire au maniement de l'arme
      */
-    private final int m_desLances;
-    /**
-     * le nombre de dés gardés dans la VD
-     */
-    private final int m_desGardes;
+    private final int m_NbMainsArme;
     /**
      * le bonus apporté à l'initiative totale
      */
     private final int m_bonusInit;
     /**
-     * le type de l'arme : simple, perce-amure, pénétrante, perce-blindage ou
-     * energétique, respectivement de 0 à 4
+     * la catégorie d'arme (permet de définir la compétence à utiliser)
      */
-    private final int m_typeArme;
+    private final int m_categorie;
+    /**
+     * le nombre de dés gardés dans la VD
+     */
+    private final int m_desGardes;
+    /**
+     * le nombre de dés lancés dans la VD
+     */
+    private final int m_desLances;
     /**
      * le malus donné par l'arme à l'attaque
      */
     private final int m_malusAttaque;
     /**
-     * le physique minimal pour manier l'arme.
-     */
-    private final int m_physMin;
-    /**
-     * la catégorie d'arme (permet de définir la compétence à utiliser)
-     */
-    private final int m_categorie;
-    /**
      * le mode d'attaque de l'arme
      */
     private final int m_mode;
     /**
-     * le nombre de mains nécessaire au maniement de l'arme
-     */
-    private final int m_NbMainsArme;
-    /**
      * le nom de l'arme
      */
     private final String m_nom;
+    /**
+     * le physique minimal pour manier l'arme.
+     */
+    private final int m_physMin;
+    /**
+     * le type de l'arme : simple, perce-amure, pénétrante, perce-blindage ou
+     * energétique, respectivement de 0 à 4
+     */
+    private final int m_typeArme;
 
     /**
      * constructeur d'arme de corps à corps à parti de la référence UP!
@@ -138,9 +138,14 @@ public abstract class Arme
 	m_mode = reference.getModArme(p_indice);
     }
 
-    public int getDesLances()
+    public int getBonusInit()
     {
-	return m_desLances;
+	return m_bonusInit;
+    }
+
+    public int getCategorie()
+    {
+	return m_categorie;
     }
 
     public int getDesGardes()
@@ -148,29 +153,14 @@ public abstract class Arme
 	return m_desGardes;
     }
 
-    public int getBonusInit()
+    public int getDesLances()
     {
-	return m_bonusInit;
-    }
-
-    public int getTypeArme()
-    {
-	return m_typeArme;
+	return m_desLances;
     }
 
     public int getMalusAttaque()
     {
 	return m_malusAttaque;
-    }
-
-    public int getphysMin()
-    {
-	return m_physMin;
-    }
-
-    public int getCategorie()
-    {
-	return m_categorie;
     }
 
     public int getMode()
@@ -181,6 +171,16 @@ public abstract class Arme
     public int getNbMainsArme()
     {
 	return m_NbMainsArme;
+    }
+
+    public int getTypeArme()
+    {
+	return m_typeArme;
+    }
+
+    public int getphysMin()
+    {
+	return m_physMin;
     }
 
     @Override
@@ -196,7 +196,7 @@ public abstract class Arme
      * définis : inutile de dégrader les performances avec toute la mécanique
      * des collections.
      */
-    public static class Degats
+    public static final class Degats
     {
 
 	/**

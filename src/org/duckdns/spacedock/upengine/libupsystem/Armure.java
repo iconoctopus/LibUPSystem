@@ -6,17 +6,9 @@ package org.duckdns.spacedock.upengine.libupsystem;
  *
  * @author iconoctopus
  */
-public class Armure
+final class Armure
 {
 
-    /**
-     * le type d'armure
-     */
-    private final int m_type;
-    /**
-     * les points d'armure
-     */
-    private final int m_points;
     /**
      * le malus d'esquive de l'armure
      */
@@ -25,6 +17,14 @@ public class Armure
      * le malus de parade de l'armure
      */
     private final int m_malusParade;
+    /**
+     * les points d'armure
+     */
+    private final int m_points;
+    /**
+     * le type d'armure
+     */
+    private final int m_type;
 
     /**
      * constructeur d'armure
@@ -35,6 +35,17 @@ public class Armure
 	m_points = p_points;
 	m_malusEsquive = p_malusEsquive;
 	m_malusParade = p_malusParade;
+    }
+
+    /**
+     *
+     * @param p_typArm
+     * @return renvoie le bonus au ND effectif offert par cette armure contre un
+     * type d'arme donné
+     */
+    int getBonusND(int p_typArm)
+    {
+	return UPReference.getInstance().getArmureBonusND(m_points, p_typArm, m_type);
     }
 
     /**
@@ -62,16 +73,5 @@ public class Armure
     int getRedDegats(int p_typArm)
     {
 	return UPReference.getInstance().getArmureRedDegats(m_points, p_typArm, m_type);
-    }
-
-    /**
-     *
-     * @param p_typArm
-     * @return renvoie le bonus au ND effectif offert par cette armure contre un
-     * type d'arme donné
-     */
-    int getBonusND(int p_typArm)
-    {
-	return UPReference.getInstance().getArmureBonusND(m_points, p_typArm, m_type);
     }
 }

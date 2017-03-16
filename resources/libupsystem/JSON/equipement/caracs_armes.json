@@ -646,5 +646,4 @@
     "cat_armes_cac": ["mains nues", "armes d'escrime", "armes à lame longue", "haches", "armes contondantes", "petites armes", "armes d'hast", "armes spéciales", "armes énergétiques", "armes lourdes"],
     "cat_armes_dist": ["archerie", "armes de jet", "armes à feu", "armes à énergie", "armes automatiques", "armes lourdes", "armes de trait", "lanceurs"],
     "mod_armes": ["corps à corps", "distance"]
-
 }

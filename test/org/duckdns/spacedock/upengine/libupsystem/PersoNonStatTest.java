@@ -44,9 +44,9 @@ public class PersoNonStatTest
 	Assert.assertEquals(0, persoRM1.getBlessuresLegeresMentales());
 	Assert.assertEquals(10, persoRM1.getNDPassif(0, 1, false));
 	Assert.assertEquals(10, persoRM1.getNDPassif(0, 1, true));
-        persoRM1.getInventaire().addPieceArmure(new PieceArmure(0, 0, 0, false), Inventaire.ZoneEmplacement.TETE);
- 	Assert.assertEquals(10, persoRM1.getNDPassif(0, 1, false));
- 	Assert.assertEquals(10, persoRM1.getNDPassif(0, 1, true));
+	persoRM1.getInventaire().addPieceArmure(new PieceArmure(0, 0, 0, false), Inventaire.ZoneEmplacement.TETE);
+	Assert.assertEquals(10, persoRM1.getNDPassif(0, 1, false));
+	Assert.assertEquals(10, persoRM1.getNDPassif(0, 1, true));
 	persoRM1.getInventaire().addPieceArmure(new PieceArmure(7, 0, 0, false), Inventaire.ZoneEmplacement.CORPS);
 	Assert.assertEquals(15, persoRM1.getNDPassif(0, 1, false));
 	Assert.assertEquals(5, persoRM1.getNDPassif(0, 1, true));
@@ -96,7 +96,7 @@ public class PersoNonStatTest
 	persoRM5.setRangComp(3, 1, 0);
 	Assert.assertEquals(20, persoRM5.getNDPassif(0, 0, false));
 	persoRM1.setRangComp(3, 1, 0);
-        persoRM1.getInventaire().removePieceArmure(Inventaire.ZoneEmplacement.TETE);
+	persoRM1.getInventaire().removePieceArmure(Inventaire.ZoneEmplacement.TETE);
 	persoRM1.getInventaire().removePieceArmure(Inventaire.ZoneEmplacement.CORPS);
 	Assert.assertEquals(5, persoRM1.getNDPassif(0, 0, false));
 
@@ -105,60 +105,8 @@ public class PersoNonStatTest
 	Assert.assertEquals(20, persoRM5.getNDPassif(0, 0, true));
 	persoRM1.setRangComp(2, 0, 0);
 	Assert.assertEquals(5, persoRM1.getNDPassif(0, 0, true));
-	try
-	{
-	    new Perso(-11);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:rang:-11", e.getMessage());
-	}
 
 	//Cas d'erreurs dans la création du perso avec caracs
-	ArbreDomaines arbre = new ArbreDomaines();
-	try
-	{
-	    int[] traits =
-	    {
-		1, 1
-	    };
-	    new Perso(traits, arbre);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:nombre de traits:2", e.getMessage());
-	}
-
-	try
-	{
-	    int[] traits =
-	    {
-		1, 1, 1, 1, 1, 1
-	    };
-	    new Perso(traits, arbre);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:nombre de traits:6", e.getMessage());
-	}
-
-	try
-	{
-	    int[] traits =
-	    {
-		0, 1, -12, 1, 1
-	    };
-	    new Perso(traits, arbre);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:trait:-12", e.getMessage());
-	}
-
     }
 
     @Test

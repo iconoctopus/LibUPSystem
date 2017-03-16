@@ -23,6 +23,38 @@ class Competence
      */
     private final ArrayList<String> m_specialites;
 
+    /**
+     * Classe encapsulant une compétence (pincipalement rang et spécialités) La
+     * gestion des spécialités est encore embryonnaire : la compétence en
+     * possède une liste mais celles-ci ne sont en aucun cas gérées par le
+     * système
+     *
+     *
+     * @param p_rang
+     * @param p_specialites
+     */
+    Competence(int p_rang, ArrayList<String> p_specialites)
+    {
+	setRang(p_rang);
+	if (p_specialites != null)
+	{
+	    m_specialites = p_specialites;
+	}
+	else
+	{
+	    m_specialites = new ArrayList<String>();
+	}
+    }
+
+    /**
+     *
+     * @param p_lbl
+     */
+    final void addSpecialite(String p_lbl)
+    {
+	m_specialites.add(p_lbl);
+    }
+
     final int getRang()
     {
 	return m_rang;
@@ -46,11 +78,12 @@ class Competence
 
     /**
      *
-     * @param p_lbl
+     * @return une copie seulement pour plus de sécurité, l'ajout ou la
+     * suppression de spécialité n'étant possible que via l'interface dédiée
      */
-    final void addSpecialite(String p_lbl)
+    final ArrayList<String> getSpecialites()
     {
-	m_specialites.add(p_lbl);
+	return new ArrayList<String>(m_specialites);
     }
 
     /**
@@ -62,36 +95,4 @@ class Competence
 	m_specialites.remove(p_indice);
     }
 
-    /**
-     *
-     * @return une copie seulement pour plus de sécurité, l'ajout ou la
-     * suppression de spécialité n'étant possible que via l'interface dédiée
-     */
-    final ArrayList<String> getSpecialites()
-    {
-	return new ArrayList<String>(m_specialites);
-    }
-
-    /**
-     * Classe encapsulant une compétence (pincipalement rang et spécialités) La
-     * gestion des spécialités est encore embryonnaire : la compétence en
-     * possède une liste mais celles-ci ne sont en aucun cas gérées par le
-     * système
-     *
-     *
-     * @param p_rang
-     * @param p_specialites
-     */
-    Competence(int p_rang, ArrayList<String> p_specialites)
-    {
-	setRang(p_rang);
-	if (p_specialites != null)
-	{
-	    m_specialites = p_specialites;
-	}
-	else
-	{
-	    m_specialites = new ArrayList<String>();
-	}
-    }
 }

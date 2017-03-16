@@ -16,22 +16,14 @@ public class PieceArmure
      */
     private final int m_idPiece;
     /**
-     * le type de la pièce
+     * si la pièce est un boucliere
      */
-    private final int m_type;
-    /**
-     * le matériau de la pièce
-     */
-    private final int m_materiau;
+    private final boolean m_isBouclier;
     /**
      * le libellé de cette pièce, construit à partir de son matériau et de sa
      * nature
      */
     private final String m_libelle;
-    /**
-     * le nombre de points de cette pièce
-     */
-    private final int m_nbpoints;
     /**
      * la localisation de la pièce
      */
@@ -45,9 +37,17 @@ public class PieceArmure
      */
     private final int m_malusParade;
     /**
-     * si la pièce est un boucliere
+     * le matériau de la pièce
      */
-    private final boolean m_isBouclier;
+    private final int m_materiau;
+    /**
+     * le nombre de points de cette pièce
+     */
+    private final int m_nbpoints;
+    /**
+     * le type de la pièce
+     */
+    private final int m_type;
 
     /**
      * costructeur de pièces d'armure
@@ -79,11 +79,29 @@ public class PieceArmure
     }
 
     /**
+     * @return the m_libelle -
+     */
+    @Override
+
+    public String toString()
+    {
+	return m_libelle;
+    }
+
+    /**
      * @return the m_idPiece
      */
     int getIdPiece()
     {
 	return m_idPiece;
+    }
+
+    /**
+     * @return the m_localisation
+     */
+    int getLocalisation()
+    {
+	return m_localisation;
     }
 
     /**
@@ -100,24 +118,6 @@ public class PieceArmure
     int getMalusParade()
     {
 	return m_malusParade;
-    }
-
-    /**
-     * @return the m_localisation
-     */
-    int getLocalisation()
-    {
-	return m_localisation;
-    }
-
-    /**
-     * @return the m_libelle -
-     */
-    @Override
-
-    public String toString()
-    {
-	return m_libelle;
     }
 
     /**

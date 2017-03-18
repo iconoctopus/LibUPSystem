@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 ykonoclast
  *
  * This program is free software: you can redistribute it and/or modify
@@ -87,6 +87,9 @@ public class Perso
 	}
 	m_traits = p_traits;
 	m_arbreDomaines = p_arbre;
+
+	//configuration automatique des autres caractéristiques maintenant possible car les traits sont connus
+	initPerso();
     }
 
     /**
@@ -108,7 +111,7 @@ public class Perso
 	m_traits[3] = p_RM - 1;//volonté
 	m_traits[4] = p_RM - 1;//sociabilité
 
-	//configuration automatique des autres caractéristiques maintenant possible car les traits sont générés
+	//configuration automatique des autres caractéristiques maintenant possible car les traits sont connus
 	initPerso();
 
 	//configuration des caractéristiques de combat une fois que l'arbre des domaines est généré
@@ -322,8 +325,8 @@ public class Perso
     }
 
     /**
-     * inflige des dégâts, via la jauge de Santé après avoir appliqué les effets
-     * d'armure
+     * inflige des dégâts à ce perso, via la jauge de Santé après avoir appliqué
+     * les effets d'armure
      *
      * @param p_degats
      */

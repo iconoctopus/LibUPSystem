@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 ykonoclast
  *
  * This program is free software: you can redistribute it and/or modify
@@ -117,7 +117,6 @@ public class PersoNonStatTest
 	persoRM1.setRangComp(2, 0, 0);
 	Assert.assertEquals(5, persoRM1.getNDPassif(0, 0, true));
 
-	//Cas d'erreurs dans la création du perso avec caracs
     }
 
     @Test
@@ -127,41 +126,6 @@ public class PersoNonStatTest
 
 	persoRM1.getInventaire().addArme(new ArmeCaC(3, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.bon), Inventaire.Lateralisation.DROITE);
 	Assert.assertEquals((int) persoRM1.getActions().get(0) + 10, (int) persoRM1.getInitTotale());//son init améliorée par une rapière bien équilibrée
-    }
-
-    @Test
-    public void testAgirEnCombat()
-    {
-	persoRM1.agirEnCombat(persoRM1.getActions().get(0));
-	Assert.assertEquals(11, persoRM1.getActions().get(0).intValue());
-
-	persoRM3.agirEnCombat(persoRM3.getActions().get(0));
-	Assert.assertEquals(11, persoRM3.getActions().get(0).intValue());
-	persoRM3.agirEnCombat(persoRM3.getActions().get(1));
-	Assert.assertEquals(11, persoRM3.getActions().get(1).intValue());
-	persoRM3.agirEnCombat(persoRM3.getActions().get(2));
-	Assert.assertEquals(11, persoRM3.getActions().get(2).intValue());
-
-	persoRM5.agirEnCombat(persoRM5.getActions().get(0));
-	Assert.assertEquals(11, persoRM5.getActions().get(0).intValue());
-	persoRM5.agirEnCombat(persoRM5.getActions().get(1));
-	Assert.assertEquals(11, persoRM5.getActions().get(1).intValue());
-	persoRM5.agirEnCombat(persoRM5.getActions().get(2));
-	Assert.assertEquals(11, persoRM5.getActions().get(2).intValue());
-	persoRM5.agirEnCombat(persoRM5.getActions().get(3));
-	Assert.assertEquals(11, persoRM5.getActions().get(3).intValue());
-	persoRM5.agirEnCombat(persoRM5.getActions().get(4));
-	Assert.assertEquals(11, persoRM5.getActions().get(4).intValue());
-
-	try
-	{
-	    persoRM1.agirEnCombat(0);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:phase:0", e.getMessage());
-	}
     }
 
     @Test

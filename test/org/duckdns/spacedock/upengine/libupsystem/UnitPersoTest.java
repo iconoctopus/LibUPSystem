@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 ykonoclast
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,9 +20,11 @@ import java.util.ArrayList;
 import org.junit.Assert;
 import static org.junit.Assert.fail;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.powermock.api.mockito.PowerMockito;
@@ -44,20 +46,64 @@ public class UnitPersoTest
 {
 
     private UPReference referenceMock;
+    private ArbreDomaines arbreMock;
+    private CoupleJauge santeInitRM1;
+    private CoupleJauge santeInitRM3;
+    private Perso persoRM1;
+    private Perso persoRM3;
+    private static ArrayList<String> listComp = new ArrayList<>();
+    private static ArrayList<String> listDom = new ArrayList<>();
+
+    @BeforeClass
+    public static void setupClass()
+    {
+	//on construit une liste de compétences retournée par la référence mockée, ce seront les mêmes pour tous les domaines
+	listComp.add("comp1");
+	listComp.add("comp2");
+	listComp.add("comp3");
+
+	//on construit une liste de domaines retournée par la référence mockée, quatre suffiront
+	listDom.add("dom1");
+	listDom.add("dom2");
+	listDom.add("dom3");
+	listDom.add("dom4");
+	listDom.add("dom5");
+    }
 
     @Before
-    public void setup()
+    public void setup() throws Exception
     {
+	//on mocke la référence, les jauges, l'arbredomaines et l'inventaire pour deux persos
 	referenceMock = PowerMockito.mock(UPReference.class);
 	PowerMockito.mockStatic(UPReference.class);
 	when(UPReference.getInstance()).thenReturn(referenceMock);
+
+	arbreMock = PowerMockito.mock(ArbreDomaines.class);
+	whenNew(ArbreDomaines.class).withNoArguments().thenReturn(arbreMock);
+
+	santeInitRM1 = PowerMockito.mock(CoupleJauge.class);
+	santeInitRM3 = PowerMockito.mock(CoupleJauge.class);
+	whenNew(CoupleJauge.class).withArguments(1, 0, 0, 1).thenReturn(santeInitRM1);
+	whenNew(CoupleJauge.class).withArguments(3, 2, 2, 3).thenReturn(santeInitRM3);
+
+	//La référence mockée renvoie les listes de domaines et compétence prédéfinies
+	when(referenceMock.getListDomaines()).thenReturn(listDom);
+	when(referenceMock.getListComp(2)).thenReturn(listComp);
+	when(referenceMock.getListComp(3)).thenReturn(listComp);
+	when(referenceMock.getListComp(4)).thenReturn(listComp);
+
+	//les jauges mockées renvoient des valeurs d'init
+	when(santeInitRM1.getRemplissage_externe()).thenReturn(1);
+	when(santeInitRM3.getRemplissage_externe()).thenReturn(3);
+
+	//les persos de test sont créés, ils utiliseront les jauges de test
+	persoRM1 = new Perso(1);
+	persoRM3 = new Perso(3);
     }
 
     @Test
     public void testPersoParCaracs()
     {
-	ArbreDomaines arbreMock = PowerMockito.mock(ArbreDomaines.class);
-
 	//cas d'erreur : pas assez de traits
 	try
 	{
@@ -107,6 +153,7 @@ public class UnitPersoTest
     @Test
     public void testPersoParRM() throws Exception
     {
+	reset(arbreMock);//on réinitialise arbreMock pour que ses interractions dans setup() ne perturbent pas le test ici
 
 	//Cas d'erreur : RM négatif
 	try
@@ -130,17 +177,7 @@ public class UnitPersoTest
 	    Assert.assertEquals("paramétre aberrant:rang:0", e.getMessage());
 	}
 
-	//Cas nominal RM3 : vérification des appels d'ArbreDomaines
-	ArbreDomaines arbreMock = PowerMockito.mock(ArbreDomaines.class);
-	whenNew(ArbreDomaines.class).withNoArguments().thenReturn(arbreMock);
-
-	ArrayList<String> list = new ArrayList<>();//on construit une liste de compétences retournée par la référence mockée
-	list.add("comp1");
-	list.add("comp2");
-	list.add("comp3");
-
-	when(referenceMock.getListComp(3)).thenReturn(list);
-
+	//Cas nominal RM3 : vérification des appels d'ArbreDomaines et de coupleJauge
 	new Perso(3);
 
 	verify(arbreMock).setRangDomaine(3, 3);
@@ -150,26 +187,88 @@ public class UnitPersoTest
 	verify(arbreMock).setRangDomaine(2, 3);
 	verify(arbreMock).setRangComp(2, 0, 3);
 	verify(arbreMock, never()).setRangComp(2, 1, 3);//seule esquive est montée dans ce domaine
-
-	list.add("comp4");
-
-	new Perso(3);
-
-	verify(arbreMock).setRangComp(3, 3, 3);//la liste mock contient à ce moment 4 items
-	verify(arbreMock, never()).setRangComp(3, 4, 3);//on ne va donc pas jusqu'à un cinquième
     }
 
     @Test
-    public void testAddSpecialite() throws Exception
+    public void testAddSpecialite()
     {
-	ArbreDomaines arbreMock = PowerMockito.mock(ArbreDomaines.class);
-	whenNew(ArbreDomaines.class).withNoArguments().thenReturn(arbreMock);
-
 	Perso perso = new Perso(3);
 
 	//test appel effectif des méthodes de l'ArbreDomaines
 	perso.addSpecialite(3, 1, "gneuh");
 	verify(arbreMock).addSpecialite(3, 1, "gneuh");
+    }
+
+    @Test
+    public void testAgirEnCombat() throws Exception
+    {
+
+	//On teste la "consommation" des actions pour des persos ayant des valeurs d'initiative différentes
+	persoRM1.agirEnCombat(persoRM1.getActions().get(0));
+	Assert.assertEquals(11, persoRM1.getActions().get(0).intValue());
+
+	persoRM3.agirEnCombat(persoRM3.getActions().get(0));
+	Assert.assertEquals(11, persoRM3.getActions().get(0).intValue());
+	persoRM3.agirEnCombat(persoRM3.getActions().get(1));
+	Assert.assertEquals(11, persoRM3.getActions().get(1).intValue());
+	persoRM3.agirEnCombat(persoRM3.getActions().get(2));
+	Assert.assertEquals(11, persoRM3.getActions().get(2).intValue());
+
+	try
+	{
+	    persoRM1.agirEnCombat(0);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:phase:0", e.getMessage());
+	}
+
+	try
+	{
+	    persoRM1.agirEnCombat(11);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:phase:11", e.getMessage());
+	}
+    }
+
+    @Test
+    public void testAttaquerCaC()
+    {
+	//cas mains nues et arme
+	/*m_inventaire.getArmeCourante()
+
+
+	arme.getCategorie()
+		getphysMin()
+
+			arme.getMalusAttaque();
+
+
+			m_arbreDomaines.effectuerJetComp //tester le jugement de la réussite par le perso*/
+
+
+ /*
+		//cas du physique minimal insuffisant avec une hache et un physique de 1
+	persoRM1.getInventaire().addArme(new ArmeCaC(10, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal), Inventaire.Lateralisation.DROITE);
+	Assert.assertFalse(StatUtils.reussiteStatistiqueAttaque(persoRM1, 1, 0, 0));
+
+	//attaque à mains nues avec RM3
+	Assert.assertTrue(StatUtils.reussiteStatistiqueAttaque(persoRM3, 30, 0, 0));
+	Assert.assertFalse(StatUtils.reussiteStatistiqueAttaque(persoRM3, 35, 0, 0));
+
+	//attaque en prenant en compte le malus à l'attaque du sabre et RM3
+	persoRM3.getInventaire().addArme(new ArmeCaC(8, Arme.QualiteArme.inferieure, Arme.EquilibrageArme.bon), Inventaire.Lateralisation.DROITE);//la qualité ne devrait pas influer, l'équilibrage non plus, ni ici ni dans les autres tests de cette méthode
+	Assert.assertTrue(StatUtils.reussiteStatistiqueAttaque(persoRM3, 27, 0, 0));
+	Assert.assertFalse(StatUtils.reussiteStatistiqueAttaque(persoRM3, 32, 0, 0));
+
+
+
+
+	 */
     }
 
     //TODO décommenter la méthode ci-dessous et l'achever

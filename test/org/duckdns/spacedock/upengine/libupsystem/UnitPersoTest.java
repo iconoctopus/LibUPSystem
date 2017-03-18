@@ -24,7 +24,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
  * @author ykonoclast
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(
+@PrepareForTest(//pour les méthodes statiques c'est la classe appelante qui doit apparaître ici, pour les classes final c'est la classe appelée (donc UPReference n'apparaît ici que pour son caractère final et pas pour sa méthode getInstance()
+
 	{
 	    Perso.class, UPReference.class
 	})

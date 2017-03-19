@@ -43,13 +43,7 @@ public class PersoNonStatTest
     @Test
     public void testPerso()
     {
-	Assert.assertEquals("PersoRM1", persoRM1.toString());
-	Assert.assertEquals(1, persoRM1.getActions().size());
-	for (int i = 0; i < persoRM1.getActions().size(); i++)
-	{
-	    Assert.assertTrue(persoRM1.getActions().get(i) < 11 && persoRM1.getActions().get(i) > 0);
-	}
-	Assert.assertTrue(persoRM1.isActif(persoRM1.getActions().get(0)));
+
 	Assert.assertEquals(0, persoRM1.getBlessuresGraves());
 	Assert.assertEquals(0, persoRM1.getBlessuresLegeres());
 	Assert.assertEquals(0, persoRM1.getBlessuresLegeresMentales());
@@ -66,13 +60,6 @@ public class PersoNonStatTest
 	Assert.assertFalse(persoRM1.isInconscient());
 	Assert.assertFalse(persoRM1.isElimine());
 
-	Assert.assertEquals("PersoRM3", persoRM3.toString());
-	Assert.assertEquals(3, persoRM3.getActions().size());
-	for (int i = 0; i < persoRM3.getActions().size(); i++)
-	{
-	    Assert.assertTrue(persoRM3.getActions().get(i) < 11 && persoRM3.getActions().get(i) > 0);
-	}
-	Assert.assertTrue(persoRM3.isActif(persoRM3.getActions().get(0)));
 	Assert.assertEquals(0, persoRM3.getBlessuresGraves());
 	Assert.assertEquals(0, persoRM3.getBlessuresLegeres());
 	Assert.assertEquals(0, persoRM3.getBlessuresLegeresMentales());
@@ -86,13 +73,6 @@ public class PersoNonStatTest
 	Assert.assertFalse(persoRM3.isInconscient());
 	Assert.assertFalse(persoRM3.isElimine());
 
-	Assert.assertEquals("PersoRM5", persoRM5.toString());
-	Assert.assertEquals(5, persoRM5.getActions().size());
-	for (int i = 0; i < persoRM5.getActions().size(); i++)
-	{
-	    Assert.assertTrue(persoRM5.getActions().get(i) < 11 && persoRM5.getActions().get(i) > 0);
-	}
-	Assert.assertTrue(persoRM5.isActif(persoRM5.getActions().get(0)));
 	Assert.assertEquals(0, persoRM5.getBlessuresGraves());
 	Assert.assertEquals(0, persoRM5.getBlessuresLegeres());
 	Assert.assertEquals(0, persoRM5.getBlessuresLegeresMentales());
@@ -102,120 +82,6 @@ public class PersoNonStatTest
 	Assert.assertFalse(persoRM5.isSonne());
 	Assert.assertFalse(persoRM5.isInconscient());
 	Assert.assertFalse(persoRM5.isElimine());
-
-	//test de cas de ND passif ou l'on ne dispose pas de la competence parade
-	persoRM5.setRangComp(3, 1, 0);
-	Assert.assertEquals(20, persoRM5.getNDPassif(0, 0, false));
-	persoRM1.setRangComp(3, 1, 0);
-	persoRM1.getInventaire().removePieceArmure(Inventaire.ZoneEmplacement.TETE);
-	persoRM1.getInventaire().removePieceArmure(Inventaire.ZoneEmplacement.CORPS);
-	Assert.assertEquals(5, persoRM1.getNDPassif(0, 0, false));
-
-	//test de cas de ND passif ou l'on ne dispose pas de la competence esquive
-	persoRM5.setRangComp(2, 0, 0);
-	Assert.assertEquals(20, persoRM5.getNDPassif(0, 0, true));
-	persoRM1.setRangComp(2, 0, 0);
-	Assert.assertEquals(5, persoRM1.getNDPassif(0, 0, true));
-
-    }
-
-    @Test
-    public void testGetInitTotale()
-    {
-	Assert.assertEquals((int) persoRM1.getActions().get(0), (int) persoRM1.getInitTotale());//son init de base
-
-	persoRM1.getInventaire().addArme(new ArmeCaC(3, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.bon), Inventaire.Lateralisation.DROITE);
-	Assert.assertEquals((int) persoRM1.getActions().get(0) + 10, (int) persoRM1.getInitTotale());//son init améliorée par une rapière bien équilibrée
-    }
-
-    @Test
-    public void testIsActif()
-    {
-	try
-	{
-	    persoRM1.isActif(0);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:phase:0", e.getMessage());
-	}
-
-	try
-	{
-	    persoRM1.isActif(11);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:phase:11", e.getMessage());
-	}
-    }
-
-    @Test
-    public void testGetSetTrait()
-    {
-	//On en profite pour tester que les bonnes valeurs de création sont employées sur la création de persos par RM
-	Assert.assertEquals(3, persoRM3.getTrait(0));
-	Assert.assertEquals(3, persoRM3.getTrait(1));
-	Assert.assertEquals(2, persoRM3.getTrait(2));
-	Assert.assertEquals(2, persoRM3.getTrait(3));
-	Assert.assertEquals(2, persoRM3.getTrait(4));
-
-	Assert.assertEquals(1, persoRM1.getTrait(0));
-	Assert.assertEquals(1, persoRM1.getTrait(1));
-	Assert.assertEquals(0, persoRM1.getTrait(2));
-	Assert.assertEquals(0, persoRM1.getTrait(3));
-	Assert.assertEquals(0, persoRM1.getTrait(4));
-
-	Assert.assertEquals(5, persoRM5.getTrait(0));
-	Assert.assertEquals(5, persoRM5.getTrait(1));
-	Assert.assertEquals(4, persoRM5.getTrait(2));
-	Assert.assertEquals(4, persoRM5.getTrait(3));
-	Assert.assertEquals(4, persoRM5.getTrait(4));
-
-	persoRM3.setTrait(0, 5);
-	Assert.assertEquals(5, persoRM3.getTrait(0));
-
-	try
-	{
-	    persoRM3.setTrait(-1, 5);
-	    fail();
-	}
-	catch (IndexOutOfBoundsException e)
-	{
-
-	}
-
-	try
-	{
-	    persoRM3.setTrait(6, 5);
-	    fail();
-	}
-	catch (IndexOutOfBoundsException e)
-	{
-
-	}
-
-	try
-	{
-	    persoRM3.getTrait(-1);
-	    fail();
-	}
-	catch (IndexOutOfBoundsException e)
-	{
-
-	}
-
-	try
-	{
-	    persoRM3.getTrait(6);
-	    fail();
-	}
-	catch (IndexOutOfBoundsException e)
-	{
-
-	}
     }
 
     @Test
@@ -277,6 +143,5 @@ public class PersoNonStatTest
 	persoRM1.etreBlesse(new Arme.Degats(0, 0));
 	Assert.assertEquals(0, persoRM1.getBlessuresGraves());
 	Assert.assertEquals(0, persoRM1.getBlessuresLegeres());
-
     }
 }

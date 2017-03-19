@@ -173,7 +173,7 @@ public class UnitPersoTest
 	    Assert.assertEquals("paramétre aberrant:rang:0", e.getMessage());
 	}
 
-	//Cas nominal RM3 : vérification des appels d'ArbreDomaines et de coupleJauge
+	//Cas nominal RM3 : vérification des appels d'ArbreDomaines
 	new Perso(3);
 
 	verify(arbreMock).setRangDomaine(3, 3);
@@ -515,18 +515,56 @@ public class UnitPersoTest
     }
 
     @Test
-    public void testGetGenInit()//petite exception aux règles des tests unitaires car il est difficile de mocker les méthodes statiques de la classe statique RollUtils, on vérifie donc de façon statistique que les résultats sont dans les normes
+    public void testToutesMethodesInit() throws Exception//petite exception aux règles des tests unitaires car il est difficile de mocker les méthodes statiques de la classe statique RollUtils, on vérifie donc de façon statistique que les résultats sont dans les normes
     {
-	Perso perso = new Perso(3);
+	//on Mocke un inventaire, il sera plus tard peuplé d'une arme avec bonus d'init
+	Inventaire inventaireMock = PowerMockito.mock(Inventaire.class);
+	whenNew(Inventaire.class).withNoArguments().thenReturn(inventaireMock);
+
+	Perso persoRM1 = new Perso(1);
+	Perso persoRM3 = new Perso(3);
 	for (int j = 0; j <= 4; j++)//5 tests de suite pour être sur
 	{
-	    perso.genInit();
-	    ArrayList<Integer> result = perso.getActions();
+	    persoRM3.genInit();
+	    ArrayList<Integer> result = persoRM3.getActions();
 	    for (int i = 0; i <= 2; i++)//for classique car l'on veut forcer la vérification de trois cases du tableau
 	    {
 		Assert.assertTrue(result.get(i) < 11 && result.get(i) > 0); //on vérifie que les init générées ne sont pas ridicules.
 	    }
 	}
+
+	Assert.assertEquals((int) persoRM1.getActions().get(0), (int) persoRM1.getInitTotale());//son init de base
+	ArmeCaC armeMock = PowerMockito.mock(ArmeCaC.class);//on ajoute une arme avec bonus d'init de 2
+	when(armeMock.getBonusInit()).thenReturn(2);
+	when(inventaireMock.getArmeCourante()).thenReturn(armeMock);
+	when(inventaireMock.getArmeCourante()).thenReturn(armeMock);
+	Assert.assertEquals((int) persoRM1.getActions().get(0) + 10, (int) persoRM1.getInitTotale());//son init améliorée par un bonus d'init de 2
+
+	//test de isActif()
+	Assert.assertTrue(persoRM1.isActif(persoRM1.getActions().get(0)));
+	Assert.assertTrue(persoRM3.isActif(persoRM3.getActions().get(0)));
+
+	//cas d'erreur sur isActif
+	try
+	{
+	    persoRM3.isActif(0);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:phase:0", e.getMessage());
+	}
+
+	try
+	{
+	    persoRM3.isActif(11);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:phase:11", e.getMessage());
+	}
+
     }
 
     @Test
@@ -587,4 +625,206 @@ public class UnitPersoTest
 	verify(armeMock).genererDegats(3, true);
     }
 
+    @Test
+    public void testGetNDPassif() throws Exception
+    {
+	//On mocke un inventaire contenant une armure
+	Armure armureMock = PowerMockito.mock(Armure.class);
+	when(armureMock.getBonusND(3)).thenReturn(7);
+	when(armureMock.getMalusEsquive()).thenReturn(4);
+	when(armureMock.getMalusParade()).thenReturn(2);
+
+	Inventaire inventaireMock = PowerMockito.mock(Inventaire.class);
+	whenNew(Inventaire.class).withNoArguments().thenReturn(inventaireMock);
+	when(inventaireMock.getArmure()).thenReturn(armureMock);
+
+	//On mocke un arbre de domaines
+	ArbreDomaines arbreMock = PowerMockito.mock(ArbreDomaines.class);
+	whenNew(ArbreDomaines.class).withNoArguments().thenReturn(arbreMock);
+
+	Perso persoRM1 = new Perso(1);
+	Perso persoRM3 = new Perso(3);
+
+	//esquive
+	when(arbreMock.getRangComp(2, 0)).thenReturn(2);//compétence possédée sans bonus de rang
+	Assert.assertEquals(18, persoRM1.getNDPassif(3, 0, true));
+	when(arbreMock.getRangComp(2, 0)).thenReturn(3);//compétence possédée avec bonus de rang
+	Assert.assertEquals(28, persoRM3.getNDPassif(3, 0, true));
+	when(arbreMock.getRangComp(2, 0)).thenReturn(0);//compétence non possédée
+	when(arbreMock.getRangDomaine(2)).thenReturn(1);
+	Assert.assertEquals(8, persoRM3.getNDPassif(3, 0, true));
+
+	//parade
+	when(arbreMock.getRangComp(3, 3)).thenReturn(1);//compétence possédée sans bonus de rang
+	Assert.assertEquals(15, persoRM1.getNDPassif(3, 1, false));
+	when(arbreMock.getRangComp(3, 3)).thenReturn(3);//compétence possédée avec bonus de rang
+	Assert.assertEquals(30, persoRM3.getNDPassif(3, 1, false));
+	when(arbreMock.getRangComp(3, 3)).thenReturn(0);//compétence non possédée
+	when(arbreMock.getRangDomaine(3)).thenReturn(3);
+	Assert.assertEquals(15, persoRM3.getNDPassif(3, 1, false));
+    }
+
+    @Test
+    public void testGetSetDivers() throws Exception
+    {//si non déjà testés dans les autres méthodes de cette classe
+
+	//mocks à l'initialisation des objets
+	CoupleJauge fatigueFARM3 = PowerMockito.mock(CoupleJauge.class);
+	whenNew(CoupleJauge.class).withArguments(3, 2, 2).thenReturn(fatigueFARM3);
+	Inventaire inventaireMock = PowerMockito.mock(Inventaire.class);
+	whenNew(Inventaire.class).withNoArguments().thenReturn(inventaireMock);
+	ArbreDomaines arbreMock = PowerMockito.mock(ArbreDomaines.class);
+	whenNew(ArbreDomaines.class).withNoArguments().thenReturn(arbreMock);
+
+	Perso persoRM3 = new Perso(3);
+
+	//méthodes liées aux jauges
+	when(santeInitRM3.getRemplissage_interne()).thenReturn(2);
+	Assert.assertEquals(2, persoRM3.getBlessuresGraves());
+
+	when(santeInitRM3.getBlessuresLegeres()).thenReturn(23);
+	Assert.assertEquals(23, persoRM3.getBlessuresLegeres());
+
+	when(fatigueFARM3.getRemplissage_interne()).thenReturn(5);
+	Assert.assertEquals(5, persoRM3.getPointsDeFatigue());
+
+	when(fatigueFARM3.getBlessuresLegeres()).thenReturn(27);
+	Assert.assertEquals(27, persoRM3.getBlessuresLegeresMentales());
+
+	when(fatigueFARM3.isElimine()).thenReturn(true);
+	when(santeInitRM3.isElimine()).thenReturn(true);
+	Assert.assertTrue(persoRM3.isElimine());
+
+	when(fatigueFARM3.isElimine()).thenReturn(true);
+	when(santeInitRM3.isElimine()).thenReturn(false);
+	Assert.assertTrue(persoRM3.isElimine());
+
+	when(fatigueFARM3.isElimine()).thenReturn(false);
+	when(santeInitRM3.isElimine()).thenReturn(true);
+	Assert.assertTrue(persoRM3.isElimine());
+
+	when(fatigueFARM3.isElimine()).thenReturn(false);
+	when(santeInitRM3.isElimine()).thenReturn(false);
+	Assert.assertFalse(persoRM3.isElimine());
+
+	when(fatigueFARM3.isInconscient()).thenReturn(true);
+	when(santeInitRM3.isInconscient()).thenReturn(true);
+	Assert.assertTrue(persoRM3.isInconscient());
+
+	when(fatigueFARM3.isInconscient()).thenReturn(true);
+	when(santeInitRM3.isInconscient()).thenReturn(false);
+	Assert.assertTrue(persoRM3.isInconscient());
+
+	when(fatigueFARM3.isInconscient()).thenReturn(false);
+	when(santeInitRM3.isInconscient()).thenReturn(true);
+	Assert.assertTrue(persoRM3.isInconscient());
+
+	when(fatigueFARM3.isInconscient()).thenReturn(false);
+	when(santeInitRM3.isInconscient()).thenReturn(false);
+	Assert.assertFalse(persoRM3.isInconscient());
+
+	when(fatigueFARM3.isSonne()).thenReturn(true);
+	when(santeInitRM3.isSonne()).thenReturn(true);
+	Assert.assertTrue(persoRM3.isSonne());
+
+	when(fatigueFARM3.isSonne()).thenReturn(true);
+	when(santeInitRM3.isSonne()).thenReturn(false);
+	Assert.assertTrue(persoRM3.isSonne());
+
+	when(fatigueFARM3.isSonne()).thenReturn(false);
+	when(santeInitRM3.isSonne()).thenReturn(true);
+	Assert.assertTrue(persoRM3.isSonne());
+
+	when(fatigueFARM3.isSonne()).thenReturn(false);
+	when(santeInitRM3.isSonne()).thenReturn(false);
+	Assert.assertFalse(persoRM3.isSonne());
+
+	//méthodes liées à l'inventaire
+	Assert.assertEquals(inventaireMock, persoRM3.getInventaire());
+
+	//méthodes de libellés
+	Assert.assertEquals("PersoRM3", persoRM3.toString());
+	persoRM3.setLibellePerso("Gongnafrug");
+	Assert.assertEquals("Gongnafrug", persoRM3.toString());
+
+	//méthodes liées à l'ArbreDomaines
+	when(arbreMock.getRangComp(2, 3)).thenReturn(2);
+	Assert.assertEquals(2, persoRM3.getRangComp(2, 3));
+
+	when(arbreMock.getRangDomaine(5)).thenReturn(5);
+	Assert.assertEquals(5, persoRM3.getRangDomaine(5));
+
+	ArrayList<String> listSpe = new ArrayList<>();
+	listSpe.add("spe1");
+	listSpe.add("spe2");
+	when(arbreMock.getSpecialites(1, 1)).thenReturn(listSpe);
+	Assert.assertEquals(listSpe, persoRM3.getSpecialites(1, 1));
+
+	persoRM3.removeSpecialite(5, 7, 8);
+	verify(arbreMock).removeSpecialite(5, 7, 8);
+
+	persoRM3.setRangComp(1, 2, 3);
+	verify(arbreMock).setRangComp(1, 2, 3);
+
+	persoRM3.setRangDomaine(78, 72);
+	verify(arbreMock).setRangDomaine(78, 72);
+
+	//méthodes liées aux traits
+	Assert.assertEquals(3, persoRM3.getTrait(0));
+	Assert.assertEquals(3, persoRM3.getTrait(1));
+	Assert.assertEquals(2, persoRM3.getTrait(2));
+	Assert.assertEquals(2, persoRM3.getTrait(3));
+	Assert.assertEquals(2, persoRM3.getTrait(4));
+
+	Perso persoRM1 = new Perso(1);
+
+	Assert.assertEquals(1, persoRM1.getTrait(0));
+	Assert.assertEquals(1, persoRM1.getTrait(1));
+	Assert.assertEquals(0, persoRM1.getTrait(2));
+	Assert.assertEquals(0, persoRM1.getTrait(3));
+	Assert.assertEquals(0, persoRM1.getTrait(4));
+
+	persoRM3.setTrait(1, 1);
+	Assert.assertEquals(1, persoRM3.getTrait(1));
+
+	try
+	{
+	    persoRM3.setTrait(-1, 5);
+	    fail();
+	}
+	catch (IndexOutOfBoundsException e)
+	{
+
+	}
+
+	try
+	{
+	    persoRM3.setTrait(6, 5);
+	    fail();
+	}
+	catch (IndexOutOfBoundsException e)
+	{
+
+	}
+
+	try
+	{
+	    persoRM3.getTrait(-1);
+	    fail();
+	}
+	catch (IndexOutOfBoundsException e)
+	{
+
+	}
+
+	try
+	{
+	    persoRM3.getTrait(6);
+	    fail();
+	}
+	catch (IndexOutOfBoundsException e)
+	{
+
+	}
+    }
 }

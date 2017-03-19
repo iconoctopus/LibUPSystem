@@ -665,6 +665,7 @@ public class Perso
     public void setTrait(int p_indice, int p_valeur)
     {
 	m_traits[p_indice] = p_valeur;
+	initJauges();//TODO : en l'état les jauges sont complètement remplacées : on perd donc les blessures, la force d'âme dépensée etc.
     }
 
     @Override

@@ -221,74 +221,7 @@ public class PersoNonStatTest
     @Test
     public void testErreurAttaquer()
     {
-	//cas d'erreur : rafale avec arme ayant plusieurs munitions mais incapable de tirer en mode automatique (pistolet)
-	persoRM5.getInventaire().addArme(new ArmeDist(42, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon), Inventaire.Lateralisation.DROITE);
-	((ArmeDist) persoRM5.getInventaire().getArmeCourante()).recharger(9);
-	persoRM5.genInit();
-	try
-	{
-	    persoRM5.attaquerDist(persoRM5.getActions().get(0), 0, 10, 9);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:nombre de coups:9", e.getMessage());
-	}
-
-	//cas d'erreur : plus de 20 balles
-	persoRM5.getInventaire().removeArme(Inventaire.Lateralisation.DROITE);
-	persoRM5.getInventaire().addArme(new ArmeDist(44, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon), Inventaire.Lateralisation.DROITE);
-	((ArmeDist) persoRM5.getInventaire().getArmeCourante()).recharger(30);
-	persoRM5.genInit();
-	try
-	{
-	    persoRM5.attaquerDist(persoRM5.getActions().get(0), 0, 100, 21);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:distance:100 nombre de coups:21", e.getMessage());
-	}
-
-	//cas d'erreur : nb de balles nul
-	persoRM5.getInventaire().removeArme(Inventaire.Lateralisation.DROITE);
-	persoRM5.getInventaire().addArme(new ArmeDist(44, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon), Inventaire.Lateralisation.DROITE);
-	((ArmeDist) persoRM5.getInventaire().getArmeCourante()).recharger(30);
-	persoRM5.genInit();
-	try
-	{
-	    persoRM5.attaquerDist(persoRM5.getActions().get(0), 0, 0, 0);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:distance:0 nombre de coups:0", e.getMessage());
-	}
-
-	//cas d'erreur : distance négative
-	persoRM5.getInventaire().removeArme(Inventaire.Lateralisation.DROITE);
-	persoRM5.getInventaire().addArme(new ArmeDist(44, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon), Inventaire.Lateralisation.DROITE);
-	((ArmeDist) persoRM5.getInventaire().getArmeCourante()).recharger(30);
-	persoRM5.genInit();
-	try
-	{
-	    persoRM5.attaquerDist(persoRM5.getActions().get(0), 0, -1, 1);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:distance:-1 nombre de coups:1", e.getMessage());
-	}
-
-	//cas d'erreur hors portée sur arc
-	persoRM5.getInventaire().removeArme(Inventaire.Lateralisation.DROITE);
-	persoRM5.getInventaire().addArme(new ArmeDist(34, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon), Inventaire.Lateralisation.DROITE);
-	((ArmeDist) persoRM5.getInventaire().getArmeCourante()).recharger(1);
-	persoRM5.genInit();
-	Assert.assertFalse(persoRM5.attaquerDist(persoRM5.getActions().get(0), 0, 200, 1).isJetReussi());
-
 	//cas d'erreur arme pas assez chargée pour faire feu : rafale trop grosse
-	persoRM5.getInventaire().removeArme(Inventaire.Lateralisation.DROITE);
 	persoRM5.getInventaire().addArme(new ArmeDist(44, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon), Inventaire.Lateralisation.DROITE);
 	((ArmeDist) persoRM5.getInventaire().getArmeCourante()).recharger(15);
 	persoRM5.genInit();
@@ -335,17 +268,6 @@ public class PersoNonStatTest
 	//test à distance avec arc de bonne qualité et un incrément
 	arme = new ArmeDist(34, Arme.QualiteArme.superieure, Arme.EquilibrageArme.normal);
 	Assert.assertEquals(21, StatUtils.degatsStatistiques(5, arme, 1));
-
-	//cas d'erreur : incréments négatifs
-	try
-	{
-	    persoRM5.genererDegats(-1);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:incréments:-1", e.getMessage());
-	}
     }
 
     @Test
@@ -356,14 +278,5 @@ public class PersoNonStatTest
 	Assert.assertEquals(0, persoRM1.getBlessuresGraves());
 	Assert.assertEquals(0, persoRM1.getBlessuresLegeres());
 
-	//cas d'erreur : dégâts négatifs
-	try
-	{
-	    persoRM1.etreBlesse(new Arme.Degats(-1, 0));
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:dégâts:-1 type:0", e.getMessage());
-	}
     }
 }

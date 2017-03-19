@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 ykonoclast
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,6 +18,7 @@ package org.duckdns.spacedock.upengine.libupsystem;
 
 import org.duckdns.spacedock.commonutils.ErrorHandler;
 import org.duckdns.spacedock.commonutils.PropertiesHandler;
+import org.duckdns.spacedock.upengine.libupsystem.RollUtils.RollResult;
 
 /**
  * représente l'un des couples de jauges vitales d'un personnage : santé/init ou
@@ -188,12 +189,12 @@ class CoupleJauge
 	{
 	    int quotient;
 	    int blessGraves;
-	    int jetAbsorption = p_victime.effectuerJetTrait(0, 0, 0, 0, 0).getScoreBrut();
-
 	    m_blessuresLegeres += p_degats;
-	    if (jetAbsorption < m_blessuresLegeres)//le jet d'absorption est en dessous du ND des blessures légères
+	    RollResult jetAbsorption = p_victime.effectuerJetTrait(0, m_blessuresLegeres);
+
+	    if (!jetAbsorption.isJetReussi())//le jet d'absorption est en dessous du ND des blessures légères
 	    {
-		quotient = ((m_blessuresLegeres) - (jetAbsorption));
+		quotient = ((m_blessuresLegeres) - (jetAbsorption).getScoreBrut());
 		quotient = quotient / 10; //on compte le nombre de tranches entières de 10, la division entre int va normalement correctement tronquer
 		blessGraves = (int) quotient + 1;//total des blessures graves : une pour avoir raté le jet, et une par tranche de 10
 		m_blessuresLegeres = 0;
@@ -201,7 +202,7 @@ class CoupleJauge
 
 		if (m_remplissage_interne > m_choc)//on risque l'inconscience et l'élimination
 		{
-		    if (m_remplissage_interne >= m_taille_interne || !p_victime.effectuerJetTrait(5 * m_remplissage_interne, 0, 0, 0, 3).isJetReussi())//jet raté ou jauge remplie
+		    if (m_remplissage_interne >= m_taille_interne || !p_victime.effectuerJetTrait(3, 5 * m_remplissage_interne).isJetReussi())//jet raté ou jauge remplie
 		    {
 			m_inconscient = true;
 			if (m_remplissage_interne >= m_taille_interne)//jauge remplie

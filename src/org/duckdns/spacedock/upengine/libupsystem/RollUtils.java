@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 ykonoclast
  *
  * This program is free software: you can redistribute it and/or modify
@@ -109,7 +109,6 @@ public final class RollUtils
 	    {
 		total = 0;
 	    }
-
 	}
 	else
 	{
@@ -123,10 +122,7 @@ public final class RollUtils
 
     /**
      * classe interne encapsulant un résultat de jet : sa réussite et le nombre
-     * d'incréments obtenus le cas échéant. On n'utilise pas de collections
-     * clé/valeur comme une EnumMap car l'on veut juste un accès simple à des
-     * champs définis : inutile de dégrader les performances avec toute la
-     * mécanique des collections.
+     * d'incréments obtenus le cas échéant.
      */
     public static final class RollResult
     {

@@ -62,7 +62,7 @@ public class Perso
      * dans l'ordre : 0:Physique ; 1:Coordination ; 2:Mental ; 3:Volonté ;
      * 4:Présence
      */
-    private final int[] m_traits;
+    private final int[] m_traits;//TODO remplacer cela par un EnumMap et virer tous les contrôles sur les traits
 
     /**
      * Constructeur de Perso prenant des caractéristiques en paramétres. Il est
@@ -74,6 +74,8 @@ public class Perso
      */
     public Perso(int[] p_traits, ArbreDomaines p_arbre)
     {
+	m_libellePerso = "Perso";
+
 	if (p_traits.length != 5)
 	{
 	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("nbtraits") + ":" + p_traits.length);
@@ -161,8 +163,7 @@ public class Perso
 	boolean result = false;
 	if (p_phaseActuelle > 0 && p_phaseActuelle < 11)
 	{
-
-	    if ((m_actions.size() - m_actionCourante) > 0 && p_phaseActuelle == m_actions.get(m_actionCourante))
+	    if (isActif(p_phaseActuelle))
 	    {
 		m_actions.set(m_actionCourante, 11);
 		m_actionCourante++;
@@ -295,31 +296,28 @@ public class Perso
      * en interne par les méthodes d'attaque qui effectuent les pré-traitements
      * pour aboutir aux caractéristiques finales du jet.
      *
+     * @param p_trait indice du trait à utiliser (pas la valeur!)
      * @param p_ND
      * @param p_comp
      * @param p_domaine
      * @param p_modifNbLances
      * @param p_modifNbGardes
      * @param p_modifScore
-     * @param p_trait
      * @return le résultat du jet
      */
-    public final RollUtils.RollResult effectuerJetComp(int p_ND, int p_comp, int p_domaine, int p_modifNbLances, int p_modifNbGardes, int p_modifScore, int p_trait)
+    public final RollUtils.RollResult effectuerJetComp(int p_trait, int p_domaine, int p_comp, int p_ND, int p_modifNbLances, int p_modifNbGardes, int p_modifScore)
     {
-	return m_arbreDomaines.effectuerJetComp(p_domaine, p_comp, p_trait, p_ND, p_modifNbLances, p_modifNbGardes, p_modifScore, isSonne());
+	return m_arbreDomaines.effectuerJetComp(m_traits[p_trait], p_domaine, p_comp, p_ND, p_modifNbLances, p_modifNbGardes, p_modifScore, isSonne());
     }
 
     /**
      * fait effectuer au personnage un jet avec l'un de ses traits purs.
      *
-     * @param p_ND
-     * @param p_modifNbLances
-     * @param p_modifNbGardes
-     * @param p_modifScore
      * @param p_trait
+     * @param p_ND
      * @return le résultat du jet
      */
-    public final RollUtils.RollResult effectuerJetTrait(int p_ND, int p_modifNbLances, int p_modifNbGardes, int p_modifScore, int p_trait)
+    public final RollUtils.RollResult effectuerJetTrait(int p_trait, int p_ND)
     {
 	return RollUtils.extraireIncrements(RollUtils.lancer(m_traits[p_trait], m_traits[p_trait], isSonne()), p_ND);
     }
@@ -332,7 +330,9 @@ public class Perso
      */
     public void etreBlesse(Degats p_degats)
     {
-	if (p_degats.getQuantite() >= 0)
+	int temp1 = p_degats.getQuantite();
+	int temp2 = p_degats.getTypeArme();
+	if (p_degats.getQuantite() >= 0 && p_degats.getTypeArme() >= 0)
 	{
 	    Armure armure = m_inventaire.getArmure();
 	    int redDegats = armure.getRedDegats(p_degats.getTypeArme());
@@ -345,7 +345,7 @@ public class Perso
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("degats") + ":" + p_degats.getQuantite());
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("degats") + ":" + p_degats.getQuantite() + " " + PropertiesHandler.getInstance("libupsystem").getString("type") + ":" + p_degats.getTypeArme());
 	}
     }
 
@@ -592,7 +592,7 @@ public class Perso
 	{
 	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("phase") + ":" + p_phaseActuelle);
 	}
-	return ((m_actions.size() - m_actionCourante) > 0 && p_phaseActuelle == m_actions.get(m_actionCourante));
+	return ((m_actions.size() - m_actionCourante) > 0 && p_phaseActuelle == m_actions.get(m_actionCourante));//si l'indice dans le tableau des actions indique que toutes celles-ci n'ont pas été consommées et si l'action pointée par cet indice correspond à la phase actuelle
     }
 
     /**
@@ -712,7 +712,7 @@ public class Perso
 		modDesLances -= arme.getMalusAttaque();
 	    }
 	    modFinal += (ecartPhyMin * 10);
-	    result = effectuerJetComp(p_ND, p_comp, p_domaine, modDesLances, modDesGardes, modFinal, m_traits[1]);
+	    result = effectuerJetComp(1, p_domaine, p_comp, p_ND, modDesLances, modDesGardes, modFinal);
 	}
 	return result;
     }

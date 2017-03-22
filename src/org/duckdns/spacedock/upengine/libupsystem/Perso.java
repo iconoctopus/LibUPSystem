@@ -56,7 +56,7 @@ public class Perso
      * @param p_arbre
      */
     public Perso(int[] p_traits, ArbreDomaines p_arbre)
-    {
+    {//TODO attention à bien introduire les grooupes de traits
 	if (p_traits.length != 5)
 	{
 	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("nbtraits") + ":" + p_traits.length);

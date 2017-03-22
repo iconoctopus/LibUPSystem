@@ -1,3 +1,19 @@
+/* 
+ * Copyright (C) 2017 ykonoclast
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.util.ArrayList;
@@ -9,21 +25,83 @@ import static org.duckdns.spacedock.commonutils.JSONHandler.loadJsonFile;
 /**
  * Classe permetant l'accès aux éléments de référence du UP!System
  *
- * @author iconoctopus
+ * @author ykonoclast
  */
 public final class UPReference
 {
 
     /**
-     * instance unique de cet objet
+     * table des autres libellés
      */
-    private static UPReference m_instance;
-
+    public final CollectionLibelles libelles;
     /**
-     * table des réductions de dégâts, indexée par le rang d'armure (issu du
-     * tableau des rangs)
+     * tableau contenant tous les domaines et leurs compétences non free form,
      */
-    private final JsonArray m_tableArmureRedDegats;
+    private final JsonArray m_arbreDomaines;
+    /**
+     * tableau contenant toutes les armes existant en jeu
+     */
+    private final JsonArray m_tabArmes;
+    /**
+     * préfixe des libellés des compétences d'attaque
+     */
+    private final String m_lblCompAttaque;
+    /**
+     * préfixe des libellés des compétences d'arts et métiers
+     */
+    private final String m_lblCompMetier;
+    /**
+     * préfixe des libellés des compétences de parade
+     */
+    private final String m_lblCompParade;
+    /**
+     * liste des libellés des catégories d'armes de corps à corps
+     */
+    private final JsonArray m_listLblCatArmCaC;
+    /**
+     * liste des libellés des catégories d'armes à distance
+     */
+    private final JsonArray m_listLblCatArmDist;
+    /**
+     * liste des libellés des localisations
+     */
+    private final JsonArray m_listLblLoca;
+    /**
+     * list des libellés des matériaux d'armures
+     */
+    private final JsonArray m_listLblMatArmures;
+    /**
+     * liste des libellés des matériaux des boucliers
+     */
+    private final JsonArray m_listLblMatBoucliers;
+    /**
+     * liste des libellés des modes d'attaque des armes
+     */
+    private final JsonArray m_listLblModArm;
+    /**
+     * liste des libellés des types d'armes
+     */
+    private final JsonArray m_listLblTypArm;
+    /**
+     * liste de libellés des types d'armures
+     */
+    private final JsonArray m_listLblTypArmures;
+    /**
+     * table de tous les boucliers
+     */
+    private final JsonArray m_tabBoucliers;
+    /**
+     * tableau des pièces d'armure
+     */
+    private final JsonArray m_tabPiecesArmures;
+    /**
+     * table des ajustemnts à effectuer sur les points d'armure pour adapter un
+     * type d'armure à un type d'arme. C'est un tableau de tableaux (un pour
+     * chaque type d'armure), chaque tableau interne est indicé par les types
+     * d'armes
+     */
+    private final JsonArray m_tableAjustementArmure;
+
     /**
      * table des bonus au ND, indexée par le rang d'armure (issu du tableau des
      * rangs)
@@ -34,6 +112,11 @@ public final class UPReference
      * points d'armure à atteindre
      */
     private final JsonArray m_tableArmureRangs;
+    /**
+     * table des réductions de dégâts, indexée par le rang d'armure (issu du
+     * tableau des rangs)
+     */
+    private final JsonArray m_tableArmureRedDegats;
     /**
      * table des modificateurs à l'init issus de la coordination
      */
@@ -47,90 +130,9 @@ public final class UPReference
      */
     private final JsonArray m_tableTraits;
     /**
-     * table des autres libellés
+     * instance unique de cet objet
      */
-    public final CollectionLibelles libelles;
-    /**
-     * préfixe des libellés des compétences d'attaque
-     */
-    private final String m_lblCompAttaque;
-    /**
-     * préfixe des libellés des compétences de parade
-     */
-    private final String m_lblCompParade;
-    /**
-     * préfixe des libellés des compétences d'arts et métiers
-     */
-    private final String m_lblCompMetier;
-    /**
-     * tableau contenant tous les domaines et leurs compétences non free form,
-     */
-    final JsonArray m_arbreDomaines;
-    /**
-     * tableau contenant toutes les armes existant en jeu
-     */
-    final JsonArray m_tabArmes;
-    /**
-     * table des ajustemnts à effectuer sur les points d'armure pour adapter un
-     * type d'armure à un type d'arme. C'est un tableau de tableaux (un pour
-     * chaque type d'armure), chaque tableau interne est indicé par les types
-     * d'armes
-     */
-    private final JsonArray m_tableAjustementArmure;
-    /**
-     * liste des libellés des types d'armes
-     */
-    private final JsonArray m_listLblTypArm;
-    /**
-     * liste des libellés des catégories d'armes de corps à corps
-     */
-    private final JsonArray m_listLblCatArmCaC;
-    /**
-     * liste des libellés des catégories d'armes à distance
-     */
-    private final JsonArray m_listLblCatArmDist;
-    /**
-     * liste des libellés des modes d'attaque des armes
-     */
-    private final JsonArray m_listLblModArm;
-    /**
-     * tableau des pièces d'armure
-     */
-    private final JsonArray m_tabPiecesArmures;
-    /**
-     * list des libellés des matériaux d'armures
-     */
-    private final JsonArray m_listLblMatArmures;
-    /**
-     * liste de libellés des types d'armures
-     */
-    private final JsonArray m_listLblTypArmures;
-    /**
-     * table de tous les boucliers
-     */
-    private final JsonArray m_tabBoucliers;
-    /**
-     * liste des libellés des matériaux des boucliers
-     */
-    private final JsonArray m_listLblMatBoucliers;
-    /**
-     * liste des libellés des localisations
-     */
-    private final JsonArray m_listLblLoca;
-
-    /**
-     *
-     * @return l'instance unique de la référence, la construit si elle n'existe
-     * pas
-     */
-    public static UPReference getInstance()
-    {
-	if (m_instance == null)
-	{
-	    m_instance = new UPReference();
-	}
-	return (m_instance);
-    }
+    private static UPReference m_instance;
 
     /**
      * véritable constructeur privé effectuant tous les accès fichiers à
@@ -183,39 +185,37 @@ public final class UPReference
 
     /**
      *
-     * @param p_coordination la valeur de coordination
-     * @return le modificateur de coordination à l'initiative
+     * @return l'instance unique de la référence, la construit si elle n'existe
+     * pas
      */
-    public int getInitModCoord(int p_coordination)
+    public static UPReference getInstance()
     {
-	//le tableau est indexé à partir de 0, pas la coordination
-	return m_tableInitCoord.getInt(p_coordination);
-    }
-
-    /**
-     *
-     * @param p_mental la valeur de mental
-     * @return le modificateur à l'initiative issu du mental
-     */
-    public int getInitModMental(int p_mental)
-    {
-	//le tableau est indexé à partir de 0, pas le mental
-	return m_tableInitMental.getInt(p_mental);
+	if (m_instance == null)
+	{
+	    m_instance = new UPReference();
+	}
+	return (m_instance);
     }
 
     /**
      *
      * @param p_points les points d'armure
-     * @return le rang d'armure
+     * @param p_typeArme
+     * @param p_typeArmure
+     * @return le bonus au ND offert par l'armure sur ce type d'arme
      */
-    private int getRang(int p_points)
+    public int getArmureBonusND(int p_points, int p_typeArme, int p_typeArmure)
     {
-	int i = -1;//on commence avec i en dehors du tableau (0 points d'armure, pas de bonus) et l'on teste si on peut l'augmenter, quand on ne peut plus l'augmenter on le renvoie.
-	while (i <= 4 && p_points >= m_tableArmureRangs.getInt(i + 1))
+	int pointsEffectifs = getPtsArmureEffectifs(p_points, p_typeArme, p_typeArmure);
+
+	int resultat = 0;
+
+	int rang = getRang(pointsEffectifs);
+	if (rang >= 0)//impossible si l'on est arrivé jusque là mais on ne sait jamais
 	{
-	    ++i;
+	    resultat = m_tableArmureBonusND.getInt(rang);
 	}
-	return (i);
+	return resultat;
     }
 
     /**
@@ -241,89 +241,6 @@ public final class UPReference
 
     /**
      *
-     * @param p_points les points d'armure
-     * @param p_typeArme
-     * @param p_typeArmure
-     * @return le bonus au ND offert par l'armure sur ce type d'arme
-     */
-    public int getArmureBonusND(int p_points, int p_typeArme, int p_typeArmure)
-    {
-	int pointsEffectifs = getPtsArmureEffectifs(p_points, p_typeArme, p_typeArmure);
-
-	int resultat = 0;
-
-	int rang = getRang(pointsEffectifs);
-	if (rang >= 0)//impossible si l'on est arrivé jusque là mais on ne sait jamais
-	{
-	    resultat = m_tableArmureBonusND.getInt(rang);
-	}
-	return resultat;
-    }
-
-    /**
-     * @param p_nbPts les points d'armure à modifier
-     * @param p_typeArme type d'arme considéré
-     * @param p_typeArmure type d'armure considéré
-     * @return les points d'armure à effectivement utiliser face à un type
-     * d'arme donné en fonction du type d'armure
-     */
-    private int getPtsArmureEffectifs(int p_nbPts, int p_typeArme, int p_typeArmure)
-    {
-	JsonArray tabPourType = m_tableAjustementArmure.getJsonArray(p_typeArmure);
-	double coeff = tabPourType.getJsonNumber(p_typeArme).doubleValue();
-
-	double preResult = (((double) p_nbPts) * coeff);
-	long IntResult = Math.round(preResult);
-	return (int) IntResult;
-    }
-
-    /**
-     *
-     * @param p_indice l'indice du trait tel que défini dan le fichier JSON
-     * @return le libelle du trait indicé
-     */
-    public String getLibelleTrait(int p_indice)
-    {
-	return m_tableTraits.getString(p_indice);
-
-    }
-
-    /**
-     *
-     * @param p_indice
-     * @return le libellé d'une arme
-     */
-    public String getLblArme(int p_indice)
-    {
-	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
-	return arme.getString("nom");
-    }
-
-    /**
-     *
-     * @param p_indice
-     * @return le nb de dés lancés par une arme
-     */
-    public int getNbLancesArme(int p_indice)
-    {
-	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
-	return arme.getInt("lance");
-    }
-
-    /**
-     *
-     * @param p_indice
-     * @return le nombre de dés gardés d'une arme
-     */
-    public int getNbGardesArme(int p_indice)
-    {
-	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
-	return arme.getInt("garde");
-
-    }
-
-    /**
-     *
      * @param p_indice
      * @return le bonus d'init de l'arme
      */
@@ -331,28 +248,6 @@ public final class UPReference
     {
 	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
 	return arme.getInt("bonus_init");
-    }
-
-    /**
-     *
-     * @param p_indice
-     * @return le malus aux jets d'attaque de l'arme
-     */
-    public int getMalusAttaqueArme(int p_indice)
-    {
-	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
-	return arme.getInt("malus_attaque");
-    }
-
-    /**
-     *
-     * @param p_indice
-     * @return le physique minimal de l'arme
-     */
-    public int getPhysMinArme(int p_indice)
-    {
-	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
-	return arme.getInt("physique_minimal");
     }
 
     /**
@@ -368,53 +263,35 @@ public final class UPReference
 
     /**
      *
-     * @param p_indice
-     * @return l'indice du type de l'arme
+     * @param p_coordination la valeur de coordination
+     * @return le modificateur de coordination à l'initiative
      */
-    public int getTypeArme(int p_indice)
+    public int getInitModCoord(int p_coordination)
+    {
+	//le tableau est indexé à partir de 0, pas la coordination
+	return m_tableInitCoord.getInt(p_coordination);
+    }
+
+    /**
+     *
+     * @param p_mental la valeur de mental
+     * @return le modificateur à l'initiative issu du mental
+     */
+    public int getInitModMental(int p_mental)
+    {
+	//le tableau est indexé à partir de 0, pas le mental
+	return m_tableInitMental.getInt(p_mental);
+    }
+
+    /**
+     *
+     * @param p_indice
+     * @return le libellé d'une arme
+     */
+    public String getLblArme(int p_indice)
     {
 	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
-	return arme.getInt("type");
-    }
-
-    /**
-     *
-     * @param p_indice
-     * @return le libellé d'un type d'arme représenté par son index
-     */
-    public String getLblTypeArme(int p_indice)
-    {
-	return m_listLblTypArm.getString(p_indice);
-    }
-
-    /**
-     *
-     * @param p_indice
-     * @return le nombre de mains utilisées par une arme
-     */
-    public int getNbMainsArme(int p_indice)
-    {
-	return m_tabArmes.getJsonObject(p_indice).getInt("mains");
-    }
-
-    /**
-     *
-     * @param p_indice
-     * @return le mode d'attaque d'une arme représentée par son index
-     */
-    public int getModArme(int p_indice)
-    {
-	return m_tabArmes.getJsonObject(p_indice).getInt("mode");
-    }
-
-    /**
-     *
-     * @param p_indice
-     * @return le libellé du mode d'attaque représenté par son index
-     */
-    public String getLblModArme(int p_indice)
-    {
-	return m_listLblModArm.getString(p_indice);
+	return arme.getString("nom");
     }
 
     /**
@@ -440,58 +317,96 @@ public final class UPReference
     }
 
     /**
-     * renvoie le malus à l'attaque à courte portée de l'arme
      *
      * @param p_indice
-     * @return
+     * @return le libllé d'une localisation
      */
-    public int getMalusCourtArme(int p_indice)
+    public String getLblLoca(int p_indice)
     {
-	return m_tabArmes.getJsonObject(p_indice).getInt("malus_court");
+	return m_listLblLoca.getString(p_indice);
     }
 
     /**
-     * renvoie le malus à l'attaque à longue portée de l'arme
      *
      * @param p_indice
-     * @return
+     * @param p_isBouclier
+     * @return le libellé d'un matériau d'armure
      */
-    public int getMalusLongArme(int p_indice)
+    public String getLblMateriauArmure(int p_indice, boolean p_isBouclier)
     {
-	return m_tabArmes.getJsonObject(p_indice).getInt("malus_long");
+	String res;
+	if (p_isBouclier)
+	{
+	    res = m_listLblMatBoucliers.getString(p_indice);
+	}
+	else
+	{
+	    res = m_listLblMatArmures.getString(p_indice);
+	}
+	return res;
     }
 
     /**
-     * renvoie la portée de l'arme
      *
      * @param p_indice
-     * @return
+     * @return le libellé du mode d'attaque représenté par son index
      */
-    public int getPorteeArme(int p_indice)
+    public String getLblModArme(int p_indice)
     {
-	return m_tabArmes.getJsonObject(p_indice).getInt("portee");
+	return m_listLblModArm.getString(p_indice);
     }
 
     /**
-     * renvoie le nombre d'actions nécessaire au rechargement de l'arme
      *
      * @param p_indice
-     * @return
+     * @param p_isBouclier
+     * @return le libellé d'une pièce d'armure
      */
-    public int getNbActionsRechargeArme(int p_indice)
+    public String getLblPiece(int p_indice, boolean p_isBouclier)
     {
-	return m_tabArmes.getJsonObject(p_indice).getInt("actions_recharge");
+	String res;
+	if (p_isBouclier)
+	{
+	    JsonObject objetIntermediaire = m_tabBoucliers.getJsonObject(p_indice);
+	    res = objetIntermediaire.getString("lbl");
+	}
+	else
+	{
+	    JsonObject piece = m_tabPiecesArmures.getJsonObject(p_indice);
+	    res = piece.getString("lbl");
+	}
+	return res;
     }
 
     /**
-     * renvoie le max de munitions au sein de l'arme
      *
      * @param p_indice
-     * @return
+     * @return le libellé d'un type d'arme représenté par son index
      */
-    public int getMagasinArme(int p_indice)
+    public String getLblTypeArme(int p_indice)
     {
-	return m_tabArmes.getJsonObject(p_indice).getInt("magasin");
+	return m_listLblTypArm.getString(p_indice);
+    }
+
+    /**
+     *
+     * @param p_indice
+     * @return le libllé d'un type d'armure
+     */
+    public String getLblTypeArmure(int p_indice)
+    {
+	return m_listLblTypArmures.getString(p_indice);
+    }
+
+    /**
+     *
+     * @param p_indice l'indice du trait tel que défini dan le fichier JSON
+     * @return le libelle du trait indicé
+     */
+    public String getLibelleTrait(int p_indice)
+    {
+	return m_tableTraits.getString(p_indice);
+
     }
 
     /**
@@ -554,6 +469,291 @@ public final class UPReference
     }
 
     /**
+     * la liste des noms de toutes les armes
+     *
+     * @return
+     */
+    public ArrayList<String> getListLblArme()
+    {
+	ArrayList<String> res = new ArrayList<>();
+	for (int i = 0; i < m_tabArmes.size(); ++i)
+	{
+	    res.add(m_tabArmes.getJsonObject(i).getString("lbl"));
+	}
+	return res;
+    }
+
+    /**
+     * la liste des noms de tous les boucliers
+     *
+     * @return
+     */
+    public ArrayList<String> getListLblBouclier()
+    {
+	ArrayList<String> res = new ArrayList<>();
+	for (int i = 0; i < m_tabBoucliers.size(); ++i)
+	{
+	    res.add(m_tabBoucliers.getJsonObject(i).getString("lbl"));
+	}
+	return res;
+    }
+
+    /**
+     * la liste des noms de tous les matériaux d'armure
+     *
+     * @return
+     */
+    public ArrayList<String> getListLblMateriauArmure()
+    {
+	ArrayList<String> res = new ArrayList<>();
+	for (int i = 0; i < m_listLblMatArmures.size(); ++i)
+	{
+	    res.add(m_listLblMatArmures.getString(i));
+	}
+	return res;
+    }
+
+    /**
+     * la liste des noms de tous les matériaux de boucliers
+     *
+     * @return
+     */
+    public ArrayList<String> getListLblMateriauBouclier()
+    {
+	ArrayList<String> res = new ArrayList<>();
+	for (int i = 0; i < m_listLblMatBoucliers.size(); ++i)
+	{
+	    res.add(m_listLblMatBoucliers.getString(i));
+	}
+	return res;
+    }
+
+    /**
+     * la liste des noms de toutes les pieces d'armures
+     *
+     * @return
+     */
+    public ArrayList<String> getListLblPieceArmure()
+    {
+	ArrayList<String> res = new ArrayList<>();
+	for (int i = 0; i < m_tabPiecesArmures.size(); ++i)
+	{
+	    res.add(m_tabPiecesArmures.getJsonObject(i).getString("lbl"));
+	}
+	return res;
+    }
+
+    /**
+     * la liste des noms de tous les types d'arme
+     *
+     * @return
+     */
+    public ArrayList<String> getListLblTypeArme()
+    {
+	ArrayList<String> res = new ArrayList<>();
+	for (int i = 0; i < m_listLblTypArm.size(); ++i)
+	{
+	    res.add(m_listLblTypArm.getString(i));
+	}
+	return res;
+    }
+
+    /**
+     * la liste des noms de tous les types d'armure
+     *
+     * @return
+     */
+    public ArrayList<String> getListLblTypeArmure()
+    {
+	ArrayList<String> res = new ArrayList<>();
+	for (int i = 0; i < m_listLblTypArmures.size(); ++i)
+	{
+	    res.add(m_listLblTypArmures.getString(i));
+	}
+	return res;
+    }
+
+    /**
+     *
+     * @param p_indice
+     * @param p_isBouclier
+     * @return la localisation d'une pièce
+     */
+    public int getLocalisation(int p_indice, boolean p_isBouclier)
+    {
+	JsonArray tab;
+
+	if (!p_isBouclier)
+	{
+	    tab = m_tabPiecesArmures;
+	}
+	else
+	{
+	    tab = m_tabBoucliers;
+	}
+	JsonObject piece = tab.getJsonObject(p_indice);
+	return piece.getInt("loca");
+    }
+
+    /**
+     * renvoie le max de munitions au sein de l'arme
+     *
+     * @param p_indice
+     * @return
+     */
+    public int getMagasinArme(int p_indice)
+    {
+	return m_tabArmes.getJsonObject(p_indice).getInt("magasin");
+    }
+
+    /**
+     *
+     * @param p_indice
+     * @return le malus aux jets d'attaque de l'arme
+     */
+    public int getMalusAttaqueArme(int p_indice)
+    {
+	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
+	return arme.getInt("malus_attaque");
+    }
+
+    /**
+     * renvoie le malus à l'attaque à courte portée de l'arme
+     *
+     * @param p_indice
+     * @return
+     */
+    public int getMalusCourtArme(int p_indice)
+    {
+	return m_tabArmes.getJsonObject(p_indice).getInt("malus_court");
+    }
+
+    /**
+     *
+     * @param p_indicePiece
+     * @param p_materiau
+     * @param p_isBouclier
+     * @return le malus d'esquive d'une pièce d'un matériau donné
+     */
+    public int getMalusEsquive(int p_indicePiece, int p_materiau, boolean p_isBouclier)
+    {
+	int res = 0;
+	if (!p_isBouclier)
+	{
+	    JsonObject piece = m_tabPiecesArmures.getJsonObject(p_indicePiece);
+	    JsonArray tabMalus = piece.getJsonArray("malus_esquive");
+	    res = tabMalus.getInt(p_materiau);
+	}
+	return res;
+    }
+
+    /**
+     * renvoie le malus à l'attaque à longue portée de l'arme
+     *
+     * @param p_indice
+     * @return
+     */
+    public int getMalusLongArme(int p_indice)
+    {
+	return m_tabArmes.getJsonObject(p_indice).getInt("malus_long");
+    }
+
+    /**
+     *
+     * @param p_indicePiece
+     * @param p_materiau
+     * @param p_isBouclier
+     * @return le malus de parade d'une pièce d'un matériau donné
+     */
+    public int getMalusParade(int p_indicePiece, int p_materiau, boolean p_isBouclier)
+    {
+	int res = 0;
+	if (!p_isBouclier)
+	{
+	    JsonObject piece = m_tabPiecesArmures.getJsonObject(p_indicePiece);
+	    JsonArray tabMalus = piece.getJsonArray("malus_parade");
+	    res = tabMalus.getInt(p_materiau);
+	}
+	return res;
+    }
+
+    /**
+     *
+     * @param p_indice
+     * @return le mode d'attaque d'une arme représentée par son index
+     */
+    public int getModArme(int p_indice)
+    {
+	return m_tabArmes.getJsonObject(p_indice).getInt("mode");
+    }
+
+    /**
+     * renvoie le nombre d'actions nécessaire au rechargement de l'arme
+     *
+     * @param p_indice
+     * @return
+     */
+    public int getNbActionsRechargeArme(int p_indice)
+    {
+	return m_tabArmes.getJsonObject(p_indice).getInt("actions_recharge");
+    }
+
+    /**
+     *
+     * @param p_indice
+     * @return le nombre de dés gardés d'une arme
+     */
+    public int getNbGardesArme(int p_indice)
+    {
+	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
+	return arme.getInt("garde");
+
+    }
+
+    /**
+     *
+     * @param p_indice
+     * @return le nb de dés lancés par une arme
+     */
+    public int getNbLancesArme(int p_indice)
+    {
+	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
+	return arme.getInt("lance");
+    }
+
+    /**
+     *
+     * @param p_indice
+     * @return le nombre de mains utilisées par une arme
+     */
+    public int getNbMainsArme(int p_indice)
+    {
+	return m_tabArmes.getJsonObject(p_indice).getInt("mains");
+    }
+
+    /**
+     *
+     * @param p_indice
+     * @return le physique minimal de l'arme
+     */
+    public int getPhysMinArme(int p_indice)
+    {
+	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
+	return arme.getInt("physique_minimal");
+    }
+
+    /**
+     * renvoie la portée de l'arme
+     *
+     * @param p_indice
+     * @return
+     */
+    public int getPorteeArme(int p_indice)
+    {
+	return m_tabArmes.getJsonObject(p_indice).getInt("portee");
+    }
+
+    /**
      *
      * @param p_idPiece
      * @param p_materiau
@@ -582,228 +782,44 @@ public final class UPReference
     /**
      *
      * @param p_indice
-     * @param p_isBouclier
-     * @return le libellé d'un matériau d'armure
+     * @return l'indice du type de l'arme
      */
-    public String getLblMateriauArmure(int p_indice, boolean p_isBouclier)
+    public int getTypeArme(int p_indice)
     {
-	String res;
-	if (p_isBouclier)
-	{
-	    res = m_listLblMatBoucliers.getString(p_indice);
-	}
-	else
-	{
-	    res = m_listLblMatArmures.getString(p_indice);
-	}
-	return res;
+	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
+	return arme.getInt("type");
+    }
+
+    /**
+     * @param p_nbPts les points d'armure à modifier
+     * @param p_typeArme type d'arme considéré
+     * @param p_typeArmure type d'armure considéré
+     * @return les points d'armure à effectivement utiliser face à un type
+     * d'arme donné en fonction du type d'armure
+     */
+    private int getPtsArmureEffectifs(int p_nbPts, int p_typeArme, int p_typeArmure)
+    {
+	JsonArray tabPourType = m_tableAjustementArmure.getJsonArray(p_typeArmure);
+	double coeff = tabPourType.getJsonNumber(p_typeArme).doubleValue();
+
+	double preResult = (((double) p_nbPts) * coeff);
+	long IntResult = Math.round(preResult);
+	return (int) IntResult;
     }
 
     /**
      *
-     * @param p_indice
-     * @return le libllé d'un type d'armure
+     * @param p_points les points d'armure
+     * @return le rang d'armure
      */
-    public String getLblTypeArmure(int p_indice)
+    private int getRang(int p_points)
     {
-	return m_listLblTypArmures.getString(p_indice);
-    }
-
-    /**
-     *
-     * @param p_indice
-     * @return le libllé d'une localisation
-     */
-    public String getLblLoca(int p_indice)
-    {
-	return m_listLblLoca.getString(p_indice);
-    }
-
-    /**
-     *
-     * @param p_indice
-     * @param p_isBouclier
-     * @return le libellé d'une pièce d'armure
-     */
-    public String getLblPiece(int p_indice, boolean p_isBouclier)
-    {
-	String res;
-	if (p_isBouclier)
+	int i = -1;//on commence avec i en dehors du tableau (0 points d'armure, pas de bonus) et l'on teste si on peut l'augmenter, quand on ne peut plus l'augmenter on le renvoie.
+	while (i <= 4 && p_points >= m_tableArmureRangs.getInt(i + 1))
 	{
-	    JsonObject objetIntermediaire = m_tabBoucliers.getJsonObject(p_indice);
-	    res = objetIntermediaire.getString("lbl");
+	    ++i;
 	}
-	else
-	{
-	    JsonObject piece = m_tabPiecesArmures.getJsonObject(p_indice);
-	    res = piece.getString("lbl");
-	}
-	return res;
-    }
-
-    /**
-     *
-     * @param p_indicePiece
-     * @param p_materiau
-     * @param p_isBouclier
-     * @return le malus d'esquive d'une pièce d'un matériau donné
-     */
-    public int getMalusEsquive(int p_indicePiece, int p_materiau, boolean p_isBouclier)
-    {
-	int res = 0;
-	if (!p_isBouclier)
-	{
-	    JsonObject piece = m_tabPiecesArmures.getJsonObject(p_indicePiece);
-	    JsonArray tabMalus = piece.getJsonArray("malus_esquive");
-	    res = tabMalus.getInt(p_materiau);
-	}
-	return res;
-    }
-
-    /**
-     *
-     * @param p_indicePiece
-     * @param p_materiau
-     * @param p_isBouclier
-     * @return le malus de parade d'une pièce d'un matériau donné
-     */
-    public int getMalusParade(int p_indicePiece, int p_materiau, boolean p_isBouclier)
-    {
-	int res = 0;
-	if (!p_isBouclier)
-	{
-	    JsonObject piece = m_tabPiecesArmures.getJsonObject(p_indicePiece);
-	    JsonArray tabMalus = piece.getJsonArray("malus_parade");
-	    res = tabMalus.getInt(p_materiau);
-	}
-	return res;
-    }
-
-    /**
-     *
-     * @param p_indice
-     * @param p_isBouclier
-     * @return la localisation d'une pièce
-     */
-    public int getLocalisation(int p_indice, boolean p_isBouclier)
-    {
-	JsonArray tab;
-
-	if (!p_isBouclier)
-	{
-	    tab = m_tabPiecesArmures;
-	}
-	else
-	{
-	    tab = m_tabBoucliers;
-	}
-	JsonObject piece = tab.getJsonObject(p_indice);
-	return piece.getInt("loca");
-    }
-
-    /**
-     * la liste des noms de toutes les armes
-     *
-     * @return
-     */
-    public ArrayList<String> getListLblArme()
-    {
-	ArrayList<String> res = new ArrayList<>();
-	for (int i = 0; i < m_tabArmes.size(); ++i)
-	{
-	    res.add(m_tabArmes.getJsonObject(i).getString("lbl"));
-	}
-	return res;
-    }
-
-    /**
-     * la liste des noms de toutes les pieces d'armures
-     *
-     * @return
-     */
-    public ArrayList<String> getListLblPieceArmure()
-    {
-	ArrayList<String> res = new ArrayList<>();
-	for (int i = 0; i < m_tabPiecesArmures.size(); ++i)
-	{
-	    res.add(m_tabPiecesArmures.getJsonObject(i).getString("lbl"));
-	}
-	return res;
-    }
-
-    /**
-     * la liste des noms de tous les matériaux d'armure
-     *
-     * @return
-     */
-    public ArrayList<String> getListLblMateriauArmure()
-    {
-	ArrayList<String> res = new ArrayList<>();
-	for (int i = 0; i < m_listLblMatArmures.size(); ++i)
-	{
-	    res.add(m_listLblMatArmures.getString(i));
-	}
-	return res;
-    }
-
-    /**
-     * la liste des noms de tous les types d'armure
-     *
-     * @return
-     */
-    public ArrayList<String> getListLblTypeArmure()
-    {
-	ArrayList<String> res = new ArrayList<>();
-	for (int i = 0; i < m_listLblTypArmures.size(); ++i)
-	{
-	    res.add(m_listLblTypArmures.getString(i));
-	}
-	return res;
-    }
-
-    /**
-     * la liste des noms de tous les types d'arme
-     *
-     * @return
-     */
-    public ArrayList<String> getListLblTypeArme()
-    {
-	ArrayList<String> res = new ArrayList<>();
-	for (int i = 0; i < m_listLblTypArm.size(); ++i)
-	{
-	    res.add(m_listLblTypArm.getString(i));
-	}
-	return res;
-    }
-
-    /**
-     * la liste des noms de tous les matériaux de boucliers
-     *
-     * @return
-     */
-    public ArrayList<String> getListLblMateriauBouclier()
-    {
-	ArrayList<String> res = new ArrayList<>();
-	for (int i = 0; i < m_listLblMatBoucliers.size(); ++i)
-	{
-	    res.add(m_listLblMatBoucliers.getString(i));
-	}
-	return res;
-    }
-
-    /**
-     * la liste des noms de tous les boucliers
-     *
-     * @return
-     */
-    public ArrayList<String> getListLblBouclier()
-    {
-	ArrayList<String> res = new ArrayList<>();
-	for (int i = 0; i < m_tabBoucliers.size(); ++i)
-	{
-	    res.add(m_tabBoucliers.getJsonObject(i).getString("lbl"));
-	}
-	return res;
+	return (i);
     }
 
     /**

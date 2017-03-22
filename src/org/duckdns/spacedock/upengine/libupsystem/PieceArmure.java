@@ -1,7 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Copyright (C) 2017 ykonoclast
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.duckdns.spacedock.upengine.libupsystem;
 
@@ -16,22 +27,14 @@ public class PieceArmure
      */
     private final int m_idPiece;
     /**
-     * le type de la pièce
+     * si la pièce est un boucliere
      */
-    private final int m_type;
-    /**
-     * le matériau de la pièce
-     */
-    private final int m_materiau;
+    private final boolean m_isBouclier;
     /**
      * le libellé de cette pièce, construit à partir de son matériau et de sa
      * nature
      */
     private final String m_libelle;
-    /**
-     * le nombre de points de cette pièce
-     */
-    private final int m_nbpoints;
     /**
      * la localisation de la pièce
      */
@@ -45,9 +48,17 @@ public class PieceArmure
      */
     private final int m_malusParade;
     /**
-     * si la pièce est un boucliere
+     * le matériau de la pièce
      */
-    private final boolean m_isBouclier;
+    private final int m_materiau;
+    /**
+     * le nombre de points de cette pièce
+     */
+    private final int m_nbpoints;
+    /**
+     * le type de la pièce
+     */
+    private final int m_type;
 
     /**
      * costructeur de pièces d'armure
@@ -79,11 +90,29 @@ public class PieceArmure
     }
 
     /**
+     * @return the m_libelle -
+     */
+    @Override
+
+    public String toString()
+    {
+	return m_libelle;
+    }
+
+    /**
      * @return the m_idPiece
      */
     int getIdPiece()
     {
 	return m_idPiece;
+    }
+
+    /**
+     * @return the m_localisation
+     */
+    int getLocalisation()
+    {
+	return m_localisation;
     }
 
     /**
@@ -100,24 +129,6 @@ public class PieceArmure
     int getMalusParade()
     {
 	return m_malusParade;
-    }
-
-    /**
-     * @return the m_localisation
-     */
-    int getLocalisation()
-    {
-	return m_localisation;
-    }
-
-    /**
-     * @return the m_libelle -
-     */
-    @Override
-
-    public String toString()
-    {
-	return m_libelle;
     }
 
     /**

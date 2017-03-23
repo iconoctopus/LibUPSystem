@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 ykonoclast
  *
  * This program is free software: you can redistribute it and/or modify
@@ -46,7 +46,7 @@ public class ArmeCaC extends Arme
      * @param p_isSonne
      * @return
      */
-    Degats genererDegats(int p_nbIncrements, int p_physique, boolean p_isSonne)
+    Degats genererDegats(int p_nbIncrements, int p_physique, boolean p_isSonne)//TODO avec le nouveau système les ajouts de dégâts seront ramenés dans Perso et cette méthode pourra être une override d'une méthode abstraite d'Arme dans les deux deux sous classs
     {
 	int degatsBruts = 0;
 	if (p_nbIncrements >= 0 && p_physique >= 0)

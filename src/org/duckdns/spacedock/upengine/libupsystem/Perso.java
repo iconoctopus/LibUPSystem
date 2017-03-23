@@ -230,7 +230,7 @@ public class Perso
      * @return
      */
     public RollResult attaquerDist(int p_phaseActuelle, int p_ND, int p_distance, int p_nbCoups)
-    {
+    {//TODO déplacer l'esentiel de ce code dans ArmeDist (ce n'est pas au perso d'embarquer la logique de traitement du combat a distance ou de veiller à consommer les muns) via une méthode renvoyant un objet de com dédié avec les modificateurs afférents
 	RollResult result = new RollResult(0, false, 0);//raté par défaut
 	ArmeDist arme = (ArmeDist) m_inventaire.getArmeCourante();
 	int modDist = 0;

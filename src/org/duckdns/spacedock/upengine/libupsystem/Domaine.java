@@ -47,7 +47,7 @@ class Domaine
 	if (p_indice >= 0)
 	{
 	    setRang(p_rang);
-	    int nbComps = UPReference.getInstance().getListComp(p_indice).size();
+	    int nbComps = UPReferenceSysteme.getInstance().getListComp(p_indice).size();
 	    for (int i = 0; i < nbComps; ++i)
 	    {
 		m_competences.add(new Competence(0, null));

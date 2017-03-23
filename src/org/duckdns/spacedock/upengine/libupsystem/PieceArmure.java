@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 ykonoclast
  *
  * This program is free software: you can redistribute it and/or modify
@@ -72,21 +72,22 @@ public class PieceArmure
     {
 	m_idPiece = p_idPiece;
 	m_type = p_type;
-	UPReference reference = UPReference.getInstance();
+	UPReferenceArmures referenceArmures = UPReferenceArmures.getInstance();
+	UPReferenceSysteme referenceSys = UPReferenceSysteme.getInstance();
 	m_materiau = p_materiau;
 	if (p_type == 0)
 	{
-	    m_libelle = reference.getLblPiece(m_idPiece, p_isBouclier) + " " + reference.libelles.interArme + " " + reference.getLblMateriauArmure(m_materiau, p_isBouclier);
+	    m_libelle = referenceArmures.getLblPiece(m_idPiece, p_isBouclier) + " " + referenceSys.libelles.interArme + " " + referenceArmures.getLblMateriauArmure(m_materiau, p_isBouclier);
 	}
 	else
 	{
-	    m_libelle = reference.getLblPiece(m_idPiece, p_isBouclier) + " " + reference.getLblTypeArmure(p_type);
+	    m_libelle = referenceArmures.getLblPiece(m_idPiece, p_isBouclier) + " " + referenceArmures.getLblTypeArmure(p_type);
 	}
 	m_isBouclier = p_isBouclier;
-	m_nbpoints = reference.getPtsArmure(p_idPiece, p_materiau, p_isBouclier);
-	m_malusEsquive = reference.getMalusEsquive(m_idPiece, m_materiau, p_isBouclier);
-	m_malusParade = reference.getMalusParade(m_idPiece, m_materiau, p_isBouclier);
-	m_localisation = reference.getLocalisation(m_idPiece, p_isBouclier);
+	m_nbpoints = referenceArmures.getPtsArmure(p_idPiece, p_materiau, p_isBouclier);
+	m_malusEsquive = referenceArmures.getMalusEsquive(m_idPiece, m_materiau, p_isBouclier);
+	m_malusParade = referenceArmures.getMalusParade(m_idPiece, m_materiau, p_isBouclier);
+	m_localisation = referenceArmures.getLocalisation(m_idPiece, p_isBouclier);
     }
 
     /**

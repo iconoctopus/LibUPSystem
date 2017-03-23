@@ -76,7 +76,7 @@ class CoupleJauge
     {
 	if (p_physique >= 0 && p_volonte >= 0 && p_mental >= 0 && p_coordination >= 0)
 	{
-	    instancier(p_physique + p_volonte, UPReference.getInstance().getInitModCoord(p_coordination) + UPReference.getInstance().getInitModMental(p_mental), p_physique);
+	    instancier(p_physique + p_volonte, UPReferenceSysteme.getInstance().getInitModCoord(p_coordination) + UPReferenceSysteme.getInstance().getInitModMental(p_mental), p_physique);
 	}
 	else
 	{

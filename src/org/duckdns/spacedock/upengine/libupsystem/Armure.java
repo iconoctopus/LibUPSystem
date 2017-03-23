@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 ykonoclast
  *
  * This program is free software: you can redistribute it and/or modify
@@ -61,7 +61,7 @@ final class Armure
      */
     int getBonusND(int p_typArm)
     {
-	return UPReference.getInstance().getArmureBonusND(m_points, p_typArm, m_type);
+	return UPReferenceArmures.getInstance().getBonusND(m_points, p_typArm, m_type);
     }
 
     /**
@@ -88,6 +88,6 @@ final class Armure
      */
     int getRedDegats(int p_typArm)
     {
-	return UPReference.getInstance().getArmureRedDegats(m_points, p_typArm, m_type);
+	return UPReferenceArmures.getInstance().getRedDegats(m_points, p_typArm, m_type);
     }
 }

@@ -37,15 +37,15 @@ import org.powermock.modules.junit4.PowerMockRunner;
  * @author ykonoclast
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(//pour les méthodes statiques c'est la classe appelante qui doit apparaître ici, pour les classes final c'est la classe appelée (donc UPReference n'apparaît ici que pour son caractère final et pas pour sa méthode getInstance()
+@PrepareForTest(//pour les méthodes statiques c'est la classe appelante qui doit apparaître ici, pour les classes final c'est la classe appelée (donc UPReferenceSysteme n'apparaît ici que pour son caractère final et pas pour sa méthode getInstance()
 
 	{
-	    Perso.class, UPReference.class, RollUtils.RollResult.class, Armure.class, Degats.class
+	    Perso.class, UPReferenceSysteme.class, RollUtils.RollResult.class, Armure.class, Degats.class
 	})
 public class UnitPersoTest
 {
 
-    private UPReference referenceMock;
+    private UPReferenceSysteme referenceMock;
     private CoupleJauge santeInitRM1;
     private CoupleJauge santeInitRM3;
     private static ArrayList<String> listComp = new ArrayList<>();
@@ -71,9 +71,9 @@ public class UnitPersoTest
     public void setup() throws Exception
     {
 	//on mocke la référence
-	referenceMock = PowerMockito.mock(UPReference.class);
-	PowerMockito.mockStatic(UPReference.class);
-	when(UPReference.getInstance()).thenReturn(referenceMock);
+	referenceMock = PowerMockito.mock(UPReferenceSysteme.class);
+	PowerMockito.mockStatic(UPReferenceSysteme.class);
+	when(UPReferenceSysteme.getInstance()).thenReturn(referenceMock);
 
 	//on mocke deux jauges, une pour un perso RM1, l'autre pour un perso RM3
 	santeInitRM1 = PowerMockito.mock(CoupleJauge.class);

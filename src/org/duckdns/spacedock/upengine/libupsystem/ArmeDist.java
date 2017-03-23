@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 ykonoclast
  *
  * This program is free software: you can redistribute it and/or modify
@@ -53,7 +53,7 @@ public class ArmeDist extends Arme
     private final int m_portee;
 
     /**
-     * constructeur appelant dans UPReference les spécificités des arms à
+     * constructeur appelant dans UPReferenceSysteme les spécificités des arms à
      * distance
      *
      * @param p_indice
@@ -64,7 +64,7 @@ public class ArmeDist extends Arme
     {
 	super(p_indice, p_qualite, p_equilibrage);
 
-	UPReference reference = UPReference.getInstance();
+	UPReferenceArmes reference = UPReferenceArmes.getInstance();
 
 	m_malusCourt = reference.getMalusCourtArme(p_indice);
 	m_malusLong = reference.getMalusLongArme(p_indice);

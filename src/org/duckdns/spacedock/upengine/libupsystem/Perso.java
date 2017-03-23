@@ -120,14 +120,14 @@ public class Perso
 	//configuration du domaine corps à corps
 	m_arbreDomaines = new ArbreDomaines();
 	m_arbreDomaines.setRangDomaine(3, p_RM);
-	for (int i = 0; i < UPReference.getInstance().getListComp(3).size(); i++)
+	for (int i = 0; i < UPReferenceSysteme.getInstance().getListComp(3).size(); i++)
 	{
 	    m_arbreDomaines.setRangComp(3, i, p_RM);
 	}
 
 	//idem pour tout le domaine combat à distance
 	m_arbreDomaines.setRangDomaine(4, p_RM);
-	for (int i = 0; i < UPReference.getInstance().getListComp(4).size(); i++)
+	for (int i = 0; i < UPReferenceSysteme.getInstance().getListComp(4).size(); i++)
 	{
 	    m_arbreDomaines.setRangComp(4, i, p_RM);
 	}

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 ykonoclast
  *
  * This program is free software: you can redistribute it and/or modify
@@ -82,8 +82,9 @@ public abstract class Arme
     public Arme(int p_indice, QualiteArme p_qualite, EquilibrageArme p_equilibrage)
     {
 
-	UPReference reference = UPReference.getInstance();
-	String nom = reference.getLblArme(p_indice);
+	UPReferenceArmes referenceArm = UPReferenceArmes.getInstance();
+	UPReferenceSysteme referenceSys = UPReferenceSysteme.getInstance();
+	String nom = referenceArm.getLblArme(p_indice);
 	nom = nom.concat(" ");
 	int bonusLances = 0;
 	int bonusGardes = 0;
@@ -92,66 +93,66 @@ public abstract class Arme
 	//récupération des éléments liés à la qualité et l'équilibrage de l'arme
 	if (p_qualite == QualiteArme.maitre)//traitement spécial des armes de maître
 	{
-	    nom = nom.concat((String) reference.libelles.libQualite.get(QualiteArme.maitre));
+	    nom = nom.concat((String) referenceArm.getListQualiteArme().get(QualiteArme.maitre));
 	    ++bonusLances;
 	    ++bonusGardes;
 	    ++bonusInitSup;
 	}
 	else
 	{
-	    nom = nom.concat(reference.libelles.liaison);
+	    nom = nom.concat(referenceSys.libelles.liaison);
 	    nom = nom.concat(" ");
-	    nom = nom.concat(reference.libelles.qualite);
+	    nom = nom.concat(referenceSys.libelles.qualite);
 	    nom = nom.concat(" ");
 
 	    switch (p_qualite)
 	    {
 		case inferieure:
 		    --bonusLances;
-		    nom = nom.concat((String) reference.libelles.libQualite.get(QualiteArme.inferieure));
+		    nom = nom.concat((String) referenceArm.getListQualiteArme().get(QualiteArme.inferieure));
 		    break;
 		case moyenne:
-		    nom = nom.concat((String) reference.libelles.libQualite.get(QualiteArme.moyenne));
+		    nom = nom.concat((String) referenceArm.getListQualiteArme().get(QualiteArme.moyenne));
 		    break;
 		case superieure:
 		    ++bonusLances;
-		    nom = nom.concat((String) reference.libelles.libQualite.get(QualiteArme.superieure));
+		    nom = nom.concat((String) referenceArm.getListQualiteArme().get(QualiteArme.superieure));
 		    break;
 	    }
 
 	    nom = nom.concat(" ");
-	    nom = nom.concat(reference.libelles.addition);
+	    nom = nom.concat(referenceSys.libelles.addition);
 	    nom = nom.concat(" ");
-	    nom = nom.concat(reference.libelles.equilibrage);
+	    nom = nom.concat(referenceSys.libelles.equilibrage);
 	    nom = nom.concat(" ");
 
 	    switch (p_equilibrage)
 	    {
 		case mauvais:
 		    bonusInitSup = -1;
-		    nom = nom.concat((String) reference.libelles.libEquilibrage.get(EquilibrageArme.mauvais));
+		    nom = nom.concat((String) referenceArm.getListEquilibrage().get(EquilibrageArme.mauvais));
 		    break;
 		case normal:
-		    nom = nom.concat((String) reference.libelles.libEquilibrage.get(EquilibrageArme.normal));
+		    nom = nom.concat((String) referenceArm.getListEquilibrage().get(EquilibrageArme.normal));
 		    break;
 		case bon:
 		    bonusInitSup = +1;
-		    nom = nom.concat((String) reference.libelles.libEquilibrage.get(EquilibrageArme.bon));
+		    nom = nom.concat((String) referenceArm.getListEquilibrage().get(EquilibrageArme.bon));
 		    break;
 	    }
 	}
 
 	//récupération et construction des caractéristiques de l'arme
-	m_desLances = reference.getNbLancesArme(p_indice) + bonusLances;
-	m_desGardes = reference.getNbGardesArme(p_indice) + bonusGardes;
-	m_bonusInit = reference.getBonusInitArme(p_indice) + bonusInitSup;
-	m_typeArme = reference.getTypeArme(p_indice);
-	m_malusAttaque = reference.getMalusAttaqueArme(p_indice);
-	m_physMin = reference.getPhysMinArme(p_indice);
+	m_desLances = referenceArm.getNbLancesArme(p_indice) + bonusLances;
+	m_desGardes = referenceArm.getNbGardesArme(p_indice) + bonusGardes;
+	m_bonusInit = referenceArm.getBonusInitArme(p_indice) + bonusInitSup;
+	m_typeArme = referenceArm.getTypeArme(p_indice);
+	m_malusAttaque = referenceArm.getMalusAttaqueArme(p_indice);
+	m_physMin = referenceArm.getPhysMinArme(p_indice);
 	m_nom = nom;
-	m_categorie = reference.getCategorieArme(p_indice);
-	m_NbMainsArme = reference.getNbMainsArme(p_indice);
-	m_mode = reference.getModArme(p_indice);
+	m_categorie = referenceArm.getCategorieArme(p_indice);
+	m_NbMainsArme = referenceArm.getNbMainsArme(p_indice);
+	m_mode = referenceArm.getModArme(p_indice);
     }
 
     public int getBonusInit()

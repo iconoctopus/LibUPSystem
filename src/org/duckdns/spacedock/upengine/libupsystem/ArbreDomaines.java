@@ -36,7 +36,7 @@ public class ArbreDomaines
      */
     public ArbreDomaines()
     {
-	int nbDomaines = UPReference.getInstance().getListDomaines().size();
+	int nbDomaines = UPReferenceSysteme.getInstance().getListDomaines().size();
 	for (int i = 0; i < nbDomaines; ++i)
 	{
 	    m_listDomaines.add(new Domaine(i, 1));

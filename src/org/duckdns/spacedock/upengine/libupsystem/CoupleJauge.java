@@ -208,7 +208,10 @@ class CoupleJauge
 			if (m_remplissage_interne > m_taille_interne || !p_victime.effectuerJetTrait(0, 5 * m_remplissage_interne).isJetReussi())//jauge déborde ou jet de mort raté
 			{
 			    m_elimine = true;
-			    m_remplissage_interne = m_taille_interne;//on ramène le remplissage au max de la jauge si il dépasse
+			    if (m_remplissage_interne > m_taille_interne)
+			    {
+				m_remplissage_interne = m_taille_interne;//on ramène le remplissage au max de la jauge si il débordait
+			    }
 			}
 		    }
 		}

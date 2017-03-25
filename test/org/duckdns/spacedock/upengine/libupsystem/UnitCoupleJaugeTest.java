@@ -250,7 +250,6 @@ public class UnitCoupleJaugeTest
     @Test
     public void gesTionDegatsNominalEchecInconscience()
     {
-
 	//On rajoute deux blessures graves à la petite jauge de santé/init pour générer une insconscience auto sans mort
 	when(resultMock.isJetReussi()).thenReturn(false);
 	when(resultMock.getScoreBrut()).thenReturn(29);
@@ -272,19 +271,72 @@ public class UnitCoupleJaugeTest
 	Assert.assertTrue(jaugeSI.isSonne());//inconscient donc sonné
 
 	//Inconscience sur jet raté
-	/*RollUtils.RollResult resultMockInconscience = PowerMockito.mock(RollUtils.RollResult.class);
-	PowerMockito.mockStatic(RollUtils.RollResult.class);
-	when(resultMockInconscience.isJetReussi()).thenReturn(true);
-	when(persoMock.effectuerJetTrait(3, 10)).thenReturn(resultMockInconscience);//réussite du jet d'inconscience : la jauge sera remplie donc le perso quand même inconscient
+	when(resultMock.isJetReussi()).thenReturn(false);
+	when(resultMock.getScoreBrut()).thenReturn(4);
+	when(persoMock.effectuerJetTrait(0, 55)).thenReturn(resultMock);
 
-	verify(persoMock).effectuerJetTrait(3, 10);
-	 */
+	RollUtils.RollResult resultMockInconscience = PowerMockito.mock(RollUtils.RollResult.class);
+	PowerMockito.mockStatic(RollUtils.RollResult.class);
+	when(resultMockInconscience.isJetReussi()).thenReturn(false);
+	when(persoMock.effectuerJetTrait(3, 30)).thenReturn(resultMockInconscience);//échec du jet d'inconscience
+
+	when(resultMockMort.isJetReussi()).thenReturn(true);
+	when(persoMock.effectuerJetTrait(0, 30)).thenReturn(resultMockMort);//réussite du jet de mort, le perso reste en vie
+
+	jaugeFFA.recevoirDegats(55, persoMock);//on inflige un total de 6 blessures graves pour voir les effets sur la jauge externe
+	verify(persoMock).effectuerJetTrait(0, 55);
+	verify(persoMock).effectuerJetTrait(3, 30);
+	verify(persoMock).effectuerJetTrait(0, 30);
+	Assert.assertEquals(0, jaugeFFA.getBlessuresLegeres());
+	Assert.assertEquals(6, jaugeFFA.getRemplissage_interne());//on doit retrouver six blessures graves en tout
+	Assert.assertEquals(2, jaugeFFA.getRemplissage_externe());//affectée d'un rang
+	Assert.assertFalse(jaugeFFA.isElimine());//tout va bien
+	Assert.assertTrue(jaugeFFA.isInconscient());//oui car jet raté même si jauge non remplie
+	Assert.assertTrue(jaugeFFA.isSonne());//oui car point de choc dépassé
     }
 
     @Test
     public void gesTionDegatsNominalEchecMort()
     {
-	//non auto et auto
-    }
+	//mort auto
+	//On rajoute trois blessures graves à la petite jauge de santé/init pour générer un débordement donc mort auto
+	when(resultMock.isJetReussi()).thenReturn(false);
+	when(resultMock.getScoreBrut()).thenReturn(19);
+	when(persoMock.effectuerJetTrait(0, 40)).thenReturn(resultMock);
 
+	jaugeSI.recevoirDegats(40, persoMock);
+	verify(persoMock).effectuerJetTrait(0, 40);
+	Assert.assertEquals(0, jaugeSI.getBlessuresLegeres());
+	Assert.assertEquals(2, jaugeSI.getRemplissage_interne());//on doit retrouver deux blessures graves car le total est ramené à la taille de la jauge
+	Assert.assertEquals(0, jaugeSI.getRemplissage_externe());//au tapis...
+	Assert.assertTrue(jaugeSI.isElimine());//oui, perso mort
+	Assert.assertTrue(jaugeSI.isInconscient());//même si le jet était réussi, la jauge déborde
+	Assert.assertTrue(jaugeSI.isSonne());//inconscient donc sonné
+
+	//mort sur jet échoué
+	when(resultMock.isJetReussi()).thenReturn(false);
+	when(resultMock.getScoreBrut()).thenReturn(4);
+	when(persoMock.effectuerJetTrait(0, 55)).thenReturn(resultMock);
+
+	RollUtils.RollResult resultMockInconscience = PowerMockito.mock(RollUtils.RollResult.class);
+	PowerMockito.mockStatic(RollUtils.RollResult.class);
+	when(resultMockInconscience.isJetReussi()).thenReturn(false);
+	when(persoMock.effectuerJetTrait(3, 30)).thenReturn(resultMockInconscience);//échec du jet d'inconscience
+
+	RollUtils.RollResult resultMockMort = PowerMockito.mock(RollUtils.RollResult.class);
+	PowerMockito.mockStatic(RollUtils.RollResult.class);
+	when(resultMockMort.isJetReussi()).thenReturn(false);
+	when(persoMock.effectuerJetTrait(0, 30)).thenReturn(resultMockMort);//échec du jet de mort, le perso trépasse
+
+	jaugeFFA.recevoirDegats(55, persoMock);//on inflige un total de 6 blessures graves pour voir les effets sur la jauge externe
+	verify(persoMock).effectuerJetTrait(0, 55);
+	verify(persoMock).effectuerJetTrait(3, 30);
+	verify(persoMock).effectuerJetTrait(0, 30);
+	Assert.assertEquals(0, jaugeFFA.getBlessuresLegeres());
+	Assert.assertEquals(6, jaugeFFA.getRemplissage_interne());//on doit retrouver six blessures graves en tout
+	Assert.assertEquals(2, jaugeFFA.getRemplissage_externe());//affectée d'un rang
+	Assert.assertTrue(jaugeFFA.isElimine());//échec au jet donc mort
+	Assert.assertTrue(jaugeFFA.isInconscient());//oui car jet raté même si jauge non remplie
+	Assert.assertTrue(jaugeFFA.isSonne());//oui car point de choc dépassé
+    }
 }

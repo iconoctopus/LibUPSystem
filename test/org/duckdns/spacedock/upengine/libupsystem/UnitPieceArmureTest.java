@@ -20,13 +20,15 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
+ * Exceptionellement on ne mocke pas UPReferenceSysteme car il est impossible de
+ * mocker les membres de la sous-classe, c'est donc en partie un test
+ * d'intégration
  *
  * @author ykonoclast
  */
@@ -34,7 +36,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @PrepareForTest(//pour les méthodes statiques c'est la classe appelante qui doit apparaître ici, pour les classes final c'est la classe appelée (donc UPReferenceSysteme n'apparaît ici que pour son caractère final et pas pour sa méthode getInstance()
 
 	{//les classes final, appelant du statique et les classes subissant un whennew
-	    PieceArmure.class, UPReferenceArmures.class, UPReferenceSysteme.class, UPReferenceSysteme.CollectionLibelles.class
+	    PieceArmure.class, UPReferenceArmures.class,
 	})
 public class UnitPieceArmureTest
 {
@@ -46,16 +48,14 @@ public class UnitPieceArmureTest
     static PieceArmure piece5;
     static PieceArmure bouclier1;
     static PieceArmure bouclier2;
-    static UPReferenceSysteme.CollectionLibelles libelles;
     private static UPReferenceArmures referenceArmuresMock;
 
     @BeforeClass
-    public static void setUpClass()//Exceptionellement on ne mocke pas les libelles car il est impossible de mocker les membres de la sous-classe, c'est donc en partie un test d'intégration
+    public static void setUpClass()
     {
 	//on mocke la référence
 	referenceArmuresMock = PowerMockito.mock(UPReferenceArmures.class);
 	PowerMockito.mockStatic(UPReferenceArmures.class);
-	when(UPReferenceArmures.getInstance()).thenReturn(referenceArmuresMock);
 	when(UPReferenceArmures.getInstance()).thenReturn(referenceArmuresMock);
 
 	//On crée les pièces de test

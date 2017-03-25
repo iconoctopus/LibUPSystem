@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 ykonoclast
  *
  * This program is free software: you can redistribute it and/or modify
@@ -27,6 +27,67 @@ import org.junit.Test;
 public class DomaineTest
 {
 
+    /*
+    try
+	{
+	    arbreTest.setRangComp(0, 0, 5);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:rang compétence > rang domaine", e.getMessage());
+	}
+
+	try
+	{
+	    persoTest.setRangComp(0, 7, 2);
+	    fail();
+	}
+	catch (IndexOutOfBoundsException e)
+	{
+
+	}
+
+	try
+	{
+	    persoTest.setRangComp(0, -1, 2);
+	    fail();
+	}
+	catch (IndexOutOfBoundsException e)
+	{
+
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+    try
+	{
+	    persoTest.removeSpecialite(1, 0, 3);
+	    fail();
+	}
+	catch (IndexOutOfBoundsException e)
+	{
+	}
+	try
+	{
+	    persoTest.removeSpecialite(1, 0, -1);
+	    fail();
+	}
+	catch (IndexOutOfBoundsException e)
+	{
+	}
+
+     */
     @Test
     public void testDomaine()
     {
@@ -35,10 +96,10 @@ public class DomaineTest
 	Domaine domaineCac = new Domaine(3, 3);
 
 	Assert.assertEquals(1, domaine1.getRang());
-	domaine1.getRangCompetence(2);
+	domaine1.getRangComp(2);
 	try
 	{
-	    domaine1.getRangCompetence(3);
+	    domaine1.getRangComp(3);
 	    fail();
 	}
 	catch (IndexOutOfBoundsException e)
@@ -47,10 +108,10 @@ public class DomaineTest
 	}
 
 	Assert.assertEquals(5, domaine2.getRang());
-	domaine2.getRangCompetence(3);
+	domaine2.getRangComp(3);
 	try
 	{
-	    domaine2.getRangCompetence(4);
+	    domaine2.getRangComp(4);
 	    fail();
 	}
 	catch (IndexOutOfBoundsException e)
@@ -59,10 +120,10 @@ public class DomaineTest
 	}
 
 	Assert.assertEquals(3, domaineCac.getRang());
-	domaineCac.getRangCompetence(15);
+	domaineCac.getRangComp(15);
 	try
 	{
-	    domaine2.getRangCompetence(16);
+	    domaine2.getRangComp(16);
 	    fail();
 	}
 	catch (IndexOutOfBoundsException e)

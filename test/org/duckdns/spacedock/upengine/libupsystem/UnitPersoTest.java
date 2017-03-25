@@ -39,8 +39,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(//pour les méthodes statiques c'est la classe appelante qui doit apparaître ici, pour les classes final c'est la classe appelée (donc UPReferenceSysteme n'apparaît ici que pour son caractère final et pas pour sa méthode getInstance()
 
-	{
-	    Perso.class, UPReferenceSysteme.class, RollUtils.RollResult.class, Armure.class, Degats.class
+	{//les classes final, appelant du statique et les classes subissant un whennew
+	    Perso.class, UPReferenceSysteme.class, RollUtils.RollResult.class, Armure.class, Degats.class, CoupleJauge.class, Inventaire.class, ArbreDomaines.class
 	})
 public class UnitPersoTest
 {
@@ -48,6 +48,12 @@ public class UnitPersoTest
     private UPReferenceSysteme referenceMock;
     private CoupleJauge santeInitRM1;
     private CoupleJauge santeInitRM3;
+    private CoupleJauge fatigueFARM1;
+    private CoupleJauge fatigueFARM3;
+    private ArbreDomaines arbreMock;
+    private Inventaire inventaireMock;
+    private Perso persoRM1;
+    private Perso persoRM3;
     private static ArrayList<String> listComp = new ArrayList<>();
     private static ArrayList<String> listDom = new ArrayList<>();
 
@@ -75,11 +81,15 @@ public class UnitPersoTest
 	PowerMockito.mockStatic(UPReferenceSysteme.class);
 	when(UPReferenceSysteme.getInstance()).thenReturn(referenceMock);
 
-	//on mocke deux jauges, une pour un perso RM1, l'autre pour un perso RM3
+	//on mocke deux groupes de jauges, un pour un perso RM1, l'autre pour un perso RM3
 	santeInitRM1 = PowerMockito.mock(CoupleJauge.class);
 	santeInitRM3 = PowerMockito.mock(CoupleJauge.class);
+	fatigueFARM1 = PowerMockito.mock(CoupleJauge.class);
+	fatigueFARM3 = PowerMockito.mock(CoupleJauge.class);
 	whenNew(CoupleJauge.class).withArguments(1, 0, 0, 1).thenReturn(santeInitRM1);
 	whenNew(CoupleJauge.class).withArguments(3, 2, 2, 3).thenReturn(santeInitRM3);
+	whenNew(CoupleJauge.class).withArguments(1, 0, 0).thenReturn(fatigueFARM1);
+	whenNew(CoupleJauge.class).withArguments(3, 2, 2).thenReturn(fatigueFARM3);
 
 	//La référence mockée renvoie les listes de domaines et compétence prédéfinies
 	when(referenceMock.getListDomaines()).thenReturn(listDom);
@@ -90,15 +100,23 @@ public class UnitPersoTest
 	//les jauges mockées renvoient des valeurs d'init
 	when(santeInitRM1.getRemplissage_externe()).thenReturn(1);
 	when(santeInitRM3.getRemplissage_externe()).thenReturn(3);
+
+	//on mocke un arbre de domaines
+	arbreMock = PowerMockito.mock(ArbreDomaines.class);
+	whenNew(ArbreDomaines.class).withNoArguments().thenReturn(arbreMock);
+
+	//On mocke un inventaire
+	inventaireMock = PowerMockito.mock(Inventaire.class);
+	whenNew(Inventaire.class).withNoArguments().thenReturn(inventaireMock);
+
+	//On crée les persos pour le test
+	persoRM1 = new Perso(1);
+	persoRM3 = new Perso(3);
     }
 
     @Test
-    public void testPersoParCaracs() throws Exception
+    public void testPersoParCaracsErreur()
     {
-	//on mocke un arbre de domaines
-	ArbreDomaines arbreMock = PowerMockito.mock(ArbreDomaines.class);
-	whenNew(ArbreDomaines.class).withNoArguments().thenReturn(arbreMock);
-
 	//cas d'erreur : pas assez de traits
 	try
 	{
@@ -146,11 +164,24 @@ public class UnitPersoTest
     }
 
     @Test
-    public void testPersoParRM() throws Exception
+    public void testPersoParCaracsNominal() throws Exception
     {
-	ArbreDomaines arbreMock = PowerMockito.mock(ArbreDomaines.class);
-	whenNew(ArbreDomaines.class).withNoArguments().thenReturn(arbreMock);
+	int[] traits =
+	{
+	    3, 4, 2, 1, 4
+	};
+	whenNew(CoupleJauge.class).withArguments(3, 1, 2, 4).thenReturn(santeInitRM3);//on n'utilisera pas la jauge mais il en faut bien une pour éviter les NullPointerException à la création
+	Perso perso = new Perso(traits, arbreMock);
+	Assert.assertEquals(traits[0], perso.getTrait(0));
+	Assert.assertEquals(traits[1], perso.getTrait(1));
+	Assert.assertEquals(traits[2], perso.getTrait(2));
+	Assert.assertEquals(traits[3], perso.getTrait(3));
+	Assert.assertEquals(traits[4], perso.getTrait(4));
+    }
 
+    @Test
+    public void testPersoParRMErreur()
+    {
 	//Cas d'erreur : RM négatif
 	try
 	{
@@ -172,49 +203,35 @@ public class UnitPersoTest
 	{
 	    Assert.assertEquals("paramétre aberrant:rang:0", e.getMessage());
 	}
-
-	//Cas nominal RM3 : vérification des appels d'ArbreDomaines
-	new Perso(3);
-
-	verify(arbreMock).setRangDomaine(3, 3);
-	verify(arbreMock).setRangComp(3, 2, 3);//la liste mock contient à ce moment 3 items
-	verify(arbreMock, never()).setRangComp(3, 3, 3);//et donc on ne va pas jusqu'à un éventuel quatrième
-	verify(arbreMock).setRangDomaine(4, 3);
-	verify(arbreMock).setRangDomaine(2, 3);
-	verify(arbreMock).setRangComp(2, 0, 3);
-	verify(arbreMock, never()).setRangComp(2, 1, 3);//seule esquive est montée dans ce domaine
     }
 
     @Test
-    public void testAddSpecialite() throws Exception
+    public void testPersoParRMNominal() throws Exception
     {
-	ArbreDomaines arbreMock = PowerMockito.mock(ArbreDomaines.class);
-	whenNew(ArbreDomaines.class).withNoArguments().thenReturn(arbreMock);
+	//Cas nominal RM4 : vérification des appels d'ArbreDomaines
+	whenNew(CoupleJauge.class).withArguments(4, 3, 3, 4).thenReturn(santeInitRM3);//on n'utilisera pas la jauge mais il en faut bien une pour éviter les NullPointerException à la création
+	new Perso(4);
 
-	Perso perso = new Perso(3);
+	verify(arbreMock).setRangDomaine(3, 4);
+	verify(arbreMock).setRangComp(3, 2, 4);//la liste mock contient à ce moment 3 items
+	verify(arbreMock, never()).setRangComp(3, 3, 4);//et donc on ne va pas jusqu'à un éventuel quatrième
+	verify(arbreMock).setRangDomaine(4, 4);
+	verify(arbreMock).setRangDomaine(2, 4);
+	verify(arbreMock).setRangComp(2, 0, 4);
+	verify(arbreMock, never()).setRangComp(2, 1, 4);//seule esquive est montée dans ce domaine
+    }
 
+    @Test
+    public void testAddSpecialite()
+    {
 	//test appel effectif des méthodes de l'ArbreDomaines
-	perso.addSpecialite(3, 1, "gneuh");
+	persoRM3.addSpecialite(3, 1, "gneuh");
 	verify(arbreMock).addSpecialite(3, 1, "gneuh");
     }
 
     @Test
-    public void testAgirEnCombat() throws Exception
+    public void testAgirEnCombatErreur()
     {
-	Perso persoRM1 = new Perso(1);
-	Perso persoRM3 = new Perso(3);
-
-	//On teste la "consommation" des actions pour des persos ayant des valeurs d'initiative différentes
-	persoRM1.agirEnCombat(persoRM1.getActions().get(0));
-	Assert.assertEquals(11, persoRM1.getActions().get(0).intValue());
-
-	persoRM3.agirEnCombat(persoRM3.getActions().get(0));
-	Assert.assertEquals(11, persoRM3.getActions().get(0).intValue());
-	persoRM3.agirEnCombat(persoRM3.getActions().get(1));
-	Assert.assertEquals(11, persoRM3.getActions().get(1).intValue());
-	persoRM3.agirEnCombat(persoRM3.getActions().get(2));
-	Assert.assertEquals(11, persoRM3.getActions().get(2).intValue());
-
 	try
 	{
 	    persoRM1.agirEnCombat(0);
@@ -237,21 +254,29 @@ public class UnitPersoTest
     }
 
     @Test
-    public void testAttaquerCaCAvecArme() throws Exception
+    public void testAgirEnCombatNominal()
     {
-	//On mocke un inventaire contenant un mock d'arme avec physique min de 2 et malus aux jets de 1
+	//On teste la "consommation" des actions pour des persos ayant des valeurs d'initiative différentes
+	persoRM1.agirEnCombat(persoRM1.getActions().get(0));
+	Assert.assertEquals(11, persoRM1.getActions().get(0).intValue());
+
+	persoRM3.agirEnCombat(persoRM3.getActions().get(0));
+	Assert.assertEquals(11, persoRM3.getActions().get(0).intValue());
+	persoRM3.agirEnCombat(persoRM3.getActions().get(1));
+	Assert.assertEquals(11, persoRM3.getActions().get(1).intValue());
+	persoRM3.agirEnCombat(persoRM3.getActions().get(2));
+	Assert.assertEquals(11, persoRM3.getActions().get(2).intValue());
+    }
+
+    @Test
+    public void testAttaquerCaCAvecArme()
+    {
+	//On mocke une arme avec physique min de 2 et malus aux jets de 1
 	ArmeCaC armeMock = PowerMockito.mock(ArmeCaC.class);
 	when(armeMock.getCategorie()).thenReturn(3);
 	when(armeMock.getphysMin()).thenReturn(2);
 	when(armeMock.getMalusAttaque()).thenReturn(1);
-
-	Inventaire inventaireMock = PowerMockito.mock(Inventaire.class);
-	whenNew(Inventaire.class).withNoArguments().thenReturn(inventaireMock);
 	when(inventaireMock.getArmeCourante()).thenReturn(armeMock);
-
-	//On mocke un arbre domaine
-	ArbreDomaines arbreMock = PowerMockito.mock(ArbreDomaines.class);
-	whenNew(ArbreDomaines.class).withNoArguments().thenReturn(arbreMock);
 
 	//On mocke un retour pour vérifier qu'il traverse correctement les couches private et on le fait retourner par arbreMock
 	RollUtils.RollResult resultMock = PowerMockito.mock(RollUtils.RollResult.class);
@@ -261,14 +286,11 @@ public class UnitPersoTest
 	when(resultMock.getScoreBrut()).thenReturn(10);
 	when(arbreMock.effectuerJetComp(1, 3, 6, 12, -1, 0, -10, true)).thenReturn(resultMock);
 
-	//On mocke une jauge de fatigue/force d'âme et le isSonne() des deux jauges avec
-	CoupleJauge fatigueFARM1 = PowerMockito.mock(CoupleJauge.class);
-	whenNew(CoupleJauge.class).withArguments(1, 0, 0).thenReturn(fatigueFARM1);
+	//On mocke le isSonne() des deux jauges avec
 	when(santeInitRM1.isSonne()).thenReturn(false);
 	when(fatigueFARM1.isSonne()).thenReturn(true);
 
-	//On crée un perso RM1 et on lui fait effectuer une attaque à la hache en prenant en compte le physique minimal de 2 et le malus à l'attaque de 1
-	Perso persoRM1 = new Perso(1);
+	//On fait effectuer une attaque à la hache à un perso RM1 en prenant en compte le physique minimal de 2 et le malus à l'attaque de 1
 	RollUtils.RollResult resultat = persoRM1.attaquerCaC(persoRM1.getActions().get(0), 12);
 
 	Assert.assertEquals(0, resultat.getNbIncrements());
@@ -279,16 +301,10 @@ public class UnitPersoTest
     }
 
     @Test
-    public void testAttaquerCaCMainsNues() throws Exception
+    public void testAttaquerCaCMainsNues()
     {
 	//On mocke un inventaire vide pour forcer le combat à mains nues
-	Inventaire inventaireMock = PowerMockito.mock(Inventaire.class);
-	whenNew(Inventaire.class).withNoArguments().thenReturn(inventaireMock);
 	when(inventaireMock.getArmeCourante()).thenReturn(null);
-
-	//On mocke un arbre domaine
-	ArbreDomaines arbreMock = PowerMockito.mock(ArbreDomaines.class);
-	whenNew(ArbreDomaines.class).withNoArguments().thenReturn(arbreMock);
 
 	//On mocke un retour pour vérifier qu'il traverse correctement les couches private et on le fait retourner par arbreMock
 	RollUtils.RollResult resultMock = PowerMockito.mock(RollUtils.RollResult.class);
@@ -298,14 +314,11 @@ public class UnitPersoTest
 	when(resultMock.getScoreBrut()).thenReturn(28);
 	when(arbreMock.effectuerJetComp(3, 3, 0, 30, 0, 0, 0, false)).thenReturn(resultMock);
 
-	//On mocke une jauge de fatigue/force d'âme et le isSonne() des deux jauges avec
-	CoupleJauge fatigueFARM3 = PowerMockito.mock(CoupleJauge.class);
-	whenNew(CoupleJauge.class).withArguments(3, 2, 2).thenReturn(fatigueFARM3);
+	//On mocke le isSonne() des deux jauges
 	when(santeInitRM3.isSonne()).thenReturn(false);
 	when(fatigueFARM3.isSonne()).thenReturn(false);
 
-	//On crée un perso RM3 et on lui fait effectuer une attaque à mains nues
-	Perso persoRM3 = new Perso(3);
+	//On fait effectuer une attaque à mains nues à un perso RM3
 	RollUtils.RollResult resultat = persoRM3.attaquerCaC(persoRM3.getActions().get(0), 30);
 
 	Assert.assertEquals(3, resultat.getNbIncrements());
@@ -316,18 +329,13 @@ public class UnitPersoTest
     }
 
     @Test
-    public void testAttaquerDistErreur() throws Exception
+    public void testAttaquerDistErreur()
     {
 	//On mocke un inventaire contenant un mock d'arme
 	ArmeDist armeMock = PowerMockito.mock(ArmeDist.class);
 	when(armeMock.getCategorie()).thenReturn(3);
 	when(armeMock.getPortee()).thenReturn(100);
-
-	Inventaire inventaireMock = PowerMockito.mock(Inventaire.class);
-	whenNew(Inventaire.class).withNoArguments().thenReturn(inventaireMock);
 	when(inventaireMock.getArmeCourante()).thenReturn(armeMock);
-
-	Perso persoRM3 = new Perso(3);
 
 	//cas d'erreur : rafale avec arme ayant plusieurs munitions mais incapable de tirer en mode automatique (pistolet)
 	try
@@ -387,7 +395,7 @@ public class UnitPersoTest
     }
 
     @Test
-    public void testAttaquerDistNominal() throws Exception
+    public void testAttaquerDistNominal()
     {
 	//On mocke un inventaire contenant un mock d'arme capable de tirer en mode automatique
 	ArmeDist armeMock = PowerMockito.mock(ArmeDist.class);
@@ -395,18 +403,9 @@ public class UnitPersoTest
 	when(armeMock.getPortee()).thenReturn(100);
 	when(armeMock.getMalusCourt()).thenReturn(-5);
 	when(armeMock.getMalusLong()).thenReturn(10);
-
-	Inventaire inventaireMock = PowerMockito.mock(Inventaire.class);
-	whenNew(Inventaire.class).withNoArguments().thenReturn(inventaireMock);
 	when(inventaireMock.getArmeCourante()).thenReturn(armeMock);
 
-	//On mocke un arbre domaine
-	ArbreDomaines arbreMock = PowerMockito.mock(ArbreDomaines.class);
-	whenNew(ArbreDomaines.class).withNoArguments().thenReturn(arbreMock);
-
-	//On mocke une jauge de fatigue/force d'âme et le isSonne() des deux jauges avec
-	CoupleJauge fatigueFARM3 = PowerMockito.mock(CoupleJauge.class);
-	whenNew(CoupleJauge.class).withArguments(3, 2, 2).thenReturn(fatigueFARM3);
+	//On mocke le isSonne() des deux jauges
 	when(santeInitRM3.isSonne()).thenReturn(false);
 	when(fatigueFARM3.isSonne()).thenReturn(false);
 
@@ -417,8 +416,6 @@ public class UnitPersoTest
 	when(resultMock.isJetReussi()).thenReturn(true);
 	when(resultMock.getScoreBrut()).thenReturn(22);
 	when(arbreMock.effectuerJetComp(3, 4, 4, 50, 0, 0, +5, false)).thenReturn(resultMock);
-
-	Perso persoRM3 = new Perso(3);
 
 	//Cas coup par coup, portée courte (pile la moitié pour vérifier l'arrondi et le "inférieur ou égal"
 	RollUtils.RollResult resultat = persoRM3.attaquerDist(persoRM3.getActions().get(0), 50, 20, 1);
@@ -449,15 +446,9 @@ public class UnitPersoTest
     }
 
     @Test
-    public void effectuerJetCompTest() throws Exception
+    public void effectuerJetCompTest()
     {
-	//On mocke un arbre domaine
-	ArbreDomaines arbreMock = PowerMockito.mock(ArbreDomaines.class);
-	whenNew(ArbreDomaines.class).withNoArguments().thenReturn(arbreMock);
-
-	//On mocke une jauge de fatigue/force d'âme et le isSonne() des deux jauges avec
-	CoupleJauge fatigueFARM3 = PowerMockito.mock(CoupleJauge.class);
-	whenNew(CoupleJauge.class).withArguments(1, 0, 0).thenReturn(fatigueFARM3);
+	//On mocke le isSonne() des deux jauges
 	when(santeInitRM3.isSonne()).thenReturn(true);
 	when(fatigueFARM3.isSonne()).thenReturn(false);
 
@@ -466,25 +457,15 @@ public class UnitPersoTest
     }
 
     @Test
-    public void testEtreBlesse() throws Exception
+    public void testEtreBlesseErreur()
     {
-	//On mocke un inventaire contenant une armure
-	Armure armureMock = PowerMockito.mock(Armure.class);
-	when(armureMock.getRedDegats(2)).thenReturn(5);
-
-	Inventaire inventaireMock = PowerMockito.mock(Inventaire.class);
-	whenNew(Inventaire.class).withNoArguments().thenReturn(inventaireMock);
-	when(inventaireMock.getArmure()).thenReturn(armureMock);
-
-	Perso perso = new Perso(3);
-
 	//cas d'erreur : dégâts négatifs
 	Degats degatsMock1 = PowerMockito.mock(Degats.class);
 	when(degatsMock1.getQuantite()).thenReturn(-2);
 	when(degatsMock1.getTypeArme()).thenReturn(2);
 	try
 	{
-	    perso.etreBlesse(degatsMock1);
+	    persoRM3.etreBlesse(degatsMock1);
 	    fail();
 	}
 	catch (IllegalArgumentException e)
@@ -498,52 +479,34 @@ public class UnitPersoTest
 	when(degatsMock2.getTypeArme()).thenReturn(-42);
 	try
 	{
-	    perso.etreBlesse(degatsMock2);
+	    persoRM3.etreBlesse(degatsMock2);
 	    fail();
 	}
 	catch (IllegalArgumentException e)
 	{
 	    Assert.assertEquals("paramétre aberrant:dégâts:33 type:-42", e.getMessage());
 	}
-	//cas nominal
-	Degats degatsMock = PowerMockito.mock(Degats.class);
-	when(degatsMock.getQuantite()).thenReturn(23);
-	when(degatsMock.getTypeArme()).thenReturn(2);
-	perso.etreBlesse(degatsMock);
-
-	verify(santeInitRM3).recevoirDegats(18, perso);
     }
 
     @Test
-    public void testToutesMethodesInit() throws Exception//petite exception aux règles des tests unitaires car il est difficile de mocker les méthodes statiques de la classe statique RollUtils, on vérifie donc de façon statistique que les résultats sont dans les normes
+    public void testEtreBlesseNominal()
     {
-	//on Mocke un inventaire, il sera plus tard peuplé d'une arme avec bonus d'init
-	Inventaire inventaireMock = PowerMockito.mock(Inventaire.class);
-	whenNew(Inventaire.class).withNoArguments().thenReturn(inventaireMock);
+	//On mocke un inventaire contenant une armure
+	Armure armureMock = PowerMockito.mock(Armure.class);
+	when(armureMock.getRedDegats(2)).thenReturn(5);
+	when(inventaireMock.getArmure()).thenReturn(armureMock);
 
-	Perso persoRM1 = new Perso(1);
-	Perso persoRM3 = new Perso(3);
-	for (int j = 0; j <= 4; j++)//5 tests de suite pour être sur
-	{
-	    persoRM3.genInit();
-	    ArrayList<Integer> result = persoRM3.getActions();
-	    for (int i = 0; i <= 2; i++)//for classique car l'on veut forcer la vérification de trois cases du tableau
-	    {
-		Assert.assertTrue(result.get(i) < 11 && result.get(i) > 0); //on vérifie que les init générées ne sont pas ridicules.
-	    }
-	}
+	Degats degatsMock = PowerMockito.mock(Degats.class);
+	when(degatsMock.getQuantite()).thenReturn(23);
+	when(degatsMock.getTypeArme()).thenReturn(2);
+	persoRM3.etreBlesse(degatsMock);
 
-	Assert.assertEquals((int) persoRM1.getActions().get(0), (int) persoRM1.getInitTotale());//son init de base
-	ArmeCaC armeMock = PowerMockito.mock(ArmeCaC.class);//on ajoute une arme avec bonus d'init de 2
-	when(armeMock.getBonusInit()).thenReturn(2);
-	when(inventaireMock.getArmeCourante()).thenReturn(armeMock);
-	when(inventaireMock.getArmeCourante()).thenReturn(armeMock);
-	Assert.assertEquals((int) persoRM1.getActions().get(0) + 10, (int) persoRM1.getInitTotale());//son init améliorée par un bonus d'init de 2
+	verify(santeInitRM3).recevoirDegats(18, persoRM3);
+    }
 
-	//test de isActif()
-	Assert.assertTrue(persoRM1.isActif(persoRM1.getActions().get(0)));
-	Assert.assertTrue(persoRM3.isActif(persoRM3.getActions().get(0)));
-
+    @Test
+    public void testToutesMethodesInitErreur()
+    {
 	//cas d'erreur sur isActif
 	try
 	{
@@ -564,27 +527,36 @@ public class UnitPersoTest
 	{
 	    Assert.assertEquals("paramétre aberrant:phase:11", e.getMessage());
 	}
-
     }
 
     @Test
-    public void testGenererDegatsCaC() throws Exception
+    public void testToutesMethodesInitNominal()//petite exception aux règles des tests unitaires car il est difficile de mocker les méthodes statiques de la classe statique RollUtils, on vérifie donc de façon statistique que les résultats sont dans les normes
     {
-	//On mocke une jauge de fatigue/force d'âme et le isSonne() des deux jauges avec
-	CoupleJauge fatigueFARM1 = PowerMockito.mock(CoupleJauge.class);
-	whenNew(CoupleJauge.class).withArguments(1, 0, 0).thenReturn(fatigueFARM1);
-	when(santeInitRM1.isSonne()).thenReturn(false);
-	when(fatigueFARM1.isSonne()).thenReturn(false);
+	for (int j = 0; j <= 4; j++)//5 tests de suite pour être sur
+	{
+	    persoRM3.genInit();
+	    ArrayList<Integer> result = persoRM3.getActions();
+	    for (int i = 0; i <= 2; i++)//for classique car l'on veut forcer la vérification de trois cases du tableau
+	    {
+		Assert.assertTrue(result.get(i) < 11 && result.get(i) > 0); //on vérifie que les init générées ne sont pas ridicules.
+	    }
+	}
 
-	//On mocke un inventaire contenant un mock d'arme
-	ArmeCaC armeMock = PowerMockito.mock(ArmeCaC.class);
-
-	Inventaire inventaireMock = PowerMockito.mock(Inventaire.class);
-	whenNew(Inventaire.class).withNoArguments().thenReturn(inventaireMock);
+	Assert.assertEquals((int) persoRM1.getActions().get(0), (int) persoRM1.getInitTotale());//son init de base
+	ArmeCaC armeMock = PowerMockito.mock(ArmeCaC.class);//on ajoute une arme avec bonus d'init de 2
+	when(armeMock.getBonusInit()).thenReturn(2);
 	when(inventaireMock.getArmeCourante()).thenReturn(armeMock);
+	when(inventaireMock.getArmeCourante()).thenReturn(armeMock);
+	Assert.assertEquals((int) persoRM1.getActions().get(0) + 10, (int) persoRM1.getInitTotale());//son init améliorée par un bonus d'init de 2
 
-	Perso persoRM1 = new Perso(1);
+	//test de isActif()
+	Assert.assertTrue(persoRM1.isActif(persoRM1.getActions().get(0)));
+	Assert.assertTrue(persoRM3.isActif(persoRM3.getActions().get(0)));
+    }
 
+    @Test
+    public void testGenererDegatsErreur()
+    {
 	//cas d'erreur : incréments négatifs
 	try
 	{
@@ -595,6 +567,18 @@ public class UnitPersoTest
 	{
 	    Assert.assertEquals("paramétre aberrant:incréments:-1", e.getMessage());
 	}
+    }
+
+    @Test
+    public void testGenererDegatsCaCNominal()
+    {
+	//On mocke le isSonne() des deux jauges
+	when(santeInitRM1.isSonne()).thenReturn(false);
+	when(fatigueFARM1.isSonne()).thenReturn(false);
+
+	//On mocke un inventaire contenant un mock d'arme
+	ArmeCaC armeMock = PowerMockito.mock(ArmeCaC.class);
+	when(inventaireMock.getArmeCourante()).thenReturn(armeMock);
 
 	//Cas nominal
 	persoRM1.genererDegats(3);
@@ -602,23 +586,16 @@ public class UnitPersoTest
     }
 
     @Test
-    public void testGenererDegatsDist() throws Exception
+    public void testGenererDegatsDist()
     {
-	//On mocke une jauge de fatigue/force d'âme et le isSonne() des deux jauges avec
-	CoupleJauge fatigueFARM3 = PowerMockito.mock(CoupleJauge.class);
-	whenNew(CoupleJauge.class).withArguments(3, 2, 2).thenReturn(fatigueFARM3);
+	//On mocke le isSonne() des deux jauges
 	when(santeInitRM3.isSonne()).thenReturn(true);
 	when(fatigueFARM3.isSonne()).thenReturn(false);
 
 	//On mocke un inventaire contenant un mock d'arme
 	ArmeDist armeMock = PowerMockito.mock(ArmeDist.class);
 	when(armeMock.getMode()).thenReturn(1);
-
-	Inventaire inventaireMock = PowerMockito.mock(Inventaire.class);
-	whenNew(Inventaire.class).withNoArguments().thenReturn(inventaireMock);
 	when(inventaireMock.getArmeCourante()).thenReturn(armeMock);
-
-	Perso persoRM3 = new Perso(3);
 
 	//Cas nominal
 	persoRM3.genererDegats(3);
@@ -626,24 +603,14 @@ public class UnitPersoTest
     }
 
     @Test
-    public void testGetNDPassif() throws Exception
+    public void testGetNDPassif()
     {
 	//On mocke un inventaire contenant une armure
 	Armure armureMock = PowerMockito.mock(Armure.class);
 	when(armureMock.getBonusND(3)).thenReturn(7);
 	when(armureMock.getMalusEsquive()).thenReturn(4);
 	when(armureMock.getMalusParade()).thenReturn(2);
-
-	Inventaire inventaireMock = PowerMockito.mock(Inventaire.class);
-	whenNew(Inventaire.class).withNoArguments().thenReturn(inventaireMock);
 	when(inventaireMock.getArmure()).thenReturn(armureMock);
-
-	//On mocke un arbre de domaines
-	ArbreDomaines arbreMock = PowerMockito.mock(ArbreDomaines.class);
-	whenNew(ArbreDomaines.class).withNoArguments().thenReturn(arbreMock);
-
-	Perso persoRM1 = new Perso(1);
-	Perso persoRM3 = new Perso(3);
 
 	//esquive
 	when(arbreMock.getRangComp(2, 0)).thenReturn(2);//compétence possédée sans bonus de rang
@@ -665,18 +632,52 @@ public class UnitPersoTest
     }
 
     @Test
-    public void testGetSetDivers() throws Exception
+    public void testGetSetDiversErreur()
     {//si non déjà testés dans les autres méthodes de cette classe
+	try
+	{
+	    persoRM3.setTrait(-1, 5);
+	    fail();
+	}
+	catch (IndexOutOfBoundsException e)
+	{
 
-	//mocks à l'initialisation des objets
-	CoupleJauge fatigueFARM3 = PowerMockito.mock(CoupleJauge.class);
-	whenNew(CoupleJauge.class).withArguments(3, 2, 2).thenReturn(fatigueFARM3);
-	Inventaire inventaireMock = PowerMockito.mock(Inventaire.class);
-	whenNew(Inventaire.class).withNoArguments().thenReturn(inventaireMock);
-	ArbreDomaines arbreMock = PowerMockito.mock(ArbreDomaines.class);
-	whenNew(ArbreDomaines.class).withNoArguments().thenReturn(arbreMock);
+	}
 
-	Perso persoRM3 = new Perso(3);
+	try
+	{
+	    persoRM3.setTrait(6, 5);
+	    fail();
+	}
+	catch (IndexOutOfBoundsException e)
+	{
+
+	}
+
+	try
+	{
+	    persoRM3.getTrait(-1);
+	    fail();
+	}
+	catch (IndexOutOfBoundsException e)
+	{
+
+	}
+
+	try
+	{
+	    persoRM3.getTrait(6);
+	    fail();
+	}
+	catch (IndexOutOfBoundsException e)
+	{
+
+	}
+    }
+
+    @Test
+    public void testGetSetDiversNominal()
+    {//si non déjà testés dans les autres méthodes de cette classe
 
 	//méthodes liées aux jauges
 	when(santeInitRM3.getRemplissage_interne()).thenReturn(2);
@@ -776,8 +777,6 @@ public class UnitPersoTest
 	Assert.assertEquals(2, persoRM3.getTrait(3));
 	Assert.assertEquals(2, persoRM3.getTrait(4));
 
-	Perso persoRM1 = new Perso(1);
-
 	Assert.assertEquals(1, persoRM1.getTrait(0));
 	Assert.assertEquals(1, persoRM1.getTrait(1));
 	Assert.assertEquals(0, persoRM1.getTrait(2));
@@ -786,45 +785,5 @@ public class UnitPersoTest
 
 	persoRM3.setTrait(1, 1);
 	Assert.assertEquals(1, persoRM3.getTrait(1));
-
-	try
-	{
-	    persoRM3.setTrait(-1, 5);
-	    fail();
-	}
-	catch (IndexOutOfBoundsException e)
-	{
-
-	}
-
-	try
-	{
-	    persoRM3.setTrait(6, 5);
-	    fail();
-	}
-	catch (IndexOutOfBoundsException e)
-	{
-
-	}
-
-	try
-	{
-	    persoRM3.getTrait(-1);
-	    fail();
-	}
-	catch (IndexOutOfBoundsException e)
-	{
-
-	}
-
-	try
-	{
-	    persoRM3.getTrait(6);
-	    fail();
-	}
-	catch (IndexOutOfBoundsException e)
-	{
-
-	}
     }
 }

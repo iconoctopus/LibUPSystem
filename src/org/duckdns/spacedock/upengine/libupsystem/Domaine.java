@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 ykonoclast
  *
  * This program is free software: you can redistribute it and/or modify
@@ -84,12 +84,12 @@ class Domaine
     }
 
     /**
-     * @param p_comp l'indice de la compétence visée
+     * @param p_rang l'indice de la compétence visée
      * @return le rang de la competence en question
      */
-    int getRangCompetence(int p_comp)
+    int getRangComp(int p_rang)
     {
-	return m_competences.get(p_comp).getRang();
+	return m_competences.get(p_rang).getRang();
     }
 
     /**

@@ -51,7 +51,7 @@ public class ArbreDomaines
      */
     public int getRangComp(int p_domaine, int p_comp)
     {
-	return m_listDomaines.get(p_domaine).getRangCompetence(p_comp);
+	return m_listDomaines.get(p_domaine).getRangComp(p_comp);
     }
 
     /**

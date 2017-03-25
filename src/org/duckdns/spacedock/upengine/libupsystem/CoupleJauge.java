@@ -202,10 +202,10 @@ class CoupleJauge
 
 		if (m_remplissage_interne > m_choc)//on risque l'inconscience et l'élimination
 		{
-		    if (m_remplissage_interne >= m_taille_interne || !p_victime.effectuerJetTrait(3, 5 * m_remplissage_interne).isJetReussi())//jet raté ou jauge remplie
+		    if (m_remplissage_interne >= m_taille_interne || !p_victime.effectuerJetTrait(3, 5 * m_remplissage_interne).isJetReussi())//jet d'inconscience raté ou jauge remplie
 		    {
 			m_inconscient = true;
-			if (m_remplissage_interne >= m_taille_interne)//jauge remplie
+			if (m_remplissage_interne > m_taille_interne || !p_victime.effectuerJetTrait(0, 5 * m_remplissage_interne).isJetReussi())//jauge déborde ou jet de mort raté
 			{
 			    m_elimine = true;
 			    m_remplissage_interne = m_taille_interne;//on ramène le remplissage au max de la jauge si il dépasse

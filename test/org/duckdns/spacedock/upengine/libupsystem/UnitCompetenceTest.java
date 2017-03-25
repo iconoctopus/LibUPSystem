@@ -17,8 +17,6 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.util.ArrayList;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;

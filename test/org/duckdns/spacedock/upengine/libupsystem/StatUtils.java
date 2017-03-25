@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 ykonoclast
  *
  * This program is free software: you can redistribute it and/or modify
@@ -80,7 +80,7 @@ final class StatUtils
 	else
 	{
 	    perso.getInventaire().addArme(new ArmeCaC(3, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais), Inventaire.Lateralisation.DROITE);
-	    perso.getInventaire().removeArme(Inventaire.Lateralisation.DROITE);//on est dans le cas où la méthode appelante veut tester les mains nues, on en profite pour tester que rangainer fonctionne bien
+	    perso.getInventaire().removeArme(Inventaire.Lateralisation.DROITE);//on est dans le cas où la méthode appelante veut tester les mains nues, on en profite pour tester que rengainer fonctionne bien
 	}
 	for (int i = 0; i <= 99999; ++i)//cent mille lancers
 	{

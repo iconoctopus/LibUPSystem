@@ -75,6 +75,7 @@ public class UnitArbreDomainesTest
 	whenNew(Domaine.class).withAnyArguments().thenReturn(domaineMock);
 
 	arbreTest = new ArbreDomaines();
+	verify(referenceMock).getListDomaines();
     }
 
     @Test

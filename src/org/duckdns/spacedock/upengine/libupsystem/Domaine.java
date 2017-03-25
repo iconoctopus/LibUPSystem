@@ -50,7 +50,7 @@ class Domaine
 	    int nbComps = UPReferenceSysteme.getInstance().getListComp(p_indice).size();
 	    for (int i = 0; i < nbComps; ++i)
 	    {
-		m_competences.add(new Competence(0, null));
+		m_competences.add(new Competence(0, new ArrayList<String>()));
 	    }
 	}
 	else
@@ -84,12 +84,13 @@ class Domaine
     }
 
     /**
-     * @param p_rang l'indice de la compétence visée
+     * @param p_numéro l'indice de la compétence visée dans le tableau interne
+     * du domaine
      * @return le rang de la competence en question
      */
-    int getRangComp(int p_rang)
+    int getRangComp(int p_numéro)
     {
-	return m_competences.get(p_rang).getRang();
+	return m_competences.get(p_numéro).getRang();
     }
 
     /**

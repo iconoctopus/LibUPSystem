@@ -25,7 +25,7 @@ import org.junit.Test;
  *
  * @author ykonoclast
  */
-public final class IntegUPReferenceSysTest
+public final class UnitUPReferenceSysTest
 {
 
     private static UPReferenceSysteme m_reference;
@@ -128,8 +128,8 @@ public final class IntegUPReferenceSysTest
     @Test
     public void testLibelles()
     {
-	Assert.assertEquals("et", m_reference.libelles.addition);
-	Assert.assertEquals("équilibrage", m_reference.libelles.equilibrage);
-	Assert.assertEquals("parade", m_reference.libelles.parade);
+	Assert.assertEquals("et", m_reference.getCollectionLibelles().addition);
+	Assert.assertEquals("équilibrage", m_reference.getCollectionLibelles().equilibrage);
+	Assert.assertEquals("parade", m_reference.getCollectionLibelles().parade);
     }
 }

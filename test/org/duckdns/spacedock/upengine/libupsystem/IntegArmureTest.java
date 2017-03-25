@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 ykonoclast
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,10 @@
  */
 package org.duckdns.spacedock.upengine.libupsystem;
 
-import org.junit.Assert;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -24,31 +27,38 @@ import static org.junit.Assert.*;
  *
  * @author ykonoclast
  */
-public class RollUtilsTest
+public class IntegArmureTest
 {
-//cas d'erreur sur paramétres
 
-    @Test
-    public void testLancer()
+    public IntegArmureTest()
     {
-	try
-	{
-	    RollUtils.lancer(-1, 2, true);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:nombre de dés lancés:-1 nombre de dés gardés:2", e.getMessage());
-	}
+    }
 
-	try
-	{
-	    RollUtils.lancer(2, -1, true);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:nombre de dés lancés:2 nombre de dés gardés:-1", e.getMessage());
-	}
+    @BeforeClass
+    public static void setUpClass()
+    {
+    }
+
+    @AfterClass
+    public static void tearDownClass()
+    {
+    }
+
+    @Before
+    public void setUp()
+    {
+    }
+
+    @After
+    public void tearDown()
+    {
+    }
+
+    // TODO add test methods here.
+    // The methods must be annotated with annotation @Test. For example:
+    //
+    @Test
+    public void hello()
+    {
     }
 }

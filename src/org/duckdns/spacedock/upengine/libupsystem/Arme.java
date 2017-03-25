@@ -100,9 +100,9 @@ public abstract class Arme
 	}
 	else
 	{
-	    nom = nom.concat(referenceSys.libelles.liaison);
+	    nom = nom.concat(referenceSys.getCollectionLibelles().liaison);
 	    nom = nom.concat(" ");
-	    nom = nom.concat(referenceSys.libelles.qualite);
+	    nom = nom.concat(referenceSys.getCollectionLibelles().qualite);
 	    nom = nom.concat(" ");
 
 	    switch (p_qualite)
@@ -121,9 +121,9 @@ public abstract class Arme
 	    }
 
 	    nom = nom.concat(" ");
-	    nom = nom.concat(referenceSys.libelles.addition);
+	    nom = nom.concat(referenceSys.getCollectionLibelles().addition);
 	    nom = nom.concat(" ");
-	    nom = nom.concat(referenceSys.libelles.equilibrage);
+	    nom = nom.concat(referenceSys.getCollectionLibelles().equilibrage);
 	    nom = nom.concat(" ");
 
 	    switch (p_equilibrage)

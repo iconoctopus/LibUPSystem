@@ -24,7 +24,7 @@ import org.junit.Test;
  *
  * @author ykonoclast
  */
-public class IntegUPReferenceArmuresTest
+public class UnitUPReferenceArmuresTest
 {
 
     private static UPReferenceArmures m_reference;

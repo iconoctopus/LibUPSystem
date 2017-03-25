@@ -77,7 +77,7 @@ public class PieceArmure
 	m_materiau = p_materiau;
 	if (p_type == 0)
 	{
-	    m_libelle = referenceArmures.getLblPiece(m_idPiece, p_isBouclier) + " " + referenceSys.libelles.interArme + " " + referenceArmures.getLblMateriauArmure(m_materiau, p_isBouclier);
+	    m_libelle = referenceArmures.getLblPiece(m_idPiece, p_isBouclier) + " " + referenceSys.getCollectionLibelles().interArmure + " " + referenceArmures.getLblMateriauArmure(m_materiau, p_isBouclier);
 	}
 	else
 	{

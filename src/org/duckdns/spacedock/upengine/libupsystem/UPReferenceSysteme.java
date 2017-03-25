@@ -32,7 +32,7 @@ public final class UPReferenceSysteme
     /**
      * table des autres libellés
      */
-    public final CollectionLibelles libelles;
+    private final CollectionLibelles m_collectionLibelles;
     /**
      * tableau contenant tous les domaines et leurs compétences non free form,
      */
@@ -93,8 +93,7 @@ public final class UPReferenceSysteme
 
 	//chargement des libellés divers
 	object = loadJsonFile("libupsystem", "tables_systeme/tab_libelles.json");
-	libelles = new CollectionLibelles(object);
-
+	m_collectionLibelles = new CollectionLibelles(object);
     }
 
     /**
@@ -109,6 +108,11 @@ public final class UPReferenceSysteme
 	    m_instance = new UPReferenceSysteme();
 	}
 	return (m_instance);
+    }
+
+    public CollectionLibelles getCollectionLibelles()
+    {
+	return m_collectionLibelles;
     }
 
     /**
@@ -141,7 +145,6 @@ public final class UPReferenceSysteme
     public String getLibelleTrait(int p_indice)
     {
 	return m_tableTraits.getString(p_indice);
-
     }
 
     /**
@@ -163,8 +166,8 @@ public final class UPReferenceSysteme
 	    ArrayList<String> listCaC = reference.getListCatArmeCaC();
 	    for (int i = 0; i < listCaC.size(); ++i)
 	    {
-		res.add(libelles.attaque + " " + listCaC.get(i));
-		res.add(libelles.parade + " " + listCaC.get(i));
+		res.add(m_collectionLibelles.attaque + " " + listCaC.get(i));
+		res.add(m_collectionLibelles.parade + " " + listCaC.get(i));
 	    }
 	}
 	else
@@ -217,7 +220,7 @@ public final class UPReferenceSysteme
 	public final String typarmure;
 	public final String ptsarmure;
 	public final String trait;
-	public final String interArme;
+	public final String interArmure;
 	public final String liaison;
 	public final String addition;
 	public final String qualite;
@@ -233,7 +236,7 @@ public final class UPReferenceSysteme
 		typarmure = p_libelles.getString("typarmure");
 		ptsarmure = p_libelles.getString("ptsarmure");
 		trait = p_libelles.getString("trait");
-		interArme = p_libelles.getString("interArme");
+		interArmure = p_libelles.getString("interArmure");
 		liaison = p_libelles.getString("liaison_standard");
 		addition = p_libelles.getString("liaison_addition");
 		qualite = p_libelles.getString("qualite");
@@ -248,7 +251,7 @@ public final class UPReferenceSysteme
 		typarmure = "typarmure";
 		ptsarmure = "ptsarmure";
 		trait = "trait";
-		interArme = "interArme";
+		interArmure = "interArmure";
 		liaison = "de";
 		addition = "et";
 		qualite = "qualite";

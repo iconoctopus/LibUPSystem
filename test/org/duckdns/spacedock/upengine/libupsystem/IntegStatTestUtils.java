@@ -23,13 +23,15 @@ package org.duckdns.spacedock.upengine.libupsystem;
 final class IntegStatTestUtils
 {
 
+    static int limiteLAncers = 9999;//dix-mille lancers
+
     static boolean reussiteStatistiqueAttaque(Perso p_perso, int p_nd, int p_distance, int p_nbCoups)
     {
 	p_perso.genInit();
 	int nbReussites = 0;
 	int nbEchecs = 0;
 	int compteurActions = 0;
-	for (int i = 0; i <= 99999; ++i)//cent mille lancers
+	for (int i = 0; i <= limiteLAncers; ++i)
 	{
 	    boolean reussite = false;
 
@@ -82,22 +84,22 @@ final class IntegStatTestUtils
 	    perso.getInventaire().addArme(new ArmeCaC(3, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais), Inventaire.Lateralisation.DROITE);
 	    perso.getInventaire().removeArme(Inventaire.Lateralisation.DROITE);//on est dans le cas où la méthode appelante veut tester les mains nues, on en profite pour tester que rengainer fonctionne bien
 	}
-	for (int i = 0; i <= 99999; ++i)//cent mille lancers
+	for (int i = 0; i <= limiteLAncers; ++i)
 	{
 	    total_degats += perso.genererDegats(p_increments).getQuantite();
 	}
-	return (int) (total_degats / 100000);
+	return (int) (total_degats / (limiteLAncers + 1));
     }
 
     static int nbBlessuresGravesStatistique(int p_degats, int p_rm)
     {
 	int nbBlessuresGraves = 0;
-	for (int i = 0; i <= 99999; ++i)//cent mille lancers
+	for (int i = 0; i <= limiteLAncers; ++i)
 	{//on crée ici un nouveau perso pour chaque test : sinon les blessures s'accumulent entre deux boucles et ils meurrent au final...
 	    Perso perso = new Perso(p_rm);
 	    perso.etreBlesse(new Arme.Degats(p_degats, 0));
 	    nbBlessuresGraves += perso.getBlessuresGraves();
 	}
-	return (int) (nbBlessuresGraves / 100000);
+	return (int) (nbBlessuresGraves / (limiteLAncers + 1));
     }
 }

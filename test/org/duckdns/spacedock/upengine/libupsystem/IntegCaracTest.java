@@ -30,19 +30,31 @@ import org.junit.Test;
 public class IntegCaracTest
 {
 
-    static Perso persoRM1;
-    static Perso persoRM3;
-    static Perso persoRM5;
+    Perso persoRM1;
+    Perso persoRM3;
+    Perso persoNonRM;
 
     @Before
     public void setUp()
     {
 	persoRM1 = new Perso(1);
 	persoRM3 = new Perso(3);
+
+	ArbreDomaines arbreTest = new ArbreDomaines();
+	arbreTest.setRangDomaine(2, 2);
+	arbreTest.setRangComp(2, 2, 1);
+	arbreTest.addSpecialite(2, 2, "élevage de stylos bic en liberté");
+
+	int[] traits = new int[]
+	{
+	    1, 2, 3, 4, 5
+	};
+
+	persoNonRM = new Perso(traits, arbreTest);
     }
 
     @Test
-    public void testValeursALaCreation()
+    public void testCaracsSecondaires()
     {
 	Assert.assertEquals(0, persoRM1.getBlessuresGraves());
 	Assert.assertEquals(0, persoRM1.getBlessuresLegeres());
@@ -61,5 +73,34 @@ public class IntegCaracTest
 	Assert.assertFalse(persoRM3.isSonne());
 	Assert.assertFalse(persoRM3.isInconscient());
 	Assert.assertFalse(persoRM3.isElimine());
+
+	Assert.assertEquals(0, persoNonRM.getBlessuresGraves());
+	Assert.assertEquals(0, persoNonRM.getBlessuresLegeres());
+	Assert.assertEquals(0, persoNonRM.getBlessuresLegeresMentales());
+	Assert.assertEquals(5, persoNonRM.getNDPassif(0, 1, false));
+	Assert.assertEquals(5, persoNonRM.getNDPassif(0, 1, true));
+	Assert.assertFalse(persoNonRM.isSonne());
+	Assert.assertFalse(persoRM3.isInconscient());
+	Assert.assertFalse(persoRM3.isElimine());
+    }
+
+    @Test
+    public void testTraits()
+    {
+	persoRM3.setTrait(0, 5);
+	persoRM3.setTrait(2, 6);
+	Assert.assertEquals(5, persoRM3.getTrait(0));
+	Assert.assertEquals(6, persoRM3.getTrait(2));
+    }
+
+    @Test
+    public void testDomComp()
+    {
+	Assert.assertEquals(3, persoRM3.getRangComp(3, 0));//Corps à corps
+	Assert.assertEquals(3, persoRM3.getRangDomaine(4));//distance
+
+	Assert.assertEquals(1, persoNonRM.getRangComp(2, 2));
+	Assert.assertEquals(2, persoNonRM.getRangDomaine(2));
+	Assert.assertEquals("élevage de stylos bic en liberté", persoNonRM.getSpecialites(2, 2).get(0));
     }
 }

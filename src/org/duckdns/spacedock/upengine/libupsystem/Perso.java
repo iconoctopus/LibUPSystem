@@ -330,8 +330,6 @@ public class Perso
      */
     public void etreBlesse(Degats p_degats)
     {
-	int temp1 = p_degats.getQuantite();
-	int temp2 = p_degats.getTypeArme();
 	if (p_degats.getQuantite() >= 0 && p_degats.getTypeArme() >= 0)
 	{
 	    Armure armure = m_inventaire.getArmure();

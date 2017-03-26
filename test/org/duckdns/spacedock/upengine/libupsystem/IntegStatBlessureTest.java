@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 ykonoclast
  *
  * This program is free software: you can redistribute it and/or modify
@@ -23,13 +23,27 @@ import org.junit.Test;
  *
  * @author ykonoclast
  */
-public class IntegStatBlessureLegereTest
+public class IntegStatBlessureTest
 {
 
     @Test
-    public void testStatDegatsLegers()
+    public void testDegatsLegers()
     {
 	int nbGraves = IntegStatTestUtils.nbBlessuresGravesStatistique(30, 1);
 	Assert.assertTrue(nbGraves == 1);
+    }
+
+    @Test
+    public void testDegatsMoyens()
+    {
+	int nbGraves = IntegStatTestUtils.nbBlessuresGravesStatistique(30, 3);
+	Assert.assertTrue(nbGraves == 1 || nbGraves == 2);
+    }
+
+    @Test
+    public void testDegatsLourds()
+    {
+	int nbGraves = IntegStatTestUtils.nbBlessuresGravesStatistique(30, 5);
+	Assert.assertTrue(nbGraves == 0);
     }
 }

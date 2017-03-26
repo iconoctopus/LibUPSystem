@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 ykonoclast
  *
  * This program is free software: you can redistribute it and/or modify
@@ -89,23 +89,23 @@ public class Inventaire
      */
     public void addArme(Arme p_arme, Lateralisation p_cote)
     {
-	EmplacementMain mainPrincipale;
+	EmplacementMain mainCible;
 	EmplacementMain autreMain;
 
 	//identification de la main porteuse et de l'arme opposée
 	if (p_cote == Lateralisation.DROITE)
 	{
-	    mainPrincipale = (EmplacementMain) m_diagrammeEmplacement.get(ZoneEmplacement.MAINDROITE);
+	    mainCible = (EmplacementMain) m_diagrammeEmplacement.get(ZoneEmplacement.MAINDROITE);
 	    autreMain = (EmplacementMain) m_diagrammeEmplacement.get(ZoneEmplacement.MAINGAUCHE);
 	}
 	else
 	{
-	    mainPrincipale = (EmplacementMain) m_diagrammeEmplacement.get(ZoneEmplacement.MAINGAUCHE);
+	    mainCible = (EmplacementMain) m_diagrammeEmplacement.get(ZoneEmplacement.MAINGAUCHE);
 	    autreMain = (EmplacementMain) m_diagrammeEmplacement.get(ZoneEmplacement.MAINDROITE);
 	}
 
 	//vérification de l'occupation des mains
-	if (!mainPrincipale.isOccupeArmeBouclier())
+	if (!mainCible.isOccupeArmeBouclier())
 	{
 	    if (p_arme.getNbMainsArme() == 2)
 	    {
@@ -119,7 +119,7 @@ public class Inventaire
 		    ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("autre_main_pas_libre"));
 		}
 	    }
-	    mainPrincipale.setArme(p_arme);//ajout effectif de l'arme
+	    mainCible.setArme(p_arme);//ajout effectif de l'arme
 	}
 	else
 	{

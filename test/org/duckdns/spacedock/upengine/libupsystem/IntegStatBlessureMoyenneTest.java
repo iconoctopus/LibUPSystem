@@ -23,13 +23,13 @@ import org.junit.Test;
  *
  * @author ykonoclast
  */
-public class PersoStatDegatsMoyensTest
+public class IntegStatBlessureMoyenneTest
 {
 
     @Test
     public void testStatDegatsMoyens()
     {
-	int nbGraves = StatUtils.nbBlessuresGravesStatistique(30, 3);
+	int nbGraves = IntegStatTestUtils.nbBlessuresGravesStatistique(30, 3);
 	Assert.assertTrue(nbGraves == 1 || nbGraves == 2);
     }
 }

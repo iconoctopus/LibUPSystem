@@ -20,7 +20,7 @@ package org.duckdns.spacedock.upengine.libupsystem;
  *
  * @author ykonoclast
  */
-final class StatUtils
+final class IntegStatTestUtils
 {
 
     static boolean reussiteStatistiqueAttaque(Perso p_perso, int p_nd, int p_distance, int p_nbCoups)

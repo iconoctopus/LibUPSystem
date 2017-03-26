@@ -16,20 +16,25 @@
  */
 package org.duckdns.spacedock.upengine.libupsystem;
 
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
  * @author ykonoclast
  */
-public class PersoStatDegatsLegersTest
+public class IntegStatBlessureLourdeTest
 {
 
     @Test
-    public void testStatDegatsLegers()
+    public void testStatDegatsLourds()
     {
-	int nbGraves = StatUtils.nbBlessuresGravesStatistique(30, 1);
-	Assert.assertTrue(nbGraves == 1);
+	int nbGraves = IntegStatTestUtils.nbBlessuresGravesStatistique(30, 5);
+	Assert.assertTrue(nbGraves == 0);
     }
 }

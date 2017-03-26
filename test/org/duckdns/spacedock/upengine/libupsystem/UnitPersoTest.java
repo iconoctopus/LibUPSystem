@@ -502,6 +502,14 @@ public class UnitPersoTest
 	persoRM3.etreBlesse(degatsMock);
 
 	verify(santeInitRM3).recevoirDegats(18, persoRM3);
+
+	//cas limite : les dégâts à 0 pasent sans causer d'effet
+	when(degatsMock.getQuantite()).thenReturn(0);
+	when(degatsMock.getTypeArme()).thenReturn(0);
+	persoRM1.etreBlesse(degatsMock);
+	verify(santeInitRM1, never()).recevoirDegats(0, persoRM1);
+	Assert.assertEquals(0, persoRM1.getBlessuresGraves());
+	Assert.assertEquals(0, persoRM1.getBlessuresLegeres());
     }
 
     @Test

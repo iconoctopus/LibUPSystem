@@ -31,33 +31,26 @@ import static org.junit.Assert.*;
 public class IntegEquipementTest
 {
 
-    public IntegEquipementTest()
-    {
-    }
+    /*persoRM1.getInventaire().addPieceArmure(new PieceArmure(0, 0, 0, false), Inventaire.ZoneEmplacement.TETE);
+	Assert.assertEquals(10, persoRM1.getNDPassif(0, 1, false));
+	Assert.assertEquals(10, persoRM1.getNDPassif(0, 1, true));
+	persoRM1.getInventaire().addPieceArmure(new PieceArmure(7, 0, 0, false), Inventaire.ZoneEmplacement.CORPS);
+	Assert.assertEquals(15, persoRM1.getNDPassif(0, 1, false));
+	Assert.assertEquals(5, persoRM1.getNDPassif(0, 1, true));
+	Assert.assertEquals(0, persoRM1.getPointsDeFatigue());
 
-    @BeforeClass
-    public static void setUpClass()
-    {
-    }
 
-    @AfterClass
-    public static void tearDownClass()
-    {
-    }
+
+	persoRM3.getInventaire().addPieceArmure(new PieceArmure(0, 3, 0, false), Inventaire.ZoneEmplacement.TETE);
+	Assert.assertEquals(35, persoRM3.getNDPassif(0, 1, false));
+	Assert.assertEquals(35, persoRM3.getNDPassif(0, 1, true));
+	Assert.assertEquals(0, persoRM3.getPointsDeFatigue());*/
 
     @Before
     public void setUp()
     {
     }
 
-    @After
-    public void tearDown()
-    {
-    }
-
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
     @Test
     public void testAjoutRetraitArmure()
     {

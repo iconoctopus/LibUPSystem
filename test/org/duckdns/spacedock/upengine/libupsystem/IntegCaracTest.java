@@ -30,34 +30,36 @@ import org.junit.Test;
 public class IntegCaracTest
 {
 
-    public IntegCaracTest()
-    {
-    }
-
-    @BeforeClass
-    public static void setUpClass()
-    {
-    }
-
-    @AfterClass
-    public static void tearDownClass()
-    {
-    }
+    static Perso persoRM1;
+    static Perso persoRM3;
+    static Perso persoRM5;
 
     @Before
     public void setUp()
     {
-    }
-
-    @After
-    public void tearDown()
-    {
+	persoRM1 = new Perso(1);
+	persoRM3 = new Perso(3);
     }
 
     @Test
-    public void Dummy()
-    {//TODO là où c'est possible interroger le perso directement
+    public void testValeursALaCreation()
+    {
+	Assert.assertEquals(0, persoRM1.getBlessuresGraves());
+	Assert.assertEquals(0, persoRM1.getBlessuresLegeres());
+	Assert.assertEquals(0, persoRM1.getBlessuresLegeresMentales());
+	Assert.assertEquals(10, persoRM1.getNDPassif(0, 1, false));
+	Assert.assertEquals(10, persoRM1.getNDPassif(0, 1, true));
+	Assert.assertTrue(persoRM1.isSonne());
+	Assert.assertFalse(persoRM1.isInconscient());
+	Assert.assertFalse(persoRM1.isElimine());
 
+	Assert.assertEquals(0, persoRM3.getBlessuresGraves());
+	Assert.assertEquals(0, persoRM3.getBlessuresLegeres());
+	Assert.assertEquals(0, persoRM3.getBlessuresLegeresMentales());
+	Assert.assertEquals(25, persoRM3.getNDPassif(0, 1, false));
+	Assert.assertEquals(25, persoRM3.getNDPassif(0, 1, true));
+	Assert.assertFalse(persoRM3.isSonne());
+	Assert.assertFalse(persoRM3.isInconscient());
+	Assert.assertFalse(persoRM3.isElimine());
     }
-
 }

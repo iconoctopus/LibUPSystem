@@ -146,7 +146,6 @@ public class UnitUPReferenceArmesTest
     @Test
     public void testGetLblCatArmeDist()
     {
-
 	ArrayList<String> cat = new ArrayList<>();
 
 	cat.add("archerie");
@@ -204,7 +203,6 @@ public class UnitUPReferenceArmesTest
 	Assert.assertEquals("espadon", m_reference.getListArmes().get(7));
     }
 
-    //TODO : tester les méthodes suivantes :
     @Test
     public void testGetLblArme()
     {
@@ -219,7 +217,6 @@ public class UnitUPReferenceArmesTest
 	Assert.assertEquals("mauvais", map.get(Arme.EquilibrageArme.mauvais));
 	Assert.assertEquals("normal", map.get(Arme.EquilibrageArme.normal));
 	Assert.assertEquals("bon", map.get(Arme.EquilibrageArme.bon));
-
     }
 
     @Test
@@ -231,5 +228,4 @@ public class UnitUPReferenceArmesTest
 	Assert.assertEquals("moyenne", map.get(Arme.QualiteArme.moyenne));
 	Assert.assertEquals("supérieure", map.get(Arme.QualiteArme.superieure));
     }
-
 }

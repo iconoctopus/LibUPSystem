@@ -37,7 +37,7 @@ public class IntegEquipementTest
 
     @Test
     public void testAjoutIntegArmure() throws Exception
-    {
+    {//TODO tester les libellés
 	Inventaire inventaire = persoRM3.getInventaire();
 
 	PieceArmure casque = new PieceArmure(0, 1, 0, false);
@@ -129,7 +129,7 @@ public class IntegEquipementTest
 
     @Test
     public void testIntegArmes()
-    {
+    {//TODO tester les libellés
 	Arme arme = new ArmeCaC(0, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais);
 	persoRM3.getInventaire().addArme(arme, Inventaire.Lateralisation.DROITE);
 	Assert.assertEquals(arme, persoRM3.getInventaire().getArmeCourante());

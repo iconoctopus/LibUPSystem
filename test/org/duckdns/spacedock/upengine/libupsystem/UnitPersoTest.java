@@ -17,8 +17,11 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import org.duckdns.spacedock.upengine.libupsystem.Arme.Degats;
 import org.junit.Assert;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -558,8 +561,20 @@ public class UnitPersoTest
 	Assert.assertEquals((int) persoRM1.getActions().get(0) + 10, (int) persoRM1.getInitTotale());//son init améliorée par un bonus d'init de 2
 
 	//test de isActif()
-	Assert.assertTrue(persoRM1.isActif(persoRM1.getActions().get(0)));
 	Assert.assertTrue(persoRM3.isActif(persoRM3.getActions().get(0)));
+	Iterator listActions = persoRM3.getActions().iterator();
+
+	for (int i = 1; i < 11; ++i)
+	{
+	    if (listActions.hasNext() && i == (int) listActions.next())
+	    {
+		assertTrue(persoRM3.isActif(i));
+	    }
+	    else
+	    {
+		assertFalse(persoRM3.isActif(i));
+	    }
+	}
     }
 
     @Test

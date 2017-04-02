@@ -16,18 +16,15 @@
  */
 package org.duckdns.spacedock.upengine.libupsystem;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
  *
  * @author ykonoclast
  */
-public class IntegCaracTest
+public class IntegCaracTest//tester les libellés
 {
 
     Perso persoRM1;

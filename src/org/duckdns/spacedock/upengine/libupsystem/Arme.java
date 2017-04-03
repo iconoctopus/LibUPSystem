@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017 ykonoclast
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.duckdns.spacedock.upengine.libupsystem;
 
 import org.duckdns.spacedock.commonutils.ErrorHandler;
@@ -8,52 +24,52 @@ import org.duckdns.spacedock.commonutils.PropertiesHandler;
  * celle-ci.Elle est abstraite car l'on ne doit pouvoir instancier que ses
  * dérivées qui sont porteuses du code signifiant pour le CaC et le CaD
  *
- * @author iconoctopus
+ * @author ykonoclast
  */
 public abstract class Arme
 {
 
     /**
-     * le nombre de dés lancés dans la VD
+     * le nombre de mains nécessaire au maniement de l'arme
      */
-    private final int m_desLances;
-    /**
-     * le nombre de dés gardés dans la VD
-     */
-    private final int m_desGardes;
+    private final int m_NbMainsArme;
     /**
      * le bonus apporté à l'initiative totale
      */
     private final int m_bonusInit;
     /**
-     * le type de l'arme : simple, perce-amure, pénétrante, perce-blindage ou
-     * energétique, respectivement de 0 à 4
+     * la catégorie d'arme (permet de définir la compétence à utiliser)
      */
-    private final int m_typeArme;
+    private final int m_categorie;
+    /**
+     * le nombre de dés gardés dans la VD
+     */
+    private final int m_desGardes;
+    /**
+     * le nombre de dés lancés dans la VD
+     */
+    private final int m_desLances;
     /**
      * le malus donné par l'arme à l'attaque
      */
     private final int m_malusAttaque;
     /**
-     * le physique minimal pour manier l'arme.
-     */
-    private final int m_physMin;
-    /**
-     * la catégorie d'arme (permet de définir la compétence à utiliser)
-     */
-    private final int m_categorie;
-    /**
      * le mode d'attaque de l'arme
      */
     private final int m_mode;
     /**
-     * le nombre de mains nécessaire au maniement de l'arme
-     */
-    private final int m_NbMainsArme;
-    /**
      * le nom de l'arme
      */
     private final String m_nom;
+    /**
+     * le physique minimal pour manier l'arme.
+     */
+    private final int m_physMin;
+    /**
+     * le type de l'arme : simple, perce-amure, pénétrante, perce-blindage ou
+     * energétique, respectivement de 0 à 4
+     */
+    private final int m_typeArme;
 
     /**
      * constructeur d'arme de corps à corps à parti de la référence UP!
@@ -66,8 +82,9 @@ public abstract class Arme
     public Arme(int p_indice, QualiteArme p_qualite, EquilibrageArme p_equilibrage)
     {
 
-	UPReference reference = UPReference.getInstance();
-	String nom = reference.getLblArme(p_indice);
+	UPReferenceArmes referenceArm = UPReferenceArmes.getInstance();
+	UPReferenceSysteme referenceSys = UPReferenceSysteme.getInstance();
+	String nom = referenceArm.getLblArme(p_indice);
 	nom = nom.concat(" ");
 	int bonusLances = 0;
 	int bonusGardes = 0;
@@ -76,76 +93,66 @@ public abstract class Arme
 	//récupération des éléments liés à la qualité et l'équilibrage de l'arme
 	if (p_qualite == QualiteArme.maitre)//traitement spécial des armes de maître
 	{
-	    nom = nom.concat((String) reference.libelles.libQualite.get(QualiteArme.maitre));
+	    nom = nom.concat((String) referenceArm.getListQualiteArme().get(QualiteArme.maitre));
 	    ++bonusLances;
 	    ++bonusGardes;
 	    ++bonusInitSup;
 	}
 	else
 	{
-	    nom = nom.concat(reference.libelles.liaison);
+	    nom = nom.concat(referenceSys.getCollectionLibelles().liaison);
 	    nom = nom.concat(" ");
-	    nom = nom.concat(reference.libelles.qualite);
+	    nom = nom.concat(referenceSys.getCollectionLibelles().qualite);
 	    nom = nom.concat(" ");
 
 	    switch (p_qualite)
 	    {
 		case inferieure:
 		    --bonusLances;
-		    nom = nom.concat((String) reference.libelles.libQualite.get(QualiteArme.inferieure));
+		    nom = nom.concat((String) referenceArm.getListQualiteArme().get(QualiteArme.inferieure));
 		    break;
 		case moyenne:
-		    nom = nom.concat((String) reference.libelles.libQualite.get(QualiteArme.moyenne));
+		    nom = nom.concat((String) referenceArm.getListQualiteArme().get(QualiteArme.moyenne));
 		    break;
 		case superieure:
 		    ++bonusLances;
-		    nom = nom.concat((String) reference.libelles.libQualite.get(QualiteArme.superieure));
+		    nom = nom.concat((String) referenceArm.getListQualiteArme().get(QualiteArme.superieure));
 		    break;
 	    }
 
 	    nom = nom.concat(" ");
-	    nom = nom.concat(reference.libelles.addition);
+	    nom = nom.concat(referenceSys.getCollectionLibelles().addition);
 	    nom = nom.concat(" ");
-	    nom = nom.concat(reference.libelles.equilibrage);
+	    nom = nom.concat(referenceSys.getCollectionLibelles().equilibrage);
 	    nom = nom.concat(" ");
 
 	    switch (p_equilibrage)
 	    {
 		case mauvais:
 		    bonusInitSup = -1;
-		    nom = nom.concat((String) reference.libelles.libEquilibrage.get(EquilibrageArme.mauvais));
+		    nom = nom.concat((String) referenceArm.getListEquilibrage().get(EquilibrageArme.mauvais));
 		    break;
 		case normal:
-		    nom = nom.concat((String) reference.libelles.libEquilibrage.get(EquilibrageArme.normal));
+		    nom = nom.concat((String) referenceArm.getListEquilibrage().get(EquilibrageArme.normal));
 		    break;
 		case bon:
 		    bonusInitSup = +1;
-		    nom = nom.concat((String) reference.libelles.libEquilibrage.get(EquilibrageArme.bon));
+		    nom = nom.concat((String) referenceArm.getListEquilibrage().get(EquilibrageArme.bon));
 		    break;
 	    }
 	}
 
 	//récupération et construction des caractéristiques de l'arme
-	m_desLances = reference.getNbLancesArme(p_indice) + bonusLances;
-	m_desGardes = reference.getNbGardesArme(p_indice) + bonusGardes;
-	m_bonusInit = reference.getBonusInitArme(p_indice) + bonusInitSup;
-	m_typeArme = reference.getTypeArme(p_indice);
-	m_malusAttaque = reference.getMalusAttaqueArme(p_indice);
-	m_physMin = reference.getPhysMinArme(p_indice);
+	m_desLances = referenceArm.getNbLancesArme(p_indice) + bonusLances;
+	m_desGardes = referenceArm.getNbGardesArme(p_indice) + bonusGardes;
+	m_bonusInit = referenceArm.getBonusInitArme(p_indice) + bonusInitSup;
+	m_typeArme = referenceArm.getTypeArme(p_indice);
+	m_malusAttaque = referenceArm.getMalusAttaqueArme(p_indice);
+	m_physMin = referenceArm.getPhysMinArme(p_indice);
 	m_nom = nom;
-	m_categorie = reference.getCategorieArme(p_indice);
-	m_NbMainsArme = reference.getNbMainsArme(p_indice);
-	m_mode = reference.getModArme(p_indice);
-    }
-
-    public int getDesLances()
-    {
-	return m_desLances;
-    }
-
-    public int getDesGardes()
-    {
-	return m_desGardes;
+	m_categorie = referenceArm.getCategorieArme(p_indice);
+	m_NbMainsArme = referenceArm.getNbMainsArme(p_indice);
+	m_mode = referenceArm.getModArme(p_indice);
     }
 
     public int getBonusInit()
@@ -153,24 +160,24 @@ public abstract class Arme
 	return m_bonusInit;
     }
 
-    public int getTypeArme()
+    public int getCategorie()
     {
-	return m_typeArme;
+	return m_categorie;
+    }
+
+    public int getDesGardes()
+    {
+	return m_desGardes;
+    }
+
+    public int getDesLances()
+    {
+	return m_desLances;
     }
 
     public int getMalusAttaque()
     {
 	return m_malusAttaque;
-    }
-
-    public int getphysMin()
-    {
-	return m_physMin;
-    }
-
-    public int getCategorie()
-    {
-	return m_categorie;
     }
 
     public int getMode()
@@ -181,6 +188,16 @@ public abstract class Arme
     public int getNbMainsArme()
     {
 	return m_NbMainsArme;
+    }
+
+    public int getTypeArme()
+    {
+	return m_typeArme;
+    }
+
+    public int getphysMin()
+    {
+	return m_physMin;
     }
 
     @Override
@@ -196,7 +213,7 @@ public abstract class Arme
      * définis : inutile de dégrader les performances avec toute la mécanique
      * des collections.
      */
-    public static class Degats
+    public static final class Degats
     {
 
 	/**

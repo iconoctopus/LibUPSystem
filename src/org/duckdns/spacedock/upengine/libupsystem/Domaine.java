@@ -1,7 +1,18 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2017 ykonoclast
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.duckdns.spacedock.upengine.libupsystem;
 
@@ -11,7 +22,7 @@ import org.duckdns.spacedock.commonutils.PropertiesHandler;
 
 /**
  *
- * @author iconoctopus
+ * @author ykonoclast
  */
 class Domaine
 {
@@ -36,10 +47,10 @@ class Domaine
 	if (p_indice >= 0)
 	{
 	    setRang(p_rang);
-	    int nbComps = UPReference.getInstance().getListComp(p_indice).size();
+	    int nbComps = UPReferenceSysteme.getInstance().getListComp(p_indice).size();
 	    for (int i = 0; i < nbComps; ++i)
 	    {
-		m_competences.add(new Competence(0, null));
+		m_competences.add(new Competence(0, new ArrayList<String>()));
 	    }
 	}
 	else
@@ -73,12 +84,13 @@ class Domaine
     }
 
     /**
-     * @param p_comp l'indice de la compétence visée
+     * @param p_numéro l'indice de la compétence visée dans le tableau interne
+     * du domaine
      * @return le rang de la competence en question
      */
-    int getRangCompetence(int p_comp)
+    int getRangComp(int p_numéro)
     {
-	return m_competences.get(p_comp).getRang();
+	return m_competences.get(p_numéro).getRang();
     }
 
     /**

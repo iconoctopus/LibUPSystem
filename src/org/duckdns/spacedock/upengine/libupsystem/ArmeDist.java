@@ -1,7 +1,18 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2017 ykonoclast
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.duckdns.spacedock.upengine.libupsystem;
 
@@ -10,10 +21,19 @@ import org.duckdns.spacedock.commonutils.PropertiesHandler;
 
 /**
  *
- * @author iconoctopus
+ * @author ykonoclast
  */
 public class ArmeDist extends Arme
 {
+
+    /**
+     * le nombre de coups présents dans l'arme au départ
+     */
+    private int m_magasinCourant;
+    /**
+     * la capacité du magasin de l'arme
+     */
+    private final int m_magasinMax;
 
     /**
      * le malus à portée courte
@@ -24,24 +44,16 @@ public class ArmeDist extends Arme
      */
     private final int m_malusLong;
     /**
-     * le malus à portée longue
-     */
-    private final int m_portee;
-    /**
      * le nombre d'actions pour recharger
      */
     private final int m_nbActionsRecharge;
     /**
-     * la capacité du magasin de l'arme
+     * le malus à portée longue
      */
-    private final int m_magasinMax;
-    /**
-     * le nombre de coups présents dans l'arme au départ
-     */
-    private int m_magasinCourant;
+    private final int m_portee;
 
     /**
-     * constructeur appelant dans UPReference les spécificités des arms à
+     * constructeur appelant dans UPReferenceSysteme les spécificités des arms à
      * distance
      *
      * @param p_indice
@@ -52,7 +64,7 @@ public class ArmeDist extends Arme
     {
 	super(p_indice, p_qualite, p_equilibrage);
 
-	UPReference reference = UPReference.getInstance();
+	UPReferenceArmes reference = UPReferenceArmes.getInstance();
 
 	m_malusCourt = reference.getMalusCourtArme(p_indice);
 	m_malusLong = reference.getMalusLongArme(p_indice);
@@ -60,6 +72,22 @@ public class ArmeDist extends Arme
 	m_nbActionsRecharge = reference.getNbActionsRechargeArme(p_indice);
 	m_magasinMax = reference.getMagasinArme(p_indice);
 	m_magasinCourant = 0;//par défaut l'arme n'est pas chargée
+    }
+
+    /**
+     *
+     * @param p_nbMun
+     */
+    void consommerMun(int p_nbMun)
+    {
+	if (p_nbMun > 0 && p_nbMun <= m_magasinCourant)
+	{
+	    m_magasinCourant -= p_nbMun;
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("nbCoups") + ":" + p_nbMun + " " + PropertiesHandler.getInstance("libupsystem").getString("muncourantes") + ":" + m_magasinCourant);
+	}
     }
 
     /**
@@ -102,11 +130,11 @@ public class ArmeDist extends Arme
     }
 
     /**
-     * @return the m_portee
+     * @return the m_magasinCourant
      */
-    int getPortee()
+    int getMunCourantes()
     {
-	return m_portee;
+	return m_magasinCourant;
     }
 
     /**
@@ -118,35 +146,19 @@ public class ArmeDist extends Arme
     }
 
     /**
+     * @return the m_portee
+     */
+    int getPortee()
+    {
+	return m_portee;
+    }
+
+    /**
      * @return the m_magasinMax
      */
     int getTailleMAgasin()
     {
 	return m_magasinMax;
-    }
-
-    /**
-     * @return the m_magasinCourant
-     */
-    int getMunCourantes()
-    {
-	return m_magasinCourant;
-    }
-
-    /**
-     *
-     * @param p_nbMun
-     */
-    void consommerMun(int p_nbMun)
-    {
-	if (p_nbMun > 0 && p_nbMun <= m_magasinCourant)
-	{
-	    m_magasinCourant -= p_nbMun;
-	}
-	else
-	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("nbCoups") + ":" + p_nbMun + " " + PropertiesHandler.getInstance("libupsystem").getString("muncourantes") + ":" + m_magasinCourant);
-	}
     }
 
     /**

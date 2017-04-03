@@ -1,7 +1,18 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2017 ykonoclast
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.duckdns.spacedock.upengine.libupsystem;
 
@@ -16,22 +27,14 @@ public class PieceArmure
      */
     private final int m_idPiece;
     /**
-     * le type de la pièce
+     * si la pièce est un boucliere
      */
-    private final int m_type;
-    /**
-     * le matériau de la pièce
-     */
-    private final int m_materiau;
+    private final boolean m_isBouclier;
     /**
      * le libellé de cette pièce, construit à partir de son matériau et de sa
      * nature
      */
     private final String m_libelle;
-    /**
-     * le nombre de points de cette pièce
-     */
-    private final int m_nbpoints;
     /**
      * la localisation de la pièce
      */
@@ -45,9 +48,17 @@ public class PieceArmure
      */
     private final int m_malusParade;
     /**
-     * si la pièce est un boucliere
+     * le matériau de la pièce
      */
-    private final boolean m_isBouclier;
+    private final int m_materiau;
+    /**
+     * le nombre de points de cette pièce
+     */
+    private final int m_nbpoints;
+    /**
+     * le type de la pièce
+     */
+    private final int m_type;
 
     /**
      * costructeur de pièces d'armure
@@ -61,21 +72,32 @@ public class PieceArmure
     {
 	m_idPiece = p_idPiece;
 	m_type = p_type;
-	UPReference reference = UPReference.getInstance();
+	UPReferenceArmures referenceArmures = UPReferenceArmures.getInstance();
+	UPReferenceSysteme referenceSys = UPReferenceSysteme.getInstance();
 	m_materiau = p_materiau;
 	if (p_type == 0)
 	{
-	    m_libelle = reference.getLblPiece(m_idPiece, p_isBouclier) + " " + reference.libelles.interArme + " " + reference.getLblMateriauArmure(m_materiau, p_isBouclier);
+	    m_libelle = referenceArmures.getLblPiece(m_idPiece, p_isBouclier) + " " + referenceSys.getCollectionLibelles().interArmure + " " + referenceArmures.getLblMateriauArmure(m_materiau, p_isBouclier);
 	}
 	else
 	{
-	    m_libelle = reference.getLblPiece(m_idPiece, p_isBouclier) + " " + reference.getLblTypeArmure(p_type);
+	    m_libelle = referenceArmures.getLblPiece(m_idPiece, p_isBouclier) + " " + referenceArmures.getLblTypeArmure(p_type);
 	}
 	m_isBouclier = p_isBouclier;
-	m_nbpoints = reference.getPtsArmure(p_idPiece, p_materiau, p_isBouclier);
-	m_malusEsquive = reference.getMalusEsquive(m_idPiece, m_materiau, p_isBouclier);
-	m_malusParade = reference.getMalusParade(m_idPiece, m_materiau, p_isBouclier);
-	m_localisation = reference.getLocalisation(m_idPiece, p_isBouclier);
+	m_nbpoints = referenceArmures.getPtsArmure(p_idPiece, p_materiau, p_isBouclier);
+	m_malusEsquive = referenceArmures.getMalusEsquive(m_idPiece, m_materiau, p_isBouclier);
+	m_malusParade = referenceArmures.getMalusParade(m_idPiece, m_materiau, p_isBouclier);
+	m_localisation = referenceArmures.getLocalisation(m_idPiece, p_isBouclier);
+    }
+
+    /**
+     * @return the m_libelle -
+     */
+    @Override
+
+    public String toString()
+    {
+	return m_libelle;
     }
 
     /**
@@ -84,6 +106,14 @@ public class PieceArmure
     int getIdPiece()
     {
 	return m_idPiece;
+    }
+
+    /**
+     * @return the m_localisation
+     */
+    int getLocalisation()
+    {
+	return m_localisation;
     }
 
     /**
@@ -100,24 +130,6 @@ public class PieceArmure
     int getMalusParade()
     {
 	return m_malusParade;
-    }
-
-    /**
-     * @return the m_localisation
-     */
-    int getLocalisation()
-    {
-	return m_localisation;
-    }
-
-    /**
-     * @return the m_libelle -
-     */
-    @Override
-
-    public String toString()
-    {
-	return m_libelle;
     }
 
     /**

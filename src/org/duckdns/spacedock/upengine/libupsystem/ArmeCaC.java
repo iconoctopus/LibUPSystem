@@ -1,7 +1,18 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2017 ykonoclast
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.duckdns.spacedock.upengine.libupsystem;
 
@@ -10,7 +21,7 @@ import org.duckdns.spacedock.commonutils.PropertiesHandler;
 
 /**
  *
- * @author iconoctopus
+ * @author ykonoclast
  */
 public class ArmeCaC extends Arme
 {
@@ -35,7 +46,7 @@ public class ArmeCaC extends Arme
      * @param p_isSonne
      * @return
      */
-    Degats genererDegats(int p_nbIncrements, int p_physique, boolean p_isSonne)
+    Degats genererDegats(int p_nbIncrements, int p_physique, boolean p_isSonne)//TODO avec le nouveau système les ajouts de dégâts seront ramenés dans Perso et cette méthode pourra être une override d'une méthode abstraite d'Arme dans les deux deux sous classs
     {
 	int degatsBruts = 0;
 	if (p_nbIncrements >= 0 && p_physique >= 0)

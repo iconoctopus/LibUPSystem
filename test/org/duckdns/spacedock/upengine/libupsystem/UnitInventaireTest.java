@@ -173,7 +173,7 @@ public class UnitInventaireTest
     public void testPieceErreur()
     {
 	//inventaire initialement occupé par un casque
-	inventaireTest.addPieceArmure(casqueMock, Inventaire.ZoneEmplacement.TETE);
+	inventaireTest.addPieceArmure(casqueMock, Inventaire.PartieCorps.TETE);
 	verify(casqueMock).isBouclier();
 
 	//Erreur : ajout sur zone occupée
@@ -181,7 +181,7 @@ public class UnitInventaireTest
 	when(casqueMock2.isBouclier()).thenReturn(false);
 	try
 	{
-	    inventaireTest.addPieceArmure(casqueMock2, Inventaire.ZoneEmplacement.TETE);
+	    inventaireTest.addPieceArmure(casqueMock2, Inventaire.PartieCorps.TETE);
 	    fail();
 	}
 
@@ -199,7 +199,7 @@ public class UnitInventaireTest
 	//Erreur : retrait de zone libre
 	try
 	{
-	    inventaireTest.removePieceArmure(Inventaire.ZoneEmplacement.PIEDGAUCHE);
+	    inventaireTest.removePieceArmure(Inventaire.PartieCorps.PIEDGAUCHE);
 	    fail();
 	}
 	catch (IllegalStateException e)
@@ -212,7 +212,7 @@ public class UnitInventaireTest
 	when(casqueMock3.isBouclier()).thenReturn(false);
 	try
 	{
-	    inventaireTest.addPieceArmure(casqueMock3, Inventaire.ZoneEmplacement.PIEDDROIT);
+	    inventaireTest.addPieceArmure(casqueMock3, Inventaire.PartieCorps.PIEDDROIT);
 	    fail();
 	}
 	catch (IllegalStateException e)
@@ -235,7 +235,7 @@ public class UnitInventaireTest
 	//tester malus akternatifs
 
 	//Ajout du casque et vérification de l'appel de toutes les méthodes idoines puis de l'effet
-	inventaireTest.addPieceArmure(casqueMock, Inventaire.ZoneEmplacement.TETE);
+	inventaireTest.addPieceArmure(casqueMock, Inventaire.PartieCorps.TETE);
 	//on vérifie que la pièce est intégralement scannée
 	verify(casqueMock).getLocalisation();
 	verify(casqueMock).isBouclier();
@@ -244,7 +244,7 @@ public class UnitInventaireTest
 	verify(casqueMock).getMalusEsquive();
 	verify(casqueMock).getMalusParade();
 
-	Assert.assertEquals(casqueMock, inventaireTest.getPieceArmure(Inventaire.ZoneEmplacement.TETE));
+	Assert.assertEquals(casqueMock, inventaireTest.getPieceArmure(Inventaire.PartieCorps.TETE));
 
 	//On construit un mock d'armure pour vérifier les paramétres de construction de l'inventaire
 	Armure armureMockAvecCasque = PowerMockito.mock(Armure.class);
@@ -257,14 +257,14 @@ public class UnitInventaireTest
 	//On ajoute le gantelet, le type doit changer ainsi que le nombre de points et l'un des malus
 	Armure armureMockAvecCasqueEtGantelet = PowerMockito.mock(Armure.class);
 	whenNew(Armure.class).withArguments(7, 2, 1, 1).thenReturn(armureMockAvecCasqueEtGantelet);
-	inventaireTest.addPieceArmure(ganteletMock, Inventaire.ZoneEmplacement.MAINDROITE);
+	inventaireTest.addPieceArmure(ganteletMock, Inventaire.PartieCorps.MAINDROITE);
 
 	//On vérifie que l'armure renvoyée correspond au casque mis en place
 	armureRetour = inventaireTest.getArmure();
 	Assert.assertEquals(armureMockAvecCasqueEtGantelet, armureRetour);
 
 	//On enlève le gantelet : c'est le premier mock qui doit être renvoyé
-	inventaireTest.removePieceArmure(Inventaire.ZoneEmplacement.MAINDROITE);
+	inventaireTest.removePieceArmure(Inventaire.PartieCorps.MAINDROITE);
 	armureRetour = inventaireTest.getArmure();
 	Assert.assertEquals(armureMockAvecCasque, armureRetour);
     }
@@ -322,7 +322,7 @@ public class UnitInventaireTest
 	when(bouclierMock3.isBouclier()).thenReturn(true);
 	try
 	{
-	    inventaireTest.addPieceArmure(bouclierMock3, Inventaire.ZoneEmplacement.MAINDROITE);
+	    inventaireTest.addPieceArmure(bouclierMock3, Inventaire.PartieCorps.MAINDROITE);
 	    fail();
 	}
 	catch (IllegalStateException e)

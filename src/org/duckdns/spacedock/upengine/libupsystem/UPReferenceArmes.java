@@ -302,24 +302,12 @@ public class UPReferenceArmes
     /**
      *
      * @param p_indice
-     * @return le nombre de dés gardés d'une arme
+     * @return la valeur de dégâts d'une arme
      */
-    public int getNbGardesArme(int p_indice)
+    public int getVDArme(int p_indice)
     {
 	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
-	return arme.getInt("garde");
-
-    }
-
-    /**
-     *
-     * @param p_indice
-     * @return le nb de dés lancés par une arme
-     */
-    public int getNbLancesArme(int p_indice)
-    {
-	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
-	return arme.getInt("lance");
+	return arme.getInt("VD");
     }
 
     /**

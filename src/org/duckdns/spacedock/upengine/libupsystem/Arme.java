@@ -36,19 +36,15 @@ public abstract class Arme
     /**
      * le bonus apporté à l'initiative totale
      */
-    private final int m_bonusInit;
+    int m_bonusInit;
     /**
      * la catégorie d'arme (permet de définir la compétence à utiliser)
      */
     private final int m_categorie;
     /**
-     * le nombre de dés gardés dans la VD
+     * la VD de l'arme
      */
-    private final int m_desGardes;
-    /**
-     * le nombre de dés lancés dans la VD
-     */
-    private final int m_desLances;
+    int m_vd;
     /**
      * le malus donné par l'arme à l'attaque
      */
@@ -60,7 +56,7 @@ public abstract class Arme
     /**
      * le nom de l'arme
      */
-    private final String m_nom;
+    String m_nom;
     /**
      * le physique minimal pour manier l'arme.
      */
@@ -79,73 +75,15 @@ public abstract class Arme
      * @param p_equilibrage l'equilibrage de l'arme, ignoré si l'arme est de
      * maître
      */
-    public Arme(int p_indice, QualiteArme p_qualite, EquilibrageArme p_equilibrage)
+    public Arme(int p_indice)
     {
-
 	UPReferenceArmes referenceArm = UPReferenceArmes.getInstance();
-	UPReferenceSysteme referenceSys = UPReferenceSysteme.getInstance();
+
 	String nom = referenceArm.getLblArme(p_indice);
-	nom = nom.concat(" ");
-	int bonusLances = 0;
-	int bonusGardes = 0;
-	int bonusInitSup = 0;
-
-	//récupération des éléments liés à la qualité et l'équilibrage de l'arme
-	if (p_qualite == QualiteArme.maitre)//traitement spécial des armes de maître
-	{
-	    nom = nom.concat((String) referenceArm.getListQualiteArme().get(QualiteArme.maitre));
-	    ++bonusLances;
-	    ++bonusGardes;
-	    ++bonusInitSup;
-	}
-	else
-	{
-	    nom = nom.concat(referenceSys.getCollectionLibelles().liaison);
-	    nom = nom.concat(" ");
-	    nom = nom.concat(referenceSys.getCollectionLibelles().qualite);
-	    nom = nom.concat(" ");
-
-	    switch (p_qualite)
-	    {
-		case inferieure:
-		    --bonusLances;
-		    nom = nom.concat((String) referenceArm.getListQualiteArme().get(QualiteArme.inferieure));
-		    break;
-		case moyenne:
-		    nom = nom.concat((String) referenceArm.getListQualiteArme().get(QualiteArme.moyenne));
-		    break;
-		case superieure:
-		    ++bonusLances;
-		    nom = nom.concat((String) referenceArm.getListQualiteArme().get(QualiteArme.superieure));
-		    break;
-	    }
-
-	    nom = nom.concat(" ");
-	    nom = nom.concat(referenceSys.getCollectionLibelles().addition);
-	    nom = nom.concat(" ");
-	    nom = nom.concat(referenceSys.getCollectionLibelles().equilibrage);
-	    nom = nom.concat(" ");
-
-	    switch (p_equilibrage)
-	    {
-		case mauvais:
-		    bonusInitSup = -1;
-		    nom = nom.concat((String) referenceArm.getListEquilibrage().get(EquilibrageArme.mauvais));
-		    break;
-		case normal:
-		    nom = nom.concat((String) referenceArm.getListEquilibrage().get(EquilibrageArme.normal));
-		    break;
-		case bon:
-		    bonusInitSup = +1;
-		    nom = nom.concat((String) referenceArm.getListEquilibrage().get(EquilibrageArme.bon));
-		    break;
-	    }
-	}
 
 	//récupération et construction des caractéristiques de l'arme
-	m_desLances = referenceArm.getNbLancesArme(p_indice) + bonusLances;
-	m_desGardes = referenceArm.getNbGardesArme(p_indice) + bonusGardes;
-	m_bonusInit = referenceArm.getBonusInitArme(p_indice) + bonusInitSup;
+	m_vd = referenceArm.getVDArme(p_indice);
+	m_bonusInit = referenceArm.getBonusInitArme(p_indice);
 	m_typeArme = referenceArm.getTypeArme(p_indice);
 	m_malusAttaque = referenceArm.getMalusAttaqueArme(p_indice);
 	m_physMin = referenceArm.getPhysMinArme(p_indice);
@@ -165,14 +103,9 @@ public abstract class Arme
 	return m_categorie;
     }
 
-    public int getDesGardes()
+    public int getVD()
     {
-	return m_desGardes;
-    }
-
-    public int getDesLances()
-    {
-	return m_desLances;
+	return m_vd;
     }
 
     public int getMalusAttaque()
@@ -204,61 +137,6 @@ public abstract class Arme
     public String toString()
     {
 	return m_nom;
-    }
-
-    /**
-     * classe utilisée pour encapsuler les résultats d'une attaque réussie ; des
-     * dégâts mais aussi le type. On n'utilise pas de collections clé/valeur
-     * comme une EnumMap car l'on veut juste un accès simple à des champs
-     * définis : inutile de dégrader les performances avec toute la mécanique
-     * des collections.
-     */
-    public static final class Degats
-    {
-
-	/**
-	 * le total des dégâts infligés
-	 */
-	private int m_quantite;
-	/**
-	 * le type d'arme employé
-	 */
-	private int m_typeArme;
-
-	/**
-	 * constructeur de dégâts
-	 *
-	 * @param p_quantite
-	 * @param p_typeArme
-	 */
-	public Degats(int p_quantite, int p_typeArme)
-	{
-	    if (p_quantite >= 0 && p_typeArme >= 0)
-	    {
-		m_quantite = p_quantite;
-		m_typeArme = p_typeArme;
-	    }
-	    else
-	    {
-		ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("degats") + ":" + p_quantite + " " + PropertiesHandler.getInstance("libupsystem").getString("type") + ":" + p_typeArme);
-	    }
-	}
-
-	/**
-	 * @return the m_quantite
-	 */
-	public int getQuantite()
-	{
-	    return m_quantite;
-	}
-
-	/**
-	 * @return the m_typeArme
-	 */
-	public int getTypeArme()
-	{
-	    return m_typeArme;
-	}
     }
 
     /**

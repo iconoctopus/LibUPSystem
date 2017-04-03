@@ -35,28 +35,63 @@ public class ArmeCaC extends Arme
      */
     public ArmeCaC(int p_indice, QualiteArme p_qualite, EquilibrageArme p_equilibrage)
     {
-	super(p_indice, p_qualite, p_equilibrage);
-    }
-
-    /**
-     * génère les dégâts infligés avec cette arme en combat au corps à corps
-     *
-     * @param p_nbIncrements
-     * @param p_physique le physique du personnage
-     * @param p_isSonne
-     * @return
-     */
-    Degats genererDegats(int p_nbIncrements, int p_physique, boolean p_isSonne)//TODO avec le nouveau système les ajouts de dégâts seront ramenés dans Perso et cette méthode pourra être une override d'une méthode abstraite d'Arme dans les deux deux sous classs
-    {
-	int degatsBruts = 0;
-	if (p_nbIncrements >= 0 && p_physique >= 0)
+	super(p_indice);
+	int bonusVD = 0;
+	int bonusInitSup = 0;
+	UPReferenceSysteme referenceSys = UPReferenceSysteme.getInstance();
+	UPReferenceArmes referenceArm = UPReferenceArmes.getInstance();
+	m_nom = m_nom.concat(" ");
+	//récupération des éléments liés à la qualité et l'équilibrage de l'arme
+	if (p_qualite == QualiteArme.maitre)//traitement spécial des armes de maître
 	{
-	    degatsBruts = (RollUtils.lancer(super.getDesLances() + p_nbIncrements + p_physique, super.getDesGardes(), p_isSonne));
+	    m_nom = m_nom.concat((String) referenceArm.getListQualiteArme().get(QualiteArme.maitre));
+	    bonusVD = bonusVD + 6;
+	    ++bonusInitSup;
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("increments") + ":" + p_nbIncrements + " " + PropertiesHandler.getInstance("libupsystem").getString("physique") + ":" + p_physique);
+	    m_nom = m_nom.concat(referenceSys.getCollectionLibelles().liaison);
+	    m_nom = m_nom.concat(" ");
+	    m_nom = m_nom.concat(referenceSys.getCollectionLibelles().qualite);
+	    m_nom = m_nom.concat(" ");
+
+	    switch (p_qualite)
+	    {
+		case inferieure:
+		    bonusVD = bonusVD - 3;
+		    m_nom = m_nom.concat((String) referenceArm.getListQualiteArme().get(QualiteArme.inferieure));
+		    break;
+		case moyenne:
+		    m_nom = m_nom.concat((String) referenceArm.getListQualiteArme().get(QualiteArme.moyenne));
+		    break;
+		case superieure:
+		    bonusVD = bonusVD + 3;
+		    m_nom = m_nom.concat((String) referenceArm.getListQualiteArme().get(QualiteArme.superieure));
+		    break;
+	    }
+
+	    m_nom = m_nom.concat(" ");
+	    m_nom = m_nom.concat(referenceSys.getCollectionLibelles().addition);
+	    m_nom = m_nom.concat(" ");
+	    m_nom = m_nom.concat(referenceSys.getCollectionLibelles().equilibrage);
+	    m_nom = m_nom.concat(" ");
+
+	    switch (p_equilibrage)
+	    {
+		case mauvais:
+		    bonusInitSup = -1;
+		    m_nom = m_nom.concat((String) referenceArm.getListEquilibrage().get(EquilibrageArme.mauvais));
+		    break;
+		case normal:
+		    m_nom = m_nom.concat((String) referenceArm.getListEquilibrage().get(EquilibrageArme.normal));
+		    break;
+		case bon:
+		    bonusInitSup = +1;
+		    m_nom = m_nom.concat((String) referenceArm.getListEquilibrage().get(EquilibrageArme.bon));
+		    break;
+	    }
 	}
-	return new Degats(degatsBruts, super.getTypeArme());
+	m_bonusInit += bonusInitSup;
+	m_vd += bonusVD;
     }
 }

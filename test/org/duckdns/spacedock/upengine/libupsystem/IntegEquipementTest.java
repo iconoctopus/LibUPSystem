@@ -52,30 +52,30 @@ public class IntegEquipementTest
 	PieceArmure ganteletDroit = new PieceArmure(3, 0, 2, false);
 
 	//On ajoute un gantelet à un perso il n'y pas assez de points pour changer le ND et la réduction des dégâts
-	inventaire.addPieceArmure(ganteletGauche, Inventaire.ZoneEmplacement.MAINGAUCHE);
-	Assert.assertEquals(ganteletGauche, inventaire.getPieceArmure(Inventaire.ZoneEmplacement.MAINGAUCHE));
+	inventaire.addPieceArmure(ganteletGauche, Inventaire.PartieCorps.MAINGAUCHE);
+	Assert.assertEquals(ganteletGauche, inventaire.getPieceArmure(Inventaire.PartieCorps.MAINGAUCHE));
 	Assert.assertEquals(25, persoRM3.getNDPassif(0, 0, false));
 	Assert.assertEquals(0, inventaire.getArmure().getRedDegats(0));
 
 	//vérification du cas nominal de l'ajout, pour toutes les zones
-	inventaire.addPieceArmure(casque, Inventaire.ZoneEmplacement.TETE);
-	Assert.assertEquals(casque, inventaire.getPieceArmure(Inventaire.ZoneEmplacement.TETE));
-	inventaire.addPieceArmure(cuirasse, Inventaire.ZoneEmplacement.CORPS);
-	Assert.assertEquals(cuirasse, inventaire.getPieceArmure(Inventaire.ZoneEmplacement.CORPS));
-	inventaire.addPieceArmure(jambiereDroite, Inventaire.ZoneEmplacement.JAMBEDROITE);
-	Assert.assertEquals(jambiereDroite, inventaire.getPieceArmure(Inventaire.ZoneEmplacement.JAMBEDROITE));
-	inventaire.addPieceArmure(jambiereGauche, Inventaire.ZoneEmplacement.JAMBEGAUCHE);
-	Assert.assertEquals(jambiereGauche, inventaire.getPieceArmure(Inventaire.ZoneEmplacement.JAMBEGAUCHE));
-	inventaire.addPieceArmure(brassiereDroite, Inventaire.ZoneEmplacement.BRASDROIT);
-	Assert.assertEquals(brassiereDroite, inventaire.getPieceArmure(Inventaire.ZoneEmplacement.BRASDROIT));
-	inventaire.addPieceArmure(brassiereGauche, Inventaire.ZoneEmplacement.BRASGAUCHE);
-	Assert.assertEquals(brassiereGauche, inventaire.getPieceArmure(Inventaire.ZoneEmplacement.BRASGAUCHE));
-	inventaire.addPieceArmure(botteDroite, Inventaire.ZoneEmplacement.PIEDDROIT);
-	Assert.assertEquals(botteDroite, inventaire.getPieceArmure(Inventaire.ZoneEmplacement.PIEDDROIT));
-	inventaire.addPieceArmure(botteGauche, Inventaire.ZoneEmplacement.PIEDGAUCHE);
-	Assert.assertEquals(botteGauche, inventaire.getPieceArmure(Inventaire.ZoneEmplacement.PIEDGAUCHE));
-	inventaire.addPieceArmure(ganteletDroit, Inventaire.ZoneEmplacement.MAINDROITE);
-	Assert.assertEquals(ganteletDroit, inventaire.getPieceArmure(Inventaire.ZoneEmplacement.MAINDROITE));
+	inventaire.addPieceArmure(casque, Inventaire.PartieCorps.TETE);
+	Assert.assertEquals(casque, inventaire.getPieceArmure(Inventaire.PartieCorps.TETE));
+	inventaire.addPieceArmure(cuirasse, Inventaire.PartieCorps.CORPS);
+	Assert.assertEquals(cuirasse, inventaire.getPieceArmure(Inventaire.PartieCorps.CORPS));
+	inventaire.addPieceArmure(jambiereDroite, Inventaire.PartieCorps.JAMBEDROITE);
+	Assert.assertEquals(jambiereDroite, inventaire.getPieceArmure(Inventaire.PartieCorps.JAMBEDROITE));
+	inventaire.addPieceArmure(jambiereGauche, Inventaire.PartieCorps.JAMBEGAUCHE);
+	Assert.assertEquals(jambiereGauche, inventaire.getPieceArmure(Inventaire.PartieCorps.JAMBEGAUCHE));
+	inventaire.addPieceArmure(brassiereDroite, Inventaire.PartieCorps.BRASDROIT);
+	Assert.assertEquals(brassiereDroite, inventaire.getPieceArmure(Inventaire.PartieCorps.BRASDROIT));
+	inventaire.addPieceArmure(brassiereGauche, Inventaire.PartieCorps.BRASGAUCHE);
+	Assert.assertEquals(brassiereGauche, inventaire.getPieceArmure(Inventaire.PartieCorps.BRASGAUCHE));
+	inventaire.addPieceArmure(botteDroite, Inventaire.PartieCorps.PIEDDROIT);
+	Assert.assertEquals(botteDroite, inventaire.getPieceArmure(Inventaire.PartieCorps.PIEDDROIT));
+	inventaire.addPieceArmure(botteGauche, Inventaire.PartieCorps.PIEDGAUCHE);
+	Assert.assertEquals(botteGauche, inventaire.getPieceArmure(Inventaire.PartieCorps.PIEDGAUCHE));
+	inventaire.addPieceArmure(ganteletDroit, Inventaire.PartieCorps.MAINDROITE);
+	Assert.assertEquals(ganteletDroit, inventaire.getPieceArmure(Inventaire.PartieCorps.MAINDROITE));
 
 	//récupération de l'armure totale (avec les deux bottes)
 	Armure armure = inventaire.getArmure();
@@ -87,8 +87,8 @@ public class IntegEquipementTest
 	Assert.assertEquals(12, armure.getMalusEsquive());
 
 	//suppression de l'une des pièce d'armure et vérification qu'elle est effective
-	inventaire.removePieceArmure(Inventaire.ZoneEmplacement.PIEDGAUCHE);
-	Assert.assertEquals(null, inventaire.getPieceArmure(Inventaire.ZoneEmplacement.PIEDGAUCHE));
+	inventaire.removePieceArmure(Inventaire.PartieCorps.PIEDGAUCHE);
+	Assert.assertEquals(null, inventaire.getPieceArmure(Inventaire.PartieCorps.PIEDGAUCHE));
 
 	//récupération de l'armure totale (avec le trou dans la liste au niveau du pied gauche)
 	armure = inventaire.getArmure();

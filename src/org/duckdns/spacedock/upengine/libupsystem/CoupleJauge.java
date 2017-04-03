@@ -18,6 +18,7 @@ package org.duckdns.spacedock.upengine.libupsystem;
 
 import org.duckdns.spacedock.commonutils.ErrorHandler;
 import org.duckdns.spacedock.commonutils.PropertiesHandler;
+import org.duckdns.spacedock.upengine.libupsystem.Perso.Trait;
 import org.duckdns.spacedock.upengine.libupsystem.RollUtils.RollResult;
 
 /**
@@ -190,7 +191,7 @@ class CoupleJauge
 	    int quotient;
 	    int blessGraves;
 	    m_blessuresLegeres += p_degats;
-	    RollResult jetAbsorption = p_victime.effectuerJetTrait(0, m_blessuresLegeres);
+	    RollResult jetAbsorption = p_victime.effectuerJetTrait(Trait.PHYSIQUE, m_blessuresLegeres);
 
 	    if (!jetAbsorption.isJetReussi())//le jet d'absorption est en dessous du ND des blessures légères
 	    {
@@ -202,10 +203,10 @@ class CoupleJauge
 
 		if (m_remplissage_interne > m_choc)//on risque l'inconscience et l'élimination
 		{
-		    if (m_remplissage_interne >= m_taille_interne || !p_victime.effectuerJetTrait(3, 5 * m_remplissage_interne).isJetReussi())//jet d'inconscience raté ou jauge remplie
+		    if (m_remplissage_interne >= m_taille_interne || !p_victime.effectuerJetTrait(Trait.VOLONTE, 5 * m_remplissage_interne).isJetReussi())//jet d'inconscience raté ou jauge remplie
 		    {
 			m_inconscient = true;
-			if (m_remplissage_interne > m_taille_interne || !p_victime.effectuerJetTrait(0, 5 * m_remplissage_interne).isJetReussi())//jauge déborde ou jet de mort raté
+			if (m_remplissage_interne > m_taille_interne || !p_victime.effectuerJetTrait(Trait.PHYSIQUE, 5 * m_remplissage_interne).isJetReussi())//jauge déborde ou jet de mort raté
 			{
 			    m_elimine = true;
 			    if (m_remplissage_interne > m_taille_interne)

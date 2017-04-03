@@ -18,9 +18,9 @@ package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumMap;
 import org.duckdns.spacedock.commonutils.ErrorHandler;
 import org.duckdns.spacedock.commonutils.PropertiesHandler;
-import org.duckdns.spacedock.upengine.libupsystem.Arme.Degats;
 import org.duckdns.spacedock.upengine.libupsystem.RollUtils.RollResult;
 
 public class Perso
@@ -59,10 +59,9 @@ public class Perso
      */
     private String m_libellePerso;
     /**
-     * dans l'ordre : 0:Physique ; 1:Coordination ; 2:Mental ; 3:Volonté ;
-     * 4:Présence
+     * les traits du personnage
      */
-    private final int[] m_traits;//TODO remplacer cela par un EnumMap et virer tous les contrôles sur les traits
+    private final EnumMap<Trait, Integer> m_traits;
 
     /**
      * Constructeur de Perso prenant des caractéristiques en paramétres. Il est
@@ -72,19 +71,15 @@ public class Perso
      * @param p_traits
      * @param p_arbre
      */
-    public Perso(int[] p_traits, ArbreDomaines p_arbre)
+    public Perso(EnumMap<Trait, Integer> p_traits, ArbreDomaines p_arbre)
     {
 	m_libellePerso = "Perso";
 
-	if (p_traits.length != 5)
+	for (Integer i : p_traits.values())
 	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("nbtraits") + ":" + p_traits.length);
-	}
-	for (int i = 0; i < p_traits.length; ++i)
-	{
-	    if (p_traits[i] < 0)
+	    if (i < 0)
 	    {
-		ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("trait") + ":" + p_traits[i]);
+		ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("trait") + ":" + i);
 	    }
 	}
 	m_traits = p_traits;
@@ -106,12 +101,12 @@ public class Perso
 	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("rang") + ":" + p_RM);
 	}
 	//configuration des traits
-	m_traits = new int[5];
-	m_traits[0] = p_RM;//physique
-	m_traits[1] = p_RM;//coordination
-	m_traits[2] = p_RM - 1;//mental
-	m_traits[3] = p_RM - 1;//volonté
-	m_traits[4] = p_RM - 1;//sociabilité
+	m_traits = new EnumMap<Trait, Integer>(Trait.class);
+	m_traits.put(Trait.PHYSIQUE, p_RM);
+	m_traits.put(Trait.COORDINATION, p_RM);
+	m_traits.put(Trait.MENTAL, p_RM - 1);
+	m_traits.put(Trait.VOLONTE, p_RM - 1);
+	m_traits.put(Trait.PRESENCE, p_RM - 1);
 
 	//configuration automatique des autres caractéristiques maintenant possible car les traits sont connus
 	initPerso();
@@ -296,7 +291,7 @@ public class Perso
      * en interne par les méthodes d'attaque qui effectuent les pré-traitements
      * pour aboutir aux caractéristiques finales du jet.
      *
-     * @param p_trait indice du trait à utiliser (pas la valeur!)
+     * @param p_trait id du trait à utiliser (pas la valeur!)
      * @param p_ND
      * @param p_comp
      * @param p_domaine
@@ -305,9 +300,9 @@ public class Perso
      * @param p_modifScore
      * @return le résultat du jet
      */
-    public final RollUtils.RollResult effectuerJetComp(int p_trait, int p_domaine, int p_comp, int p_ND, int p_modifNbLances, int p_modifNbGardes, int p_modifScore)
+    public final RollUtils.RollResult effectuerJetComp(Trait p_trait, int p_domaine, int p_comp, int p_ND, int p_modifNbLances, int p_modifNbGardes, int p_modifScore)
     {
-	return m_arbreDomaines.effectuerJetComp(m_traits[p_trait], p_domaine, p_comp, p_ND, p_modifNbLances, p_modifNbGardes, p_modifScore, isSonne());
+	return m_arbreDomaines.effectuerJetComp(m_traits.get(p_trait), p_domaine, p_comp, p_ND, p_modifNbLances, p_modifNbGardes, p_modifScore, isSonne());
     }
 
     /**
@@ -317,9 +312,9 @@ public class Perso
      * @param p_ND
      * @return le résultat du jet
      */
-    public final RollUtils.RollResult effectuerJetTrait(int p_trait, int p_ND)
+    public final RollUtils.RollResult effectuerJetTrait(Trait p_trait, int p_ND)
     {
-	return RollUtils.extraireIncrements(RollUtils.lancer(m_traits[p_trait], m_traits[p_trait], isSonne()), p_ND);
+	return RollUtils.extraireIncrements(RollUtils.lancer(m_traits.get(p_trait), m_traits.get(p_trait), isSonne()), p_ND);
     }
 
     /**
@@ -377,7 +372,13 @@ public class Perso
      */
     public Degats genererDegats(int p_increments)
     {
-	Degats result = new Degats(RollUtils.lancer(m_traits[0] + p_increments, 1, isSonne()), 0); //mains nues par défaut
+	int domaine;
+	int competence;
+	int vd;
+	int bonusSup = p_increments * 2;//bonus aux dégâts du aux incréments (pas de ciblage dans cette méthode)
+	int typArm;
+
+	Degats result = new Degats(0, 0);
 
 	if (p_increments >= 0)
 	{
@@ -385,15 +386,31 @@ public class Perso
 
 	    if (arme != null)//armes équipées
 	    {
+		vd = arme.getVD();
+		typArm = arme.getTypeArme();
+
 		if (arme.getMode() == 0)//arme de corps à corps employée
 		{
-		    result = ((ArmeCaC) arme).genererDegats(p_increments, m_traits[0], isSonne());
+		    domaine = 3;//corps à corps
+		    competence = arme.getCategorie() * 2;//les attaques sont à catégorie *2, les parades à catégorie * 2 +1
+		    bonusSup += m_traits.get(Trait.PHYSIQUE);//le rang de physique vient en bonus au nombre d'incréments
 		}
 		else//arme à distance employée
 		{
-		    result = ((ArmeDist) arme).genererDegats(p_increments, isSonne());
+		    domaine = 4;//distance
+		    competence = arme.getCategorie();//compétence d'arme
+		    //pas de bonus de physique pour les armes à distance
 		}
 	    }
+	    else//combat à mains nues
+	    {
+		vd = m_traits.get(Trait.PHYSIQUE);
+		typArm = 0;
+		domaine = 3;//corps à corps
+		competence = 0;//comp mains nues
+		bonusSup += m_traits.get(Trait.PHYSIQUE);//le rang de physique vient en bonus au nombre d'incréments
+	    }
+	    return new Degats(vd + domaine + competence + bonusSup, typArm);
 	}
 	else
 	{
@@ -569,12 +586,12 @@ public class Perso
 
     /**
      *
-     * @param p_indice
+     * @param p_trait le trait considéré
      * @return la valeur du trait
      */
-    public int getTrait(int p_indice)
+    public int getTrait(Trait p_trait)
     {
-	return m_traits[p_indice];
+	return m_traits.get(p_trait);
     }
 
     /**
@@ -657,12 +674,12 @@ public class Perso
 
     /**
      *
-     * @param p_indice
+     * @param p_trait le trait considéré
      * @param p_valeur
      */
-    public void setTrait(int p_indice, int p_valeur)
+    public void setTrait(Trait p_trait, int p_valeur)
     {
-	m_traits[p_indice] = p_valeur;
+	m_traits.put(p_trait, p_valeur);
 	initJauges();//TODO : en l'état les jauges sont complètement remplacées : on perd donc les blessures, la force d'âme dépensée etc.
     }
 
@@ -703,15 +720,15 @@ public class Perso
 	    if (p_comp != 0)//on utilise une arme, il faut prendre en compte ses éventuels malus
 	    {
 		{
-		    if (arme.getphysMin() > m_traits[0])
+		    if (arme.getphysMin() > m_traits.get(Trait.PHYSIQUE))
 		    {
-			ecartPhyMin += m_traits[0] - arme.getphysMin();
+			ecartPhyMin += m_traits.get(Trait.PHYSIQUE) - arme.getphysMin();
 		    }
 		}
 		modDesLances -= arme.getMalusAttaque();
 	    }
 	    modFinal += (ecartPhyMin * 10);
-	    result = effectuerJetComp(1, p_domaine, p_comp, p_ND, modDesLances, modDesGardes, modFinal);
+	    result = effectuerJetComp(Trait.COORDINATION, p_domaine, p_comp, p_ND, modDesLances, modDesGardes, modFinal);
 	}
 	return result;
     }
@@ -722,16 +739,17 @@ public class Perso
      */
     private void initJauges()
     {
-	int traitMin = m_traits[0];
-	for (int i = 1; i < m_traits.length; ++i)
+	int traitMin = m_traits.get(Trait.PHYSIQUE);
+
+	for (Integer i : m_traits.values())
 	{
-	    if (m_traits[i] < traitMin)
+	    if (i < traitMin)
 	    {
-		traitMin = m_traits[i];
+		traitMin = i;
 	    }
 	}
-	m_jaugeFatigueForceDAme = new CoupleJauge(m_traits[0], m_traits[3], traitMin);
-	m_jaugeSanteInit = new CoupleJauge(m_traits[0], m_traits[3], m_traits[2], m_traits[1]);
+	m_jaugeFatigueForceDAme = new CoupleJauge(m_traits.get(Trait.PHYSIQUE), m_traits.get(Trait.VOLONTE), traitMin);
+	m_jaugeSanteInit = new CoupleJauge(m_traits.get(Trait.PHYSIQUE), m_traits.get(Trait.VOLONTE), m_traits.get(Trait.MENTAL), m_traits.get(Trait.COORDINATION));
     }
 
     /**
@@ -741,5 +759,66 @@ public class Perso
     {
 	initJauges();
 	genInit();
+    }
+
+    //enum contenant les différents traits possibles
+    public enum Trait
+    {
+	PHYSIQUE, COORDINATION, VOLONTE, MENTAL, PRESENCE
+    }
+
+    /**
+     * classe utilisée pour encapsuler les résultats d'une attaque réussie ; des
+     * dégâts mais aussi le type. On n'utilise pas de collections clé/valeur
+     * comme une EnumMap car l'on veut juste un accès simple à des champs
+     * définis : inutile de dégrader les performances avec toute la mécanique
+     * des collections.
+     */
+    public static final class Degats
+    {
+
+	/**
+	 * le total des dégâts infligés
+	 */
+	private int m_quantite;
+	/**
+	 * le type d'arme employé
+	 */
+	private int m_typeArme;
+
+	/**
+	 * constructeur de dégâts
+	 *
+	 * @param p_quantite
+	 * @param p_typeArme
+	 */
+	public Degats(int p_quantite, int p_typeArme)
+	{
+	    if (p_quantite >= 0 && p_typeArme >= 0)
+	    {
+		m_quantite = p_quantite;
+		m_typeArme = p_typeArme;
+	    }
+	    else
+	    {
+		ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("degats") + ":" + p_quantite + " " + PropertiesHandler.getInstance("libupsystem").getString("type") + ":" + p_typeArme);
+	    }
+	}
+
+	/**
+	 * @return the m_quantite
+	 */
+	public int getQuantite()
+	{
+	    return m_quantite;
+	}
+
+	/**
+	 * @return the m_typeArme
+	 */
+	public int getTypeArme()
+	{
+	    return m_typeArme;
+	}
     }
 }

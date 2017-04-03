@@ -60,9 +60,9 @@ public class ArmeDist extends Arme
      * @param p_qualite
      * @param p_equilibrage
      */
-    public ArmeDist(int p_indice, QualiteArme p_qualite, EquilibrageArme p_equilibrage)
+    public ArmeDist(int p_indice)
     {
-	super(p_indice, p_qualite, p_equilibrage);
+	super(p_indice);
 
 	UPReferenceArmes reference = UPReferenceArmes.getInstance();
 
@@ -88,29 +88,6 @@ public class ArmeDist extends Arme
 	{
 	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("nbCoups") + ":" + p_nbMun + " " + PropertiesHandler.getInstance("libupsystem").getString("muncourantes") + ":" + m_magasinCourant);
 	}
-    }
-
-    /**
-     * génère les dégâts infligés avec cette arme en combat à distance sous la
-     * forme d'un objet dégâts, le physique n'est pas un facteur ici car on est
-     * à distance
-     *
-     * @param p_nbIncrements
-     * @param p_isSonne
-     * @return
-     */
-    Degats genererDegats(int p_nbIncrements, boolean p_isSonne)
-    {
-	int degatsBruts = 0;
-	if (p_nbIncrements >= 0)
-	{
-	    degatsBruts = (RollUtils.lancer(super.getDesLances() + p_nbIncrements, super.getDesGardes(), p_isSonne));
-	}
-	else
-	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("increments") + ":" + p_nbIncrements);
-	}
-	return new Degats(degatsBruts, super.getTypeArme());
     }
 
     /**

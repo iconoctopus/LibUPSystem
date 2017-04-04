@@ -47,7 +47,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @PrepareForTest(//pour les méthodes statiques c'est la classe appelante qui doit apparaître ici, pour les classes final c'est la classe appelée (donc UPReferenceSysteme n'apparaît ici que pour son caractère final et pas pour sa méthode getInstance()
 
 	{//les classes final, appelant du statique et les classes subissant un whennew
-	    Perso.class, UPReferenceSysteme.class, RollUtils.RollResult.class, Armure.class, Degats.class, CoupleJauge.class, Inventaire.class, ArbreDomaines.class
+	    Perso.class, UPReferenceSysteme.class, RollUtils.RollResult.class, Armure.class, Degats.class, CoupleJauge.class, Inventaire.class, ArbreDomaines.class, ArmeDist.class
 	})
 public class UnitPersoTest
 {
@@ -312,81 +312,12 @@ public class UnitPersoTest
     }
 
     @Test
-    public void testAttaquerDistErreur()
+    public void testAttaquerDist()
     {
-	//On mocke un inventaire contenant un mock d'arme
+	//On mocke un inventaire contenant un mock d'arme ainsi qu'un mock de rapport de distance
 	ArmeDist armeMock = PowerMockito.mock(ArmeDist.class);
-	when(armeMock.getCategorie()).thenReturn(3);
-	when(armeMock.getPortee()).thenReturn(100);
 	when(inventaireMock.getArmeCourante()).thenReturn(armeMock);
-
-	//cas d'erreur : rafale avec arme ayant plusieurs munitions mais incapable de tirer en mode automatique (pistolet)
-	try
-	{
-	    persoRM3.attaquerDist(persoRM3.getActions().get(0), 0, 10, 9);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:nombre de coups:9", e.getMessage());
-	}
-
-	//NOTE : les cas suivants fonctionnent car ces tests sont effectués avant qu'il ne soit vérifié si l'arme peut tirer en rafale, si l'ordre des vérifications change dans le code il faudra modifier le mock
-	//cas d'erreur : portée insufissante entraînant échec auto
-	persoRM3.genInit();
-	Assert.assertFalse(persoRM3.attaquerDist(persoRM3.getActions().get(0), 0, 200, 1).isJetReussi());
-
-	//cas d'erreur : plus de 20 balles
-	persoRM3.genInit();
-	try
-	{
-	    persoRM3.attaquerDist(persoRM3.getActions().get(0), 0, 100, 21);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:distance:100 nombre de coups:21", e.getMessage());
-	}
-
-	//cas d'erreur : nb de balles nul
-	persoRM3.genInit();
-	try
-	{
-	    persoRM3.attaquerDist(persoRM3.getActions().get(0), 0, 0, 0);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:distance:0 nombre de coups:0", e.getMessage());
-	}
-
-	//cas d'erreur : distance négative
-	persoRM3.genInit();
-	try
-	{
-	    persoRM3.attaquerDist(persoRM3.getActions().get(0), 0, -1, 1);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:distance:-1 nombre de coups:1", e.getMessage());
-	}
-
-	//cas d'erreur : hors portée donc échec auto
-	persoRM3.genInit();
-	Assert.assertFalse(persoRM3.attaquerDist(persoRM3.getActions().get(0), 0, 150, 1).isJetReussi());
-    }
-
-    @Test
-    public void testAttaquerDistNominal()
-    {
-	//On mocke un inventaire contenant un mock d'arme capable de tirer en mode automatique
-	ArmeDist armeMock = PowerMockito.mock(ArmeDist.class);
-	when(armeMock.getCategorie()).thenReturn(4);
-	when(armeMock.getPortee()).thenReturn(100);
-	when(armeMock.getMalusCourt()).thenReturn(-5);
-	when(armeMock.getMalusLong()).thenReturn(10);
-	when(inventaireMock.getArmeCourante()).thenReturn(armeMock);
+	ArmeDist.DistReport reportMock = PowerMockito.mock(ArmeDist.DistReport.class);
 
 	//On mocke le isSonne() des deux jauges
 	when(santeInitRM3.isSonne()).thenReturn(false);
@@ -398,34 +329,34 @@ public class UnitPersoTest
 	when(resultMock.getNbIncrements()).thenReturn(1);
 	when(resultMock.isJetReussi()).thenReturn(true);
 	when(resultMock.getScoreBrut()).thenReturn(22);
-	when(arbreMock.effectuerJetComp(3, 4, 4, 50, 0, 0, +5, false)).thenReturn(resultMock);
+	when(arbreMock.effectuerJetComp(3, 4, 0, 50, -2, 0, -15, false)).thenReturn(resultMock);
 
-	//Cas coup par coup, portée courte (pile la moitié pour vérifier l'arrondi et le "inférieur ou égal"
-	RollUtils.RollResult resultat = persoRM3.attaquerDist(persoRM3.getActions().get(0), 50, 20, 1);
+	//nombre aberrant de coups (17) mais traité comme coup par coup (juste là pour vérifier le bon passage des arguments), physique minimal dépassé, malus au jet d'attaque
+	when(armeMock.getphysMin()).thenReturn(5);
+	when(armeMock.getMalusAttaque()).thenReturn(2);
+	when(armeMock.verifPreAttaque(20, 17)).thenReturn(reportMock);
+	when(reportMock.isEchecAuto()).thenReturn(false);
+	when(reportMock.getModDesGardes()).thenReturn(0);
+	when(reportMock.getModDesLances()).thenReturn(0);
+	when(reportMock.getModJet()).thenReturn(+5);
+	RollUtils.RollResult resultat = persoRM3.attaquerDist(persoRM3.getActions().get(0), 50, 20, 17);//cas limite important : l'arme est de catégorie 0 mais elle n'est pas "mains nues" car elle est à distance, les vérifications de "mains nues" doivent ne pas pêter
 
+	verify(armeMock).verifPreAttaque(20, 17);
+	verify(reportMock).isEchecAuto();
+	verify(reportMock).getModDesGardes();
+	verify(reportMock).getModDesLances();
+	verify(reportMock).getModJet();
+	verify(arbreMock).effectuerJetComp(3, 4, 0, 50, -2, 0, -15, false);//+5 pour portée courte et -20 pour défaut de physique
 	Assert.assertEquals(1, resultat.getNbIncrements());
 	Assert.assertEquals(22, resultat.getScoreBrut());
 	Assert.assertEquals(true, resultat.isJetReussi());
-	verify(arbreMock).effectuerJetComp(3, 4, 4, 50, 0, 0, +5, false);
 
-	//On ne teste plus les retours : on sait qu'il fonctionne
-	//Cas rafale courte, portée longue (juste 1 au dessus de la moitié)
-	persoRM3.genInit();
-	persoRM3.attaquerDist(persoRM3.getActions().get(0), 20, 51, 3);
-	verify(arbreMock).effectuerJetComp(3, 4, 4, 20, 2, 0, -10, false);
-
-	//Cas rafale moyenne (8 coups donc 2 tranches entières de 6), portée courte
-	persoRM3.genInit();
-	persoRM3.attaquerDist(persoRM3.getActions().get(0), 12, 25, 8);
-	verify(arbreMock).effectuerJetComp(3, 4, 4, 12, 4, 0, +5, false);
-
-	//Cas rafale longue(19 coups donc 3 tranches entières de 5), portée longue, physique minimal dépassé, malus au jet d'attaque
-	when(armeMock.getphysMin()).thenReturn(5);
-	when(armeMock.getMalusAttaque()).thenReturn(2);
-
-	persoRM3.genInit();
-	persoRM3.attaquerDist(persoRM3.getActions().get(0), 17, 75, 19);
-	verify(arbreMock).effectuerJetComp(3, 4, 4, 17, 1, 3, -30, false);
+	//cas de l'échec auto, toutes choses étant égales par ailleurs
+	when(reportMock.isEchecAuto()).thenReturn(true);
+	resultat = persoRM3.attaquerDist(persoRM3.getActions().get(1), 50, 20, 17);
+	Assert.assertEquals(0, resultat.getNbIncrements());
+	Assert.assertEquals(0, resultat.getScoreBrut());
+	Assert.assertEquals(false, resultat.isJetReussi());
     }
 
     @Test

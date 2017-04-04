@@ -173,7 +173,7 @@ public class UnitDomaineTest
 	//cas d'erreur sur paramétre de compétence
 	try
 	{
-	    domaine.effectuerJetComp(-1, 1, 0, 0, 0, 0, false);
+	    domaine.effectuerJetComp(1, -1, 0, 0, 0, 0, false);
 	    fail();
 	}
 	catch (IllegalArgumentException e)
@@ -184,7 +184,7 @@ public class UnitDomaineTest
 	//cas d'erreur sur paramétre de trait
 	try
 	{
-	    domaine.effectuerJetComp(1, -1, 0, 0, 0, 0, false);
+	    domaine.effectuerJetComp(-1, 1, 0, 0, 0, 0, false);
 	    fail();
 	}
 	catch (IllegalArgumentException e)

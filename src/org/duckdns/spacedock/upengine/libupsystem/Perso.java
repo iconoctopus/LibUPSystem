@@ -225,63 +225,14 @@ public class Perso
      * @return
      */
     public RollResult attaquerDist(int p_phaseActuelle, int p_ND, int p_distance, int p_nbCoups)
-    {//TODO déplacer l'esentiel de ce code dans ArmeDist (ce n'est pas au perso d'embarquer la logique de traitement du combat a distance ou de veiller à consommer les muns) via une méthode renvoyant un objet de com dédié avec les modificateurs afférents
+    {
 	RollResult result = new RollResult(0, false, 0);//raté par défaut
 	ArmeDist arme = (ArmeDist) m_inventaire.getArmeCourante();
-	int modDist = 0;
-	if (p_distance >= 0 && p_nbCoups > 0 && p_nbCoups <= 20)
-	{
-	    arme.consommerMun(p_nbCoups);//on consomme les coups, une exception sera levée si il n'y a pas assez de munitions, le code appelant devrait vérifier systématiquement cela
-	    if (p_distance <= arme.getPortee())//échec auto si distance > portée
-	    {
-		if (p_distance <= (int) Math.round((double) arme.getPortee() / (double) 2))
-		{//portée courte
-		    modDist -= arme.getMalusCourt();
-		}
-		else
-		{//portée longue
-		    modDist -= arme.getMalusLong();
-		}
-		//tir effectif, maintenant il faut calculer l'éventuel bonus de rafale
-		int bonusDesLancesRafale = 0;
-		int bonusDesGardesRafale = 0;
 
-		if (p_nbCoups > 1)
-		{
-		    if (arme.getCategorie() == 4)//rafales acceptées, sinon lever une exception
-		    {
-			if (p_nbCoups >= 3)//les bonus commmencent à partir de 3 balles
-			{
-			    if (p_nbCoups < 4)//rafale courte
-			    {
-				bonusDesLancesRafale = 2;
-			    }
-			    else
-			    {
-				if (p_nbCoups < 10)//rafale moyenne
-				{
-				    int preResult = (p_nbCoups / 3);//division entre int donc troncature
-				    bonusDesLancesRafale = preResult * 2;
-				}
-				else//rafale longue
-				{
-				    bonusDesLancesRafale = bonusDesGardesRafale = (p_nbCoups / 5);//division entre int donc troncature
-				}
-			    }
-			}
-		    }
-		    else
-		    {
-			ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("nbCoups") + ":" + p_nbCoups);
-		    }
-
-		}
-		result = effectuerAttaque(p_phaseActuelle, p_ND, arme.getCategorie(), 4, bonusDesLancesRafale, bonusDesGardesRafale, modDist);
-	    }
-	}
-	else
+	ArmeDist.DistReport report = arme.verifPreAttaque(p_distance, p_nbCoups);
+	if (!report.isEchecAuto())//on n'est pas en situation d'échec automatique
 	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("distance") + ":" + p_distance + " " + PropertiesHandler.getInstance("libupsystem").getString("nbCoups") + ":" + p_nbCoups);
+	    result = effectuerAttaque(p_phaseActuelle, p_ND, arme.getCategorie(), 4, report.getModDesLances(), report.getModDesGardes(), report.getModJet());
 	}
 	return result;
     }
@@ -291,18 +242,18 @@ public class Perso
      * en interne par les méthodes d'attaque qui effectuent les pré-traitements
      * pour aboutir aux caractéristiques finales du jet.
      *
-     * @param p_trait id du trait à utiliser (pas la valeur!)
+     * @param p_idTrait id du trait à utiliser (pas la valeur!)
      * @param p_ND
-     * @param p_comp
-     * @param p_domaine
+     * @param p_indComp
+     * @param p_indDomaine
      * @param p_modifNbLances
      * @param p_modifNbGardes
      * @param p_modifScore
      * @return le résultat du jet
      */
-    public final RollUtils.RollResult effectuerJetComp(Trait p_trait, int p_domaine, int p_comp, int p_ND, int p_modifNbLances, int p_modifNbGardes, int p_modifScore)
+    public final RollUtils.RollResult effectuerJetComp(Trait p_idTrait, int p_indDomaine, int p_indComp, int p_ND, int p_modifNbLances, int p_modifNbGardes, int p_modifScore)
     {
-	return m_arbreDomaines.effectuerJetComp(m_traits.get(p_trait), p_domaine, p_comp, p_ND, p_modifNbLances, p_modifNbGardes, p_modifScore, isSonne());
+	return m_arbreDomaines.effectuerJetComp(m_traits.get(p_idTrait), p_indDomaine, p_indComp, p_ND, p_modifNbLances, p_modifNbGardes, p_modifScore, isSonne());
     }
 
     /**
@@ -717,7 +668,7 @@ public class Perso
 
 	    Arme arme = m_inventaire.getArmeCourante();
 
-	    if (p_comp != 0)//on utilise une arme, il faut prendre en compte ses éventuels malus
+	    if (p_domaine != 3 || p_domaine == 3 && p_comp != 0)//on utilise une arme, il faut prendre en compte ses éventuels malus
 	    {
 		{
 		    if (arme.getphysMin() > m_traits.get(Trait.PHYSIQUE))

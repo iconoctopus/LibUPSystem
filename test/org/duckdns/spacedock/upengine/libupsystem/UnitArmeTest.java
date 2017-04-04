@@ -18,6 +18,7 @@ package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.util.EnumMap;
 import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -114,14 +115,30 @@ public class UnitArmeTest
 
 	when(referenceMock.getMalusCourtArme(34)).thenReturn(5);
 	when(referenceMock.getMalusLongArme(34)).thenReturn(10);
-	when(referenceMock.getMagasinArme(34)).thenReturn(1);
+	when(referenceMock.getMagasinArme(34)).thenReturn(3);
 	when(referenceMock.getNbActionsRechargeArme(34)).thenReturn(1);
 	when(referenceMock.getPorteeArme(34)).thenReturn(150);
 
 	arme5 = new ArmeDist(34, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal);
 	arme6 = new ArmeDist(34, Arme.QualiteArme.inferieure, Arme.EquilibrageArme.bon);
 	arme7 = new ArmeDist(34, Arme.QualiteArme.superieure, Arme.EquilibrageArme.mauvais);
-	arme8 = new ArmeDist(34, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais);
+
+	when(referenceMock.getVDArme(512)).thenReturn(5);
+	when(referenceMock.getBonusInitArme(512)).thenReturn(2);
+	when(referenceMock.getCategorieArme(512)).thenReturn(4);
+	when(referenceMock.getTypeArme(512)).thenReturn(2);
+	when(referenceMock.getMalusAttaqueArme(512)).thenReturn(1);
+	when(referenceMock.getPhysMinArme(512)).thenReturn(3);
+	when(referenceMock.getNbMainsArme(512)).thenReturn(1);
+	when(referenceMock.getModArme(512)).thenReturn(1);
+	when(referenceMock.getLblArme(512)).thenReturn("SupaShooter");
+
+	when(referenceMock.getMalusCourtArme(512)).thenReturn(5);
+	when(referenceMock.getMalusLongArme(512)).thenReturn(10);
+	when(referenceMock.getMagasinArme(512)).thenReturn(19);
+	when(referenceMock.getNbActionsRechargeArme(512)).thenReturn(1);
+	when(referenceMock.getPorteeArme(512)).thenReturn(50);
+	arme8 = new ArmeDist(512, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais);
     }
 
     @Test
@@ -134,7 +151,7 @@ public class UnitArmeTest
 	Assert.assertEquals(0, arme5.getBonusInit());
 	Assert.assertEquals(0, arme6.getBonusInit());
 	Assert.assertEquals(0, arme7.getBonusInit());
-	Assert.assertEquals(0, arme8.getBonusInit());
+	Assert.assertEquals(2, arme8.getBonusInit());
     }
 
     @Test
@@ -147,7 +164,7 @@ public class UnitArmeTest
 	Assert.assertEquals(0, arme5.getCategorie());
 	Assert.assertEquals(0, arme6.getCategorie());
 	Assert.assertEquals(0, arme7.getCategorie());
-	Assert.assertEquals(0, arme8.getCategorie());
+	Assert.assertEquals(4, arme8.getCategorie());
     }
 
     @Test
@@ -160,7 +177,7 @@ public class UnitArmeTest
 	Assert.assertEquals(3, arme5.getVD());
 	Assert.assertEquals(3, arme6.getVD());
 	Assert.assertEquals(3, arme7.getVD());
-	Assert.assertEquals(3, arme8.getVD());
+	Assert.assertEquals(5, arme8.getVD());
     }
 
     @Test
@@ -173,7 +190,7 @@ public class UnitArmeTest
 	Assert.assertEquals(0, arme5.getMalusAttaque());
 	Assert.assertEquals(0, arme6.getMalusAttaque());
 	Assert.assertEquals(0, arme7.getMalusAttaque());
-	Assert.assertEquals(0, arme8.getMalusAttaque());
+	Assert.assertEquals(1, arme8.getMalusAttaque());
     }
 
     @Test
@@ -186,7 +203,7 @@ public class UnitArmeTest
 	Assert.assertEquals(0, arme5.getTypeArme());
 	Assert.assertEquals(0, arme6.getTypeArme());
 	Assert.assertEquals(0, arme7.getTypeArme());
-	Assert.assertEquals(0, arme8.getTypeArme());
+	Assert.assertEquals(2, arme8.getTypeArme());
     }
 
     @Test
@@ -199,7 +216,7 @@ public class UnitArmeTest
 	Assert.assertEquals(0, arme5.getphysMin());
 	Assert.assertEquals(0, arme6.getphysMin());
 	Assert.assertEquals(0, arme7.getphysMin());
-	Assert.assertEquals(0, arme8.getphysMin());
+	Assert.assertEquals(3, arme8.getphysMin());
     }
 
     @Test
@@ -225,7 +242,7 @@ public class UnitArmeTest
 	Assert.assertEquals("arc de qualité moyenne et équilibrage normal", arme5.toString());
 	Assert.assertEquals("arc de qualité inférieure et équilibrage bon", arme6.toString());
 	Assert.assertEquals("arc de qualité supérieure et équilibrage mauvais", arme7.toString());
-	Assert.assertEquals("arc de maître", arme8.toString());
+	Assert.assertEquals("SupaShooter de maître", arme8.toString());
     }
 
     @Test
@@ -234,30 +251,30 @@ public class UnitArmeTest
 	Assert.assertEquals(5, arme5.getMalusCourt());
 	Assert.assertEquals(10, arme5.getMalusLong());
 	Assert.assertEquals(0, arme5.getMunCourantes());
-	Assert.assertEquals(1, arme5.getTailleMAgasin());
+	Assert.assertEquals(3, arme5.getTailleMAgasin());
 	Assert.assertEquals(1, arme5.getNbActionsRecharge());
 	Assert.assertEquals(150, arme5.getPortee());
 
 	Assert.assertEquals(8, arme6.getMalusCourt());
 	Assert.assertEquals(13, arme6.getMalusLong());
 	Assert.assertEquals(0, arme6.getMunCourantes());
-	Assert.assertEquals(1, arme6.getTailleMAgasin());
+	Assert.assertEquals(3, arme6.getTailleMAgasin());
 	Assert.assertEquals(1, arme6.getNbActionsRecharge());
 	Assert.assertEquals(300, arme6.getPortee());
 
 	Assert.assertEquals(2, arme7.getMalusCourt());
 	Assert.assertEquals(7, arme7.getMalusLong());
 	Assert.assertEquals(0, arme7.getMunCourantes());
-	Assert.assertEquals(1, arme7.getTailleMAgasin());
+	Assert.assertEquals(3, arme7.getTailleMAgasin());
 	Assert.assertEquals(1, arme7.getNbActionsRecharge());
 	Assert.assertEquals(75, arme7.getPortee());
 
 	Assert.assertEquals(-1, arme8.getMalusCourt());
 	Assert.assertEquals(4, arme8.getMalusLong());
 	Assert.assertEquals(0, arme8.getMunCourantes());
-	Assert.assertEquals(1, arme8.getTailleMAgasin());
+	Assert.assertEquals(19, arme8.getTailleMAgasin());
 	Assert.assertEquals(1, arme8.getNbActionsRecharge());
-	Assert.assertEquals(300, arme8.getPortee());
+	Assert.assertEquals(100, arme8.getPortee());
     }
 
     @Test
@@ -266,12 +283,12 @@ public class UnitArmeTest
 	//On recharge trop
 	try
 	{
-	    arme5.recharger(2);
+	    arme5.recharger(4);
 	    fail();
 	}
 	catch (IllegalArgumentException e)
 	{
-	    Assert.assertEquals("paramétre aberrant:nombre de coups:2 taille du magasin:1", e.getMessage());
+	    Assert.assertEquals("paramétre aberrant:nombre de coups:4 taille du magasin:3", e.getMessage());
 	}
 
 	//On consomme à vide
@@ -289,8 +306,100 @@ public class UnitArmeTest
     @Test
     public void testGestionMunitionsNominal()
     {
-	Assert.assertEquals(1, arme5.recharger(1));
+	Assert.assertEquals(1, arme5.recharger(2));
+	arme5.consommerMun(1);
+	Assert.assertEquals(1, arme5.getMunCourantes());
 	arme5.consommerMun(1);
 	Assert.assertEquals(0, arme5.getMunCourantes());
+    }
+
+    @Test
+    public void testVerifPreAttaqueErreur()
+    {
+	arme8.recharger(19);
+	arme5.recharger(3);
+	//cas d'erreur : rafale avec arme ayant plusieurs munitions mais incapable de tirer en mode automatique (pistolet)
+	try
+	{
+	    arme5.verifPreAttaque(10, 3);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:nombre de coups:3", e.getMessage());
+	}
+	arme5.consommerMun(3);
+
+	//cas d'erreur : portée insufissante entraînant échec auto
+	Assert.assertTrue(arme8.verifPreAttaque(200, 10).isEchecAuto());
+	assertEquals(9, arme8.getMunCourantes());//on vérifie que bien qu'il y ait eu échec auto, l'attaque hors portée ne soit pas annulée et les munitions bien consommées
+	arme8.recharger(10);//on remplit les munitions consommées
+
+	//cas d'erreur : plus de 20 balles
+	try
+	{
+	    arme8.verifPreAttaque(100, 21);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:distance:100 nombre de coups:21", e.getMessage());
+	}
+
+	//cas d'erreur : nb de balles nul
+	try
+	{
+	    arme8.verifPreAttaque(0, 0);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:distance:0 nombre de coups:0", e.getMessage());
+	}
+
+	//cas d'erreur : distance négative
+	try
+	{
+	    arme8.verifPreAttaque(-1, 1);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:distance:-1 nombre de coups:1", e.getMessage());
+	}
+	arme8.consommerMun(19);//on consomme toutes les munitions rechargées pour se retrouver en état nominal
+    }
+
+    @Test
+    public void testVerifdistNominal()
+    {
+	arme8.recharger(19);
+
+	//Cas coup par coup, portée courte (pile la moitié pour vérifier l'arrondi et le "inférieur ou égal", physique minimal dépassé, malus au jet d'attaque
+	ArmeDist.DistReport report = arme8.verifPreAttaque(50, 1);
+	assertEquals(1, report.getModJet());
+	assertEquals(0, report.getModDesGardes());
+	assertEquals(0, report.getModDesLances());
+	arme8.recharger(1);
+
+	//Cas rafale courte, portée longue (juste 1 au dessus de la moitié)
+	report = arme8.verifPreAttaque(51, 3);
+	assertEquals(-4, report.getModJet());
+	assertEquals(0, report.getModDesGardes());
+	assertEquals(2, report.getModDesLances());
+	arme8.recharger(3);
+
+	//Cas rafale moyenne (8 coups donc 2 tranches entières de 3), portée courte
+	report = arme8.verifPreAttaque(25, 8);
+	assertEquals(1, report.getModJet());
+	assertEquals(0, report.getModDesGardes());
+	assertEquals(4, report.getModDesLances());
+	arme8.recharger(8);
+
+	//Cas rafale longue(19 coups donc 3 tranches entières de 5), portée longue
+	report = arme8.verifPreAttaque(75, 19);
+	assertEquals(-4, report.getModJet());
+	assertEquals(3, report.getModDesGardes());
+	assertEquals(3, report.getModDesLances());
     }
 }

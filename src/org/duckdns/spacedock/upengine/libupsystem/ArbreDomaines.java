@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 ykonoclast
  *
  * This program is free software: you can redistribute it and/or modify
@@ -98,9 +98,9 @@ public class ArbreDomaines
 
     /**
      *
-     * @param p_domaine
-     * @param p_comp
-     * @param p_trait
+     * @param p_indDomaine l'INDEX de la comp
+     * @param p_indComp l'INDEX de la comp
+     * @param p_rangTrait le RANG du trait
      * @param p_nd
      * @param p_modifNbDesLances
      * @param p_modifNbDesGardes
@@ -108,9 +108,9 @@ public class ArbreDomaines
      * @param p_isSonne
      * @return
      */
-    RollUtils.RollResult effectuerJetComp(int p_trait, int p_domaine, int p_comp, int p_nd, int p_modifNbDesLances, int p_modifNbDesGardes, int p_modifScore, boolean p_isSonne)
+    RollUtils.RollResult effectuerJetComp(int p_rangTrait, int p_indDomaine, int p_indComp, int p_nd, int p_modifNbDesLances, int p_modifNbDesGardes, int p_modifScore, boolean p_isSonne)
     {
-	return m_listDomaines.get(p_domaine).effectuerJetComp(p_comp, p_trait, p_nd, p_modifNbDesLances, p_modifNbDesGardes, p_modifScore, p_isSonne);
+	return m_listDomaines.get(p_indDomaine).effectuerJetComp(p_rangTrait, p_indComp, p_nd, p_modifNbDesLances, p_modifNbDesGardes, p_modifScore, p_isSonne);
     }
 
     /**

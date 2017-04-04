@@ -143,8 +143,8 @@ class Domaine
     /**
      * effectue le jet de l'une des compétences du domaine
      *
-     * @param p_comp
-     * @param p_trait
+     * @param p_indComp
+     * @param p_rangTrait
      * @param p_nd
      * @param p_modifNbDesLances
      * @param p_modifNbDesGardes
@@ -152,20 +152,20 @@ class Domaine
      * @param p_isSonne
      * @return
      */
-    RollUtils.RollResult effectuerJetComp(int p_comp, int p_trait, int p_nd, int p_modifNbDesLances, int p_modifNbDesGardes, int p_modifScore, boolean p_isSonne)
+    RollUtils.RollResult effectuerJetComp(int p_rangTrait, int p_indComp, int p_nd, int p_modifNbDesLances, int p_modifNbDesGardes, int p_modifScore, boolean p_isSonne)
     {
 	int result = 0;
 
-	if (getRang() > 0 && p_comp >= 0 && p_trait >= 0)
+	if (getRang() > 0 && p_indComp >= 0 && p_rangTrait >= 0)
 	{
-	    int comp = m_competences.get(p_comp).getRang();
+	    int comp = m_competences.get(p_indComp).getRang();
 
 	    int bonus = p_modifScore;
 	    int lances = getRang() + comp + p_modifNbDesLances;
-	    int gardes = p_trait + p_modifNbDesGardes;
+	    int gardes = p_rangTrait + p_modifNbDesGardes;
 	    if (lances > 0)
 	    {
-		if (p_trait > 0)
+		if (p_rangTrait > 0)
 		{
 		    /*if(specialite)
 		{
@@ -190,9 +190,9 @@ class Domaine
 	{
 	    String message = "";
 
-	    message = message.concat(PropertiesHandler.getInstance("libupsystem").getString("trait") + ":" + p_trait);
+	    message = message.concat(PropertiesHandler.getInstance("libupsystem").getString("trait") + ":" + p_rangTrait);
 	    message = message.concat(" " + PropertiesHandler.getInstance("libupsystem").getString("dom") + ":" + getRang());
-	    message = message.concat(" " + PropertiesHandler.getInstance("commonutils").getString("indice") + " " + PropertiesHandler.getInstance("libupsystem").getString("comp") + ":" + p_comp);
+	    message = message.concat(" " + PropertiesHandler.getInstance("commonutils").getString("indice") + " " + PropertiesHandler.getInstance("libupsystem").getString("comp") + ":" + p_indComp);
 	    ErrorHandler.paramAberrant(message);
 	}
 	return RollUtils.extraireIncrements(result, p_nd);

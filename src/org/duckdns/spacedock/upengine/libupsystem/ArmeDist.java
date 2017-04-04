@@ -60,15 +60,47 @@ public class ArmeDist extends Arme
      * @param p_qualite
      * @param p_equilibrage
      */
-    public ArmeDist(int p_indice)
+    public ArmeDist(int p_indice, QualiteArme p_qualite, EquilibrageArme p_equilibrage)
     {
-	super(p_indice);
-
+	super(p_indice, p_qualite, p_equilibrage);
 	UPReferenceArmes reference = UPReferenceArmes.getInstance();
+	int modifMalus;
+	int porteeEffective = reference.getPorteeArme(p_indice);
 
-	m_malusCourt = reference.getMalusCourtArme(p_indice);
-	m_malusLong = reference.getMalusLongArme(p_indice);
-	m_portee = reference.getPorteeArme(p_indice);
+	if (p_qualite == QualiteArme.maitre)//traitement spécial des armes de maître
+	{
+	    modifMalus = -6;
+	    porteeEffective = porteeEffective * 2;
+	}
+	else
+	{
+	    switch (p_qualite)
+	    {
+		case inferieure:
+		    modifMalus = +3;
+		    break;
+		case superieure:
+		    modifMalus = -3;
+		    break;
+		default:
+		    modifMalus = 0;
+		    break;
+	    }
+	    switch (p_equilibrage)
+	    {
+		case mauvais:
+		    porteeEffective = porteeEffective / 2;
+		    break;
+		case bon:
+		    porteeEffective = porteeEffective * 2;
+		    break;
+		default:
+		    break;
+	    }
+	}
+	m_malusCourt = reference.getMalusCourtArme(p_indice) + modifMalus;//ainsi que modifié par la qualité
+	m_malusLong = reference.getMalusLongArme(p_indice) + modifMalus;//ainsi que modifié par la qualité
+	m_portee = porteeEffective;//ainsi que modifiée par l'équilibrage et la qualité
 	m_nbActionsRecharge = reference.getNbActionsRechargeArme(p_indice);
 	m_magasinMax = reference.getMagasinArme(p_indice);
 	m_magasinCourant = 0;//par défaut l'arme n'est pas chargée

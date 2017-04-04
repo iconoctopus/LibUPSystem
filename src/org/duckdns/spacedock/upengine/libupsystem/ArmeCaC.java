@@ -26,6 +26,9 @@ import org.duckdns.spacedock.commonutils.PropertiesHandler;
 public class ArmeCaC extends Arme
 {
 
+    private final int m_bonusVDSup;
+    private final int m_bonusInitSup;
+
     /**
      * constructeur identique à celui de la superclasse
      *
@@ -35,63 +38,61 @@ public class ArmeCaC extends Arme
      */
     public ArmeCaC(int p_indice, QualiteArme p_qualite, EquilibrageArme p_equilibrage)
     {
-	super(p_indice);
-	int bonusVD = 0;
-	int bonusInitSup = 0;
-	UPReferenceSysteme referenceSys = UPReferenceSysteme.getInstance();
-	UPReferenceArmes referenceArm = UPReferenceArmes.getInstance();
-	m_nom = m_nom.concat(" ");
-	//récupération des éléments liés à la qualité et l'équilibrage de l'arme
+	super(p_indice, p_qualite, p_equilibrage);
+
 	if (p_qualite == QualiteArme.maitre)//traitement spécial des armes de maître
 	{
-	    m_nom = m_nom.concat((String) referenceArm.getListQualiteArme().get(QualiteArme.maitre));
-	    bonusVD = bonusVD + 6;
-	    ++bonusInitSup;
+	    m_bonusVDSup = 6;
+	    m_bonusInitSup = +1;
 	}
 	else
 	{
-	    m_nom = m_nom.concat(referenceSys.getCollectionLibelles().liaison);
-	    m_nom = m_nom.concat(" ");
-	    m_nom = m_nom.concat(referenceSys.getCollectionLibelles().qualite);
-	    m_nom = m_nom.concat(" ");
-
 	    switch (p_qualite)
 	    {
 		case inferieure:
-		    bonusVD = bonusVD - 3;
-		    m_nom = m_nom.concat((String) referenceArm.getListQualiteArme().get(QualiteArme.inferieure));
-		    break;
-		case moyenne:
-		    m_nom = m_nom.concat((String) referenceArm.getListQualiteArme().get(QualiteArme.moyenne));
+		    m_bonusVDSup = - 3;
 		    break;
 		case superieure:
-		    bonusVD = bonusVD + 3;
-		    m_nom = m_nom.concat((String) referenceArm.getListQualiteArme().get(QualiteArme.superieure));
+		    m_bonusVDSup = +3;
+		    break;
+		default:
+		    m_bonusVDSup = 0;
 		    break;
 	    }
-
-	    m_nom = m_nom.concat(" ");
-	    m_nom = m_nom.concat(referenceSys.getCollectionLibelles().addition);
-	    m_nom = m_nom.concat(" ");
-	    m_nom = m_nom.concat(referenceSys.getCollectionLibelles().equilibrage);
-	    m_nom = m_nom.concat(" ");
-
 	    switch (p_equilibrage)
 	    {
 		case mauvais:
-		    bonusInitSup = -1;
-		    m_nom = m_nom.concat((String) referenceArm.getListEquilibrage().get(EquilibrageArme.mauvais));
-		    break;
-		case normal:
-		    m_nom = m_nom.concat((String) referenceArm.getListEquilibrage().get(EquilibrageArme.normal));
+		    m_bonusInitSup = -1;
 		    break;
 		case bon:
-		    bonusInitSup = +1;
-		    m_nom = m_nom.concat((String) referenceArm.getListEquilibrage().get(EquilibrageArme.bon));
+		    m_bonusInitSup = +1;
+		    break;
+		default:
+		    m_bonusInitSup = 0;
 		    break;
 	    }
 	}
-	m_bonusInit += bonusInitSup;
-	m_vd += bonusVD;
+    }
+
+    /**
+     *
+     * @return la valeur de dégâts modifiée par les valeurs d'équilibrage et de
+     * qualité
+     */
+    @Override
+    public int getVD()
+    {
+	return super.getVD() + m_bonusVDSup;
+    }
+
+    /**
+     *
+     * @return le bonus d'init modifié par les valeurs d'équilibrage et de
+     * qualité
+     */
+    @Override
+    public int getBonusInit()
+    {
+	return super.getBonusInit() + m_bonusInitSup;
     }
 }

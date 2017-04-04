@@ -50,7 +50,11 @@ public class UnitArmeTest
     private static ArmeCaC arme1;
     private static ArmeCaC arme2;
     private static ArmeCaC arme3;
-    private static ArmeDist arme4;
+    private static ArmeCaC arme4;
+    private static ArmeDist arme5;
+    private static ArmeDist arme6;
+    private static ArmeDist arme7;
+    private static ArmeDist arme8;
     private static UPReferenceArmes referenceMock;
     private static EnumMap<Arme.QualiteArme, String> listQualite;
     private static EnumMap<Arme.EquilibrageArme, String> listEquilibrage;
@@ -77,7 +81,7 @@ public class UnitArmeTest
 	when(referenceMock.getVDArme(3)).thenReturn(2);
 	when(referenceMock.getBonusInitArme(3)).thenReturn(1);
 	when(referenceMock.getCategorieArme(3)).thenReturn(1);
-	when(referenceMock.getTypeArme(3)).thenReturn(0);
+	when(referenceMock.getTypeArme(3)).thenReturn(4);
 	when(referenceMock.getMalusAttaqueArme(3)).thenReturn(0);
 	when(referenceMock.getPhysMinArme(3)).thenReturn(0);
 	when(referenceMock.getNbMainsArme(3)).thenReturn(1);
@@ -96,6 +100,7 @@ public class UnitArmeTest
 	when(referenceMock.getLblArme(10)).thenReturn("hache d'arme");
 	arme2 = new ArmeCaC(10, Arme.QualiteArme.inferieure, Arme.EquilibrageArme.bon);
 	arme3 = new ArmeCaC(10, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais);
+	arme4 = new ArmeCaC(10, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal);
 
 	when(referenceMock.getVDArme(34)).thenReturn(3);
 	when(referenceMock.getBonusInitArme(34)).thenReturn(0);
@@ -113,7 +118,10 @@ public class UnitArmeTest
 	when(referenceMock.getNbActionsRechargeArme(34)).thenReturn(1);
 	when(referenceMock.getPorteeArme(34)).thenReturn(150);
 
-	arme4 = new ArmeDist(34);
+	arme5 = new ArmeDist(34, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal);
+	arme6 = new ArmeDist(34, Arme.QualiteArme.inferieure, Arme.EquilibrageArme.bon);
+	arme7 = new ArmeDist(34, Arme.QualiteArme.superieure, Arme.EquilibrageArme.mauvais);
+	arme8 = new ArmeDist(34, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais);
     }
 
     @Test
@@ -123,6 +131,10 @@ public class UnitArmeTest
 	Assert.assertEquals(1, arme2.getBonusInit());
 	Assert.assertEquals(1, arme3.getBonusInit());
 	Assert.assertEquals(0, arme4.getBonusInit());
+	Assert.assertEquals(0, arme5.getBonusInit());
+	Assert.assertEquals(0, arme6.getBonusInit());
+	Assert.assertEquals(0, arme7.getBonusInit());
+	Assert.assertEquals(0, arme8.getBonusInit());
     }
 
     @Test
@@ -131,7 +143,11 @@ public class UnitArmeTest
 	Assert.assertEquals(1, arme1.getCategorie());
 	Assert.assertEquals(3, arme2.getCategorie());
 	Assert.assertEquals(3, arme3.getCategorie());
-	Assert.assertEquals(0, arme4.getCategorie());
+	Assert.assertEquals(3, arme4.getCategorie());
+	Assert.assertEquals(0, arme5.getCategorie());
+	Assert.assertEquals(0, arme6.getCategorie());
+	Assert.assertEquals(0, arme7.getCategorie());
+	Assert.assertEquals(0, arme8.getCategorie());
     }
 
     @Test
@@ -140,7 +156,11 @@ public class UnitArmeTest
 	Assert.assertEquals(5, arme1.getVD());
 	Assert.assertEquals(3, arme2.getVD());
 	Assert.assertEquals(12, arme3.getVD());
-	Assert.assertEquals(3, arme4.getVD());
+	Assert.assertEquals(6, arme4.getVD());
+	Assert.assertEquals(3, arme5.getVD());
+	Assert.assertEquals(3, arme6.getVD());
+	Assert.assertEquals(3, arme7.getVD());
+	Assert.assertEquals(3, arme8.getVD());
     }
 
     @Test
@@ -149,16 +169,24 @@ public class UnitArmeTest
 	Assert.assertEquals(0, arme1.getMalusAttaque());
 	Assert.assertEquals(1, arme2.getMalusAttaque());
 	Assert.assertEquals(1, arme3.getMalusAttaque());
-	Assert.assertEquals(0, arme4.getMalusAttaque());
+	Assert.assertEquals(1, arme4.getMalusAttaque());
+	Assert.assertEquals(0, arme5.getMalusAttaque());
+	Assert.assertEquals(0, arme6.getMalusAttaque());
+	Assert.assertEquals(0, arme7.getMalusAttaque());
+	Assert.assertEquals(0, arme8.getMalusAttaque());
     }
 
     @Test
     public void testTypeArme()
     {
-	Assert.assertEquals(0, arme1.getTypeArme());
+	Assert.assertEquals(4, arme1.getTypeArme());
 	Assert.assertEquals(0, arme2.getTypeArme());
 	Assert.assertEquals(0, arme3.getTypeArme());
 	Assert.assertEquals(0, arme4.getTypeArme());
+	Assert.assertEquals(0, arme5.getTypeArme());
+	Assert.assertEquals(0, arme6.getTypeArme());
+	Assert.assertEquals(0, arme7.getTypeArme());
+	Assert.assertEquals(0, arme8.getTypeArme());
     }
 
     @Test
@@ -167,7 +195,11 @@ public class UnitArmeTest
 	Assert.assertEquals(0, arme1.getphysMin());
 	Assert.assertEquals(2, arme2.getphysMin());
 	Assert.assertEquals(2, arme3.getphysMin());
-	Assert.assertEquals(0, arme4.getphysMin());
+	Assert.assertEquals(2, arme4.getphysMin());
+	Assert.assertEquals(0, arme5.getphysMin());
+	Assert.assertEquals(0, arme6.getphysMin());
+	Assert.assertEquals(0, arme7.getphysMin());
+	Assert.assertEquals(0, arme8.getphysMin());
     }
 
     @Test
@@ -176,7 +208,11 @@ public class UnitArmeTest
 	Assert.assertEquals(0, arme1.getMode());
 	Assert.assertEquals(0, arme2.getMode());
 	Assert.assertEquals(0, arme3.getMode());
-	Assert.assertEquals(1, arme4.getMode());
+	Assert.assertEquals(0, arme4.getMode());
+	Assert.assertEquals(1, arme5.getMode());
+	Assert.assertEquals(1, arme6.getMode());
+	Assert.assertEquals(1, arme7.getMode());
+	Assert.assertEquals(1, arme8.getMode());
     }
 
     @Test
@@ -185,18 +221,43 @@ public class UnitArmeTest
 	Assert.assertEquals("rapière de qualité supérieure et équilibrage mauvais", arme1.toString());
 	Assert.assertEquals("hache d'arme de qualité inférieure et équilibrage bon", arme2.toString());
 	Assert.assertEquals("hache d'arme de maître", arme3.toString());
-	Assert.assertEquals("arc", arme4.toString());
+	Assert.assertEquals("hache d'arme de qualité moyenne et équilibrage normal", arme4.toString());
+	Assert.assertEquals("arc de qualité moyenne et équilibrage normal", arme5.toString());
+	Assert.assertEquals("arc de qualité inférieure et équilibrage bon", arme6.toString());
+	Assert.assertEquals("arc de qualité supérieure et équilibrage mauvais", arme7.toString());
+	Assert.assertEquals("arc de maître", arme8.toString());
     }
 
     @Test
     public void testGetSpecifiqueDistancet()
     {
-	Assert.assertEquals(5, arme4.getMalusCourt());
-	Assert.assertEquals(10, arme4.getMalusLong());
-	Assert.assertEquals(0, arme4.getMunCourantes());
-	Assert.assertEquals(1, arme4.getTailleMAgasin());
-	Assert.assertEquals(1, arme4.getNbActionsRecharge());
-	Assert.assertEquals(150, arme4.getPortee());
+	Assert.assertEquals(5, arme5.getMalusCourt());
+	Assert.assertEquals(10, arme5.getMalusLong());
+	Assert.assertEquals(0, arme5.getMunCourantes());
+	Assert.assertEquals(1, arme5.getTailleMAgasin());
+	Assert.assertEquals(1, arme5.getNbActionsRecharge());
+	Assert.assertEquals(150, arme5.getPortee());
+
+	Assert.assertEquals(8, arme6.getMalusCourt());
+	Assert.assertEquals(13, arme6.getMalusLong());
+	Assert.assertEquals(0, arme6.getMunCourantes());
+	Assert.assertEquals(1, arme6.getTailleMAgasin());
+	Assert.assertEquals(1, arme6.getNbActionsRecharge());
+	Assert.assertEquals(300, arme6.getPortee());
+
+	Assert.assertEquals(2, arme7.getMalusCourt());
+	Assert.assertEquals(7, arme7.getMalusLong());
+	Assert.assertEquals(0, arme7.getMunCourantes());
+	Assert.assertEquals(1, arme7.getTailleMAgasin());
+	Assert.assertEquals(1, arme7.getNbActionsRecharge());
+	Assert.assertEquals(75, arme7.getPortee());
+
+	Assert.assertEquals(-1, arme8.getMalusCourt());
+	Assert.assertEquals(4, arme8.getMalusLong());
+	Assert.assertEquals(0, arme8.getMunCourantes());
+	Assert.assertEquals(1, arme8.getTailleMAgasin());
+	Assert.assertEquals(1, arme8.getNbActionsRecharge());
+	Assert.assertEquals(300, arme8.getPortee());
     }
 
     @Test
@@ -205,7 +266,7 @@ public class UnitArmeTest
 	//On recharge trop
 	try
 	{
-	    arme4.recharger(2);
+	    arme5.recharger(2);
 	    fail();
 	}
 	catch (IllegalArgumentException e)
@@ -216,7 +277,7 @@ public class UnitArmeTest
 	//On consomme à vide
 	try
 	{
-	    arme4.consommerMun(1);
+	    arme5.consommerMun(1);
 	    fail();
 	}
 	catch (IllegalArgumentException e)
@@ -228,8 +289,8 @@ public class UnitArmeTest
     @Test
     public void testGestionMunitionsNominal()
     {
-	Assert.assertEquals(1, arme4.recharger(1));
-	arme4.consommerMun(1);
-	Assert.assertEquals(0, arme4.getMunCourantes());
+	Assert.assertEquals(1, arme5.recharger(1));
+	arme5.consommerMun(1);
+	Assert.assertEquals(0, arme5.getMunCourantes());
     }
 }

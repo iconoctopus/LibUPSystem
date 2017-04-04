@@ -47,30 +47,30 @@ public class IntegStatAttaqueTest
 	Assert.assertFalse(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM3, 32, 0, 0));
 
 	//attaque à distance au fusil d'assaut coup par coup avec RM5 et portée courte
-	persoRM5.getInventaire().addArme(new ArmeDist(44), Inventaire.Lateralisation.DROITE);
+	persoRM5.getInventaire().addArme(new ArmeDist(44, Arme.QualiteArme.superieure, Arme.EquilibrageArme.bon), Inventaire.Lateralisation.DROITE);
 	((ArmeDist) persoRM5.getInventaire().getArmeCourante()).recharger(30);
-	Assert.assertTrue(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM5, 42, 150, 1));//pile la portée, donc courte
-	Assert.assertFalse(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM5, 46, 150, 2));//deux balles ne devraient rien changer, on n'est pas au seuil de rafale courte
+	Assert.assertTrue(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM5, 45, 300, 1));//pile la portée, donc courte
+	Assert.assertFalse(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM5, 49, 300, 2));//deux balles ne devraient rien changer, on n'est pas au seuil de rafale courte
 
 	//attaque à distance au fusil d'assaut en rafale courte avec RM3 et portée courte
 	persoRM3.getInventaire().removeArme(Inventaire.Lateralisation.DROITE);
-	persoRM3.getInventaire().addArme(new ArmeDist(44), Inventaire.Lateralisation.DROITE);
+	persoRM3.getInventaire().addArme(new ArmeDist(44, Arme.QualiteArme.inferieure, Arme.EquilibrageArme.normal), Inventaire.Lateralisation.DROITE);
 	((ArmeDist) persoRM3.getInventaire().getArmeCourante()).recharger(30);
-	Assert.assertTrue(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM3, 27, 100, 3));
-	Assert.assertFalse(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM3, 32, 20, 3));
+	Assert.assertTrue(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM3, 24, 100, 3));
+	Assert.assertFalse(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM3, 29, 20, 3));
 
 	//attaque à distance au fusil d'assaut en rafale moyenne avec RM3 et portée longue
 	persoRM3.getInventaire().removeArme(Inventaire.Lateralisation.DROITE);
-	persoRM3.getInventaire().addArme(new ArmeDist(44), Inventaire.Lateralisation.DROITE);
+	persoRM3.getInventaire().addArme(new ArmeDist(44, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais), Inventaire.Lateralisation.DROITE);
 	((ArmeDist) persoRM3.getInventaire().getArmeCourante()).recharger(30);
-	Assert.assertTrue(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM3, 24, 200, 8));//donc deux groupes entiers de trois balles
-	Assert.assertFalse(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM3, 28, 270, 8));
+	Assert.assertTrue(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM3, 30, 400, 8));//donc deux groupes entiers de trois balles
+	Assert.assertFalse(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM3, 34, 540, 8));
 
 	//attaque à distance au fusil d'assaut en rafale longue avec RM5 et portée courte
 	persoRM5.getInventaire().removeArme(Inventaire.Lateralisation.DROITE);
-	persoRM5.getInventaire().addArme(new ArmeDist(44), Inventaire.Lateralisation.DROITE);
+	persoRM5.getInventaire().addArme(new ArmeDist(44, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.mauvais), Inventaire.Lateralisation.DROITE);
 	((ArmeDist) persoRM5.getInventaire().getArmeCourante()).recharger(30);
-	Assert.assertTrue(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM5, 56, 120, 13));//deux groupes entiers de 5 balles
-	Assert.assertFalse(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM5, 60, 40, 13));
+	Assert.assertTrue(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM5, 56, 60, 13));//deux groupes entiers de 5 balles
+	Assert.assertFalse(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM5, 60, 20, 13));
     }
 }

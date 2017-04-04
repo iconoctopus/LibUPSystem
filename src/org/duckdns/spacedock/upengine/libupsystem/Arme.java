@@ -16,9 +16,6 @@
  */
 package org.duckdns.spacedock.upengine.libupsystem;
 
-import org.duckdns.spacedock.commonutils.ErrorHandler;
-import org.duckdns.spacedock.commonutils.PropertiesHandler;
-
 /**
  * Classe représentant une arme et permettant de générer des dégâts avec
  * celle-ci.Elle est abstraite car l'on ne doit pouvoir instancier que ses
@@ -36,7 +33,7 @@ public abstract class Arme
     /**
      * le bonus apporté à l'initiative totale
      */
-    int m_bonusInit;
+    private int m_bonusInit;
     /**
      * la catégorie d'arme (permet de définir la compétence à utiliser)
      */
@@ -44,7 +41,7 @@ public abstract class Arme
     /**
      * la VD de l'arme
      */
-    int m_vd;
+    private int m_vd;
     /**
      * le malus donné par l'arme à l'attaque
      */
@@ -56,7 +53,7 @@ public abstract class Arme
     /**
      * le nom de l'arme
      */
-    String m_nom;
+    private final String m_nom;
     /**
      * le physique minimal pour manier l'arme.
      */
@@ -75,11 +72,58 @@ public abstract class Arme
      * @param p_equilibrage l'equilibrage de l'arme, ignoré si l'arme est de
      * maître
      */
-    public Arme(int p_indice)
+    public Arme(int p_indice, QualiteArme p_qualite, EquilibrageArme p_equilibrage)
     {
 	UPReferenceArmes referenceArm = UPReferenceArmes.getInstance();
 
 	String nom = referenceArm.getLblArme(p_indice);
+
+	UPReferenceSysteme referenceSys = UPReferenceSysteme.getInstance();
+	nom = nom.concat(" ");
+	//récupération des éléments liés à la qualité et l'équilibrage de l'arme
+	if (p_qualite == QualiteArme.maitre)//traitement spécial des armes de maître
+	{
+	    nom = nom.concat((String) referenceArm.getListQualiteArme().get(QualiteArme.maitre));
+	}
+	else
+	{
+	    nom = nom.concat(referenceSys.getCollectionLibelles().liaison);
+	    nom = nom.concat(" ");
+	    nom = nom.concat(referenceSys.getCollectionLibelles().qualite);
+	    nom = nom.concat(" ");
+
+	    switch (p_qualite)
+	    {
+		case inferieure:
+		    nom = nom.concat((String) referenceArm.getListQualiteArme().get(QualiteArme.inferieure));
+		    break;
+		case moyenne:
+		    nom = nom.concat((String) referenceArm.getListQualiteArme().get(QualiteArme.moyenne));
+		    break;
+		case superieure:
+		    nom = nom.concat((String) referenceArm.getListQualiteArme().get(QualiteArme.superieure));
+		    break;
+	    }
+
+	    nom = nom.concat(" ");
+	    nom = nom.concat(referenceSys.getCollectionLibelles().addition);
+	    nom = nom.concat(" ");
+	    nom = nom.concat(referenceSys.getCollectionLibelles().equilibrage);
+	    nom = nom.concat(" ");
+
+	    switch (p_equilibrage)
+	    {
+		case mauvais:
+		    nom = nom.concat((String) referenceArm.getListEquilibrage().get(EquilibrageArme.mauvais));
+		    break;
+		case normal:
+		    nom = nom.concat((String) referenceArm.getListEquilibrage().get(EquilibrageArme.normal));
+		    break;
+		case bon:
+		    nom = nom.concat((String) referenceArm.getListEquilibrage().get(EquilibrageArme.bon));
+		    break;
+	    }
+	}
 
 	//récupération et construction des caractéristiques de l'arme
 	m_vd = referenceArm.getVDArme(p_indice);

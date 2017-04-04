@@ -43,7 +43,7 @@ public class IntegCaracTest//tester les libellés
 	arbreTest.setRangComp(2, 2, 1);
 	arbreTest.addSpecialite(2, 2, "élevage de stylos bic en liberté");
 
-	EnumMap<Perso.Trait, Integer> traits = new EnumMap(Perso.Trait.class);
+	EnumMap<Perso.Trait, Integer> traits = new EnumMap<Perso.Trait, Integer>(Perso.Trait.class);
 	traits.put(Perso.Trait.PHYSIQUE, 1);
 	traits.put(Perso.Trait.COORDINATION, 2);
 	traits.put(Perso.Trait.MENTAL, 3);

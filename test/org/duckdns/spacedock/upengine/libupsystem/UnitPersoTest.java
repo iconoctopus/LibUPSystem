@@ -124,7 +124,7 @@ public class UnitPersoTest
     @Test
     public void testPersoParCaracsErreur()
     {
-	EnumMap<Perso.Trait, Integer> traits = new EnumMap(Perso.Trait.class);
+	EnumMap<Perso.Trait, Integer> traits = new EnumMap<Perso.Trait, Integer>(Perso.Trait.class);
 	traits.put(Perso.Trait.MENTAL, -12);
 	traits.put(Perso.Trait.PHYSIQUE, 1);
 	traits.put(Perso.Trait.COORDINATION, 1);
@@ -146,7 +146,7 @@ public class UnitPersoTest
     @Test
     public void testPersoParCaracsNominal() throws Exception
     {
-	EnumMap<Perso.Trait, Integer> traits = new EnumMap(Perso.Trait.class);
+	EnumMap<Perso.Trait, Integer> traits = new EnumMap<Perso.Trait, Integer>(Perso.Trait.class);
 	traits.put(Perso.Trait.MENTAL, 2);
 	traits.put(Perso.Trait.PHYSIQUE, 3);
 	traits.put(Perso.Trait.COORDINATION, 4);

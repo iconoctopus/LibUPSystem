@@ -52,8 +52,8 @@ public class UnitArmeTest
     private static ArmeCaC arme3;
     private static ArmeDist arme4;
     private static UPReferenceArmes referenceMock;
-    private static EnumMap listQualite;
-    private static EnumMap listEquilibrage;
+    private static EnumMap<Arme.QualiteArme, String> listQualite;
+    private static EnumMap<Arme.EquilibrageArme, String> listEquilibrage;
 
     @BeforeClass
     public static void setUpClass()
@@ -62,11 +62,11 @@ public class UnitArmeTest
 	referenceMock = PowerMockito.mock(UPReferenceArmes.class);
 	PowerMockito.mockStatic(UPReferenceArmes.class);
 	when(UPReferenceArmes.getInstance()).thenReturn(referenceMock);
-	listEquilibrage = new EnumMap(Arme.EquilibrageArme.class);
+	listEquilibrage = new EnumMap<Arme.EquilibrageArme, String>(Arme.EquilibrageArme.class);
 	listEquilibrage.put(Arme.EquilibrageArme.mauvais, "mauvais");
 	listEquilibrage.put(Arme.EquilibrageArme.normal, "normal");
 	listEquilibrage.put(Arme.EquilibrageArme.bon, "bon");
-	listQualite = new EnumMap(Arme.QualiteArme.class);
+	listQualite = new EnumMap<Arme.QualiteArme, String>(Arme.QualiteArme.class);
 	listQualite.put(Arme.QualiteArme.inferieure, "inférieure");
 	listQualite.put(Arme.QualiteArme.moyenne, "moyenne");
 	listQualite.put(Arme.QualiteArme.superieure, "supérieure");

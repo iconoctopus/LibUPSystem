@@ -185,9 +185,9 @@ public class UnitCoupleJaugeTest
 	//Cas du jet d'absorption réussi : on doit retrouver des blessures légères
 	when(resultMock.isJetReussi()).thenReturn(true);
 
-	when(persoMock.effectuerJetTrait(Perso.Trait.PHYSIQUE, 20)).thenReturn(resultMock);
+	when(persoMock.effectuerJetTrait(GroupeTraits.Trait.PHYSIQUE, 20)).thenReturn(resultMock);
 	jaugeFFA.recevoirDegats(20, persoMock);
-	verify(persoMock).effectuerJetTrait(Perso.Trait.PHYSIQUE, 20);
+	verify(persoMock).effectuerJetTrait(GroupeTraits.Trait.PHYSIQUE, 20);
 	Assert.assertEquals(20, jaugeFFA.getBlessuresLegeres());
 	Assert.assertEquals(0, jaugeFFA.getRemplissage_interne());//pas encore affectée
 	Assert.assertEquals(3, jaugeFFA.getRemplissage_externe());//pas encore affectée
@@ -195,9 +195,9 @@ public class UnitCoupleJaugeTest
 	Assert.assertFalse(jaugeFFA.isInconscient());//tout va bien
 	Assert.assertFalse(jaugeFFA.isSonne());//tout va bien
 
-	when(persoMock.effectuerJetTrait(Perso.Trait.PHYSIQUE, 50)).thenReturn(resultMock);
+	when(persoMock.effectuerJetTrait(GroupeTraits.Trait.PHYSIQUE, 50)).thenReturn(resultMock);
 	jaugeSI.recevoirDegats(50, persoMock);
-	verify(persoMock).effectuerJetTrait(Perso.Trait.PHYSIQUE, 50);
+	verify(persoMock).effectuerJetTrait(GroupeTraits.Trait.PHYSIQUE, 50);
 	Assert.assertEquals(50, jaugeSI.getBlessuresLegeres());
 	Assert.assertEquals(0, jaugeSI.getRemplissage_interne());//pas encore affectée
 	Assert.assertEquals(1, jaugeSI.getRemplissage_externe());//pas encore affectée
@@ -211,11 +211,11 @@ public class UnitCoupleJaugeTest
 	//Cas du jet raté de moins de 10
 	when(resultMock.isJetReussi()).thenReturn(false);
 	when(resultMock.getScoreBrut()).thenReturn(21);
-	when(persoMock.effectuerJetTrait(Perso.Trait.PHYSIQUE, 30)).thenReturn(resultMock);
+	when(persoMock.effectuerJetTrait(GroupeTraits.Trait.PHYSIQUE, 30)).thenReturn(resultMock);
 
 	//d'abord la jauge de Fatigue/force d'âme : très grosse, elle encaissera bien
 	jaugeFFA.recevoirDegats(30, persoMock);
-	verify(persoMock).effectuerJetTrait(Perso.Trait.PHYSIQUE, 30);
+	verify(persoMock).effectuerJetTrait(GroupeTraits.Trait.PHYSIQUE, 30);
 	Assert.assertEquals(0, jaugeFFA.getBlessuresLegeres());
 	Assert.assertEquals(1, jaugeFFA.getRemplissage_interne());//on doit retrouver une blessure grave
 	Assert.assertEquals(3, jaugeFFA.getRemplissage_externe());//pas encore affectée
@@ -225,9 +225,9 @@ public class UnitCoupleJaugeTest
 
 	//Ensuite la petite jauge de santé/init
 	when(resultMock.getScoreBrut()).thenReturn(16);
-	when(persoMock.effectuerJetTrait(Perso.Trait.PHYSIQUE, 20)).thenReturn(resultMock);
+	when(persoMock.effectuerJetTrait(GroupeTraits.Trait.PHYSIQUE, 20)).thenReturn(resultMock);
 	jaugeSI.recevoirDegats(20, persoMock);
-	verify(persoMock).effectuerJetTrait(Perso.Trait.PHYSIQUE, 20);
+	verify(persoMock).effectuerJetTrait(GroupeTraits.Trait.PHYSIQUE, 20);
 	Assert.assertEquals(0, jaugeSI.getBlessuresLegeres());
 	Assert.assertEquals(1, jaugeSI.getRemplissage_interne());//on doit retrouver une blessure grave
 	Assert.assertEquals(1, jaugeSI.getRemplissage_externe());//pas encore affectée
@@ -236,9 +236,9 @@ public class UnitCoupleJaugeTest
 
 	//Cas du jet raté de plus de 10 sans chute dans l'inconscience
 	when(resultMock.getScoreBrut()).thenReturn(7);
-	when(persoMock.effectuerJetTrait(Perso.Trait.PHYSIQUE, 23)).thenReturn(resultMock);
+	when(persoMock.effectuerJetTrait(GroupeTraits.Trait.PHYSIQUE, 23)).thenReturn(resultMock);
 	jaugeFFA.recevoirDegats(23, persoMock);
-	verify(persoMock).effectuerJetTrait(Perso.Trait.PHYSIQUE, 23);
+	verify(persoMock).effectuerJetTrait(GroupeTraits.Trait.PHYSIQUE, 23);
 	Assert.assertEquals(0, jaugeFFA.getBlessuresLegeres());
 	Assert.assertEquals(3, jaugeFFA.getRemplissage_interne());//on doit retrouver deux blessures graves de plus
 	Assert.assertEquals(3, jaugeFFA.getRemplissage_externe());//pas encore affectée
@@ -253,16 +253,16 @@ public class UnitCoupleJaugeTest
 	//On rajoute deux blessures graves à la petite jauge de santé/init pour générer une insconscience auto sans mort
 	when(resultMock.isJetReussi()).thenReturn(false);
 	when(resultMock.getScoreBrut()).thenReturn(29);
-	when(persoMock.effectuerJetTrait(Perso.Trait.PHYSIQUE, 40)).thenReturn(resultMock);
+	when(persoMock.effectuerJetTrait(GroupeTraits.Trait.PHYSIQUE, 40)).thenReturn(resultMock);
 
 	RollUtils.RollResult resultMockMort = PowerMockito.mock(RollUtils.RollResult.class);
 	PowerMockito.mockStatic(RollUtils.RollResult.class);
 	when(resultMockMort.isJetReussi()).thenReturn(true);
-	when(persoMock.effectuerJetTrait(Perso.Trait.PHYSIQUE, 10)).thenReturn(resultMockMort);//réussite du jet de mort, le perso reste en vie
+	when(persoMock.effectuerJetTrait(GroupeTraits.Trait.PHYSIQUE, 10)).thenReturn(resultMockMort);//réussite du jet de mort, le perso reste en vie
 
 	jaugeSI.recevoirDegats(40, persoMock);
-	verify(persoMock).effectuerJetTrait(Perso.Trait.PHYSIQUE, 40);
-	verify(persoMock).effectuerJetTrait(Perso.Trait.PHYSIQUE, 10);
+	verify(persoMock).effectuerJetTrait(GroupeTraits.Trait.PHYSIQUE, 40);
+	verify(persoMock).effectuerJetTrait(GroupeTraits.Trait.PHYSIQUE, 10);
 	Assert.assertEquals(0, jaugeSI.getBlessuresLegeres());
 	Assert.assertEquals(2, jaugeSI.getRemplissage_interne());//on doit retrouver deux blessures graves
 	Assert.assertEquals(0, jaugeSI.getRemplissage_externe());//au tapis...
@@ -273,20 +273,20 @@ public class UnitCoupleJaugeTest
 	//Inconscience sur jet raté
 	when(resultMock.isJetReussi()).thenReturn(false);
 	when(resultMock.getScoreBrut()).thenReturn(4);
-	when(persoMock.effectuerJetTrait(Perso.Trait.PHYSIQUE, 55)).thenReturn(resultMock);
+	when(persoMock.effectuerJetTrait(GroupeTraits.Trait.PHYSIQUE, 55)).thenReturn(resultMock);
 
 	RollUtils.RollResult resultMockInconscience = PowerMockito.mock(RollUtils.RollResult.class);
 	PowerMockito.mockStatic(RollUtils.RollResult.class);
 	when(resultMockInconscience.isJetReussi()).thenReturn(false);
-	when(persoMock.effectuerJetTrait(Perso.Trait.VOLONTE, 30)).thenReturn(resultMockInconscience);//échec du jet d'inconscience
+	when(persoMock.effectuerJetTrait(GroupeTraits.Trait.VOLONTE, 30)).thenReturn(resultMockInconscience);//échec du jet d'inconscience
 
 	when(resultMockMort.isJetReussi()).thenReturn(true);
-	when(persoMock.effectuerJetTrait(Perso.Trait.PHYSIQUE, 30)).thenReturn(resultMockMort);//réussite du jet de mort, le perso reste en vie
+	when(persoMock.effectuerJetTrait(GroupeTraits.Trait.PHYSIQUE, 30)).thenReturn(resultMockMort);//réussite du jet de mort, le perso reste en vie
 
 	jaugeFFA.recevoirDegats(55, persoMock);//on inflige un total de 6 blessures graves pour voir les effets sur la jauge externe
-	verify(persoMock).effectuerJetTrait(Perso.Trait.PHYSIQUE, 55);
-	verify(persoMock).effectuerJetTrait(Perso.Trait.VOLONTE, 30);
-	verify(persoMock).effectuerJetTrait(Perso.Trait.PHYSIQUE, 30);
+	verify(persoMock).effectuerJetTrait(GroupeTraits.Trait.PHYSIQUE, 55);
+	verify(persoMock).effectuerJetTrait(GroupeTraits.Trait.VOLONTE, 30);
+	verify(persoMock).effectuerJetTrait(GroupeTraits.Trait.PHYSIQUE, 30);
 	Assert.assertEquals(0, jaugeFFA.getBlessuresLegeres());
 	Assert.assertEquals(6, jaugeFFA.getRemplissage_interne());//on doit retrouver six blessures graves en tout
 	Assert.assertEquals(2, jaugeFFA.getRemplissage_externe());//affectée d'un rang
@@ -302,10 +302,10 @@ public class UnitCoupleJaugeTest
 	//On rajoute trois blessures graves à la petite jauge de santé/init pour générer un débordement donc mort auto
 	when(resultMock.isJetReussi()).thenReturn(false);
 	when(resultMock.getScoreBrut()).thenReturn(19);
-	when(persoMock.effectuerJetTrait(Perso.Trait.PHYSIQUE, 40)).thenReturn(resultMock);
+	when(persoMock.effectuerJetTrait(GroupeTraits.Trait.PHYSIQUE, 40)).thenReturn(resultMock);
 
 	jaugeSI.recevoirDegats(40, persoMock);
-	verify(persoMock).effectuerJetTrait(Perso.Trait.PHYSIQUE, 40);
+	verify(persoMock).effectuerJetTrait(GroupeTraits.Trait.PHYSIQUE, 40);
 	Assert.assertEquals(0, jaugeSI.getBlessuresLegeres());
 	Assert.assertEquals(2, jaugeSI.getRemplissage_interne());//on doit retrouver deux blessures graves car le total est ramené à la taille de la jauge
 	Assert.assertEquals(0, jaugeSI.getRemplissage_externe());//au tapis...
@@ -316,22 +316,22 @@ public class UnitCoupleJaugeTest
 	//mort sur jet échoué
 	when(resultMock.isJetReussi()).thenReturn(false);
 	when(resultMock.getScoreBrut()).thenReturn(4);
-	when(persoMock.effectuerJetTrait(Perso.Trait.PHYSIQUE, 55)).thenReturn(resultMock);
+	when(persoMock.effectuerJetTrait(GroupeTraits.Trait.PHYSIQUE, 55)).thenReturn(resultMock);
 
 	RollUtils.RollResult resultMockInconscience = PowerMockito.mock(RollUtils.RollResult.class);
 	PowerMockito.mockStatic(RollUtils.RollResult.class);
 	when(resultMockInconscience.isJetReussi()).thenReturn(false);
-	when(persoMock.effectuerJetTrait(Perso.Trait.VOLONTE, 30)).thenReturn(resultMockInconscience);//échec du jet d'inconscience
+	when(persoMock.effectuerJetTrait(GroupeTraits.Trait.VOLONTE, 30)).thenReturn(resultMockInconscience);//échec du jet d'inconscience
 
 	RollUtils.RollResult resultMockMort = PowerMockito.mock(RollUtils.RollResult.class);
 	PowerMockito.mockStatic(RollUtils.RollResult.class);
 	when(resultMockMort.isJetReussi()).thenReturn(false);
-	when(persoMock.effectuerJetTrait(Perso.Trait.PHYSIQUE, 30)).thenReturn(resultMockMort);//échec du jet de mort, le perso trépasse
+	when(persoMock.effectuerJetTrait(GroupeTraits.Trait.PHYSIQUE, 30)).thenReturn(resultMockMort);//échec du jet de mort, le perso trépasse
 
 	jaugeFFA.recevoirDegats(55, persoMock);//on inflige un total de 6 blessures graves pour voir les effets sur la jauge externe
-	verify(persoMock).effectuerJetTrait(Perso.Trait.PHYSIQUE, 55);
-	verify(persoMock).effectuerJetTrait(Perso.Trait.VOLONTE, 30);
-	verify(persoMock).effectuerJetTrait(Perso.Trait.PHYSIQUE, 30);
+	verify(persoMock).effectuerJetTrait(GroupeTraits.Trait.PHYSIQUE, 55);
+	verify(persoMock).effectuerJetTrait(GroupeTraits.Trait.VOLONTE, 30);
+	verify(persoMock).effectuerJetTrait(GroupeTraits.Trait.PHYSIQUE, 30);
 	Assert.assertEquals(0, jaugeFFA.getBlessuresLegeres());
 	Assert.assertEquals(6, jaugeFFA.getRemplissage_interne());//on doit retrouver six blessures graves en tout
 	Assert.assertEquals(2, jaugeFFA.getRemplissage_externe());//affectée d'un rang

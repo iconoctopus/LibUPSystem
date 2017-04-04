@@ -16,7 +16,7 @@
  */
 package org.duckdns.spacedock.upengine.libupsystem;
 
-import java.util.EnumMap;
+import org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,12 +43,7 @@ public class IntegCaracTest//tester les libellés
 	arbreTest.setRangComp(2, 2, 1);
 	arbreTest.addSpecialite(2, 2, "élevage de stylos bic en liberté");
 
-	EnumMap<Perso.Trait, Integer> traits = new EnumMap<Perso.Trait, Integer>(Perso.Trait.class);
-	traits.put(Perso.Trait.PHYSIQUE, 1);
-	traits.put(Perso.Trait.COORDINATION, 2);
-	traits.put(Perso.Trait.MENTAL, 3);
-	traits.put(Perso.Trait.VOLONTE, 4);
-	traits.put(Perso.Trait.PRESENCE, 5);
+	GroupeTraits traits = new GroupeTraits(1, 2, 3, 4, 5);
 
 	persoNonRM = new Perso(traits, arbreTest);
     }
@@ -87,10 +82,10 @@ public class IntegCaracTest//tester les libellés
     @Test
     public void testTraits()
     {
-	persoRM3.setTrait(Perso.Trait.PHYSIQUE, 5);
-	persoRM3.setTrait(Perso.Trait.MENTAL, 6);
-	Assert.assertEquals(5, persoRM3.getTrait(Perso.Trait.PHYSIQUE));
-	Assert.assertEquals(6, persoRM3.getTrait(Perso.Trait.MENTAL));
+	persoRM3.setTrait(Trait.PHYSIQUE, 5);
+	persoRM3.setTrait(Trait.MENTAL, 6);
+	Assert.assertEquals(5, persoRM3.getTrait(Trait.PHYSIQUE));
+	Assert.assertEquals(6, persoRM3.getTrait(Trait.MENTAL));
     }
 
     @Test

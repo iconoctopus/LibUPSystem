@@ -18,7 +18,7 @@ package org.duckdns.spacedock.upengine.libupsystem;
 
 import org.duckdns.spacedock.commonutils.ErrorHandler;
 import org.duckdns.spacedock.commonutils.PropertiesHandler;
-import org.duckdns.spacedock.upengine.libupsystem.Perso.Trait;
+import org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait;
 import org.duckdns.spacedock.upengine.libupsystem.RollUtils.RollResult;
 
 /**

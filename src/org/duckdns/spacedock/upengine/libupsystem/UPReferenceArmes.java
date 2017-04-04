@@ -60,12 +60,12 @@ public class UPReferenceArmes
     /**
      * liste des libellés de qualité d'arme
      */
-    public final EnumMap m_listLblQualite;
+    public final EnumMap<Arme.QualiteArme, String> m_listLblQualite;
 
     /**
      * liste des libellés d'équilibrage d'arme
      */
-    public final EnumMap m_listLblEquilibrage;
+    public final EnumMap<Arme.EquilibrageArme, String> m_listLblEquilibrage;
 
     /**
      * véritable constructeur privé effectuant tous les accès fichiers à
@@ -84,14 +84,14 @@ public class UPReferenceArmes
 	m_listLblModArm = object.getJsonArray("mod_armes");
 
 	JsonArray tabQualite = object.getJsonArray("qualite_armes");
-	m_listLblQualite = new EnumMap(Arme.QualiteArme.class);
+	m_listLblQualite = new EnumMap<Arme.QualiteArme, String>(Arme.QualiteArme.class);
 	m_listLblQualite.put(Arme.QualiteArme.inferieure, tabQualite.getString(0));
 	m_listLblQualite.put(Arme.QualiteArme.moyenne, tabQualite.getString(1));
 	m_listLblQualite.put(Arme.QualiteArme.superieure, tabQualite.getString(2));
 	m_listLblQualite.put(Arme.QualiteArme.maitre, tabQualite.getString(3));
 
 	JsonArray tabEquilibrage = object.getJsonArray("equilibrage_armes");
-	m_listLblEquilibrage = new EnumMap(Arme.EquilibrageArme.class);
+	m_listLblEquilibrage = new EnumMap<Arme.EquilibrageArme, String>(Arme.EquilibrageArme.class);
 	m_listLblEquilibrage.put(Arme.EquilibrageArme.mauvais, tabEquilibrage.getString(0));
 	m_listLblEquilibrage.put(Arme.EquilibrageArme.normal, tabEquilibrage.getString(1));
 	m_listLblEquilibrage.put(Arme.EquilibrageArme.bon, tabEquilibrage.getString(2));

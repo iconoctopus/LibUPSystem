@@ -97,13 +97,12 @@ public final class UnitUPReferenceSysTest
 	cac.add("attaque armes lourdes");
 	cac.add("parade armes lourdes");
 
-	dist.add("archerie");
+	dist.add("armes de trait");
 	dist.add("armes de jet");
 	dist.add("armes à feu");
 	dist.add("armes à énergie");
 	dist.add("armes automatiques");
 	dist.add("armes lourdes");
-	dist.add("armes de trait");
 	dist.add("lanceurs");
 
 	social.add("art oratoire");

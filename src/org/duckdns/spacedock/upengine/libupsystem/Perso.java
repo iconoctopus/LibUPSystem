@@ -410,7 +410,7 @@ public class Perso
 		competence = 0;//comp mains nues
 		bonusSup += m_traits.get(Trait.PHYSIQUE);//le rang de physique vient en bonus au nombre d'incréments
 	    }
-	    return new Degats(vd + domaine + competence + bonusSup, typArm);
+	    return new Degats(vd + m_arbreDomaines.getRangDomaine(domaine) + m_arbreDomaines.getRangComp(domaine, competence) + bonusSup, typArm);
 	}
 	else
 	{

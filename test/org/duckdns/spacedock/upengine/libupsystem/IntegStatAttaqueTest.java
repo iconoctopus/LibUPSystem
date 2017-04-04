@@ -23,7 +23,7 @@ import org.junit.Test;
  *
  * @author ykonoclast
  */
-public class IntegStatAttaqueDegatsTests
+public class IntegStatAttaqueTest
 {
 
     @Test
@@ -47,50 +47,30 @@ public class IntegStatAttaqueDegatsTests
 	Assert.assertFalse(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM3, 32, 0, 0));
 
 	//attaque à distance au fusil d'assaut coup par coup avec RM5 et portée courte
-	persoRM5.getInventaire().addArme(new ArmeDist(44, Arme.QualiteArme.superieure, Arme.EquilibrageArme.mauvais), Inventaire.Lateralisation.DROITE);
+	persoRM5.getInventaire().addArme(new ArmeDist(44), Inventaire.Lateralisation.DROITE);
 	((ArmeDist) persoRM5.getInventaire().getArmeCourante()).recharger(30);
 	Assert.assertTrue(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM5, 42, 150, 1));//pile la portée, donc courte
 	Assert.assertFalse(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM5, 46, 150, 2));//deux balles ne devraient rien changer, on n'est pas au seuil de rafale courte
 
 	//attaque à distance au fusil d'assaut en rafale courte avec RM3 et portée courte
 	persoRM3.getInventaire().removeArme(Inventaire.Lateralisation.DROITE);
-	persoRM3.getInventaire().addArme(new ArmeDist(44, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal), Inventaire.Lateralisation.DROITE);
+	persoRM3.getInventaire().addArme(new ArmeDist(44), Inventaire.Lateralisation.DROITE);
 	((ArmeDist) persoRM3.getInventaire().getArmeCourante()).recharger(30);
 	Assert.assertTrue(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM3, 27, 100, 3));
 	Assert.assertFalse(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM3, 32, 20, 3));
 
 	//attaque à distance au fusil d'assaut en rafale moyenne avec RM3 et portée longue
 	persoRM3.getInventaire().removeArme(Inventaire.Lateralisation.DROITE);
-	persoRM3.getInventaire().addArme(new ArmeDist(44, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais), Inventaire.Lateralisation.DROITE);
+	persoRM3.getInventaire().addArme(new ArmeDist(44), Inventaire.Lateralisation.DROITE);
 	((ArmeDist) persoRM3.getInventaire().getArmeCourante()).recharger(30);
 	Assert.assertTrue(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM3, 24, 200, 8));//donc deux groupes entiers de trois balles
 	Assert.assertFalse(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM3, 28, 270, 8));
 
 	//attaque à distance au fusil d'assaut en rafale longue avec RM5 et portée courte
 	persoRM5.getInventaire().removeArme(Inventaire.Lateralisation.DROITE);
-	persoRM5.getInventaire().addArme(new ArmeDist(44, Arme.QualiteArme.maitre, Arme.EquilibrageArme.bon), Inventaire.Lateralisation.DROITE);
+	persoRM5.getInventaire().addArme(new ArmeDist(44), Inventaire.Lateralisation.DROITE);
 	((ArmeDist) persoRM5.getInventaire().getArmeCourante()).recharger(30);
 	Assert.assertTrue(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM5, 56, 120, 13));//deux groupes entiers de 5 balles
 	Assert.assertFalse(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM5, 60, 40, 13));
-    }
-
-    @Test
-    public void testGenererDegats()
-    {
-	//Test en corps à corps avec rapière de maître sans incréments, le perso est sonné
-	Arme arme = new ArmeCaC(3, Arme.QualiteArme.maitre, Arme.EquilibrageArme.normal);
-	int resultVariant = IntegStatTestUtils.degatsStatistiques(1, arme, 0);
-	Assert.assertTrue(22 == resultVariant || resultVariant == 21);
-
-	//test en corps avec hache de mauvaise qualité et deux incréments
-	arme = new ArmeCaC(10, Arme.QualiteArme.inferieure, Arme.EquilibrageArme.normal);
-	Assert.assertEquals(31, IntegStatTestUtils.degatsStatistiques(3, arme, 2));
-
-	//test en corps à corps à mains nues sans incréments
-	Assert.assertEquals(11, IntegStatTestUtils.degatsStatistiques(5, null, 0));
-
-	//test à distance avec arc de bonne qualité et un incrément
-	arme = new ArmeDist(34, Arme.QualiteArme.superieure, Arme.EquilibrageArme.normal);
-	Assert.assertEquals(21, IntegStatTestUtils.degatsStatistiques(5, arme, 1));
     }
 }

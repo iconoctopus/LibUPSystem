@@ -17,9 +17,12 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.Iterator;
-import org.duckdns.spacedock.upengine.libupsystem.Arme.Degats;
+import java.util.ListIterator;
+import org.duckdns.spacedock.upengine.libupsystem.Perso.Degats;
 import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -28,6 +31,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.powermock.api.mockito.PowerMockito;
@@ -68,7 +72,7 @@ public class UnitPersoTest
 	listComp.add("comp2");
 	listComp.add("comp3");
 
-	//on construit une liste de domaines retournée par la référence mockée, quatre suffiront
+	//on construit une liste de domaines retournée par la référence mockée, cinq suffiront
 	listDom.add("dom1");
 	listDom.add("dom2");
 	listDom.add("dom3");
@@ -120,43 +124,16 @@ public class UnitPersoTest
     @Test
     public void testPersoParCaracsErreur()
     {
-	//cas d'erreur : pas assez de traits
-	try
-	{
-	    int[] traits =
-	    {
-		1, 1
-	    };
-	    new Perso(traits, arbreMock);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:nombre de traits:2", e.getMessage());
-	}
-
-	//cas d'erreur : trop de traits
-	try
-	{
-	    int[] traits =
-	    {
-		1, 1, 1, 1, 1, 1
-	    };
-	    new Perso(traits, arbreMock);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:nombre de traits:6", e.getMessage());
-	}
+	EnumMap<Perso.Trait, Integer> traits = new EnumMap(Perso.Trait.class);
+	traits.put(Perso.Trait.MENTAL, -12);
+	traits.put(Perso.Trait.PHYSIQUE, 1);
+	traits.put(Perso.Trait.COORDINATION, 1);
+	traits.put(Perso.Trait.VOLONTE, 1);
+	traits.put(Perso.Trait.PRESENCE, 1);
 
 	//cas d'erreur : trait négatif
 	try
 	{
-	    int[] traits =
-	    {
-		0, 1, -12, 1, 1
-	    };
 	    new Perso(traits, arbreMock);
 	    fail();
 	}
@@ -169,17 +146,20 @@ public class UnitPersoTest
     @Test
     public void testPersoParCaracsNominal() throws Exception
     {
-	int[] traits =
-	{
-	    3, 4, 2, 1, 4
-	};
+	EnumMap<Perso.Trait, Integer> traits = new EnumMap(Perso.Trait.class);
+	traits.put(Perso.Trait.MENTAL, 2);
+	traits.put(Perso.Trait.PHYSIQUE, 3);
+	traits.put(Perso.Trait.COORDINATION, 4);
+	traits.put(Perso.Trait.VOLONTE, 1);
+	traits.put(Perso.Trait.PRESENCE, 4);
+
 	whenNew(CoupleJauge.class).withArguments(3, 1, 2, 4).thenReturn(santeInitRM3);//on n'utilisera pas la jauge mais il en faut bien une pour éviter les NullPointerException à la création
 	Perso perso = new Perso(traits, arbreMock);
-	Assert.assertEquals(traits[0], perso.getTrait(0));
-	Assert.assertEquals(traits[1], perso.getTrait(1));
-	Assert.assertEquals(traits[2], perso.getTrait(2));
-	Assert.assertEquals(traits[3], perso.getTrait(3));
-	Assert.assertEquals(traits[4], perso.getTrait(4));
+	Assert.assertEquals(traits.get(Perso.Trait.PHYSIQUE).intValue(), perso.getTrait(Perso.Trait.PHYSIQUE));
+	Assert.assertEquals(traits.get(Perso.Trait.COORDINATION).intValue(), perso.getTrait(Perso.Trait.COORDINATION));
+	Assert.assertEquals(traits.get(Perso.Trait.MENTAL).intValue(), perso.getTrait(Perso.Trait.MENTAL));
+	Assert.assertEquals(traits.get(Perso.Trait.VOLONTE).intValue(), perso.getTrait(Perso.Trait.VOLONTE));
+	Assert.assertEquals(traits.get(Perso.Trait.PRESENCE).intValue(), perso.getTrait(Perso.Trait.PRESENCE));
     }
 
     @Test
@@ -455,7 +435,7 @@ public class UnitPersoTest
 	when(santeInitRM3.isSonne()).thenReturn(true);
 	when(fatigueFARM3.isSonne()).thenReturn(false);
 
-	new Perso(3).effectuerJetComp(4, 1, 1, 49, -2, +1, +7);
+	new Perso(3).effectuerJetComp(Perso.Trait.PRESENCE, 1, 1, 49, -2, +1, +7);
 	verify(arbreMock).effectuerJetComp(2, 1, 1, 49, -2, +1, +7, true);
     }
 
@@ -541,7 +521,7 @@ public class UnitPersoTest
     }
 
     @Test
-    public void testToutesMethodesInitNominal()//petite exception aux règles des tests unitaires car il est difficile de mocker les méthodes statiques de la classe statique RollUtils, on vérifie donc de façon statistique que les résultats sont dans les normes
+    public void testToutesMethodesInitNominal()//petite exception aux règles des tests unitaires car il est difficile de mocker les méthodes statiques de la classe statique RollUtils, on vérifie donc simplement que les résultats sont dans les normes
     {
 	for (int j = 0; j <= 4; j++)//5 tests de suite pour être sur
 	{
@@ -562,18 +542,27 @@ public class UnitPersoTest
 
 	//test de isActif()
 	Assert.assertTrue(persoRM3.isActif(persoRM3.getActions().get(0)));
-	Iterator listActions = persoRM3.getActions().iterator();
+	ListIterator<Integer> listActions = persoRM3.getActions().listIterator();
 
-	for (int i = 1; i < 11; ++i)
+	int phaseCourante = 1;
+	while (phaseCourante < 11)
 	{
-	    if (listActions.hasNext() && i == (int) listActions.next())
+	    if (listActions.hasNext() && phaseCourante == (int) listActions.next())
 	    {
-		assertTrue(persoRM3.isActif(i));
+		assertTrue(persoRM3.isActif(phaseCourante));
+		persoRM3.agirEnCombat(phaseCourante);//on consomme l'action
+		if (listActions.hasNext() && phaseCourante == (int) listActions.next())//deuxième vérification car il peut très bien y avoir deux actions dans la même phase
+		{
+		    --phaseCourante;//on annule la progression de phase qui va avoir lieu
+		}
+		listActions.previous();//on annule le next du test que l'on vient de faire
 	    }
 	    else
 	    {
-		assertFalse(persoRM3.isActif(i));
+		listActions.previous();//on annule le next() indu car la phase courante n'était pas une phase d'action du perso, il ne faut donc pas dépasser une action légitime
+		assertFalse(persoRM3.isActif(phaseCourante));
 	    }
+	    ++phaseCourante;
 	}
     }
 
@@ -595,34 +584,65 @@ public class UnitPersoTest
     @Test
     public void testGenererDegatsCaCNominal()
     {
-	//On mocke le isSonne() des deux jauges
-	when(santeInitRM1.isSonne()).thenReturn(false);
-	when(fatigueFARM1.isSonne()).thenReturn(false);
+	//On prévoie les appels aux domaines et compétences
+	when(arbreMock.getRangComp(3, 0)).thenReturn(3);
+	when(arbreMock.getRangComp(3, 2)).thenReturn(3);
+	when(arbreMock.getRangDomaine(3)).thenReturn(3);
+
+	//Cas mains nues
+	Degats result = persoRM3.genererDegats(3);
+	verify(inventaireMock).getArmeCourante();
+	verify(arbreMock).getRangComp(3, 0);
+	verify(arbreMock).getRangDomaine(3);
+	assertEquals(18, result.getQuantite());
+	assertEquals(0, result.getTypeArme());
 
 	//On mocke un inventaire contenant un mock d'arme
 	ArmeCaC armeMock = PowerMockito.mock(ArmeCaC.class);
 	when(inventaireMock.getArmeCourante()).thenReturn(armeMock);
+	when(armeMock.getVD()).thenReturn(7);
+	when(armeMock.getTypeArme()).thenReturn(3);
+	when(armeMock.getMode()).thenReturn(0);
+	when(armeMock.getCategorie()).thenReturn(1);
 
 	//Cas nominal
-	persoRM1.genererDegats(3);
-	verify(armeMock).genererDegats(3, 1, false);
+	result = persoRM3.genererDegats(2);
+	verify(armeMock).getVD();
+	verify(armeMock).getTypeArme();
+	verify(armeMock).getMode();
+	verify(armeMock).getCategorie();
+	verify(arbreMock).getRangComp(3, 2);
+	verify(arbreMock, times(2)).getRangDomaine(3);
+	assertEquals(20, result.getQuantite());
+	assertEquals(3, result.getTypeArme());
     }
 
     @Test
-    public void testGenererDegatsDist()
+    public void testGenererDegatsDistNominal()
     {
-	//On mocke le isSonne() des deux jauges
-	when(santeInitRM3.isSonne()).thenReturn(true);
-	when(fatigueFARM3.isSonne()).thenReturn(false);
+	//On prévoie les appels aux domaines et compétences
+	when(arbreMock.getRangComp(4, 2)).thenReturn(1);
+	when(arbreMock.getRangDomaine(4)).thenReturn(1);
 
 	//On mocke un inventaire contenant un mock d'arme
 	ArmeDist armeMock = PowerMockito.mock(ArmeDist.class);
 	when(armeMock.getMode()).thenReturn(1);
 	when(inventaireMock.getArmeCourante()).thenReturn(armeMock);
+	when(armeMock.getVD()).thenReturn(5);
+	when(armeMock.getTypeArme()).thenReturn(2);
+	when(armeMock.getMode()).thenReturn(1);
+	when(armeMock.getCategorie()).thenReturn(2);
 
 	//Cas nominal
-	persoRM3.genererDegats(3);
-	verify(armeMock).genererDegats(3, true);
+	Degats result = persoRM1.genererDegats(0);
+	verify(armeMock).getVD();
+	verify(armeMock).getTypeArme();
+	verify(armeMock).getMode();
+	verify(armeMock).getCategorie();
+	verify(arbreMock).getRangComp(4, 2);
+	verify(arbreMock).getRangDomaine(4);
+	assertEquals(7, result.getQuantite());
+	assertEquals(2, result.getTypeArme());
     }
 
     @Test
@@ -652,50 +672,6 @@ public class UnitPersoTest
 	when(arbreMock.getRangComp(3, 3)).thenReturn(0);//compétence non possédée
 	when(arbreMock.getRangDomaine(3)).thenReturn(3);
 	Assert.assertEquals(15, persoRM3.getNDPassif(3, 1, false));
-    }
-
-    @Test
-    public void testGetSetDiversErreur()
-    {//si non déjà testés dans les autres méthodes de cette classe
-	try
-	{
-	    persoRM3.setTrait(-1, 5);
-	    fail();
-	}
-	catch (IndexOutOfBoundsException e)
-	{
-
-	}
-
-	try
-	{
-	    persoRM3.setTrait(6, 5);
-	    fail();
-	}
-	catch (IndexOutOfBoundsException e)
-	{
-
-	}
-
-	try
-	{
-	    persoRM3.getTrait(-1);
-	    fail();
-	}
-	catch (IndexOutOfBoundsException e)
-	{
-
-	}
-
-	try
-	{
-	    persoRM3.getTrait(6);
-	    fail();
-	}
-	catch (IndexOutOfBoundsException e)
-	{
-
-	}
     }
 
     @Test
@@ -794,19 +770,43 @@ public class UnitPersoTest
 	verify(arbreMock).setRangDomaine(78, 72);
 
 	//méthodes liées aux traits
-	Assert.assertEquals(3, persoRM3.getTrait(0));
-	Assert.assertEquals(3, persoRM3.getTrait(1));
-	Assert.assertEquals(2, persoRM3.getTrait(2));
-	Assert.assertEquals(2, persoRM3.getTrait(3));
-	Assert.assertEquals(2, persoRM3.getTrait(4));
+	Assert.assertEquals(3, persoRM3.getTrait(Perso.Trait.PHYSIQUE));
+	Assert.assertEquals(3, persoRM3.getTrait(Perso.Trait.COORDINATION));
+	Assert.assertEquals(2, persoRM3.getTrait(Perso.Trait.MENTAL));
+	Assert.assertEquals(2, persoRM3.getTrait(Perso.Trait.VOLONTE));
+	Assert.assertEquals(2, persoRM3.getTrait(Perso.Trait.PRESENCE));
 
-	Assert.assertEquals(1, persoRM1.getTrait(0));
-	Assert.assertEquals(1, persoRM1.getTrait(1));
-	Assert.assertEquals(0, persoRM1.getTrait(2));
-	Assert.assertEquals(0, persoRM1.getTrait(3));
-	Assert.assertEquals(0, persoRM1.getTrait(4));
+	Assert.assertEquals(1, persoRM1.getTrait(Perso.Trait.PHYSIQUE));
+	Assert.assertEquals(1, persoRM1.getTrait(Perso.Trait.COORDINATION));
+	Assert.assertEquals(0, persoRM1.getTrait(Perso.Trait.MENTAL));
+	Assert.assertEquals(0, persoRM1.getTrait(Perso.Trait.VOLONTE));
+	Assert.assertEquals(0, persoRM1.getTrait(Perso.Trait.PRESENCE));
 
-	persoRM3.setTrait(1, 1);
-	Assert.assertEquals(1, persoRM3.getTrait(1));
+	persoRM3.setTrait(Perso.Trait.COORDINATION, 1);
+	Assert.assertEquals(1, persoRM3.getTrait(Perso.Trait.COORDINATION));
+    }
+
+    @Test
+    public void testDegatsErreur()
+    {
+	try
+	{
+	    new Degats(-1, 2);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:dégâts:-1 type:2", e.getMessage());
+	}
+
+	try
+	{
+	    new Degats(2, -1);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:dégâts:2 type:-1", e.getMessage());
+	}
     }
 }

@@ -38,21 +38,12 @@ public class UnitUPReferenceArmesTest
     }
 
     @Test
-    public void testGetNbLancesArme()
+    public void testGetVDArme()
     {
-	Assert.assertEquals(4, m_reference.getNbLancesArme(0));
-	Assert.assertEquals(2, m_reference.getNbLancesArme(20));
-	Assert.assertEquals(4, m_reference.getNbLancesArme(23));
-	Assert.assertEquals(5, m_reference.getNbLancesArme(42));
-    }
-
-    @Test
-    public void testGetNbGardesArme()
-    {
-	Assert.assertEquals(3, m_reference.getNbGardesArme(0));
-	Assert.assertEquals(2, m_reference.getNbGardesArme(20));
-	Assert.assertEquals(2, m_reference.getNbGardesArme(23));
-	Assert.assertEquals(4, m_reference.getNbGardesArme(42));
+	Assert.assertEquals(20, m_reference.getVDArme(0));
+	Assert.assertEquals(6, m_reference.getVDArme(20));
+	Assert.assertEquals(12, m_reference.getVDArme(23));
+	Assert.assertEquals(20, m_reference.getVDArme(42));
     }
 
     @Test
@@ -148,13 +139,12 @@ public class UnitUPReferenceArmesTest
     {
 	ArrayList<String> cat = new ArrayList<>();
 
-	cat.add("archerie");
+	cat.add("armes de trait");
 	cat.add("armes de jet");
 	cat.add("armes à feu");
 	cat.add("armes à énergie");
 	cat.add("armes automatiques");
 	cat.add("armes lourdes");
-	cat.add("armes de trait");
 	cat.add("lanceurs");
 	Assert.assertEquals(cat, m_reference.getListCatArmeDist());
     }

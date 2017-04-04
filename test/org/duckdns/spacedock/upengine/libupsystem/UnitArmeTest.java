@@ -74,8 +74,7 @@ public class UnitArmeTest
 	when(referenceMock.getListQualiteArme()).thenReturn(listQualite);
 	when(referenceMock.getListEquilibrage()).thenReturn(listEquilibrage);
 
-	when(referenceMock.getNbLancesArme(3)).thenReturn(2);
-	when(referenceMock.getNbGardesArme(3)).thenReturn(3);
+	when(referenceMock.getVDArme(3)).thenReturn(2);
 	when(referenceMock.getBonusInitArme(3)).thenReturn(1);
 	when(referenceMock.getCategorieArme(3)).thenReturn(1);
 	when(referenceMock.getTypeArme(3)).thenReturn(0);
@@ -86,8 +85,7 @@ public class UnitArmeTest
 	when(referenceMock.getLblArme(3)).thenReturn("rapière");
 	arme1 = new ArmeCaC(3, Arme.QualiteArme.superieure, Arme.EquilibrageArme.mauvais);
 
-	when(referenceMock.getNbLancesArme(10)).thenReturn(6);
-	when(referenceMock.getNbGardesArme(10)).thenReturn(3);
+	when(referenceMock.getVDArme(10)).thenReturn(6);
 	when(referenceMock.getBonusInitArme(10)).thenReturn(0);
 	when(referenceMock.getCategorieArme(10)).thenReturn(3);
 	when(referenceMock.getTypeArme(10)).thenReturn(0);
@@ -99,8 +97,7 @@ public class UnitArmeTest
 	arme2 = new ArmeCaC(10, Arme.QualiteArme.inferieure, Arme.EquilibrageArme.bon);
 	arme3 = new ArmeCaC(10, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais);
 
-	when(referenceMock.getNbLancesArme(34)).thenReturn(2);
-	when(referenceMock.getNbGardesArme(34)).thenReturn(3);
+	when(referenceMock.getVDArme(34)).thenReturn(3);
 	when(referenceMock.getBonusInitArme(34)).thenReturn(0);
 	when(referenceMock.getCategorieArme(34)).thenReturn(0);
 	when(referenceMock.getTypeArme(34)).thenReturn(0);
@@ -116,7 +113,7 @@ public class UnitArmeTest
 	when(referenceMock.getNbActionsRechargeArme(34)).thenReturn(1);
 	when(referenceMock.getPorteeArme(34)).thenReturn(150);
 
-	arme4 = new ArmeDist(34, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal);
+	arme4 = new ArmeDist(34);
     }
 
     @Test
@@ -138,21 +135,12 @@ public class UnitArmeTest
     }
 
     @Test
-    public void testDesLances()
+    public void testVD()
     {
-	Assert.assertEquals(3, arme1.getDesLances());
-	Assert.assertEquals(5, arme2.getDesLances());
-	Assert.assertEquals(7, arme3.getDesLances());
-	Assert.assertEquals(2, arme4.getDesLances());
-    }
-
-    @Test
-    public void testDesGardes()
-    {
-	Assert.assertEquals(3, arme1.getDesGardes());
-	Assert.assertEquals(3, arme2.getDesGardes());
-	Assert.assertEquals(4, arme3.getDesGardes());
-	Assert.assertEquals(3, arme4.getDesGardes());
+	Assert.assertEquals(5, arme1.getVD());
+	Assert.assertEquals(3, arme2.getVD());
+	Assert.assertEquals(12, arme3.getVD());
+	Assert.assertEquals(3, arme4.getVD());
     }
 
     @Test
@@ -197,7 +185,7 @@ public class UnitArmeTest
 	Assert.assertEquals("rapière de qualité supérieure et équilibrage mauvais", arme1.toString());
 	Assert.assertEquals("hache d'arme de qualité inférieure et équilibrage bon", arme2.toString());
 	Assert.assertEquals("hache d'arme de maître", arme3.toString());
-	Assert.assertEquals("arc de qualité moyenne et équilibrage normal", arme4.toString());
+	Assert.assertEquals("arc", arme4.toString());
     }
 
     @Test
@@ -209,54 +197,6 @@ public class UnitArmeTest
 	Assert.assertEquals(1, arme4.getTailleMAgasin());
 	Assert.assertEquals(1, arme4.getNbActionsRecharge());
 	Assert.assertEquals(150, arme4.getPortee());
-    }
-
-    @Test
-    public void testDegatsErreur()
-    {
-	try
-	{
-	    new Arme.Degats(-1, 2);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:dégâts:-1 type:2", e.getMessage());
-	}
-
-	try
-	{
-	    new Arme.Degats(2, -1);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:dégâts:2 type:-1", e.getMessage());
-	}
-    }
-
-    @Test
-    public void testGenererDegatsErreur()
-    {
-	try
-	{
-	    arme1.genererDegats(2, -1, true);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:incréments:2 physique:-1", e.getMessage());
-	}
-
-	try
-	{
-	    arme2.genererDegats(-2, 1, true);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:incréments:-2 physique:1", e.getMessage());
-	}
     }
 
     @Test

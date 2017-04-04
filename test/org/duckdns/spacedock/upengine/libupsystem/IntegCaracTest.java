@@ -16,6 +16,7 @@
  */
 package org.duckdns.spacedock.upengine.libupsystem;
 
+import java.util.EnumMap;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +26,7 @@ import org.junit.Test;
  * @author ykonoclast
  */
 public class IntegCaracTest//tester les libellés
-{
+{//TODO vérifier que les compétences d'attaque et de parade sont bien positionnées
 
     Perso persoRM1;
     Perso persoRM3;
@@ -42,10 +43,12 @@ public class IntegCaracTest//tester les libellés
 	arbreTest.setRangComp(2, 2, 1);
 	arbreTest.addSpecialite(2, 2, "élevage de stylos bic en liberté");
 
-	int[] traits = new int[]
-	{
-	    1, 2, 3, 4, 5
-	};
+	EnumMap<Perso.Trait, Integer> traits = new EnumMap(Perso.Trait.class);
+	traits.put(Perso.Trait.PHYSIQUE, 1);
+	traits.put(Perso.Trait.COORDINATION, 2);
+	traits.put(Perso.Trait.MENTAL, 3);
+	traits.put(Perso.Trait.VOLONTE, 4);
+	traits.put(Perso.Trait.PRESENCE, 5);
 
 	persoNonRM = new Perso(traits, arbreTest);
     }
@@ -84,10 +87,10 @@ public class IntegCaracTest//tester les libellés
     @Test
     public void testTraits()
     {
-	persoRM3.setTrait(0, 5);
-	persoRM3.setTrait(2, 6);
-	Assert.assertEquals(5, persoRM3.getTrait(0));
-	Assert.assertEquals(6, persoRM3.getTrait(2));
+	persoRM3.setTrait(Perso.Trait.PHYSIQUE, 5);
+	persoRM3.setTrait(Perso.Trait.MENTAL, 6);
+	Assert.assertEquals(5, persoRM3.getTrait(Perso.Trait.PHYSIQUE));
+	Assert.assertEquals(6, persoRM3.getTrait(Perso.Trait.MENTAL));
     }
 
     @Test

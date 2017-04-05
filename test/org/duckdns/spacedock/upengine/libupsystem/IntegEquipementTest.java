@@ -54,7 +54,7 @@ public class IntegEquipementTest
 	//On ajoute un gantelet à un perso il n'y pas assez de points pour changer le ND et la réduction des dégâts
 	inventaire.addPieceArmure(ganteletGauche, Inventaire.PartieCorps.MAINGAUCHE);
 	Assert.assertEquals(ganteletGauche, inventaire.getPieceArmure(Inventaire.PartieCorps.MAINGAUCHE));
-	Assert.assertEquals(25, persoRM3.getNDPassif(0, 0, false));
+	Assert.assertEquals(20, persoRM3.getDefense(0, 0));
 	Assert.assertEquals(0, inventaire.getArmure().getRedDegats(0));
 
 	//vérification du cas nominal de l'ajout, pour toutes les zones
@@ -79,9 +79,9 @@ public class IntegEquipementTest
 
 	//récupération de l'armure totale (avec les deux bottes)
 	Armure armure = inventaire.getArmure();
-	Assert.assertEquals(40, persoRM3.getNDPassif(1, 0, false));
+	Assert.assertEquals(35, persoRM3.getDefense(1, 0));
 	Assert.assertEquals(15, armure.getRedDegats(1));
-	Assert.assertEquals(35, persoRM3.getNDPassif(2, 0, false));
+	Assert.assertEquals(30, persoRM3.getDefense(2, 0));
 	Assert.assertEquals(5, armure.getRedDegats(2));
 	Assert.assertEquals(0, armure.getMalusParade());
 	Assert.assertEquals(12, armure.getMalusEsquive());
@@ -92,11 +92,11 @@ public class IntegEquipementTest
 
 	//récupération de l'armure totale (avec le trou dans la liste au niveau du pied gauche)
 	armure = inventaire.getArmure();
-	Assert.assertEquals(35, persoRM3.getNDPassif(1, 0, false));
+	Assert.assertEquals(30, persoRM3.getDefense(1, 0));
 	Assert.assertEquals(15, armure.getRedDegats(1));
-	Assert.assertEquals(40, persoRM3.getNDPassif(0, 0, false));
+	Assert.assertEquals(35, persoRM3.getDefense(0, 0));
 	Assert.assertEquals(15, armure.getRedDegats(0));
-	Assert.assertEquals(35, persoRM3.getNDPassif(2, 0, false));
+	Assert.assertEquals(30, persoRM3.getDefense(2, 0));
 	Assert.assertEquals(5, armure.getRedDegats(2));
 	Assert.assertEquals(0, armure.getMalusParade());
 	Assert.assertEquals(11, armure.getMalusEsquive());
@@ -108,20 +108,20 @@ public class IntegEquipementTest
 
 	Assert.assertEquals(0, inventaire.getArmure().getMalusParade());
 	Assert.assertEquals(11, inventaire.getArmure().getMalusEsquive());
-	Assert.assertEquals(40, persoRM3.getNDPassif(2, 0, false));//le bouclier doit avoir fait augmenter le type général de l'armure en plus de lui avoir fait passer un rang
+	Assert.assertEquals(35, persoRM3.getDefense(2, 0));//le bouclier doit avoir fait augmenter le type général de l'armure en plus de lui avoir fait passer un rang
 	Assert.assertEquals(15, inventaire.getArmure().getRedDegats(2));
-	Assert.assertEquals(35, persoRM3.getNDPassif(3, 0, false));
+	Assert.assertEquals(30, persoRM3.getDefense(3, 0));
 	Assert.assertEquals(5, inventaire.getArmure().getRedDegats(3));
-	Assert.assertEquals(30, persoRM3.getNDPassif(4, 0, false));
+	Assert.assertEquals(25, persoRM3.getDefense(4, 0));
 	Assert.assertEquals(5, inventaire.getArmure().getRedDegats(4));
 
 	//on retire le bouclier, tout doit redevenir comme avant
 	inventaire.removeBouclier(Inventaire.Lateralisation.GAUCHE);
-	Assert.assertEquals(35, persoRM3.getNDPassif(1, 0, false));
+	Assert.assertEquals(30, persoRM3.getDefense(1, 0));
 	Assert.assertEquals(15, inventaire.getArmure().getRedDegats(1));
-	Assert.assertEquals(40, persoRM3.getNDPassif(0, 0, false));
+	Assert.assertEquals(35, persoRM3.getDefense(0, 0));
 	Assert.assertEquals(15, inventaire.getArmure().getRedDegats(0));
-	Assert.assertEquals(35, persoRM3.getNDPassif(2, 0, false));
+	Assert.assertEquals(30, persoRM3.getDefense(2, 0));
 	Assert.assertEquals(5, inventaire.getArmure().getRedDegats(2));
 	Assert.assertEquals(0, inventaire.getArmure().getMalusParade());
 	Assert.assertEquals(11, inventaire.getArmure().getMalusEsquive());

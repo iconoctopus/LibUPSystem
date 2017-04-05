@@ -36,6 +36,7 @@ public class UnitGroupeTraitsTest
 	try
 	{
 	    new GroupeTraits(3, 2, 0, 4, 1).setTrait(GroupeTraits.Trait.MENTAL, -1);
+	    fail();
 	}
 	catch (IllegalArgumentException e)
 	{

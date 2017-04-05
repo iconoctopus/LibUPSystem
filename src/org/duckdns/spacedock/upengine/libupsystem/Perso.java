@@ -115,10 +115,6 @@ public class Perso
 	    m_arbreDomaines.setRangComp(4, i, p_RM);
 	}
 
-	//on ajoute des rangs en esquive
-	m_arbreDomaines.setRangDomaine(2, p_RM);
-	m_arbreDomaines.setRangComp(2, 0, p_RM);
-
 	m_libellePerso = PropertiesHandler.getInstance("libupsystem").getString("lbl_perso_std") + p_RM;
     }
 
@@ -425,66 +421,31 @@ public class Perso
 
     /**
      *
-     * @param p_typeArme
-     * @param p_catArme catégorie d'arme à employer en parade, ignoré si
-     * esquive, attnetion ce n'est pas le numéro index de comp mais bien la
-     * catégorie d'arme
-     * @param p_esquive : si l'esquive doit être employée, sinon c'est une
-     * parade qui est effectuée
-     * @return le ND passif calculé à partir des comps et de l'armure
+     * @param p_typeArme le type d'arme infligeant potentiellement des dégâts
+     * entrants afin de prendre en compte l'armure
+     * @param p_nbAdvSup nombre d'adversaires supplémentaires AU DELA DU PREMIER
+     * @return la défense, calculée à partir du groupe de traits
      */
-    public int getNDPassif(int p_typeArme, int p_catArme, boolean p_esquive)
+    public int getDefense(int p_typeArme, int p_nbAdvSup)
     {
-	int ND;
-	int rang;
-	int effetArmure = 0;
-	Armure armure = m_inventaire.getArmure();
-
-	if (!p_esquive)
+	int result = 0;
+	if (p_nbAdvSup >= 0)
 	{
-	    //calcul de la valeur issue de la compétence parade
-	    rang = m_arbreDomaines.getRangComp(3, p_catArme * 2 + 1); // la comp de parade est par convention à cat*2+1 là où attaque est à cat*2
+	    Armure armure = m_inventaire.getArmure();
 
-	    //ajout des bonus  et malus d'armure
-	    effetArmure += armure.getBonusND(p_typeArme);
-	    effetArmure -= armure.getMalusParade();
-	}
-	else
-	{
-	    //calcul de la valeur issue de la compétence esquive
-	    rang = m_arbreDomaines.getRangComp(2, 0);
-	    //ajout des bonus  et malus d'armure
-	    effetArmure += armure.getBonusND(p_typeArme);
-	    effetArmure -= armure.getMalusEsquive();
-
-	}
-
-	if (rang > 0)
-	{
-	    ND = rang * 5 + 5;
-	    if (rang >= 3)
+	    result = m_groupeTraits.getTrait(Trait.COORDINATION) * 5 + 5;//valeur de base
+	    result += armure.getBonusND(p_typeArme);//effets d'armure
+	    result -= p_nbAdvSup * 2; // malus par adversaire supplémentaire
+	    if (result < 5)//application de la règle du minimum de 5 à la défense
 	    {
-		ND += 5;
+		result = 5;
 	    }
 	}
 	else
 	{
-	    if (!p_esquive)
-	    {
-		rang = m_arbreDomaines.getRangDomaine(3);
-	    }
-	    else
-	    {
-		rang = m_arbreDomaines.getRangDomaine(2);
-	    }
-	    ND = rang * 5 - 5;
-	    if (ND < 5)
-	    {
-		ND = 5;
-	    }
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("nb_adv_sup") + ":" + p_nbAdvSup);
 	}
-	ND += effetArmure;
-	return ND;
+	return result;
     }
 
     public int getPointsDeFatigue()

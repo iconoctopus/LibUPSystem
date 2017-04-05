@@ -200,9 +200,6 @@ public class UnitPersoTest
 	verify(arbreMock, times(2)).setRangComp(3, 2, 3);//la liste mock contient à ce moment 3 items
 	verify(arbreMock, never()).setRangComp(3, 3, 3);//et donc on ne va pas jusqu'à un éventuel quatrième
 	verify(arbreMock, times(2)).setRangDomaine(4, 3);
-	verify(arbreMock, times(2)).setRangDomaine(2, 3);
-	verify(arbreMock, times(2)).setRangComp(2, 0, 3);
-	verify(arbreMock, never()).setRangComp(2, 1, 3);//seule esquive est montée dans ce domaine
 
 	assertEquals(3, persoTest.getTrait(PHYSIQUE));
 	assertEquals(3, persoTest.getTrait(COORDINATION));
@@ -599,32 +596,39 @@ public class UnitPersoTest
     }
 
     @Test
-    public void testGetNDPassif()
+    public void testGetNDPassifErreur()
+    {
+	try
+	{
+	    persoRM3.getDefense(0, -1);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    assertEquals("paramétre aberrant:nombre d'adversaires au delà du premier:-1", e.getMessage());
+	}
+    }
+
+    @Test
+    public void testGetNDPassifNominal()
     {
 	//On mocke un inventaire contenant une armure
 	Armure armureMock = PowerMockito.mock(Armure.class);
 	when(armureMock.getBonusND(3)).thenReturn(7);
-	when(armureMock.getMalusEsquive()).thenReturn(4);
-	when(armureMock.getMalusParade()).thenReturn(2);
 	when(inventaireMock.getArmure()).thenReturn(armureMock);
 
-	//esquive
-	when(arbreMock.getRangComp(2, 0)).thenReturn(2);//compétence possédée sans bonus de rang
-	Assert.assertEquals(18, persoRM1.getNDPassif(3, 0, true));
-	when(arbreMock.getRangComp(2, 0)).thenReturn(3);//compétence possédée avec bonus de rang
-	Assert.assertEquals(28, persoRM3.getNDPassif(3, 0, true));
-	when(arbreMock.getRangComp(2, 0)).thenReturn(0);//compétence non possédée
-	when(arbreMock.getRangDomaine(2)).thenReturn(1);
-	Assert.assertEquals(8, persoRM3.getNDPassif(3, 0, true));
+	//sans adversaire supplémentaire
+	Assert.assertEquals(17, persoRM1.getDefense(3, 0));
+	verify(armureMock).getBonusND(3);
+	Assert.assertEquals(27, persoRM3.getDefense(3, 0));
 
-	//parade
-	when(arbreMock.getRangComp(3, 3)).thenReturn(1);//compétence possédée sans bonus de rang
-	Assert.assertEquals(15, persoRM1.getNDPassif(3, 1, false));
-	when(arbreMock.getRangComp(3, 3)).thenReturn(3);//compétence possédée avec bonus de rang
-	Assert.assertEquals(30, persoRM3.getNDPassif(3, 1, false));
-	when(arbreMock.getRangComp(3, 3)).thenReturn(0);//compétence non possédée
-	when(arbreMock.getRangDomaine(3)).thenReturn(3);
-	Assert.assertEquals(15, persoRM3.getNDPassif(3, 1, false));
+	//avec adversaires supplémentaire (mais calcul normal)
+	Assert.assertEquals(15, persoRM1.getDefense(3, 1));
+	Assert.assertEquals(21, persoRM3.getDefense(3, 3));
+
+	//avec adversaires supplémentaire entraînant défense <5 donc application du minimum
+	Assert.assertEquals(5, persoRM1.getDefense(3, 6));//positif mais < 5
+	Assert.assertEquals(5, persoRM3.getDefense(3, 52));//négatif
     }
 
     @Test

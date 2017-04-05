@@ -54,8 +54,8 @@ public class IntegCaracTest//tester les libellés
 	Assert.assertEquals(0, persoRM1.getBlessuresGraves());
 	Assert.assertEquals(0, persoRM1.getBlessuresLegeres());
 	Assert.assertEquals(0, persoRM1.getBlessuresLegeresMentales());
-	Assert.assertEquals(10, persoRM1.getNDPassif(0, 1, false));
-	Assert.assertEquals(10, persoRM1.getNDPassif(0, 1, true));
+	Assert.assertEquals(10, persoRM1.getDefense(0, 0));
+	Assert.assertEquals(8, persoRM1.getDefense(0, 1));
 	Assert.assertTrue(persoRM1.isSonne());
 	Assert.assertFalse(persoRM1.isInconscient());
 	Assert.assertFalse(persoRM1.isElimine());
@@ -63,8 +63,8 @@ public class IntegCaracTest//tester les libellés
 	Assert.assertEquals(0, persoRM3.getBlessuresGraves());
 	Assert.assertEquals(0, persoRM3.getBlessuresLegeres());
 	Assert.assertEquals(0, persoRM3.getBlessuresLegeresMentales());
-	Assert.assertEquals(25, persoRM3.getNDPassif(0, 1, false));
-	Assert.assertEquals(25, persoRM3.getNDPassif(0, 1, true));
+	Assert.assertEquals(20, persoRM3.getDefense(0, 0));
+	Assert.assertEquals(5, persoRM3.getDefense(0, 52));
 	Assert.assertFalse(persoRM3.isSonne());
 	Assert.assertFalse(persoRM3.isInconscient());
 	Assert.assertFalse(persoRM3.isElimine());
@@ -72,8 +72,8 @@ public class IntegCaracTest//tester les libellés
 	Assert.assertEquals(0, persoNonRM.getBlessuresGraves());
 	Assert.assertEquals(0, persoNonRM.getBlessuresLegeres());
 	Assert.assertEquals(0, persoNonRM.getBlessuresLegeresMentales());
-	Assert.assertEquals(5, persoNonRM.getNDPassif(0, 1, false));
-	Assert.assertEquals(5, persoNonRM.getNDPassif(0, 1, true));
+	Assert.assertEquals(15, persoNonRM.getDefense(0, 0));
+	Assert.assertEquals(7, persoNonRM.getDefense(0, 4));
 	Assert.assertFalse(persoNonRM.isSonne());
 	Assert.assertFalse(persoRM3.isInconscient());
 	Assert.assertFalse(persoRM3.isElimine());

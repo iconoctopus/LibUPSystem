@@ -107,7 +107,7 @@ public class Inventaire
 	//vérification de l'occupation des mains
 	if (!mainCible.isOccupeArmeBouclier())
 	{
-	    if (p_arme.getNbMainsArme() == 2)
+	    if (p_arme.isArme2Mains())
 	    {
 		if (!autreMain.isOccupeArmeBouclier())
 		{
@@ -281,7 +281,7 @@ public class Inventaire
 	//vérification de l'occupation des mains
 	if (mainPrincipale.isOccupeArmeBouclier())
 	{
-	    if (mainPrincipale.getArme().getNbMainsArme() == 2)
+	    if (mainPrincipale.getArme().isArme2Mains())
 	    {
 		autreMain.setArmeDeuxMainsDansMainPrincipaleFalse();
 	    }

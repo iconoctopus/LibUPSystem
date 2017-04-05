@@ -29,7 +29,7 @@ public abstract class Arme
     /**
      * le nombre de mains nécessaire au maniement de l'arme
      */
-    private final int m_NbMainsArme;
+    private final boolean m_arme2Mains;
     /**
      * le bonus apporté à l'initiative totale
      */
@@ -133,7 +133,7 @@ public abstract class Arme
 	m_physMin = referenceArm.getPhysMinArme(p_indice);
 	m_nom = nom;
 	m_categorie = referenceArm.getCategorieArme(p_indice);
-	m_NbMainsArme = referenceArm.getNbMainsArme(p_indice);
+	m_arme2Mains = referenceArm.isArme2Mains(p_indice);
 	m_mode = referenceArm.getModArme(p_indice);
     }
 
@@ -162,9 +162,9 @@ public abstract class Arme
 	return m_mode;
     }
 
-    public int getNbMainsArme()
+    public boolean isArme2Mains()
     {
-	return m_NbMainsArme;
+	return m_arme2Mains;
     }
 
     public int getTypeArme()

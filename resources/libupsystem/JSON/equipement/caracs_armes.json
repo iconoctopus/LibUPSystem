@@ -8,7 +8,7 @@
 	    "physique_minimal": 2,
 	    "categorie": 1,
 	    "type": 0,
-	    "mains": 1,
+	    "2mains": false,
 	    "mode": 0
 	}, {
 	    "nom": "coutelas",
@@ -18,7 +18,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 1,
 	    "type": 0,
-	    "mains": 1,
+	    "2mains": false,
 	    "mode": 0
 	}, {
 	    "nom": "épée courte",
@@ -28,7 +28,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 1,
 	    "type": 0,
-	    "mains": 1,
+	    "2mains": false,
 	    "mode": 0
 	}, {
 	    "nom": "rapière",
@@ -38,7 +38,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 1,
 	    "type": 0,
-	    "mains": 1,
+	    "2mains": false,
 	    "mode": 0
 	}, {
 	    "nom": "sabre",
@@ -48,7 +48,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 1,
 	    "type": 0,
-	    "mains": 1,
+	    "2mains": false,
 	    "mode": 0
 	}, {
 	    "nom": "épée à deux mains",
@@ -58,7 +58,7 @@
 	    "physique_minimal": 3,
 	    "categorie": 2,
 	    "type": 0,
-	    "mains": 2,
+	    "2mains": true,
 	    "mode": 0
 	}, {
 	    "nom": "épée à une main",
@@ -68,7 +68,7 @@
 	    "physique_minimal": 2,
 	    "categorie": 2,
 	    "type": 0,
-	    "mains": 1,
+	    "2mains": false,
 	    "mode": 0
 	}, {
 	    "nom": "espadon",
@@ -78,7 +78,7 @@
 	    "physique_minimal": 4,
 	    "categorie": 2,
 	    "type": 0,
-	    "mains": 2,
+	    "2mains": true,
 	    "mode": 0
 	}, {
 	    "nom": "hachette",
@@ -88,7 +88,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 3,
 	    "type": 0,
-	    "mains": 1,
+	    "2mains": false,
 	    "mode": 0
 	}, {
 	    "nom": "hache à deux mains",
@@ -98,7 +98,7 @@
 	    "physique_minimal": 3,
 	    "categorie": 3,
 	    "type": 0,
-	    "mains": 2,
+	    "2mains": true,
 	    "mode": 0
 	}, {
 	    "nom": "hache d'arme",
@@ -108,7 +108,7 @@
 	    "physique_minimal": 2,
 	    "categorie": 3,
 	    "type": 0,
-	    "mains": 1,
+	    "2mains": false,
 	    "mode": 0
 	}, {
 	    "nom": "arme improvisée (petite)",
@@ -118,7 +118,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 4,
 	    "type": 0,
-	    "mains": 1,
+	    "2mains": false,
 	    "mode": 0
 	}, {
 	    "nom": "arme improvisée (moyenne)",
@@ -128,7 +128,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 4,
 	    "type": 0,
-	    "mains": 1,
+	    "2mains": false,
 	    "mode": 0
 	}, {
 	    "nom": "arme improvisée (grosse)",
@@ -138,7 +138,7 @@
 	    "physique_minimal": 3,
 	    "categorie": 4,
 	    "type": 0,
-	    "mains": 1,
+	    "2mains": false,
 	    "mode": 0
 	}, {
 	    "nom": "bâton ferré",
@@ -148,7 +148,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 4,
 	    "type": 0,
-	    "mains": 2,
+	    "2mains": true,
 	    "mode": 0
 	}, {
 	    "nom": "fléau d'arme",
@@ -158,7 +158,7 @@
 	    "physique_minimal": 2,
 	    "categorie": 4,
 	    "type": 0,
-	    "mains": 2,
+	    "2mains": true,
 	    "mode": 0
 	}, {
 	    "nom": "gourdin",
@@ -168,7 +168,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 4,
 	    "type": 0,
-	    "mains": 2,
+	    "2mains": true,
 	    "mode": 0
 	}, {
 	    "nom": "marteau",
@@ -178,7 +178,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 4,
 	    "type": 0,
-	    "mains": 1,
+	    "2mains": false,
 	    "mode": 0
 	}, {
 	    "nom": "masse",
@@ -188,7 +188,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 4,
 	    "type": 0,
-	    "mains": 1,
+	    "2mains": false,
 	    "mode": 0
 	}, {
 	    "nom": "morgenstern",
@@ -198,7 +198,7 @@
 	    "physique_minimal": 2,
 	    "categorie": 4,
 	    "type": 0,
-	    "mains": 1,
+	    "2mains": false,
 	    "mode": 0
 	}, {
 	    "nom": "brise-lame",
@@ -208,7 +208,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 5,
 	    "type": 0,
-	    "mains": 1,
+	    "2mains": false,
 	    "mode": 0
 	}, {
 	    "nom": "chakram",
@@ -218,7 +218,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 5,
 	    "type": 0,
-	    "mains": 1,
+	    "2mains": false,
 	    "mode": 0
 	}, {
 	    "nom": "couteau",
@@ -228,7 +228,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 5,
 	    "type": 0,
-	    "mains": 1,
+	    "2mains": false,
 	    "mode": 0
 	}, {
 	    "nom": "dague",
@@ -238,7 +238,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 5,
 	    "type": 0,
-	    "mains": 1,
+	    "2mains": false,
 	    "mode": 0
 	}, {
 	    "nom": "katar",
@@ -248,7 +248,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 5,
 	    "type": 0,
-	    "mains": 1,
+	    "2mains": false,
 	    "mode": 0
 	}, {
 	    "nom": "main gauche",
@@ -258,7 +258,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 5,
 	    "type": 0,
-	    "mains": 1,
+	    "2mains": false,
 	    "mode": 0
 	}, {
 	    "nom": "epieu",
@@ -268,7 +268,7 @@
 	    "physique_minimal": 2,
 	    "categorie": 6,
 	    "type": 0,
-	    "mains": 2,
+	    "2mains": true,
 	    "mode": 0
 	}, {
 	    "nom": "hallebarde",
@@ -278,7 +278,7 @@
 	    "physique_minimal": 3,
 	    "categorie": 6,
 	    "type": 0,
-	    "mains": 2,
+	    "2mains": true,
 	    "mode": 0
 	}, {
 	    "nom": "javeline",
@@ -288,7 +288,7 @@
 	    "physique_minimal": 0,
 	    "categorie": 6,
 	    "type": 0,
-	    "mains": 1,
+	    "2mains": false,
 	    "mode": 0
 	}, {
 	    "nom": "lance",
@@ -298,7 +298,7 @@
 	    "physique_minimal": 3,
 	    "categorie": 6,
 	    "type": 0,
-	    "mains": 2,
+	    "2mains": true,
 	    "mode": 0
 	}, {
 	    "nom": "arme lourde de corps à corps (avec harnais)",
@@ -308,7 +308,7 @@
 	    "physique_minimal": 3,
 	    "categorie": 9,
 	    "type": 0,
-	    "mains": 2,
+	    "2mains": true,
 	    "mode": 0
 	}, {
 	    "nom": "arme lourde de corps à corps (sans harnais)",
@@ -318,7 +318,7 @@
 	    "physique_minimal": 3,
 	    "categorie": 9,
 	    "type": 0,
-	    "mains": 2,
+	    "2mains": true,
 	    "mode": 0
 	},
 	{
@@ -334,7 +334,7 @@
 	    "actions_recharge": 3,
 	    "magasin": 1,
 	    "type": 1,
-	    "mains": 2,
+	    "2mains": true,
 	    "mode": 1
 	}, {
 	    "nom": "arbalète lourde",
@@ -349,7 +349,7 @@
 	    "actions_recharge": 4,
 	    "magasin": 1,
 	    "type": 1,
-	    "mains": 2,
+	    "2mains": true,
 	    "mode": 1
 	}, {
 	    "nom": "arc",
@@ -364,7 +364,7 @@
 	    "actions_recharge": 1,
 	    "magasin": 1,
 	    "type": 0,
-	    "mains": 2,
+	    "2mains": true,
 	    "mode": 1
 	}, {
 	    "nom": "arc long",
@@ -379,7 +379,7 @@
 	    "actions_recharge": 1,
 	    "magasin": 1,
 	    "type": 0,
-	    "mains": 2,
+	    "2mains": true,
 	    "mode": 1
 	}, {
 	    "nom": "chakram",
@@ -394,7 +394,7 @@
 	    "actions_recharge": 0,
 	    "magasin": 1,
 	    "type": 0,
-	    "mains": 1,
+	    "2mains": false,
 	    "mode": 1
 	}, {
 	    "nom": "fronde",
@@ -409,7 +409,7 @@
 	    "actions_recharge": 1,
 	    "magasin": 1,
 	    "type": 0,
-	    "mains": 1,
+	    "2mains": false,
 	    "mode": 1
 	}, {
 	    "nom": "fusil",
@@ -424,7 +424,7 @@
 	    "actions_recharge": 1,
 	    "magasin": 10,
 	    "type": 1,
-	    "mains": 2,
+	    "2mains": true,
 	    "mode": 1
 	}, {
 	    "nom": "mousquet",
@@ -439,7 +439,7 @@
 	    "actions_recharge": 7,
 	    "magasin": 1,
 	    "type": 1,
-	    "mains": 2,
+	    "2mains": true,
 	    "mode": 1
 	}, {
 	    "nom": "pistolet ancien",
@@ -454,7 +454,7 @@
 	    "actions_recharge": 5,
 	    "magasin": 1,
 	    "type": 1,
-	    "mains": 1,
+	    "2mains": false,
 	    "mode": 1
 	}, {
 	    "nom": "pistolet léger",
@@ -469,7 +469,7 @@
 	    "actions_recharge": 1,
 	    "magasin": 6,
 	    "type": 1,
-	    "mains": 1,
+	    "2mains": false,
 	    "mode": 1
 	}, {
 	    "nom": "pistolet lourd",
@@ -484,7 +484,7 @@
 	    "actions_recharge": 1,
 	    "magasin": 9,
 	    "type": 1,
-	    "mains": 1,
+	    "2mains": false,
 	    "mode": 1
 	}, {
 	    "nom": "shotgun",
@@ -499,7 +499,7 @@
 	    "actions_recharge": 1,
 	    "magasin": 6,
 	    "type": 0,
-	    "mains": 2,
+	    "2mains": true,
 	    "mode": 1
 	}, {
 	    "nom": "fusil d'assaut",
@@ -514,7 +514,7 @@
 	    "actions_recharge": 1,
 	    "magasin": 30,
 	    "type": 1,
-	    "mains": 2,
+	    "2mains": true,
 	    "mode": 1
 	}, {
 	    "nom": "mitrailleuse légère",
@@ -529,7 +529,7 @@
 	    "actions_recharge": 1,
 	    "magasin": 100,
 	    "type": 1,
-	    "mains": 2,
+	    "2mains": true,
 	    "mode": 1
 	}, {
 	    "nom": "pistolet mitrallleur",
@@ -544,7 +544,7 @@
 	    "actions_recharge": 1,
 	    "magasin": 20,
 	    "type": 1,
-	    "mains": 1,
+	    "2mains": false,
 	    "mode": 1
 	}, {
 	    "nom": "canon d'assaut",
@@ -559,7 +559,7 @@
 	    "actions_recharge": 1,
 	    "magasin": 10,
 	    "type": 2,
-	    "mains": 2,
+	    "2mains": true,
 	    "mode": 1
 	}, {
 	    "nom": "lance missile",
@@ -574,7 +574,7 @@
 	    "actions_recharge": 1,
 	    "magasin": 1,
 	    "type": 0,
-	    "mains": 2,
+	    "2mains": true,
 	    "mode": 1
 	}, {
 	    "nom": "mitrailleuse lourde",
@@ -589,7 +589,7 @@
 	    "actions_recharge": 1,
 	    "magasin": 500,
 	    "type": 2,
-	    "mains": 2,
+	    "2mains": true,
 	    "mode": 1
 	}],
     "types_armes": ["simple", "perce-armure", "pénétrante", "perce-blindage", "énergétique"],

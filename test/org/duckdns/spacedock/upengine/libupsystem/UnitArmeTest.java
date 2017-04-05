@@ -85,7 +85,7 @@ public class UnitArmeTest
 	when(referenceMock.getTypeArme(3)).thenReturn(4);
 	when(referenceMock.getMalusAttaqueArme(3)).thenReturn(0);
 	when(referenceMock.getPhysMinArme(3)).thenReturn(0);
-	when(referenceMock.getNbMainsArme(3)).thenReturn(1);
+	when(referenceMock.isArme2Mains(3)).thenReturn(false);
 	when(referenceMock.getModArme(3)).thenReturn(0);
 	when(referenceMock.getLblArme(3)).thenReturn("rapière");
 	arme1 = new ArmeCaC(3, Arme.QualiteArme.superieure, Arme.EquilibrageArme.mauvais);
@@ -96,7 +96,7 @@ public class UnitArmeTest
 	when(referenceMock.getTypeArme(10)).thenReturn(0);
 	when(referenceMock.getMalusAttaqueArme(10)).thenReturn(1);
 	when(referenceMock.getPhysMinArme(10)).thenReturn(2);
-	when(referenceMock.getNbMainsArme(10)).thenReturn(1);
+	when(referenceMock.isArme2Mains(10)).thenReturn(false);
 	when(referenceMock.getModArme(10)).thenReturn(0);
 	when(referenceMock.getLblArme(10)).thenReturn("hache d'arme");
 	arme2 = new ArmeCaC(10, Arme.QualiteArme.inferieure, Arme.EquilibrageArme.bon);
@@ -109,7 +109,7 @@ public class UnitArmeTest
 	when(referenceMock.getTypeArme(34)).thenReturn(0);
 	when(referenceMock.getMalusAttaqueArme(34)).thenReturn(0);
 	when(referenceMock.getPhysMinArme(34)).thenReturn(0);
-	when(referenceMock.getNbMainsArme(34)).thenReturn(2);
+	when(referenceMock.isArme2Mains(34)).thenReturn(true);
 	when(referenceMock.getModArme(34)).thenReturn(1);
 	when(referenceMock.getLblArme(34)).thenReturn("arc");
 
@@ -129,7 +129,7 @@ public class UnitArmeTest
 	when(referenceMock.getTypeArme(512)).thenReturn(2);
 	when(referenceMock.getMalusAttaqueArme(512)).thenReturn(1);
 	when(referenceMock.getPhysMinArme(512)).thenReturn(3);
-	when(referenceMock.getNbMainsArme(512)).thenReturn(1);
+	when(referenceMock.isArme2Mains(512)).thenReturn(false);
 	when(referenceMock.getModArme(512)).thenReturn(1);
 	when(referenceMock.getLblArme(512)).thenReturn("SupaShooter");
 
@@ -220,16 +220,16 @@ public class UnitArmeTest
     }
 
     @Test
-    public void testMode()
+    public void testNbMains()
     {
-	Assert.assertEquals(0, arme1.getMode());
-	Assert.assertEquals(0, arme2.getMode());
-	Assert.assertEquals(0, arme3.getMode());
-	Assert.assertEquals(0, arme4.getMode());
-	Assert.assertEquals(1, arme5.getMode());
-	Assert.assertEquals(1, arme6.getMode());
-	Assert.assertEquals(1, arme7.getMode());
-	Assert.assertEquals(1, arme8.getMode());
+	Assert.assertFalse(arme1.isArme2Mains());
+	Assert.assertFalse(arme2.isArme2Mains());
+	Assert.assertFalse(arme3.isArme2Mains());
+	Assert.assertFalse(arme4.isArme2Mains());
+	Assert.assertTrue(arme5.isArme2Mains());
+	Assert.assertTrue(arme6.isArme2Mains());
+	Assert.assertTrue(arme7.isArme2Mains());
+	Assert.assertFalse(arme8.isArme2Mains());
     }
 
     @Test

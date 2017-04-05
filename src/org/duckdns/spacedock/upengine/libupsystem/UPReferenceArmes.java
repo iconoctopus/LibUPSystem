@@ -313,11 +313,11 @@ public class UPReferenceArmes
     /**
      *
      * @param p_indice
-     * @return le nombre de mains utilisées par une arme
+     * @return si l'arme doit s'employer à deux mains
      */
-    public int getNbMainsArme(int p_indice)
+    public boolean isArme2Mains(int p_indice)
     {
-	return m_tabArmes.getJsonObject(p_indice).getInt("mains");
+	return m_tabArmes.getJsonObject(p_indice).getBoolean("2mains");
     }
 
     /**

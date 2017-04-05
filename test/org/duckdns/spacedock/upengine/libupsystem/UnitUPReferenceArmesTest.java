@@ -102,10 +102,10 @@ public class UnitUPReferenceArmesTest
     }
 
     @Test
-    public void testGetNbMainsArme()
+    public void testIsArme2Mains()
     {
-	Assert.assertEquals(1, m_reference.getNbMainsArme(4));
-	Assert.assertEquals(2, m_reference.getNbMainsArme(14));
+	Assert.assertFalse(m_reference.isArme2Mains(4));
+	Assert.assertTrue(m_reference.isArme2Mains(14));
     }
 
     @Test

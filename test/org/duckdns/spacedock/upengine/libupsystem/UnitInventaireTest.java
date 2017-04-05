@@ -55,9 +55,9 @@ public class UnitInventaireTest
     {
 	inventaireTest = new Inventaire();
 	arme1MainMock = PowerMockito.mock(Arme.class);
-	when(arme1MainMock.getNbMainsArme()).thenReturn(1);
+	when(arme1MainMock.isArme2Mains()).thenReturn(false);
 	arme2MainsMock = PowerMockito.mock(Arme.class);
-	when(arme2MainsMock.getNbMainsArme()).thenReturn(2);
+	when(arme2MainsMock.isArme2Mains()).thenReturn(true);
 
 	casqueMock = PowerMockito.mock(PieceArmure.class);
 	when(casqueMock.isBouclier()).thenReturn(false);
@@ -89,7 +89,7 @@ public class UnitInventaireTest
     {
 	//main droite initialement prise
 	inventaireTest.addArme(arme1MainMock, Inventaire.Lateralisation.DROITE);
-	verify(arme1MainMock).getNbMainsArme();
+	verify(arme1MainMock).isArme2Mains();
 
 	//erreur : on ne peut pas retirer quelque chose qui n'est pas là
 	try
@@ -111,7 +111,7 @@ public class UnitInventaireTest
 	}
 	catch (IllegalStateException e)
 	{
-	    verify(arme1MainSupMock, never()).getNbMainsArme();
+	    verify(arme1MainSupMock, never()).isArme2Mains();
 	    Assert.assertEquals("emploi de la mauvaise méthode dans ce contexte:l'emplacement n'est pas libre", e.getMessage());
 	}
 
@@ -119,7 +119,7 @@ public class UnitInventaireTest
 	try
 	{
 	    inventaireTest.addArme(arme2MainsMock, Inventaire.Lateralisation.GAUCHE);
-	    verify(arme2MainsMock).getNbMainsArme();
+	    verify(arme2MainsMock).isArme2Mains();
 	    fail();
 	}
 	catch (IllegalStateException e)
@@ -141,7 +141,7 @@ public class UnitInventaireTest
 
 	//ajout d'arme côté secondaire, dans cette version sans combat à deux armes l'arme principale qui répond reste celle de l'autre côté, à terme ce test évoluera
 	Arme arme1MainSupMock = PowerMockito.mock(Arme.class);
-	when(arme1MainSupMock.getNbMainsArme()).thenReturn(1);
+	when(arme1MainSupMock.isArme2Mains()).thenReturn(false);
 	inventaireTest.addArme(arme1MainSupMock, Inventaire.Lateralisation.GAUCHE);
 	armeRetour = inventaireTest.getArmeCourante();
 	Assert.assertEquals(arme1MainMock, armeRetour);

@@ -17,6 +17,9 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.util.ArrayList;
+import static org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait.MENTAL;
+import static org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait.PHYSIQUE;
+import static org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait.PRESENCE;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -58,10 +61,9 @@ public final class UnitUPReferenceSysTest
     @Test
     public void testGetLibelleTrait()
     {
-	Assert.assertEquals("physique", m_reference.getLibelleTrait(0));
-	Assert.assertEquals("mental", m_reference.getLibelleTrait(2));
-	Assert.assertEquals("sociabilité", m_reference.getLibelleTrait(4));
-
+	Assert.assertEquals("physique", m_reference.getLibelleTrait(PHYSIQUE));
+	Assert.assertEquals("mental", m_reference.getLibelleTrait(MENTAL));
+	Assert.assertEquals("présence", m_reference.getLibelleTrait(PRESENCE));
     }
 
     @Test

@@ -17,9 +17,16 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import static org.duckdns.spacedock.commonutils.JSONHandler.loadJsonFile;
+import org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait;
+import static org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait.COORDINATION;
+import static org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait.MENTAL;
+import static org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait.PHYSIQUE;
+import static org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait.PRESENCE;
+import static org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait.VOLONTE;
 
 /**
  * Classe permetant l'accès aux éléments de référence du UP!System
@@ -60,9 +67,9 @@ public final class UPReferenceSysteme
      */
     private final JsonArray m_tableInitMental;
     /**
-     * table des libellés des traits
+     * liste des libellés de traits
      */
-    private final JsonArray m_tableTraits;
+    public final EnumMap<Trait, String> m_listLblTrait;
     /**
      * instance unique de cet objet
      */
@@ -83,10 +90,18 @@ public final class UPReferenceSysteme
 
 	//chargement des libellés des caractéristiques particulières
 	object = loadJsonFile("libupsystem", "tables_systeme/tab_caracs.json");
-	m_tableTraits = object.getJsonArray("traits");
 	m_lblCompAttaque = object.getString("lbl_attaque");
 	m_lblCompParade = object.getString("lbl_parade");
 	m_lblCompMetier = object.getString("lbl_metier");
+
+	//chargement des libellés de traits
+	JsonArray tabTraits = object.getJsonArray("traits");
+	m_listLblTrait = new EnumMap<Trait, String>(Trait.class);
+	m_listLblTrait.put(PHYSIQUE, tabTraits.getString(0));
+	m_listLblTrait.put(COORDINATION, tabTraits.getString(1));
+	m_listLblTrait.put(MENTAL, tabTraits.getString(2));
+	m_listLblTrait.put(VOLONTE, tabTraits.getString(3));
+	m_listLblTrait.put(PRESENCE, tabTraits.getString(4));
 
 	//chargement de l'arbre des domaines et competences
 	m_arbreDomaines = object.getJsonArray("arbre_domaines");
@@ -139,12 +154,12 @@ public final class UPReferenceSysteme
 
     /**
      *
-     * @param p_indice l'indice du trait tel que défini dan le fichier JSON
+     * @param p_indice l'identifiant du trait
      * @return le libelle du trait indicé
      */
-    public String getLibelleTrait(int p_indice)
+    public String getLibelleTrait(Trait p_idTrait)
     {
-	return m_tableTraits.getString(p_indice);
+	return m_listLblTrait.get(p_idTrait);
     }
 
     /**

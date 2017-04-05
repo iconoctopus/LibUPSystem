@@ -438,6 +438,16 @@ public class UnitPersoTest
     }
 
     @Test
+    public void testEffectuerJetTrait()
+    {
+	persoRM3.effectuerJetTrait(MENTAL, 7);
+	verify(traitsRM3).effectuerJetTrait(MENTAL, 7, false);
+	when(fatigueFARM3.isSonne()).thenReturn(true);
+	persoRM3.effectuerJetTrait(MENTAL, 7);
+	verify(traitsRM3).effectuerJetTrait(MENTAL, 7, true);
+    }
+
+    @Test
     public void testToutesMethodesInitErreur()
     {
 	//cas d'erreur sur isActif

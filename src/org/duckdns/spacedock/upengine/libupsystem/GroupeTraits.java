@@ -70,7 +70,7 @@ public class GroupeTraits
      */
     void setTrait(Trait p_idTrait, int p_rang)
     {
-	if (p_rang >= 0)
+	if (p_rang >= 0 && p_rang < 11)
 	{
 	    m_traits.put(p_idTrait, p_rang);
 	}

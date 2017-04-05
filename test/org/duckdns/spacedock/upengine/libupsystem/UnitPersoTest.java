@@ -97,28 +97,28 @@ public class UnitPersoTest
 	//on mocke deux groupes de traits : un pour le perso RM1 et l'autre pour le perso RM3
 	traitsRM1 = PowerMockito.mock(GroupeTraits.class);
 	traitsRM3 = PowerMockito.mock(GroupeTraits.class);
-	whenNew(GroupeTraits.class).withArguments(3, 3, 2, 2, 2).thenReturn(traitsRM3);
+	whenNew(GroupeTraits.class).withArguments(3, 4, 2, 2, 2).thenReturn(traitsRM3);
 	when(traitsRM3.getTrait(Trait.PHYSIQUE)).thenReturn(3);
-	when(traitsRM3.getTrait(Trait.COORDINATION)).thenReturn(3);
+	when(traitsRM3.getTrait(Trait.COORDINATION)).thenReturn(4);
 	when(traitsRM3.getTrait(Trait.MENTAL)).thenReturn(2);
 	when(traitsRM3.getTrait(Trait.VOLONTE)).thenReturn(2);
 	when(traitsRM3.getTrait(Trait.PRESENCE)).thenReturn(2);
 
-	whenNew(GroupeTraits.class).withArguments(1, 1, 0, 0, 0).thenReturn(traitsRM1);
-	when(traitsRM1.getTrait(Trait.PHYSIQUE)).thenReturn(1);
-	when(traitsRM1.getTrait(Trait.COORDINATION)).thenReturn(1);
-	when(traitsRM1.getTrait(Trait.MENTAL)).thenReturn(0);
-	when(traitsRM1.getTrait(Trait.VOLONTE)).thenReturn(0);
-	when(traitsRM1.getTrait(Trait.PRESENCE)).thenReturn(0);
+	whenNew(GroupeTraits.class).withArguments(2, 2, 2, 2, 2).thenReturn(traitsRM1);
+	when(traitsRM1.getTrait(Trait.PHYSIQUE)).thenReturn(2);
+	when(traitsRM1.getTrait(Trait.COORDINATION)).thenReturn(2);
+	when(traitsRM1.getTrait(Trait.MENTAL)).thenReturn(2);
+	when(traitsRM1.getTrait(Trait.VOLONTE)).thenReturn(2);
+	when(traitsRM1.getTrait(Trait.PRESENCE)).thenReturn(2);
 
 	//on mocke deux groupes de jauges, un pour un perso RM1, l'autre pour un perso RM3
 	santeInitRM1 = PowerMockito.mock(CoupleJauge.class);
 	santeInitRM3 = PowerMockito.mock(CoupleJauge.class);
 	fatigueFARM1 = PowerMockito.mock(CoupleJauge.class);
 	fatigueFARM3 = PowerMockito.mock(CoupleJauge.class);
-	whenNew(CoupleJauge.class).withArguments(1, 0, 0, 1).thenReturn(santeInitRM1);
-	whenNew(CoupleJauge.class).withArguments(3, 2, 2, 3).thenReturn(santeInitRM3);
-	whenNew(CoupleJauge.class).withArguments(1, 0, 0).thenReturn(fatigueFARM1);
+	whenNew(CoupleJauge.class).withArguments(2, 2, 2, 2).thenReturn(santeInitRM1);
+	whenNew(CoupleJauge.class).withArguments(3, 2, 2, 4).thenReturn(santeInitRM3);
+	whenNew(CoupleJauge.class).withArguments(2, 2, 2).thenReturn(fatigueFARM1);
 	whenNew(CoupleJauge.class).withArguments(3, 2, 2).thenReturn(fatigueFARM3);
 
 	//La référence mockée renvoie les listes de domaines et compétence prédéfinies
@@ -188,6 +188,17 @@ public class UnitPersoTest
 	{
 	    Assert.assertEquals("paramétre aberrant:rang:0", e.getMessage());
 	}
+
+	//Cas d'erreur : RM >9
+	try
+	{
+	    new Perso(10);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:rang:10", e.getMessage());
+	}
     }
 
     @Test
@@ -196,13 +207,13 @@ public class UnitPersoTest
 	//Cas nominal RM3 : vérification des appels d'ArbreDomaines et GroupeTraits
 	Perso persoTest = new Perso(3);
 
-	verify(arbreMock, times(2)).setRangDomaine(3, 3);
-	verify(arbreMock, times(2)).setRangComp(3, 2, 3);//la liste mock contient à ce moment 3 items
-	verify(arbreMock, never()).setRangComp(3, 3, 3);//et donc on ne va pas jusqu'à un éventuel quatrième
-	verify(arbreMock, times(2)).setRangDomaine(4, 3);
+	verify(arbreMock, times(2)).setRangDomaine(3, 4);
+	verify(arbreMock, times(2)).setRangComp(3, 2, 4);//la liste mock contient à ce moment 3 items
+	verify(arbreMock, never()).setRangComp(3, 3, 4);//et donc on ne va pas jusqu'à un éventuel quatrième
+	verify(arbreMock, times(2)).setRangDomaine(4, 4);
 
 	assertEquals(3, persoTest.getTrait(PHYSIQUE));
-	assertEquals(3, persoTest.getTrait(COORDINATION));
+	assertEquals(4, persoTest.getTrait(COORDINATION));
 	assertEquals(2, persoTest.getTrait(MENTAL));
 	assertEquals(2, persoTest.getTrait(VOLONTE));
 	assertEquals(2, persoTest.getTrait(PRESENCE));
@@ -258,10 +269,10 @@ public class UnitPersoTest
     @Test
     public void testAttaquerCaCAvecArme()
     {
-	//On mocke une arme avec physique min de 2 et malus aux jets de 1
+	//On mocke une arme avec physique min de 3 et malus aux jets de 1
 	ArmeCaC armeMock = PowerMockito.mock(ArmeCaC.class);
 	when(armeMock.getCategorie()).thenReturn(3);
-	when(armeMock.getphysMin()).thenReturn(2);
+	when(armeMock.getphysMin()).thenReturn(3);
 	when(armeMock.getMalusAttaque()).thenReturn(1);
 	when(inventaireMock.getArmeCourante()).thenReturn(armeMock);
 
@@ -271,7 +282,7 @@ public class UnitPersoTest
 	when(resultMock.getNbIncrements()).thenReturn(0);
 	when(resultMock.isJetReussi()).thenReturn(false);
 	when(resultMock.getScoreBrut()).thenReturn(10);
-	when(arbreMock.effectuerJetComp(1, 3, 6, 12, -1, 0, -10, true)).thenReturn(resultMock);
+	when(arbreMock.effectuerJetComp(2, 3, 6, 12, -1, 0, -10, true)).thenReturn(resultMock);
 
 	//On mocke le isSonne() des deux jauges avec
 	when(santeInitRM1.isSonne()).thenReturn(false);
@@ -284,7 +295,7 @@ public class UnitPersoTest
 	Assert.assertEquals(10, resultat.getScoreBrut());
 	Assert.assertEquals(false, resultat.isJetReussi());
 
-	verify(arbreMock).effectuerJetComp(1, 3, 6, 12, -1, 0, -10, true);
+	verify(arbreMock).effectuerJetComp(2, 3, 6, 12, -1, 0, -10, true);
 	verify(traitsRM3, times(2)).getTrait(COORDINATION);
     }
 
@@ -300,7 +311,7 @@ public class UnitPersoTest
 	when(resultMock.getNbIncrements()).thenReturn(3);
 	when(resultMock.isJetReussi()).thenReturn(true);
 	when(resultMock.getScoreBrut()).thenReturn(28);
-	when(arbreMock.effectuerJetComp(3, 3, 0, 30, 0, 0, 0, false)).thenReturn(resultMock);
+	when(arbreMock.effectuerJetComp(4, 3, 0, 30, 0, 0, 0, false)).thenReturn(resultMock);
 
 	//On mocke le isSonne() des deux jauges
 	when(santeInitRM3.isSonne()).thenReturn(false);
@@ -314,7 +325,7 @@ public class UnitPersoTest
 	Assert.assertEquals(true, resultat.isJetReussi());
 
 	verify(traitsRM3, times(3)).getTrait(COORDINATION);
-	verify(arbreMock).effectuerJetComp(3, 3, 0, 30, 0, 0, 0, false);
+	verify(arbreMock).effectuerJetComp(4, 3, 0, 30, 0, 0, 0, false);
     }
 
     @Test
@@ -335,7 +346,7 @@ public class UnitPersoTest
 	when(resultMock.getNbIncrements()).thenReturn(1);
 	when(resultMock.isJetReussi()).thenReturn(true);
 	when(resultMock.getScoreBrut()).thenReturn(22);
-	when(arbreMock.effectuerJetComp(3, 4, 0, 50, -2, 0, -15, false)).thenReturn(resultMock);
+	when(arbreMock.effectuerJetComp(4, 4, 0, 50, -2, 0, -15, false)).thenReturn(resultMock);
 
 	//nombre aberrant de coups (17) mais traité comme coup par coup (juste là pour vérifier le bon passage des arguments), physique minimal dépassé, malus au jet d'attaque
 	when(armeMock.getphysMin()).thenReturn(5);
@@ -353,7 +364,7 @@ public class UnitPersoTest
 	verify(reportMock).getModDesLances();
 	verify(reportMock).getModJet();
 	verify(traitsRM3, times(3)).getTrait(COORDINATION);
-	verify(arbreMock).effectuerJetComp(3, 4, 0, 50, -2, 0, -15, false);//+5 pour portée courte et -20 pour défaut de physique
+	verify(arbreMock).effectuerJetComp(4, 4, 0, 50, -2, 0, -15, false);//+5 pour portée courte et -10 pour défaut de physique
 	Assert.assertEquals(1, resultat.getNbIncrements());
 	Assert.assertEquals(22, resultat.getScoreBrut());
 	Assert.assertEquals(true, resultat.isJetReussi());
@@ -617,17 +628,20 @@ public class UnitPersoTest
 	when(armureMock.getBonusND(3)).thenReturn(7);
 	when(inventaireMock.getArmure()).thenReturn(armureMock);
 
+	//le perso de RM3 est sonné pour vérifier que la règle est bien appliquée
+	when(fatigueFARM3.isSonne()).thenReturn(true);
+
 	//sans adversaire supplémentaire
-	Assert.assertEquals(17, persoRM1.getDefense(3, 0));
+	Assert.assertEquals(22, persoRM1.getDefense(3, 0));
 	verify(armureMock).getBonusND(3);
 	Assert.assertEquals(27, persoRM3.getDefense(3, 0));
 
 	//avec adversaires supplémentaire (mais calcul normal)
-	Assert.assertEquals(15, persoRM1.getDefense(3, 1));
+	Assert.assertEquals(20, persoRM1.getDefense(3, 1));
 	Assert.assertEquals(21, persoRM3.getDefense(3, 3));
 
 	//avec adversaires supplémentaire entraînant défense <5 donc application du minimum
-	Assert.assertEquals(5, persoRM1.getDefense(3, 6));//positif mais < 5
+	Assert.assertEquals(5, persoRM1.getDefense(3, 9));//positif mais < 5
 	Assert.assertEquals(5, persoRM3.getDefense(3, 52));//négatif
     }
 
@@ -729,7 +743,7 @@ public class UnitPersoTest
 	//méthodes liées aux traits
 	Assert.assertEquals(3, persoRM3.getTrait(Trait.PHYSIQUE));
 	verify(traitsRM3, times(5)).getTrait(PHYSIQUE);
-	Assert.assertEquals(3, persoRM3.getTrait(Trait.COORDINATION));
+	Assert.assertEquals(4, persoRM3.getTrait(Trait.COORDINATION));
 	verify(traitsRM3, times(3)).getTrait(COORDINATION);
 	Assert.assertEquals(2, persoRM3.getTrait(Trait.MENTAL));
 	verify(traitsRM3, times(3)).getTrait(MENTAL);
@@ -737,11 +751,11 @@ public class UnitPersoTest
 	verify(traitsRM3, times(4)).getTrait(VOLONTE);
 	Assert.assertEquals(2, persoRM3.getTrait(Trait.PRESENCE));
 
-	Assert.assertEquals(1, persoRM1.getTrait(Trait.PHYSIQUE));
-	Assert.assertEquals(1, persoRM1.getTrait(Trait.COORDINATION));
-	Assert.assertEquals(0, persoRM1.getTrait(Trait.MENTAL));
-	Assert.assertEquals(0, persoRM1.getTrait(Trait.VOLONTE));
-	Assert.assertEquals(0, persoRM1.getTrait(Trait.PRESENCE));
+	Assert.assertEquals(2, persoRM1.getTrait(Trait.PHYSIQUE));
+	Assert.assertEquals(2, persoRM1.getTrait(Trait.COORDINATION));
+	Assert.assertEquals(2, persoRM1.getTrait(Trait.MENTAL));
+	Assert.assertEquals(2, persoRM1.getTrait(Trait.VOLONTE));
+	Assert.assertEquals(2, persoRM1.getTrait(Trait.PRESENCE));
 
 	persoRM3.setTrait(Trait.COORDINATION, 1);
 	verify(traitsRM3).setTrait(COORDINATION, 1);

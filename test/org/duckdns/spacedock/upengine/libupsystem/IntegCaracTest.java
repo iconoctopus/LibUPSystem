@@ -54,16 +54,16 @@ public class IntegCaracTest//tester les libellés
 	Assert.assertEquals(0, persoRM1.getBlessuresGraves());
 	Assert.assertEquals(0, persoRM1.getBlessuresLegeres());
 	Assert.assertEquals(0, persoRM1.getBlessuresLegeresMentales());
-	Assert.assertEquals(10, persoRM1.getDefense(0, 0));
-	Assert.assertEquals(8, persoRM1.getDefense(0, 1));
-	Assert.assertTrue(persoRM1.isSonne());
+	Assert.assertEquals(15, persoRM1.getDefense(0, 0));
+	Assert.assertEquals(5, persoRM1.getDefense(0, 6));
+	Assert.assertFalse(persoRM1.isSonne());
 	Assert.assertFalse(persoRM1.isInconscient());
 	Assert.assertFalse(persoRM1.isElimine());
 
 	Assert.assertEquals(0, persoRM3.getBlessuresGraves());
 	Assert.assertEquals(0, persoRM3.getBlessuresLegeres());
 	Assert.assertEquals(0, persoRM3.getBlessuresLegeresMentales());
-	Assert.assertEquals(20, persoRM3.getDefense(0, 0));
+	Assert.assertEquals(25, persoRM3.getDefense(0, 0));
 	Assert.assertEquals(5, persoRM3.getDefense(0, 52));
 	Assert.assertFalse(persoRM3.isSonne());
 	Assert.assertFalse(persoRM3.isInconscient());
@@ -91,8 +91,8 @@ public class IntegCaracTest//tester les libellés
     @Test
     public void testDomComp()
     {
-	Assert.assertEquals(3, persoRM3.getRangComp(3, 0));//Corps à corps
-	Assert.assertEquals(3, persoRM3.getRangDomaine(4));//distance
+	Assert.assertEquals(4, persoRM3.getRangComp(3, 0));//Corps à corps
+	Assert.assertEquals(4, persoRM3.getRangDomaine(4));//distance
 
 	Assert.assertEquals(1, persoNonRM.getRangComp(2, 2));
 	Assert.assertEquals(2, persoNonRM.getRangDomaine(2));

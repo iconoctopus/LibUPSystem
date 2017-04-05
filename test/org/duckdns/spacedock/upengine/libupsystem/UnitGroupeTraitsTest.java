@@ -42,14 +42,24 @@ public class UnitGroupeTraitsTest
 	{
 	    assertEquals("paramétre aberrant:trait:-1", e.getMessage());
 	}
+
+	try
+	{
+	    new GroupeTraits(3, 2, 0, 4, 1).setTrait(GroupeTraits.Trait.VOLONTE, 11);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    assertEquals("paramétre aberrant:trait:11", e.getMessage());
+	}
     }
 
     @Test
     public void testSetTraitNominal()
     {
 	GroupeTraits traits = new GroupeTraits(4, 3, 7, 1, 2);
-	traits.setTrait(GroupeTraits.Trait.COORDINATION, 12);
-	assertEquals(12, traits.getTrait(GroupeTraits.Trait.COORDINATION));
+	traits.setTrait(GroupeTraits.Trait.COORDINATION, 10);
+	assertEquals(10, traits.getTrait(GroupeTraits.Trait.COORDINATION));
 	traits.setTrait(GroupeTraits.Trait.COORDINATION, 0);//petit cas limite
 	assertEquals(0, traits.getTrait(GroupeTraits.Trait.COORDINATION));
     }

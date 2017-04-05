@@ -89,12 +89,28 @@ public class Perso
      */
     public Perso(int p_RM)
     {
-	if (p_RM < 1)
+	if (p_RM < 1 || p_RM > 9)
 	{
 	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("rang") + ":" + p_RM);
 	}
+
 	//configuration des traits
-	m_groupeTraits = new GroupeTraits(p_RM, p_RM, p_RM - 1, p_RM - 1, p_RM - 1);
+	ArrayList<Integer> listTrait = new ArrayList<Integer>();
+	listTrait.add(p_RM);
+	listTrait.add(p_RM + 1);
+	listTrait.add(p_RM - 2);
+	listTrait.add(p_RM - 1);
+	listTrait.add(p_RM - 3);
+
+	for (int i = 0; i < 5; ++i)
+	{
+	    if (listTrait.get(i) < 2)
+	    {
+		listTrait.set(i, 2);//minimum de 2 aux traits
+	    }
+	}
+
+	m_groupeTraits = new GroupeTraits(listTrait.get(0), listTrait.get(1), listTrait.get(2), listTrait.get(3), listTrait.get(4));
 
 	//configuration automatique des autres caractéristiques maintenant possible car les traits sont connus
 	initPerso();
@@ -102,17 +118,17 @@ public class Perso
 	//configuration des caractéristiques de combat une fois que l'arbre des domaines est généré
 	//configuration du domaine corps à corps
 	m_arbreDomaines = new ArbreDomaines();
-	m_arbreDomaines.setRangDomaine(3, p_RM);
+	m_arbreDomaines.setRangDomaine(3, p_RM + 1);
 	for (int i = 0; i < UPReferenceSysteme.getInstance().getListComp(3).size(); i++)
 	{
-	    m_arbreDomaines.setRangComp(3, i, p_RM);
+	    m_arbreDomaines.setRangComp(3, i, p_RM + 1);
 	}
 
 	//idem pour tout le domaine combat à distance
-	m_arbreDomaines.setRangDomaine(4, p_RM);
+	m_arbreDomaines.setRangDomaine(4, p_RM + 1);
 	for (int i = 0; i < UPReferenceSysteme.getInstance().getListComp(4).size(); i++)
 	{
-	    m_arbreDomaines.setRangComp(4, i, p_RM);
+	    m_arbreDomaines.setRangComp(4, i, p_RM + 1);
 	}
 
 	m_libellePerso = PropertiesHandler.getInstance("libupsystem").getString("lbl_perso_std") + p_RM;
@@ -436,6 +452,10 @@ public class Perso
 	    result = m_groupeTraits.getTrait(Trait.COORDINATION) * 5 + 5;//valeur de base
 	    result += armure.getBonusND(p_typeArme);//effets d'armure
 	    result -= p_nbAdvSup * 2; // malus par adversaire supplémentaire
+	    if (isSonne())//malus si sonné
+	    {
+		result -= 5;
+	    }
 	    if (result < 5)//application de la règle du minimum de 5 à la défense
 	    {
 		result = 5;

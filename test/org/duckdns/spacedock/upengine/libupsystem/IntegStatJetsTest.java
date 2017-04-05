@@ -17,14 +17,27 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
 import org.junit.Assert;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
  *
  * @author ykonoclast
  */
-public class IntegStatAttaqueTest
+public class IntegStatJetsTest
 {
+
+    @Test
+    public void testJetTrait()
+    {
+	Perso persoRM3 = new Perso(3);
+	assertTrue(IntegStatTestUtils.reussiteStatistiqueJetsTrait(persoRM3, 11, GroupeTraits.Trait.PRESENCE));
+	assertFalse(IntegStatTestUtils.reussiteStatistiqueJetsTrait(persoRM3, 12, GroupeTraits.Trait.PRESENCE));
+
+	assertTrue(IntegStatTestUtils.reussiteStatistiqueJetsTrait(persoRM3, 23, GroupeTraits.Trait.COORDINATION));
+	assertFalse(IntegStatTestUtils.reussiteStatistiqueJetsTrait(persoRM3, 24, GroupeTraits.Trait.COORDINATION));
+    }
 
     @Test
     public void testAttaquer()//sert aussi pour tester tout le système de jets de compétence : il se trouve qu'attaquer est la forme la plus complexe du jet de compétence, une fois tous les bonus et malus pris en compte

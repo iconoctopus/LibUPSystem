@@ -16,6 +16,7 @@
  */
 package org.duckdns.spacedock.upengine.libupsystem;
 
+import org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait;
 import org.duckdns.spacedock.upengine.libupsystem.Perso.Degats;
 
 /**
@@ -73,6 +74,30 @@ final class IntegStatTestUtils
 	return (nbReussites > nbEchecs);
     }
 
+    static boolean reussiteStatistiqueJetsTrait(Perso p_perso, int p_nd, Trait p_idTrait)
+    {
+	int nbReussites = 0;
+	int nbEchecs = 0;
+	for (int i = 0; i <= limiteLAncers; ++i)
+	{
+	    boolean reussite = false;
+
+	    if (p_perso.effectuerJetTrait(p_idTrait, p_nd).isJetReussi())
+	    {
+		reussite = true;
+	    }
+	    if (reussite)
+	    {
+		nbReussites++;
+	    }
+	    else
+	    {
+		nbEchecs++;
+	    }
+	}
+	return (nbReussites > nbEchecs);
+    }
+
     static int nbBlessuresGravesStatistique(int p_degats, int p_rm)
     {
 	int nbBlessuresGraves = 0;
@@ -84,4 +109,5 @@ final class IntegStatTestUtils
 	}
 	return (int) (nbBlessuresGraves / (limiteLAncers + 1));
     }
+
 }

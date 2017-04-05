@@ -607,7 +607,7 @@ public class UnitPersoTest
     }
 
     @Test
-    public void testGetNDPassifErreur()
+    public void testGetDefenseErreur()
     {
 	try
 	{
@@ -621,7 +621,7 @@ public class UnitPersoTest
     }
 
     @Test
-    public void testGetNDPassifNominal()
+    public void testGetDefenseNominal()
     {
 	//On mocke un inventaire contenant une armure
 	Armure armureMock = PowerMockito.mock(Armure.class);

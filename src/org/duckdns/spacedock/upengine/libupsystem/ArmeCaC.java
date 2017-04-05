@@ -1,7 +1,18 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2017 ykonoclast
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.duckdns.spacedock.upengine.libupsystem;
 
@@ -10,10 +21,13 @@ import org.duckdns.spacedock.commonutils.PropertiesHandler;
 
 /**
  *
- * @author iconoctopus
+ * @author ykonoclast
  */
 public class ArmeCaC extends Arme
 {
+
+    private final int m_bonusVDSup;
+    private final int m_bonusInitSup;
 
     /**
      * constructeur identique à celui de la superclasse
@@ -25,27 +39,60 @@ public class ArmeCaC extends Arme
     public ArmeCaC(int p_indice, QualiteArme p_qualite, EquilibrageArme p_equilibrage)
     {
 	super(p_indice, p_qualite, p_equilibrage);
-    }
 
-    /**
-     * génère les dégâts infligés avec cette arme en combat au corps à corps
-     *
-     * @param p_nbIncrements
-     * @param p_physique le physique du personnage
-     * @param p_isSonne
-     * @return
-     */
-    Degats genererDegats(int p_nbIncrements, int p_physique, boolean p_isSonne)
-    {
-	int degatsBruts = 0;
-	if (p_nbIncrements >= 0 && p_physique >= 0)
+	if (p_qualite == QualiteArme.maitre)//traitement spécial des armes de maître
 	{
-	    degatsBruts = (RollUtils.lancer(super.getDesLances() + p_nbIncrements + p_physique, super.getDesGardes(), p_isSonne));
+	    m_bonusVDSup = 6;
+	    m_bonusInitSup = +1;
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("increments") + ":" + p_nbIncrements + " " + PropertiesHandler.getInstance("libupsystem").getString("physique") + ":" + p_physique);
+	    switch (p_qualite)
+	    {
+		case inferieure:
+		    m_bonusVDSup = - 3;
+		    break;
+		case superieure:
+		    m_bonusVDSup = +3;
+		    break;
+		default:
+		    m_bonusVDSup = 0;
+		    break;
+	    }
+	    switch (p_equilibrage)
+	    {
+		case mauvais:
+		    m_bonusInitSup = -1;
+		    break;
+		case bon:
+		    m_bonusInitSup = +1;
+		    break;
+		default:
+		    m_bonusInitSup = 0;
+		    break;
+	    }
 	}
-	return new Degats(degatsBruts, super.getTypeArme());
+    }
+
+    /**
+     *
+     * @return la valeur de dégâts modifiée par les valeurs d'équilibrage et de
+     * qualité
+     */
+    @Override
+    public int getVD()
+    {
+	return super.getVD() + m_bonusVDSup;
+    }
+
+    /**
+     *
+     * @return le bonus d'init modifié par les valeurs d'équilibrage et de
+     * qualité
+     */
+    @Override
+    public int getBonusInit()
+    {
+	return super.getBonusInit() + m_bonusInitSup;
     }
 }

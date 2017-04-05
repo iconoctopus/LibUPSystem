@@ -1,7 +1,18 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2017 ykonoclast
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.duckdns.spacedock.upengine.libupsystem;
 
@@ -12,31 +23,20 @@ import org.duckdns.spacedock.commonutils.PropertiesHandler;
 /**
  * encapsule l'équipement d'un personnage
  *
- * @author iconoctopus
+ * @author ykonoclast
  */
 public class Inventaire
 {
 
     /**
-     * le diagramme contenant les pièces d'armures et armes portées par le
-     * personnage
-     */
-    private final EnumMap<ZoneEmplacement, Emplacement> m_diagrammeEmplacement;
-
-    /**
      * main considérée comme portant l'arme principale
      */
     private Lateralisation m_cotePrincipal;
-
     /**
-     * le type d'armure, c'est par défaut le type le plus élevé parmi les pièces
-     * portées (hors localisation)
+     * le diagramme contenant les pièces d'armures et armes portées par le
+     * personnage
      */
-    private int m_typeArmure;
-    /**
-     * les points d'armure, viennent des ajouts de pièces
-     */
-    private int m_pointsArmure;
+    private final EnumMap<PartieCorps, Emplacement> m_diagrammeEmplacement;
     /**
      * le malus d'esquive de l'armure, provient de la somme de ceux des pièces
      */
@@ -45,6 +45,15 @@ public class Inventaire
      * le malus de parade de l'armure, provient de la somme de ceux des pièces
      */
     private int m_malusParade;
+    /**
+     * les points d'armure, viennent des ajouts de pièces
+     */
+    private int m_pointsArmure;
+    /**
+     * le type d'armure, c'est par défaut le type le plus élevé parmi les pièces
+     * portées (hors localisation)
+     */
+    private int m_typeArmure;
 
     /**
      * constructeur sans éléments initiaux : on initialise quand même pour
@@ -52,17 +61,17 @@ public class Inventaire
      */
     public Inventaire()
     {
-	m_diagrammeEmplacement = new EnumMap<ZoneEmplacement, Emplacement>(ZoneEmplacement.class);
-	m_diagrammeEmplacement.put(ZoneEmplacement.BRASDROIT, new Emplacement(2));
-	m_diagrammeEmplacement.put(ZoneEmplacement.BRASGAUCHE, new Emplacement(2));
-	m_diagrammeEmplacement.put(ZoneEmplacement.TETE, new Emplacement(0));
-	m_diagrammeEmplacement.put(ZoneEmplacement.CORPS, new Emplacement(1));
-	m_diagrammeEmplacement.put(ZoneEmplacement.MAINDROITE, new EmplacementMain(3));
-	m_diagrammeEmplacement.put(ZoneEmplacement.MAINGAUCHE, new EmplacementMain(3));
-	m_diagrammeEmplacement.put(ZoneEmplacement.JAMBEDROITE, new Emplacement(4));
-	m_diagrammeEmplacement.put(ZoneEmplacement.JAMBEGAUCHE, new Emplacement(4));
-	m_diagrammeEmplacement.put(ZoneEmplacement.PIEDDROIT, new Emplacement(5));
-	m_diagrammeEmplacement.put(ZoneEmplacement.PIEDGAUCHE, new Emplacement(5));
+	m_diagrammeEmplacement = new EnumMap<PartieCorps, Emplacement>(PartieCorps.class);
+	m_diagrammeEmplacement.put(PartieCorps.BRASDROIT, new Emplacement(2));
+	m_diagrammeEmplacement.put(PartieCorps.BRASGAUCHE, new Emplacement(2));
+	m_diagrammeEmplacement.put(PartieCorps.TETE, new Emplacement(0));
+	m_diagrammeEmplacement.put(PartieCorps.CORPS, new Emplacement(1));
+	m_diagrammeEmplacement.put(PartieCorps.MAINDROITE, new EmplacementMain(3));
+	m_diagrammeEmplacement.put(PartieCorps.MAINGAUCHE, new EmplacementMain(3));
+	m_diagrammeEmplacement.put(PartieCorps.JAMBEDROITE, new Emplacement(4));
+	m_diagrammeEmplacement.put(PartieCorps.JAMBEGAUCHE, new Emplacement(4));
+	m_diagrammeEmplacement.put(PartieCorps.PIEDDROIT, new Emplacement(5));
+	m_diagrammeEmplacement.put(PartieCorps.PIEDGAUCHE, new Emplacement(5));
 
 	m_typeArmure = 0;
 	m_malusEsquive = 0;
@@ -80,25 +89,25 @@ public class Inventaire
      */
     public void addArme(Arme p_arme, Lateralisation p_cote)
     {
-	EmplacementMain mainPrincipale;
+	EmplacementMain mainCible;
 	EmplacementMain autreMain;
 
 	//identification de la main porteuse et de l'arme opposée
 	if (p_cote == Lateralisation.DROITE)
 	{
-	    mainPrincipale = (EmplacementMain) m_diagrammeEmplacement.get(ZoneEmplacement.MAINDROITE);
-	    autreMain = (EmplacementMain) m_diagrammeEmplacement.get(ZoneEmplacement.MAINGAUCHE);
+	    mainCible = (EmplacementMain) m_diagrammeEmplacement.get(PartieCorps.MAINDROITE);
+	    autreMain = (EmplacementMain) m_diagrammeEmplacement.get(PartieCorps.MAINGAUCHE);
 	}
 	else
 	{
-	    mainPrincipale = (EmplacementMain) m_diagrammeEmplacement.get(ZoneEmplacement.MAINGAUCHE);
-	    autreMain = (EmplacementMain) m_diagrammeEmplacement.get(ZoneEmplacement.MAINDROITE);
+	    mainCible = (EmplacementMain) m_diagrammeEmplacement.get(PartieCorps.MAINGAUCHE);
+	    autreMain = (EmplacementMain) m_diagrammeEmplacement.get(PartieCorps.MAINDROITE);
 	}
 
 	//vérification de l'occupation des mains
-	if (!mainPrincipale.isOccupeArmeBouclier())
+	if (!mainCible.isOccupeArmeBouclier())
 	{
-	    if (p_arme.getNbMainsArme() == 2)
+	    if (p_arme.isArme2Mains())
 	    {
 		if (!autreMain.isOccupeArmeBouclier())
 		{
@@ -110,7 +119,7 @@ public class Inventaire
 		    ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("autre_main_pas_libre"));
 		}
 	    }
-	    mainPrincipale.setArme(p_arme);//ajout effectif de l'arme
+	    mainCible.setArme(p_arme);//ajout effectif de l'arme
 	}
 	else
 	{
@@ -120,39 +129,42 @@ public class Inventaire
     }
 
     /**
+     * ajoute un bouclier dans la main indiquée (méthode spéciale pour boucliers
+     * car c'est le gantelet qui est dans la main)
      *
+     * @param p_bouclier
      * @param p_cote
      */
-    public void removeArme(Lateralisation p_cote)
+    public void addBouclier(PieceArmure p_bouclier, Lateralisation p_cote)
     {
-	EmplacementMain mainPrincipale;
-	EmplacementMain autreMain;
+	if (p_bouclier.isBouclier())
+	{
+	    EmplacementMain main;
 
-	//identification de la main porteuse et de l'arme opposée
-	if (p_cote == Lateralisation.DROITE)
-	{
-	    mainPrincipale = (EmplacementMain) m_diagrammeEmplacement.get(ZoneEmplacement.MAINDROITE);
-	    autreMain = (EmplacementMain) m_diagrammeEmplacement.get(ZoneEmplacement.MAINGAUCHE);
-	}
-	else
-	{
-	    mainPrincipale = (EmplacementMain) m_diagrammeEmplacement.get(ZoneEmplacement.MAINGAUCHE);
-	    autreMain = (EmplacementMain) m_diagrammeEmplacement.get(ZoneEmplacement.MAINDROITE);
-	}
-
-	//vérification de l'occupation des mains
-	if (mainPrincipale.isOccupeArmeBouclier())
-	{
-	    if (mainPrincipale.getArme().getNbMainsArme() == 2)
+	    //identification de la main
+	    if (p_cote == Lateralisation.DROITE)
 	    {
-		autreMain.setArmeDeuxMainsDansMainPrincipaleFalse();
+		main = (EmplacementMain) m_diagrammeEmplacement.get(PartieCorps.MAINDROITE);
 	    }
-	    mainPrincipale.removeArme();
+	    else
+	    {
+		main = (EmplacementMain) m_diagrammeEmplacement.get(PartieCorps.MAINGAUCHE);
+	    }
+
+	    if (!main.isOccupeArmeBouclier())
+	    {
+		main.setBouclier(p_bouclier);
+		reScanArmure();
+	    }
+	    else
+	    {
+		//exception emplacement non libre
+		ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("emplacement_pas_libre"));
+	    }
 	}
 	else
 	{
-	    //exception main principale non occupée
-	    ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("emplacement_non_occupe"));
+	    ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("pas_bouclier"));
 	}
     }
 
@@ -163,7 +175,7 @@ public class Inventaire
      * @param p_piece
      * @param p_zone
      */
-    public void addPieceArmure(PieceArmure p_piece, ZoneEmplacement p_zone)
+    public void addPieceArmure(PieceArmure p_piece, PartieCorps p_zone)
     {
 	if (!p_piece.isBouclier())//pièce d'armure classique
 	{
@@ -187,61 +199,97 @@ public class Inventaire
     }
 
     /**
-     * ajoute un bouclier dans la main indiquée (méthode spéciale pour boucliers
-     * car c'est le gantelet qui est dans la main)
      *
-     * @param p_bouclier
-     * @param p_cote
+     * @return l'arme couramment tenue
      */
-    public void addBouclier(PieceArmure p_bouclier, Lateralisation p_cote)
+    public Arme getArmeCourante()
     {
-	if (p_bouclier.isBouclier())
+	EmplacementMain mainPrincipale;
+	if (m_cotePrincipal == Lateralisation.DROITE)
 	{
-	    EmplacementMain main;
-
-	    //identification de la main
-	    if (p_cote == Lateralisation.DROITE)
-	    {
-		main = (EmplacementMain) m_diagrammeEmplacement.get(ZoneEmplacement.MAINDROITE);
-	    }
-	    else
-	    {
-		main = (EmplacementMain) m_diagrammeEmplacement.get(ZoneEmplacement.MAINGAUCHE);
-	    }
-
-	    if (!main.isOccupeArmeBouclier())
-	    {
-		main.setBouclier(p_bouclier);
-		reScanArmure();
-	    }
-	    else
-	    {
-		//exception emplacement non libre
-		ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("emplacement_pas_libre"));
-	    }
+	    mainPrincipale = (EmplacementMain) m_diagrammeEmplacement.get(PartieCorps.MAINDROITE);
 	}
 	else
 	{
-	    ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("pas_bouclier"));
+	    mainPrincipale = (EmplacementMain) m_diagrammeEmplacement.get(PartieCorps.MAINGAUCHE);
 	}
+	return mainPrincipale.getArme();
     }
 
     /**
-     * supprime la piece d'armure de la zone désignée, ne s'applique pas aux
-     * boucliers (c'est le gantelet qui est dans la main)
+     * pas de vérification, le retour peut très bien être nul
      *
-     * @param p_zone
+     * @param p_cote
+     * @return
      */
-    public void removePieceArmure(ZoneEmplacement p_zone)
+    public PieceArmure getBouclier(Lateralisation p_cote)
     {
-	Emplacement emplacement = m_diagrammeEmplacement.get(p_zone);
-	if (emplacement.isOccupeArmure())
+	EmplacementMain main;
+	if (p_cote == Lateralisation.DROITE)
 	{
-	    emplacement.removePiece();
-	    reScanArmure();
+	    main = (EmplacementMain) m_diagrammeEmplacement.get(PartieCorps.MAINDROITE);
 	}
 	else
 	{
+	    main = (EmplacementMain) m_diagrammeEmplacement.get(PartieCorps.MAINGAUCHE);
+	}
+	return main.getBouclier();
+    }
+
+    /**
+     * indique quelle main sera utilisée par défaut
+     *
+     * @param p_cote
+     */
+    public void setCotePrincipal(Lateralisation p_cote)
+    {
+	m_cotePrincipal = p_cote;
+    }
+
+    /**
+     * pas de vérification le retour peut très bien être nul
+     *
+     * @param p_zone
+     * @return
+     */
+    public PieceArmure getPieceArmure(PartieCorps p_zone)
+    {
+	return m_diagrammeEmplacement.get(p_zone).getPiece();
+    }
+
+    /**
+     *
+     * @param p_cote
+     */
+    public void removeArme(Lateralisation p_cote)
+    {
+	EmplacementMain mainPrincipale;
+	EmplacementMain autreMain;
+
+	//identification de la main porteuse et de l'arme opposée
+	if (p_cote == Lateralisation.DROITE)
+	{
+	    mainPrincipale = (EmplacementMain) m_diagrammeEmplacement.get(PartieCorps.MAINDROITE);
+	    autreMain = (EmplacementMain) m_diagrammeEmplacement.get(PartieCorps.MAINGAUCHE);
+	}
+	else
+	{
+	    mainPrincipale = (EmplacementMain) m_diagrammeEmplacement.get(PartieCorps.MAINGAUCHE);
+	    autreMain = (EmplacementMain) m_diagrammeEmplacement.get(PartieCorps.MAINDROITE);
+	}
+
+	//vérification de l'occupation des mains
+	if (mainPrincipale.isOccupeArmeBouclier())
+	{
+	    if (mainPrincipale.getArme().isArme2Mains())
+	    {
+		autreMain.setArmeDeuxMainsDansMainPrincipaleFalse();
+	    }
+	    mainPrincipale.removeArme();
+	}
+	else
+	{
+	    //exception main principale non occupée
 	    ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("emplacement_non_occupe"));
 	}
     }
@@ -259,11 +307,11 @@ public class Inventaire
 	//identification de la main
 	if (p_cote == Lateralisation.DROITE)
 	{
-	    main = (EmplacementMain) m_diagrammeEmplacement.get(ZoneEmplacement.MAINDROITE);
+	    main = (EmplacementMain) m_diagrammeEmplacement.get(PartieCorps.MAINDROITE);
 	}
 	else
 	{
-	    main = (EmplacementMain) m_diagrammeEmplacement.get(ZoneEmplacement.MAINGAUCHE);
+	    main = (EmplacementMain) m_diagrammeEmplacement.get(PartieCorps.MAINGAUCHE);
 	}
 
 	//retrait du bouclier
@@ -276,6 +324,34 @@ public class Inventaire
 	{
 	    ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("emplacement_non_occupe"));
 	}
+    }
+
+    /**
+     * supprime la piece d'armure de la zone désignée, ne s'applique pas aux
+     * boucliers (c'est le gantelet qui est dans la main)
+     *
+     * @param p_zone
+     */
+    public void removePieceArmure(PartieCorps p_zone)
+    {
+	Emplacement emplacement = m_diagrammeEmplacement.get(p_zone);
+	if (emplacement.isOccupeArmure())
+	{
+	    emplacement.removePiece();
+	    reScanArmure();
+	}
+	else
+	{
+	    ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("emplacement_non_occupe"));
+	}
+    }
+
+    /**
+     * @return l'armure actuellement portée
+     */
+    Armure getArmure()
+    {
+	return new Armure(m_pointsArmure, m_typeArmure, m_malusEsquive, m_malusParade);
     }
 
     /**
@@ -328,90 +404,6 @@ public class Inventaire
 	m_pointsArmure += p_piece.getNbpoints();
 	m_malusEsquive += p_piece.getMalusEsquive();
 	m_malusParade += p_piece.getMalusParade();
-    }
-
-    /**
-     * indique quelle main sera utilisée par défaut
-     *
-     * @param p_cote
-     */
-    public void setCotePrincipal(Lateralisation p_cote)
-    {
-	m_cotePrincipal = p_cote;
-    }
-
-    /**
-     *
-     * @return l'arme couramment tenue
-     */
-    public Arme getArmeCourante()
-    {
-	EmplacementMain mainPrincipale;
-	if (m_cotePrincipal == Lateralisation.DROITE)
-	{
-	    mainPrincipale = (EmplacementMain) m_diagrammeEmplacement.get(ZoneEmplacement.MAINDROITE);
-	}
-	else
-	{
-	    mainPrincipale = (EmplacementMain) m_diagrammeEmplacement.get(ZoneEmplacement.MAINGAUCHE);
-	}
-	return mainPrincipale.getArme();
-    }
-
-    /**
-     * pas de vérification le retour peut très bien être nul
-     *
-     * @param p_zone
-     * @return
-     */
-    public PieceArmure getPieceArmure(ZoneEmplacement p_zone)
-    {
-	return m_diagrammeEmplacement.get(p_zone).getPiece();
-    }
-
-    /**
-     * pas de vérification, le retour peut très bien être nul
-     *
-     * @param p_cote
-     * @return
-     */
-    public PieceArmure getBouclier(Lateralisation p_cote)
-    {
-	EmplacementMain main;
-	if (p_cote == Lateralisation.DROITE)
-	{
-	    main = (EmplacementMain) m_diagrammeEmplacement.get(ZoneEmplacement.MAINDROITE);
-	}
-	else
-	{
-	    main = (EmplacementMain) m_diagrammeEmplacement.get(ZoneEmplacement.MAINGAUCHE);
-	}
-	return main.getBouclier();
-    }
-
-    /**
-     * @return l'armure actuellement portée
-     */
-    Armure getArmure()
-    {
-	return new Armure(m_pointsArmure, m_typeArmure, m_malusEsquive, m_malusParade);
-    }
-
-    /**
-     * enum représentant les différentes localisation du corps d'un personnage à
-     * fins d'inventaire. Il manque les yeux par exemple pour le combat.
-     */
-    public enum ZoneEmplacement
-    {
-	TETE, CORPS, JAMBEGAUCHE, JAMBEDROITE, PIEDGAUCHE, PIEDDROIT, BRASGAUCHE, BRASDROIT, MAINGAUCHE, MAINDROITE
-    }
-
-    /**
-     * représente l'un des deux côtés
-     */
-    public enum Lateralisation
-    {
-	GAUCHE, DROITE
     }
 
     /**
@@ -668,5 +660,22 @@ public class Inventaire
 	{
 	    return true;
 	}
+    }
+
+    /**
+     * enum représentant les différentes localisation du corps d'un personnage à
+     * fins d'inventaire. Il manque les yeux par exemple pour le combat.
+     */
+    public enum PartieCorps
+    {
+	TETE, CORPS, JAMBEGAUCHE, JAMBEDROITE, PIEDGAUCHE, PIEDDROIT, BRASGAUCHE, BRASDROIT, MAINGAUCHE, MAINDROITE
+    }
+
+    /**
+     * représente l'un des deux côtés
+     */
+    public enum Lateralisation
+    {
+	GAUCHE, DROITE
     }
 }

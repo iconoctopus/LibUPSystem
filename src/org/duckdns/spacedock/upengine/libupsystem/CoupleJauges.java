@@ -211,10 +211,17 @@ class CoupleJauges
 
 		if (m_remplissage_interne > m_choc)//on risque l'inconscience et l'élimination
 		{
-		    if (m_remplissage_interne >= m_taille_interne || !p_traits.effectuerJetTrait(Trait.VOLONTE, 5 * m_remplissage_interne, false).isJetReussi())//jet d'inconscience raté ou jauge remplie
+		    int nbIncrementsRequis = m_remplissage_interne - m_choc - 1;//nombre de blessures graves au delà du point de choc moins une
+		    RollResult jetInconscience = p_traits.effectuerJetTrait(Trait.VOLONTE, UPReferenceSysteme.getInstance().getValeurND(UPReferenceSysteme.ND.moyen), false);
+		    boolean jetInconscienceReussi = jetInconscience.isJetReussi() && jetInconscience.getNbIncrements() >= nbIncrementsRequis;//jet d'inconscience (ND moyen, autant d'incrément que de blessures au delà du point de choc moins une
+
+		    if (m_remplissage_interne >= m_taille_interne || !jetInconscienceReussi)//jet d'inconscience raté ou jauge remplie
 		    {
 			m_inconscient = true;
-			if (m_remplissage_interne > m_taille_interne || !p_traits.effectuerJetTrait(Trait.PHYSIQUE, 5 * m_remplissage_interne, false).isJetReussi())//jauge déborde ou jet de mort raté
+			//on risque maintenant l'élimination
+			RollResult jetMort = p_traits.effectuerJetTrait(Trait.PHYSIQUE, UPReferenceSysteme.getInstance().getValeurND(UPReferenceSysteme.ND.moyen), false);
+			boolean jetMortReussi = jetMort.isJetReussi() && jetMort.getNbIncrements() >= nbIncrementsRequis;//jet de mort (ND moyen, autant d'incrément que de blessures au delà du point de choc moins une
+			if (m_remplissage_interne > m_taille_interne || !jetMortReussi)//jauge déborde ou jet de mort raté
 			{
 			    m_elimine = true;
 			    if (m_remplissage_interne > m_taille_interne)

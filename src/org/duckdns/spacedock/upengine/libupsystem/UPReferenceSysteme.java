@@ -153,6 +153,24 @@ public final class UPReferenceSysteme
 
     /**
      *
+     * @return la valeur d'un ND
+     */
+    public int getValeurND(ND p_nD)
+    {
+	return m_listValeurND.get(p_nD);
+    }
+
+    /**
+     *
+     * @return le libellé d'un ND
+     */
+    public String getLblND(ND p_nD)
+    {
+	return m_listLblND.get(p_nD);
+    }
+
+    /**
+     *
      * @param p_coordination la valeur de coordination
      * @return le modificateur de coordination à l'initiative
      */

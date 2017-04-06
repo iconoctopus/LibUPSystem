@@ -81,6 +81,8 @@ public class UnitCoupleJaugeTest
 	Assert.assertEquals(1, jaugeSI.getTaille_externe());
 	Assert.assertEquals(0, jaugeSI.getRemplissage_interne());
 	Assert.assertEquals(1, jaugeSI.getRemplissage_externe());
+	Assert.assertEquals(0, jaugeSI.getBlessuresLegeres());
+	Assert.assertEquals(1, jaugeSI.getPtChoc());
 
 	//Jauge de fatigue/force d'âme
 	Assert.assertFalse(jaugeFFA.isElimine());
@@ -90,6 +92,8 @@ public class UnitCoupleJaugeTest
 	Assert.assertEquals(3, jaugeFFA.getTaille_externe());
 	Assert.assertEquals(0, jaugeFFA.getRemplissage_interne());
 	Assert.assertEquals(3, jaugeFFA.getRemplissage_externe());
+	Assert.assertEquals(0, jaugeFFA.getBlessuresLegeres());
+	Assert.assertEquals(3, jaugeFFA.getPtChoc());
     }
 
     @Test

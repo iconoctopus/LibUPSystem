@@ -27,6 +27,8 @@ import static org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait.VOLO
 import org.duckdns.spacedock.upengine.libupsystem.Perso.Degats;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -597,6 +599,35 @@ public class UnitPersoTest
 
 	persoRM3.setTrait(Trait.COORDINATION, 1);
 	verify(traitsRM3).setTrait(COORDINATION, 1);
+
+	//méthodes liées aux jauges
+	persoRM3.getInitTotale();
+	verify(jaugesRM3).getInitTotale(null);//cas sans arme équipée
+	Arme armeMock = PowerMockito.mock(Arme.class);
+	when(inventaireMock.getArmeCourante()).thenReturn(armeMock);
+	persoRM3.getInitTotale();
+	verify(jaugesRM3).getInitTotale(armeMock);//cas avec arme équipée
+
+	persoRM1.getEtatVital();
+	verify(jaugesRM1).getEtatVital();
+
+	ArrayList<Integer> actions = persoRM3.getActions();
+	verify(jaugesRM3).getActions();
+	assertEquals(1, actions.get(0).intValue());
+	assertEquals(2, actions.get(1).intValue());
+	assertEquals(3, actions.get(2).intValue());
+	assertEquals(2, persoRM1.getActions().get(0).intValue());
+
+	persoRM1.genInit();
+	verify(jaugesRM1).genInit();
+
+	when(jaugesRM1.isActif(2)).thenReturn(true);
+	assertTrue(persoRM1.isActif(2));
+	assertFalse(persoRM1.isActif(3));
+	verify(jaugesRM1).isActif(2);
+
+	persoRM3.agirEnCombat(6);
+	verify(jaugesRM3).agirEnCombat(6);
     }
 
     @Test

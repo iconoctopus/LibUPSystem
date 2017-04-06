@@ -91,11 +91,6 @@ public class EnsembleJaugesTest
 	jaugesRM1 = new EnsembleJauges(traitsRM1Mock);
     }
 
-    @After
-    public void tearDown()
-    {
-    }
-
     @Test
     public void testAgirEnCombatErreur()
     {
@@ -180,47 +175,37 @@ public class EnsembleJaugesTest
 
 	//test de isActif()
 	Assert.assertTrue(jaugesRM3.isActif(jaugesRM3.getActions().get(0)));
-	ListIterator<Integer> listActions = jaugesRM3.getActions().listIterator();
 
-	int phaseCourante = 1;
-	while (phaseCourante < 11)
+	for (int i = 0; i < 11; ++i)//on teste une dizaine de fois pour être sur d'avoir des configurations d'init variées (notamment plusieurs actions dans la même phase)
 	{
-	    if (listActions.hasNext() && phaseCourante == (int) listActions.next())
+	    int phaseCourante = 1;
+	    jaugesRM3.genInit();
+	    ListIterator<Integer> listActions = jaugesRM3.getActions().listIterator();
+	    while (phaseCourante < 11)
 	    {
-		assertTrue(jaugesRM3.isActif(phaseCourante));
-		jaugesRM3.agirEnCombat(phaseCourante);//on consomme l'action
-		if (listActions.hasNext() && phaseCourante == (int) listActions.next())//deuxième vérification car il peut très bien y avoir deux actions dans la même phase
+		if (listActions.hasNext() && phaseCourante == (int) listActions.next())
 		{
-		    --phaseCourante;//on annule la progression de phase qui va avoir lieu
+		    assertTrue(jaugesRM3.isActif(phaseCourante));
+		    jaugesRM3.agirEnCombat(phaseCourante);//on consomme l'action
+		    if (listActions.hasNext() && phaseCourante == (int) listActions.next())//deuxième vérification car il peut très bien y avoir deux actions dans la même phase
+		    {
+			--phaseCourante;//on annule la progression de phase qui va avoir lieu
+		    }
+		    listActions.previous();//on annule le next du test que l'on vient de faire
 		}
-		listActions.previous();//on annule le next du test que l'on vient de faire
+		else
+		{
+		    listActions.previous();//on annule le next() indu car la phase courante n'était pas une phase d'action du perso, il ne faut donc pas dépasser une action légitime
+		    assertFalse(jaugesRM3.isActif(phaseCourante));
+		}
+		++phaseCourante;
 	    }
-	    else
-	    {
-		listActions.previous();//on annule le next() indu car la phase courante n'était pas une phase d'action du perso, il ne faut donc pas dépasser une action légitime
-		assertFalse(jaugesRM3.isActif(phaseCourante));
-	    }
-	    ++phaseCourante;
 	}
     }
 
     @Test
-    public void testGetSetDiversNominal()
-    {//si non déjà testés dans les autres méthodes de cette classe
-
-	//méthodes liées aux jauges
-	when(santeInitRM3Mock.getRemplissage_interne()).thenReturn(2);
-	Assert.assertEquals(2, jaugesRM3.getEtatVital().getBlessuresGraves());
-
-	when(santeInitRM3Mock.getBlessuresLegeres()).thenReturn(23);
-	Assert.assertEquals(23, jaugesRM3.getEtatVital().getBlessuresLegeres());
-
-	when(fatigueFARM3Mock.getRemplissage_interne()).thenReturn(5);
-	Assert.assertEquals(5, jaugesRM3.getEtatVital().getPtsFatigue());
-
-	when(fatigueFARM3Mock.getBlessuresLegeres()).thenReturn(27);
-	Assert.assertEquals(27, jaugesRM3.getEtatVital().getBlessuresLegeresMentales());
-
+    public void testEtatBooleens()
+    {
 	when(fatigueFARM3Mock.isElimine()).thenReturn(true);
 	when(santeInitRM3Mock.isElimine()).thenReturn(true);
 	Assert.assertTrue(jaugesRM3.getEtatVital().isElimine());
@@ -268,5 +253,49 @@ public class EnsembleJaugesTest
 	when(fatigueFARM3Mock.isSonne()).thenReturn(false);
 	when(santeInitRM3Mock.isSonne()).thenReturn(false);
 	Assert.assertFalse(jaugesRM3.getEtatVital().isSonne());
+    }
+
+    @Test
+    public void testGetEtatInternes()
+    {
+	when(santeInitRM3Mock.getRemplissage_interne()).thenReturn(2);
+	Assert.assertEquals(2, jaugesRM3.getEtatVital().getBlessuresGraves());
+
+	when(santeInitRM3Mock.getTaille_interne()).thenReturn(5);
+	Assert.assertEquals(5, jaugesRM3.getEtatVital().getSante());
+
+	when(santeInitRM3Mock.getBlessuresLegeres()).thenReturn(23);
+	Assert.assertEquals(23, jaugesRM3.getEtatVital().getBlessuresLegeres());
+
+	when(fatigueFARM3Mock.getRemplissage_interne()).thenReturn(7);
+	Assert.assertEquals(7, jaugesRM3.getEtatVital().getPtsFatigue());
+
+	when(fatigueFARM3Mock.getTaille_interne()).thenReturn(6);
+	Assert.assertEquals(6, jaugesRM3.getEtatVital().getFatigue());
+
+	when(fatigueFARM3Mock.getBlessuresLegeres()).thenReturn(27);
+	Assert.assertEquals(27, jaugesRM3.getEtatVital().getBlessuresLegeresMentales());
+
+	when(santeInitRM3Mock.getPtChoc()).thenReturn(2);
+	Assert.assertEquals(2, jaugesRM3.getEtatVital().getPtChocSante());
+
+	when(fatigueFARM3Mock.getPtChoc()).thenReturn(4);
+	Assert.assertEquals(4, jaugesRM3.getEtatVital().getPtChocFatigue());
+    }
+
+    @Test
+    public void testGetEtatExternes()
+    {
+	when(santeInitRM3Mock.getRemplissage_externe()).thenReturn(1);
+	Assert.assertEquals(1, jaugesRM3.getEtatVital().getInitActu());
+
+	when(santeInitRM3Mock.getTaille_externe()).thenReturn(8);
+	Assert.assertEquals(8, jaugesRM3.getEtatVital().getInitMax());
+
+	when(fatigueFARM3Mock.getRemplissage_externe()).thenReturn(2);
+	Assert.assertEquals(2, jaugesRM3.getEtatVital().getForceDAmeActu());
+
+	when(fatigueFARM3Mock.getTaille_externe()).thenReturn(3);
+	Assert.assertEquals(3, jaugesRM3.getEtatVital().getForceDAmeMax());
     }
 }

@@ -54,6 +54,15 @@ public class IntegCaracTest//tester les libellés
 	Assert.assertEquals(0, persoRM1.getEtatVital().getBlessuresGraves());
 	Assert.assertEquals(0, persoRM1.getEtatVital().getBlessuresLegeres());
 	Assert.assertEquals(0, persoRM1.getEtatVital().getBlessuresLegeresMentales());
+	Assert.assertEquals(4, persoRM1.getEtatVital().getFatigue());
+	Assert.assertEquals(4, persoRM1.getEtatVital().getSante());
+	Assert.assertEquals(0, persoRM1.getEtatVital().getPtsFatigue());
+	Assert.assertEquals(2, persoRM1.getEtatVital().getPtChocFatigue());
+	Assert.assertEquals(2, persoRM1.getEtatVital().getPtChocSante());
+	Assert.assertEquals(2, persoRM1.getEtatVital().getInitMax());
+	Assert.assertEquals(2, persoRM1.getEtatVital().getInitActu());
+	Assert.assertEquals(2, persoRM1.getEtatVital().getForceDAmeActu());
+	Assert.assertEquals(2, persoRM1.getEtatVital().getForceDAmeMax());
 	Assert.assertEquals(15, persoRM1.getDefense(0, 0));
 	Assert.assertEquals(5, persoRM1.getDefense(0, 6));
 	Assert.assertFalse(persoRM1.getEtatVital().isSonne());
@@ -63,6 +72,15 @@ public class IntegCaracTest//tester les libellés
 	Assert.assertEquals(0, persoRM3.getEtatVital().getBlessuresGraves());
 	Assert.assertEquals(0, persoRM3.getEtatVital().getBlessuresLegeres());
 	Assert.assertEquals(0, persoRM3.getEtatVital().getBlessuresLegeresMentales());
+	Assert.assertEquals(5, persoRM3.getEtatVital().getFatigue());
+	Assert.assertEquals(5, persoRM3.getEtatVital().getSante());
+	Assert.assertEquals(0, persoRM3.getEtatVital().getPtsFatigue());
+	Assert.assertEquals(2, persoRM3.getEtatVital().getPtChocFatigue());
+	Assert.assertEquals(3, persoRM3.getEtatVital().getPtChocSante());
+	Assert.assertEquals(3, persoRM3.getEtatVital().getInitMax());
+	Assert.assertEquals(3, persoRM3.getEtatVital().getInitActu());
+	Assert.assertEquals(2, persoRM3.getEtatVital().getForceDAmeActu());
+	Assert.assertEquals(2, persoRM3.getEtatVital().getForceDAmeMax());
 	Assert.assertEquals(25, persoRM3.getDefense(0, 0));
 	Assert.assertEquals(5, persoRM3.getDefense(0, 52));
 	Assert.assertFalse(persoRM3.getEtatVital().isSonne());
@@ -72,11 +90,20 @@ public class IntegCaracTest//tester les libellés
 	Assert.assertEquals(0, persoNonRM.getEtatVital().getBlessuresGraves());
 	Assert.assertEquals(0, persoNonRM.getEtatVital().getBlessuresLegeres());
 	Assert.assertEquals(0, persoNonRM.getEtatVital().getBlessuresLegeresMentales());
+	Assert.assertEquals(5, persoNonRM.getEtatVital().getFatigue());
+	Assert.assertEquals(5, persoNonRM.getEtatVital().getSante());
+	Assert.assertEquals(0, persoNonRM.getEtatVital().getPtsFatigue());
+	Assert.assertEquals(4, persoNonRM.getEtatVital().getPtChocFatigue());
+	Assert.assertEquals(1, persoNonRM.getEtatVital().getPtChocSante());
+	Assert.assertEquals(2, persoNonRM.getEtatVital().getInitMax());
+	Assert.assertEquals(2, persoNonRM.getEtatVital().getInitActu());
+	Assert.assertEquals(1, persoNonRM.getEtatVital().getForceDAmeActu());
+	Assert.assertEquals(1, persoNonRM.getEtatVital().getForceDAmeMax());
 	Assert.assertEquals(15, persoNonRM.getDefense(0, 0));
 	Assert.assertEquals(7, persoNonRM.getDefense(0, 4));
 	Assert.assertFalse(persoNonRM.getEtatVital().isSonne());
-	Assert.assertFalse(persoRM3.getEtatVital().isInconscient());
-	Assert.assertFalse(persoRM3.getEtatVital().isElimine());
+	Assert.assertFalse(persoNonRM.getEtatVital().isInconscient());
+	Assert.assertFalse(persoNonRM.getEtatVital().isElimine());
     }
 
     @Test

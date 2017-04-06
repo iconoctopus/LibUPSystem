@@ -17,26 +17,15 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import org.duckdns.spacedock.commonutils.ErrorHandler;
 import org.duckdns.spacedock.commonutils.PropertiesHandler;
+import org.duckdns.spacedock.upengine.libupsystem.EnsembleJauges.EtatVital;
 import org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait;
 import org.duckdns.spacedock.upengine.libupsystem.RollUtils.RollResult;
 
 public class Perso
 {
 
-    /**
-     * l'indice de l'action courantes dans le tableau des actions
-     */
-    private int m_actionCourante;
-
-    /**
-     * les actions du personnage dans ce tour sous la forme de la phase dans
-     * laquelle l'action se déroule dans l'ordre des phases (donc tableau de la
-     * taille de l'init) ,celles consommées sont fixées à 11
-     */
-    private ArrayList<Integer> m_actions;
     /**
      * arbre des domaines/compétences du personnage
      */
@@ -47,13 +36,9 @@ public class Perso
      */
     private final Inventaire m_inventaire = new Inventaire();
     /**
-     * non finale pour augmenter à l'xp et définition hors constructeur
+     * la structure encapsulant l'état vital du personnage
      */
-    private CoupleJauge m_jaugeFatigueForceDAme;
-    /**
-     * non finale pour augmenter à l'xp et définition hors constructeur
-     */
-    private CoupleJauge m_jaugeSanteInit;
+    private final EnsembleJauges m_jauges;
     /**
      * le nom du personage
      */
@@ -78,8 +63,8 @@ public class Perso
 	m_groupeTraits = p_traits;
 	m_arbreDomaines = p_arbre;
 
-	//configuration automatique des autres caractéristiques maintenant possible car les traits sont connus
-	initPerso();
+	m_jauges = new EnsembleJauges(p_traits);
+
     }
 
     /**
@@ -112,8 +97,7 @@ public class Perso
 
 	m_groupeTraits = new GroupeTraits(listTrait.get(0), listTrait.get(1), listTrait.get(2), listTrait.get(3), listTrait.get(4));
 
-	//configuration automatique des autres caractéristiques maintenant possible car les traits sont connus
-	initPerso();
+	m_jauges = new EnsembleJauges(m_groupeTraits);
 
 	//configuration des caractéristiques de combat une fois que l'arbre des domaines est généré
 	//configuration du domaine corps à corps
@@ -143,33 +127,6 @@ public class Perso
     public void addSpecialite(int p_domaine, int p_comp, String p_specialite)
     {
 	m_arbreDomaines.addSpecialite(p_domaine, p_comp, p_specialite);
-    }
-
-    /**
-     * fait dépenser une action au personnage dans la phase en cours si c'est
-     * possible
-     *
-     * @param p_phaseActuelle
-     * @return un booléen indiquant si il est possible d'agir dans la phase en
-     * cours
-     */
-    public boolean agirEnCombat(int p_phaseActuelle)
-    {
-	boolean result = false;
-	if (p_phaseActuelle > 0 && p_phaseActuelle < 11)
-	{
-	    if (isActif(p_phaseActuelle))
-	    {
-		m_actions.set(m_actionCourante, 11);
-		m_actionCourante++;
-		result = true;
-	    }
-	}
-	else
-	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("phase") + ":" + p_phaseActuelle);
-	}
-	return result;
     }
 
     /**
@@ -206,13 +163,12 @@ public class Perso
      * Fait effectuer une attaque à distance au personnage. Cette méthode
      * vérifie que l'action est possible dans la phase courante en fonction de
      * l'init du perso, elle est donc conçue pour le combat uniquement. On
-     * utilise l'arme courante ou les mains nues. Si l'on veut utiliser une
-     * autre arme il faut d'abord la configurer comme arme courante. Une
-     * exception est levée si l'on essaye d'attaquer à distance avec une arme de
-     * corps à corps (rien n'interdit d'entrer une distance 0 dans l'autre
-     * méthode adaptée). Aucune vérification n'est effectuée sur le magasin
-     * actuel de l'arme. Si celui-ci n'est pas suffisant l'arme lèvera une
-     * exception.
+     * utilise l'arme courante. Si l'on veut utiliser une autre arme il faut
+     * d'abord la configurer comme arme courante. Une exception est levée si
+     * l'on essaye d'attaquer à distance avec une arme de corps à corps (rien
+     * n'interdit d'entrer une distance 0). Aucune vérification n'est effectuée
+     * sur le magasin actuel de l'arme. Si celui-ci n'est pas suffisant l'arme
+     * lèvera une exception.
      *
      * Il est important de garder la génération des dégâts séparée et déclenchée
      * depuis l'extérieur afin que le contrôleur puisse choisir d'utiliser les
@@ -253,7 +209,7 @@ public class Perso
      */
     public final RollUtils.RollResult effectuerJetComp(Trait p_idTrait, int p_indDomaine, int p_indComp, int p_ND, int p_modifNbLances, int p_modifNbGardes, int p_modifScore)
     {
-	return m_arbreDomaines.effectuerJetComp(m_groupeTraits.getTrait(p_idTrait), p_indDomaine, p_indComp, p_ND, p_modifNbLances, p_modifNbGardes, p_modifScore, isSonne());
+	return m_arbreDomaines.effectuerJetComp(m_groupeTraits.getTrait(p_idTrait), p_indDomaine, p_indComp, p_ND, p_modifNbLances, p_modifNbGardes, p_modifScore, m_jauges.getEtatVital().isSonne());
     }
 
     /**
@@ -265,8 +221,7 @@ public class Perso
      */
     public final RollUtils.RollResult effectuerJetTrait(Trait p_trait, int p_ND)
     {
-	return m_groupeTraits.effectuerJetTrait(p_trait, p_ND, isSonne());
-
+	return m_groupeTraits.effectuerJetTrait(p_trait, p_ND, m_jauges.getEtatVital().isSonne());
     }
 
     /**
@@ -277,6 +232,7 @@ public class Perso
      */
     public void etreBlesse(Degats p_degats)
     {
+
 	if (p_degats.getQuantite() >= 0 && p_degats.getTypeArme() >= 0)
 	{
 	    Armure armure = m_inventaire.getArmure();
@@ -285,33 +241,13 @@ public class Perso
 
 	    if (degatsEffectifs > 0)
 	    {
-		m_jaugeSanteInit.recevoirDegats(degatsEffectifs, this);
+		m_jauges.recevoirDegatsPhysiques(degatsEffectifs);
 	    }
 	}
 	else
 	{
 	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("degats") + ":" + p_degats.getQuantite() + " " + PropertiesHandler.getInstance("libupsystem").getString("type") + ":" + p_degats.getTypeArme());
 	}
-    }
-
-    /**
-     * génère l'initiative du personnage, devrait être appelée dans le
-     * constructeur mais par la suite contrôlée de l'extérieur
-     */
-    public final void genInit()
-    {
-	int initiative = m_jaugeSanteInit.getRemplissage_externe();
-	m_actionCourante = 0;
-	ArrayList<Integer> tabResult = new ArrayList<>();
-	if (initiative > 0)
-	{
-	    for (int i = 0; i < initiative; i++)
-	    {
-		tabResult.add(RollUtils.lancer(1, 1, true));
-	    }
-	}
-	Collections.sort(tabResult);
-	m_actions = tabResult;
     }
 
     /**
@@ -372,27 +308,39 @@ public class Perso
     }
 
     /**
+     * fait dépenser une action au personnage si il lui est possible d'agir dans
+     * la phase actuelle
+     *
+     * @param p_phaseActuelle
+     * @return vrai si le perso peut agir
+     */
+    public boolean agirEnCombat(int p_phaseActuelle)
+    {
+	return m_jauges.agirEnCombat(p_phaseActuelle);
+    }
+
+    /**
+     *
+     * @param p_phaseActuelle
+     * @return vrai si le perso a une action dans la phase actuelle
+     */
+    public boolean isActif(int p_phaseActuelle)
+    {
+	return m_jauges.isActif(p_phaseActuelle);
+    }
+
+    /**
      *
      * @return une copie : la liste n'est pas modifiable de l'extérieur
      */
     public ArrayList<Integer> getActions()
     {
-	return new ArrayList<>(m_actions);
+	return m_jauges.getActions();
     }
 
-    public int getBlessuresGraves()
+    public EtatVital getEtatVital()
     {
-	return m_jaugeSanteInit.getRemplissage_interne();
-    }
-
-    public int getBlessuresLegeres()
-    {
-	return m_jaugeSanteInit.getBlessuresLegeres();
-    }
-
-    public int getBlessuresLegeresMentales()
-    {
-	return m_jaugeFatigueForceDAme.getBlessuresLegeres();
+	return m_jauges.getEtatVital();
     }
 
     /**
@@ -401,24 +349,7 @@ public class Perso
      */
     public int getInitTotale()
     {
-	int result = 0;
-
-	//traitement de la partie dûe aux dés d'action
-	for (int i = 0; i < m_actions.size(); ++i)
-	{
-	    if (m_actions.get(i) < 11)//si l'action considérée est toujours disponible
-	    {
-		result += m_actions.get(i);
-	    }
-	}
-
-	//traitement du bonus dû à l'arme
-	Arme arme = m_inventaire.getArmeCourante();
-	if (arme != null)
-	{
-	    result += arme.getBonusInit() * 5;
-	}
-	return result;
+	return m_jauges.getInitTotale(m_inventaire.getArmeCourante());
     }
 
     public Inventaire getInventaire()
@@ -452,7 +383,7 @@ public class Perso
 	    result = m_groupeTraits.getTrait(Trait.COORDINATION) * 5 + 5;//valeur de base
 	    result += armure.getBonusND(p_typeArme);//effets d'armure
 	    result -= p_nbAdvSup * 2; // malus par adversaire supplémentaire
-	    if (isSonne())//malus si sonné
+	    if (m_jauges.getEtatVital().isSonne())//malus si sonné
 	    {
 		result -= 5;
 	    }
@@ -468,9 +399,12 @@ public class Perso
 	return result;
     }
 
-    public int getPointsDeFatigue()
+    /**
+     * force le personnage à relancer son initiative
+     */
+    public void genInit()
     {
-	return m_jaugeFatigueForceDAme.getRemplissage_interne();
+	m_jauges.genInit();
     }
 
     /**
@@ -516,52 +450,6 @@ public class Perso
     }
 
     /**
-     * renvoie vrai si le personnage a une action dans la phase active
-     * comportement indéfini si demande pour pĥase ultérieure ou antérieure
-     *
-     * @param p_phaseActuelle
-     * @return
-     */
-    public boolean isActif(int p_phaseActuelle)
-    {
-	if (p_phaseActuelle <= 0 || p_phaseActuelle > 10)
-	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("phase") + ":" + p_phaseActuelle);
-	}
-	return ((m_actions.size() - m_actionCourante) > 0 && p_phaseActuelle == m_actions.get(m_actionCourante));//si l'indice dans le tableau des actions indique que toutes celles-ci n'ont pas été consommées et si l'action pointée par cet indice correspond à la phase actuelle
-    }
-
-    /**
-     * les 2 jauges sont prises en compte
-     *
-     * @return
-     */
-    public boolean isElimine()
-    {
-	return (m_jaugeFatigueForceDAme.isElimine() || m_jaugeSanteInit.isElimine());
-    }
-
-    /**
-     * les 2 jauges sont prises en compte
-     *
-     * @return
-     */
-    public boolean isInconscient()
-    {
-	return m_jaugeSanteInit.isInconscient() || m_jaugeFatigueForceDAme.isInconscient();
-    }
-
-    /**
-     * les 2 jauges sont prises en compte
-     *
-     * @return
-     */
-    public boolean isSonne()
-    {
-	return (m_jaugeSanteInit.isSonne() || m_jaugeFatigueForceDAme.isSonne());
-    }
-
-    /**
      *
      * @param p_domaine
      * @param p_comp
@@ -601,7 +489,7 @@ public class Perso
     public void setTrait(Trait p_trait, int p_valeur)
     {
 	m_groupeTraits.setTrait(p_trait, p_valeur);
-	initJauges();//TODO : en l'état les jauges sont complètement remplacées : on perd donc les blessures, la force d'âme dépensée etc.
+	m_jauges.initJauges();//TODO : en l'état les jauges sont complètement remplacées : on perd donc les blessures, la force d'âme dépensée etc.
     }
 
     @Override
@@ -629,7 +517,7 @@ public class Perso
     private RollResult effectuerAttaque(int p_phaseActuelle, int p_ND, int p_comp, int p_domaine, int p_modifNbLances, int p_modifNbGardes, int p_modifScore)
     {
 	RollResult result = null;
-	if (agirEnCombat(p_phaseActuelle))
+	if (m_jauges.agirEnCombat(p_phaseActuelle))
 	{
 	    int modDesLances = 0 + p_modifNbLances;
 	    int modDesGardes = 0 + p_modifNbGardes;
@@ -652,35 +540,6 @@ public class Perso
 	    result = effectuerJetComp(Trait.COORDINATION, p_domaine, p_comp, p_ND, modDesLances, modDesGardes, modFinal);
 	}
 	return result;
-    }
-
-    /**
-     * initialise les jauges du personnage avec le tableau de ses traits, doit
-     * donc être appelé par le onstructeur après cette initialisation
-     */
-    private void initJauges()
-    {
-	int traitMin = m_groupeTraits.getTrait(Trait.PHYSIQUE);
-
-	for (Trait t : Trait.values())
-	{
-	    int traitcourant = m_groupeTraits.getTrait(t);
-	    if (traitcourant < traitMin)
-	    {
-		traitMin = traitcourant;
-	    }
-	}
-	m_jaugeFatigueForceDAme = new CoupleJauge(m_groupeTraits.getTrait(Trait.PHYSIQUE), m_groupeTraits.getTrait(Trait.VOLONTE), traitMin);
-	m_jaugeSanteInit = new CoupleJauge(m_groupeTraits.getTrait(Trait.PHYSIQUE), m_groupeTraits.getTrait(Trait.VOLONTE), m_groupeTraits.getTrait(Trait.MENTAL), m_groupeTraits.getTrait(Trait.COORDINATION));
-    }
-
-    /**
-     * initialise les caractéristiques hors traits du personnage
-     */
-    private void initPerso()
-    {
-	initJauges();
-	genInit();
     }
 
     /**

@@ -27,7 +27,7 @@ import org.duckdns.spacedock.upengine.libupsystem.RollUtils.RollResult;
  *
  * @author ykonoclast
  */
-class CoupleJauge
+class CoupleJauges
 {
 
     /**
@@ -73,7 +73,7 @@ class CoupleJauge
      * @param p_mental le trait mental
      * @param p_coordination le trait coordination
      */
-    CoupleJauge(int p_physique, int p_volonte, int p_mental, int p_coordination)
+    CoupleJauges(int p_physique, int p_volonte, int p_mental, int p_coordination)
     {
 	if (p_physique >= 0 && p_volonte >= 0 && p_mental >= 0 && p_coordination >= 0)
 	{
@@ -92,7 +92,7 @@ class CoupleJauge
      * @param p_volonte le trait volonte
      * @param p_tailleForceDAme le plus faible des traits du perso
      */
-    CoupleJauge(int p_physique, int p_volonte, int p_tailleForceDAme)//jauge de fatigue
+    CoupleJauges(int p_physique, int p_volonte, int p_tailleForceDAme)//jauge de fatigue
     {
 	if (p_physique >= 0 && p_volonte >= 0 && p_tailleForceDAme >= 0)
 	{
@@ -146,6 +146,15 @@ class CoupleJauge
 
     /**
      *
+     * @return la position du point de choc de cette jauge
+     */
+    int getPtChoc()
+    {
+	return m_choc;
+    }
+
+    /**
+     *
      * @return si le personnage est éliminé (coma ou mort)
      */
     Boolean isElimine()
@@ -179,19 +188,19 @@ class CoupleJauge
      * externe au passage
      *
      * @param p_degats
-     * @param p_victime sera utilisé pour les deux jets (absorption et
-     * éventuellement inconscience)
+     * @param p_traits les traits du personnage cible afin de faire le jet
+     * d'absorption puis le jet d'inconscience et éventuellement le jet de mort
      * @return le niveau de remplissage de la jauge externe, ce qui permet de
      * suivre si celle-ci a été réduite
      */
-    int recevoirDegats(int p_degats, Perso p_victime)
+    int recevoirDegats(int p_degats, GroupeTraits p_traits)
     {
 	if (p_degats >= 0)
 	{
 	    int quotient;
 	    int blessGraves;
 	    m_blessuresLegeres += p_degats;
-	    RollResult jetAbsorption = p_victime.effectuerJetTrait(Trait.PHYSIQUE, m_blessuresLegeres);
+	    RollResult jetAbsorption = p_traits.effectuerJetTrait(Trait.PHYSIQUE, m_blessuresLegeres, false);
 
 	    if (!jetAbsorption.isJetReussi())//le jet d'absorption est en dessous du ND des blessures légères
 	    {
@@ -203,10 +212,10 @@ class CoupleJauge
 
 		if (m_remplissage_interne > m_choc)//on risque l'inconscience et l'élimination
 		{
-		    if (m_remplissage_interne >= m_taille_interne || !p_victime.effectuerJetTrait(Trait.VOLONTE, 5 * m_remplissage_interne).isJetReussi())//jet d'inconscience raté ou jauge remplie
+		    if (m_remplissage_interne >= m_taille_interne || !p_traits.effectuerJetTrait(Trait.VOLONTE, 5 * m_remplissage_interne, false).isJetReussi())//jet d'inconscience raté ou jauge remplie
 		    {
 			m_inconscient = true;
-			if (m_remplissage_interne > m_taille_interne || !p_victime.effectuerJetTrait(Trait.PHYSIQUE, 5 * m_remplissage_interne).isJetReussi())//jauge déborde ou jet de mort raté
+			if (m_remplissage_interne > m_taille_interne || !p_traits.effectuerJetTrait(Trait.PHYSIQUE, 5 * m_remplissage_interne, false).isJetReussi())//jauge déborde ou jet de mort raté
 			{
 			    m_elimine = true;
 			    if (m_remplissage_interne > m_taille_interne)
@@ -235,7 +244,7 @@ class CoupleJauge
     }
 
     /**
-     * commun aux deux constructeurs. Sert à constituer le CoupleJauge dans les
+     * commun aux deux constructeurs. Sert à constituer le CoupleJauges dans les
      * faits
      *
      * @param p_taille_interne

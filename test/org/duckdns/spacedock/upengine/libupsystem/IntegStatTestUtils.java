@@ -105,7 +105,7 @@ final class IntegStatTestUtils
 	{//on crée ici un nouveau perso pour chaque test : sinon les blessures s'accumulent entre deux boucles et ils meurrent au final...
 	    Perso perso = new Perso(p_rm);
 	    perso.etreBlesse(new Degats(p_degats, 0));
-	    nbBlessuresGraves += perso.getBlessuresGraves();
+	    nbBlessuresGraves += perso.getEtatVital().getBlessuresGraves();
 	}
 	return (int) (nbBlessuresGraves / (limiteLAncers + 1));
     }

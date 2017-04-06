@@ -17,7 +17,7 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.util.ArrayList;
-import java.util.ListIterator;
+import org.duckdns.spacedock.upengine.libupsystem.EnsembleJauges.EtatVital;
 import org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait;
 import static org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait.COORDINATION;
 import static org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait.MENTAL;
@@ -27,8 +27,6 @@ import static org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait.VOLO
 import org.duckdns.spacedock.upengine.libupsystem.Perso.Degats;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -51,16 +49,16 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @PrepareForTest(//pour les méthodes statiques c'est la classe appelante qui doit apparaître ici, pour les classes final c'est la classe appelée (donc UPReferenceSysteme n'apparaît ici que pour son caractère final et pas pour sa méthode getInstance()
 
 	{//les classes final, appelant du statique et les classes subissant un whennew
-	    Perso.class, GroupeTraits.class, UPReferenceSysteme.class, RollUtils.RollResult.class, Armure.class, Degats.class, CoupleJauge.class, Inventaire.class, ArbreDomaines.class, ArmeDist.class
+	    Perso.class, EtatVital.class, GroupeTraits.class, UPReferenceSysteme.class, RollUtils.RollResult.class, Armure.class, Degats.class, EnsembleJauges.class, Inventaire.class, ArbreDomaines.class, ArmeDist.class
 	})
 public class UnitPersoTest
 {
 
     private UPReferenceSysteme referenceMock;
-    private CoupleJauge santeInitRM1;
-    private CoupleJauge santeInitRM3;
-    private CoupleJauge fatigueFARM1;
-    private CoupleJauge fatigueFARM3;
+    private EtatVital etatRM1;
+    private EtatVital etatRM3;
+    private EnsembleJauges jaugesRM1;
+    private EnsembleJauges jaugesRM3;
     private GroupeTraits traitsRM3;
     private GroupeTraits traitsRM1;
     private ArbreDomaines arbreMock;
@@ -69,6 +67,8 @@ public class UnitPersoTest
     private Perso persoRM3;
     private static ArrayList<String> listComp = new ArrayList<>();
     private static ArrayList<String> listDom = new ArrayList<>();
+    private static ArrayList<Integer> listRM1 = new ArrayList<>();
+    private static ArrayList<Integer> listRM3 = new ArrayList<>();
 
     @BeforeClass
     public static void setupClass()
@@ -84,6 +84,12 @@ public class UnitPersoTest
 	listDom.add("dom3");
 	listDom.add("dom4");
 	listDom.add("dom5");
+
+	//on construit deux listes d'actions retournées par les ensembles de jauges mockés
+	listRM1.add(2);
+	listRM3.add(1);
+	listRM3.add(2);
+	listRM3.add(3);
     }
 
     @Before
@@ -112,24 +118,31 @@ public class UnitPersoTest
 	when(traitsRM1.getTrait(Trait.PRESENCE)).thenReturn(2);
 
 	//on mocke deux groupes de jauges, un pour un perso RM1, l'autre pour un perso RM3
-	santeInitRM1 = PowerMockito.mock(CoupleJauge.class);
-	santeInitRM3 = PowerMockito.mock(CoupleJauge.class);
-	fatigueFARM1 = PowerMockito.mock(CoupleJauge.class);
-	fatigueFARM3 = PowerMockito.mock(CoupleJauge.class);
-	whenNew(CoupleJauge.class).withArguments(2, 2, 2, 2).thenReturn(santeInitRM1);
-	whenNew(CoupleJauge.class).withArguments(3, 2, 2, 4).thenReturn(santeInitRM3);
-	whenNew(CoupleJauge.class).withArguments(2, 2, 2).thenReturn(fatigueFARM1);
-	whenNew(CoupleJauge.class).withArguments(3, 2, 2).thenReturn(fatigueFARM3);
+	jaugesRM1 = PowerMockito.mock(EnsembleJauges.class);
+	jaugesRM3 = PowerMockito.mock(EnsembleJauges.class);
+	whenNew(EnsembleJauges.class).withArguments(traitsRM1).thenReturn(jaugesRM1);
+	whenNew(EnsembleJauges.class).withArguments(traitsRM3).thenReturn(jaugesRM3);
+
+	//les jauges mockées renvoient des états vitaux
+	etatRM1 = PowerMockito.mock(EtatVital.class);
+	when(jaugesRM1.getEtatVital()).thenReturn(etatRM1);
+	etatRM3 = PowerMockito.mock(EtatVital.class);
+	when(jaugesRM3.getEtatVital()).thenReturn(etatRM3);
+
+	//les jauges mockées gèrent l'init
+	when(jaugesRM1.getActions()).thenReturn(listRM1);
+	when(jaugesRM1.agirEnCombat(2)).thenReturn(true);
+
+	when(jaugesRM3.getActions()).thenReturn(listRM3);
+	when(jaugesRM3.agirEnCombat(1)).thenReturn(true);
+	when(jaugesRM3.agirEnCombat(2)).thenReturn(true);
+	when(jaugesRM3.agirEnCombat(3)).thenReturn(true);
 
 	//La référence mockée renvoie les listes de domaines et compétence prédéfinies
 	when(referenceMock.getListDomaines()).thenReturn(listDom);
 	when(referenceMock.getListComp(2)).thenReturn(listComp);
 	when(referenceMock.getListComp(3)).thenReturn(listComp);
 	when(referenceMock.getListComp(4)).thenReturn(listComp);
-
-	//les jauges mockées renvoient des valeurs d'init
-	when(santeInitRM1.getRemplissage_externe()).thenReturn(1);
-	when(santeInitRM3.getRemplissage_externe()).thenReturn(3);
 
 	//on mocke un arbre de domaines
 	arbreMock = PowerMockito.mock(ArbreDomaines.class);
@@ -155,7 +168,6 @@ public class UnitPersoTest
 	when(traits.getTrait(Trait.VOLONTE)).thenReturn(1);
 	when(traits.getTrait(Trait.PRESENCE)).thenReturn(4);
 
-	whenNew(CoupleJauge.class).withArguments(3, 1, 2, 4).thenReturn(santeInitRM3);//on n'utilisera pas la jauge mais il en faut bien une pour éviter les NullPointerException à la création
 	Perso perso = new Perso(traits, arbreMock);
 	Assert.assertEquals(3, perso.getTrait(Trait.PHYSIQUE));
 	Assert.assertEquals(4, perso.getTrait(Trait.COORDINATION));
@@ -228,45 +240,6 @@ public class UnitPersoTest
     }
 
     @Test
-    public void testAgirEnCombatErreur()
-    {
-	try
-	{
-	    persoRM1.agirEnCombat(0);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:phase:0", e.getMessage());
-	}
-
-	try
-	{
-	    persoRM1.agirEnCombat(11);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:phase:11", e.getMessage());
-	}
-    }
-
-    @Test
-    public void testAgirEnCombatNominal()
-    {
-	//On teste la "consommation" des actions pour des persos ayant des valeurs d'initiative différentes
-	persoRM1.agirEnCombat(persoRM1.getActions().get(0));
-	Assert.assertEquals(11, persoRM1.getActions().get(0).intValue());
-
-	persoRM3.agirEnCombat(persoRM3.getActions().get(0));
-	Assert.assertEquals(11, persoRM3.getActions().get(0).intValue());
-	persoRM3.agirEnCombat(persoRM3.getActions().get(1));
-	Assert.assertEquals(11, persoRM3.getActions().get(1).intValue());
-	persoRM3.agirEnCombat(persoRM3.getActions().get(2));
-	Assert.assertEquals(11, persoRM3.getActions().get(2).intValue());
-    }
-
-    @Test
     public void testAttaquerCaCAvecArme()
     {
 	//On mocke une arme avec physique min de 3 et malus aux jets de 1
@@ -284,19 +257,18 @@ public class UnitPersoTest
 	when(resultMock.getScoreBrut()).thenReturn(10);
 	when(arbreMock.effectuerJetComp(2, 3, 6, 12, -1, 0, -10, true)).thenReturn(resultMock);
 
-	//On mocke le isSonne() des deux jauges avec
-	when(santeInitRM1.isSonne()).thenReturn(false);
-	when(fatigueFARM1.isSonne()).thenReturn(true);
+	//On mocke le isSonne()
+	when(etatRM1.isSonne()).thenReturn(true);
 
 	//On fait effectuer une attaque à la hache à un perso RM1 en prenant en compte le physique minimal de 2 et le malus à l'attaque de 1
 	RollUtils.RollResult resultat = persoRM1.attaquerCaC(persoRM1.getActions().get(0), 12);
-
+	verify(etatRM1).isSonne();
 	Assert.assertEquals(0, resultat.getNbIncrements());
 	Assert.assertEquals(10, resultat.getScoreBrut());
 	Assert.assertEquals(false, resultat.isJetReussi());
 
 	verify(arbreMock).effectuerJetComp(2, 3, 6, 12, -1, 0, -10, true);
-	verify(traitsRM3, times(2)).getTrait(COORDINATION);
+	verify(traitsRM1).getTrait(COORDINATION);
     }
 
     @Test
@@ -313,9 +285,8 @@ public class UnitPersoTest
 	when(resultMock.getScoreBrut()).thenReturn(28);
 	when(arbreMock.effectuerJetComp(4, 3, 0, 30, 0, 0, 0, false)).thenReturn(resultMock);
 
-	//On mocke le isSonne() des deux jauges
-	when(santeInitRM3.isSonne()).thenReturn(false);
-	when(fatigueFARM3.isSonne()).thenReturn(false);
+	//On mocke le isSonne()
+	when(etatRM3.isSonne()).thenReturn(false);
 
 	//On fait effectuer une attaque à mains nues à un perso RM3
 	RollUtils.RollResult resultat = persoRM3.attaquerCaC(persoRM3.getActions().get(0), 30);
@@ -323,8 +294,8 @@ public class UnitPersoTest
 	Assert.assertEquals(3, resultat.getNbIncrements());
 	Assert.assertEquals(28, resultat.getScoreBrut());
 	Assert.assertEquals(true, resultat.isJetReussi());
-
-	verify(traitsRM3, times(3)).getTrait(COORDINATION);
+	verify(etatRM3).isSonne();
+	verify(traitsRM3).getTrait(COORDINATION);
 	verify(arbreMock).effectuerJetComp(4, 3, 0, 30, 0, 0, 0, false);
     }
 
@@ -336,9 +307,8 @@ public class UnitPersoTest
 	when(inventaireMock.getArmeCourante()).thenReturn(armeMock);
 	ArmeDist.DistReport reportMock = PowerMockito.mock(ArmeDist.DistReport.class);
 
-	//On mocke le isSonne() des deux jauges
-	when(santeInitRM3.isSonne()).thenReturn(false);
-	when(fatigueFARM3.isSonne()).thenReturn(false);
+	//On mocke le isSonne()
+	when(etatRM3.isSonne()).thenReturn(false);
 
 	//On mocke un retour pour vérifier qu'il traverse correctement les couches private et on le fait retourner par arbreMock
 	RollUtils.RollResult resultMock = PowerMockito.mock(RollUtils.RollResult.class);
@@ -363,7 +333,7 @@ public class UnitPersoTest
 	verify(reportMock).getModDesGardes();
 	verify(reportMock).getModDesLances();
 	verify(reportMock).getModJet();
-	verify(traitsRM3, times(3)).getTrait(COORDINATION);
+	verify(traitsRM3).getTrait(COORDINATION);
 	verify(arbreMock).effectuerJetComp(4, 4, 0, 50, -2, 0, -15, false);//+5 pour portée courte et -10 pour défaut de physique
 	Assert.assertEquals(1, resultat.getNbIncrements());
 	Assert.assertEquals(22, resultat.getScoreBrut());
@@ -381,12 +351,12 @@ public class UnitPersoTest
     public void effectuerJetCompTest()
     {
 	//On mocke le isSonne() des deux jauges
-	when(santeInitRM3.isSonne()).thenReturn(true);
-	when(fatigueFARM3.isSonne()).thenReturn(false);
+	when(etatRM3.isSonne()).thenReturn(true);
 
 	new Perso(3).effectuerJetComp(Trait.PRESENCE, 1, 1, 49, -2, +1, +7);
 	verify(arbreMock).effectuerJetComp(2, 1, 1, 49, -2, +1, +7, true);
-	verify(traitsRM3, times(3)).getTrait(PRESENCE);
+	verify(traitsRM3).getTrait(PRESENCE);
+	verify(etatRM3).isSonne();
     }
 
     @Test
@@ -434,15 +404,15 @@ public class UnitPersoTest
 	when(degatsMock.getTypeArme()).thenReturn(2);
 	persoRM3.etreBlesse(degatsMock);
 
-	verify(santeInitRM3).recevoirDegats(18, persoRM3);
+	verify(jaugesRM3).recevoirDegatsPhysiques(18);
 
 	//cas limite : les dégâts à 0 pasent sans causer d'effet
 	when(degatsMock.getQuantite()).thenReturn(0);
 	when(degatsMock.getTypeArme()).thenReturn(0);
 	persoRM1.etreBlesse(degatsMock);
-	verify(santeInitRM1, never()).recevoirDegats(0, persoRM1);
-	Assert.assertEquals(0, persoRM1.getBlessuresGraves());
-	Assert.assertEquals(0, persoRM1.getBlessuresLegeres());
+	verify(jaugesRM1, never()).recevoirDegatsPhysiques(0);
+	Assert.assertEquals(0, persoRM1.getEtatVital().getBlessuresGraves());
+	Assert.assertEquals(0, persoRM1.getEtatVital().getBlessuresLegeres());
     }
 
     @Test
@@ -450,80 +420,9 @@ public class UnitPersoTest
     {
 	persoRM3.effectuerJetTrait(MENTAL, 7);
 	verify(traitsRM3).effectuerJetTrait(MENTAL, 7, false);
-	when(fatigueFARM3.isSonne()).thenReturn(true);
+	when(etatRM3.isSonne()).thenReturn(true);
 	persoRM3.effectuerJetTrait(MENTAL, 7);
 	verify(traitsRM3).effectuerJetTrait(MENTAL, 7, true);
-    }
-
-    @Test
-    public void testToutesMethodesInitErreur()
-    {
-	//cas d'erreur sur isActif
-	try
-	{
-	    persoRM3.isActif(0);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:phase:0", e.getMessage());
-	}
-
-	try
-	{
-	    persoRM3.isActif(11);
-	    fail();
-	}
-	catch (IllegalArgumentException e)
-	{
-	    Assert.assertEquals("paramétre aberrant:phase:11", e.getMessage());
-	}
-    }
-
-    @Test
-    public void testToutesMethodesInitNominal()//petite exception aux règles des tests unitaires car il est difficile de mocker les méthodes statiques de la classe statique RollUtils, on vérifie donc simplement que les résultats sont dans les normes
-    {
-	for (int j = 0; j <= 4; j++)//5 tests de suite pour être sur
-	{
-	    persoRM3.genInit();
-	    ArrayList<Integer> result = persoRM3.getActions();
-	    for (int i = 0; i <= 2; i++)//for classique car l'on veut forcer la vérification de trois cases du tableau
-	    {
-		Assert.assertTrue(result.get(i) < 11 && result.get(i) > 0); //on vérifie que les init générées ne sont pas ridicules.
-	    }
-	}
-
-	Assert.assertEquals((int) persoRM1.getActions().get(0), (int) persoRM1.getInitTotale());//son init de base
-	ArmeCaC armeMock = PowerMockito.mock(ArmeCaC.class);//on ajoute une arme avec bonus d'init de 2
-	when(armeMock.getBonusInit()).thenReturn(2);
-	when(inventaireMock.getArmeCourante()).thenReturn(armeMock);
-	when(inventaireMock.getArmeCourante()).thenReturn(armeMock);
-	Assert.assertEquals((int) persoRM1.getActions().get(0) + 10, (int) persoRM1.getInitTotale());//son init améliorée par un bonus d'init de 2
-
-	//test de isActif()
-	Assert.assertTrue(persoRM3.isActif(persoRM3.getActions().get(0)));
-	ListIterator<Integer> listActions = persoRM3.getActions().listIterator();
-
-	int phaseCourante = 1;
-	while (phaseCourante < 11)
-	{
-	    if (listActions.hasNext() && phaseCourante == (int) listActions.next())
-	    {
-		assertTrue(persoRM3.isActif(phaseCourante));
-		persoRM3.agirEnCombat(phaseCourante);//on consomme l'action
-		if (listActions.hasNext() && phaseCourante == (int) listActions.next())//deuxième vérification car il peut très bien y avoir deux actions dans la même phase
-		{
-		    --phaseCourante;//on annule la progression de phase qui va avoir lieu
-		}
-		listActions.previous();//on annule le next du test que l'on vient de faire
-	    }
-	    else
-	    {
-		listActions.previous();//on annule le next() indu car la phase courante n'était pas une phase d'action du perso, il ne faut donc pas dépasser une action légitime
-		assertFalse(persoRM3.isActif(phaseCourante));
-	    }
-	    ++phaseCourante;
-	}
     }
 
     @Test
@@ -573,7 +472,7 @@ public class UnitPersoTest
 	verify(armeMock).getCategorie();
 	verify(arbreMock).getRangComp(3, 2);
 	verify(arbreMock, times(2)).getRangDomaine(3);
-	verify(traitsRM3, times(7)).getTrait(PHYSIQUE);
+	verify(traitsRM3, times(3)).getTrait(PHYSIQUE);
 	assertEquals(20, result.getQuantite());
 	assertEquals(3, result.getTypeArme());
     }
@@ -629,7 +528,7 @@ public class UnitPersoTest
 	when(inventaireMock.getArmure()).thenReturn(armureMock);
 
 	//le perso de RM3 est sonné pour vérifier que la règle est bien appliquée
-	when(fatigueFARM3.isSonne()).thenReturn(true);
+	when(etatRM3.isSonne()).thenReturn(true);
 
 	//sans adversaire supplémentaire
 	Assert.assertEquals(22, persoRM1.getDefense(3, 0));
@@ -648,67 +547,6 @@ public class UnitPersoTest
     @Test
     public void testGetSetDiversNominal()
     {//si non déjà testés dans les autres méthodes de cette classe
-
-	//méthodes liées aux jauges
-	when(santeInitRM3.getRemplissage_interne()).thenReturn(2);
-	Assert.assertEquals(2, persoRM3.getBlessuresGraves());
-
-	when(santeInitRM3.getBlessuresLegeres()).thenReturn(23);
-	Assert.assertEquals(23, persoRM3.getBlessuresLegeres());
-
-	when(fatigueFARM3.getRemplissage_interne()).thenReturn(5);
-	Assert.assertEquals(5, persoRM3.getPointsDeFatigue());
-
-	when(fatigueFARM3.getBlessuresLegeres()).thenReturn(27);
-	Assert.assertEquals(27, persoRM3.getBlessuresLegeresMentales());
-
-	when(fatigueFARM3.isElimine()).thenReturn(true);
-	when(santeInitRM3.isElimine()).thenReturn(true);
-	Assert.assertTrue(persoRM3.isElimine());
-
-	when(fatigueFARM3.isElimine()).thenReturn(true);
-	when(santeInitRM3.isElimine()).thenReturn(false);
-	Assert.assertTrue(persoRM3.isElimine());
-
-	when(fatigueFARM3.isElimine()).thenReturn(false);
-	when(santeInitRM3.isElimine()).thenReturn(true);
-	Assert.assertTrue(persoRM3.isElimine());
-
-	when(fatigueFARM3.isElimine()).thenReturn(false);
-	when(santeInitRM3.isElimine()).thenReturn(false);
-	Assert.assertFalse(persoRM3.isElimine());
-
-	when(fatigueFARM3.isInconscient()).thenReturn(true);
-	when(santeInitRM3.isInconscient()).thenReturn(true);
-	Assert.assertTrue(persoRM3.isInconscient());
-
-	when(fatigueFARM3.isInconscient()).thenReturn(true);
-	when(santeInitRM3.isInconscient()).thenReturn(false);
-	Assert.assertTrue(persoRM3.isInconscient());
-
-	when(fatigueFARM3.isInconscient()).thenReturn(false);
-	when(santeInitRM3.isInconscient()).thenReturn(true);
-	Assert.assertTrue(persoRM3.isInconscient());
-
-	when(fatigueFARM3.isInconscient()).thenReturn(false);
-	when(santeInitRM3.isInconscient()).thenReturn(false);
-	Assert.assertFalse(persoRM3.isInconscient());
-
-	when(fatigueFARM3.isSonne()).thenReturn(true);
-	when(santeInitRM3.isSonne()).thenReturn(true);
-	Assert.assertTrue(persoRM3.isSonne());
-
-	when(fatigueFARM3.isSonne()).thenReturn(true);
-	when(santeInitRM3.isSonne()).thenReturn(false);
-	Assert.assertTrue(persoRM3.isSonne());
-
-	when(fatigueFARM3.isSonne()).thenReturn(false);
-	when(santeInitRM3.isSonne()).thenReturn(true);
-	Assert.assertTrue(persoRM3.isSonne());
-
-	when(fatigueFARM3.isSonne()).thenReturn(false);
-	when(santeInitRM3.isSonne()).thenReturn(false);
-	Assert.assertFalse(persoRM3.isSonne());
 
 	//méthodes liées à l'inventaire
 	Assert.assertEquals(inventaireMock, persoRM3.getInventaire());
@@ -742,13 +580,13 @@ public class UnitPersoTest
 
 	//méthodes liées aux traits
 	Assert.assertEquals(3, persoRM3.getTrait(Trait.PHYSIQUE));
-	verify(traitsRM3, times(5)).getTrait(PHYSIQUE);
+	verify(traitsRM3).getTrait(PHYSIQUE);
 	Assert.assertEquals(4, persoRM3.getTrait(Trait.COORDINATION));
-	verify(traitsRM3, times(3)).getTrait(COORDINATION);
+	verify(traitsRM3).getTrait(COORDINATION);
 	Assert.assertEquals(2, persoRM3.getTrait(Trait.MENTAL));
-	verify(traitsRM3, times(3)).getTrait(MENTAL);
+	verify(traitsRM3).getTrait(MENTAL);
 	Assert.assertEquals(2, persoRM3.getTrait(Trait.VOLONTE));
-	verify(traitsRM3, times(4)).getTrait(VOLONTE);
+	verify(traitsRM3).getTrait(VOLONTE);
 	Assert.assertEquals(2, persoRM3.getTrait(Trait.PRESENCE));
 
 	Assert.assertEquals(2, persoRM1.getTrait(Trait.PHYSIQUE));

@@ -60,17 +60,22 @@ public class PieceArmure
 
 	//construction du nom
 	if (p_type == 0)
-	{
+	{//armure ancienne
 	    String libelleTemp = referenceArmures.getLblPiece(p_idPiece, p_isBouclier);
-	    if (!isBouclier())
+	    if (!p_isBouclier)
 	    {//on ajoute le nom lié au matériau
-		libelleTemp = libelleTemp.concat(" " + referenceSys.getCollectionLibelles().interArmure + " " + referenceArmures.getLblMateriauArmure(p_materiau));
+		libelleTemp = libelleTemp.concat(" " + referenceSys.getCollectionLibelles().interArmure + " " + referenceArmures.getLblMateriauArmureAncienne(p_materiau));
 	    }
 	    m_libelle = libelleTemp;
 	}
 	else
-	{
-	    m_libelle = referenceArmures.getLblPiece(p_idPiece, p_isBouclier) + " " + referenceArmures.getLblTypeArmure(p_type);
+	{//armure moderne
+	    String libelleTemp = referenceArmures.getLblPiece(p_idPiece, p_isBouclier) + " " + referenceArmures.getLblTypeArmure(p_type);
+	    if (!p_isBouclier)
+	    {//on ajoute le nom lié au matériau
+		libelleTemp = libelleTemp.concat(" " + referenceSys.getCollectionLibelles().liaison + " " + referenceSys.getCollectionLibelles().facture + " " + referenceArmures.getLblMateriauArmure(p_materiau));
+	    }
+	    m_libelle = libelleTemp;
 	}
 
 	m_isBouclier = p_isBouclier;

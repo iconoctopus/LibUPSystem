@@ -4,11 +4,11 @@
     "bonusND": [0, 5, 10, 10, 10, 15],
     "malus_armure": [0, 1, 2, 3, 4, 5],
     "pieces": [{
-	    "lbl": "heaume complet",
+	    "lbl": "casque complet",
 	    "points": [3, 2, 1.5, 1],
 	    "loca": 0
 	}, {
-	    "lbl": "heaume ouvert",
+	    "lbl": "casque ouvert",
 	    "points": [2, 1.5, 1, 0.5],
 	    "loca": 0
 	}, {
@@ -55,7 +55,8 @@
 	}],
     "loca_doubles": [2, 3, 4, 5],
     "ajustements": [[1, 0.5, 0.33, 0.25, 0.2], [2, 1, 0.5, 0.33, 0.25], [3, 2, 1, 0.5, 0.33], [4, 3, 2, 1, 0.5]],
-    "materiaux_armures": ["plates", "lamelles ou maille", "cuir clouté", "cuir bouilli"],
+    "materiaux_armures_anciennes": ["plates", "lamelles ou maille", "cuir clouté", "cuir bouilli"],
+    "materiaux_armures": ["très lourde", "lourde", "moyenne", "légère"],
     "types_armures": ["ancienne", "moderne", "avec blindage", "énergétique"],
     "localisations": ["tête", "corps", "bras", "main", "jambe", "pied"]
 }

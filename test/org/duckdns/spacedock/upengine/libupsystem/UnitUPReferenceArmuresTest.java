@@ -104,7 +104,7 @@ public class UnitUPReferenceArmuresTest
     @Test
     public void testGetLblPiece()
     {
-	Assert.assertEquals("heaume complet", m_reference.getLblPiece(0, false));
+	Assert.assertEquals("casque complet", m_reference.getLblPiece(0, false));
 	Assert.assertEquals("cuirasse", m_reference.getLblPiece(7, false));
     }
 

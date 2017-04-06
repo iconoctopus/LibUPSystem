@@ -34,6 +34,10 @@ public class UPReferenceArmures
      */
     private final JsonArray m_listLblMatArmures;
     /**
+     * list des libellés des matériaux d'armures
+     */
+    private final JsonArray m_listLblMatArmuresAnciennes;
+    /**
      * liste des libellés des localisations
      */
     private final JsonArray m_listLblLoca;
@@ -97,6 +101,7 @@ public class UPReferenceArmures
 	m_tableAjustementArmure = object.getJsonArray("ajustements");
 	m_tabPiecesArmures = object.getJsonArray("pieces");
 	m_listLblMatArmures = object.getJsonArray("materiaux_armures");
+	m_listLblMatArmuresAnciennes = object.getJsonArray("materiaux_armures_anciennes");
 	m_listLblTypArmures = object.getJsonArray("types_armures");
 	m_tabBoucliers = object.getJsonArray("boucliers");
 	m_listLblLoca = object.getJsonArray("localisations");
@@ -193,6 +198,16 @@ public class UPReferenceArmures
     public String getLblMateriauArmure(int p_indice)
     {
 	return m_listLblMatArmures.getString(p_indice);
+    }
+
+    /**
+     *
+     * @param p_indice
+     * @return le libellé d'un matériau d'armure ancienne
+     */
+    public String getLblMateriauArmureAncienne(int p_indice)
+    {
+	return m_listLblMatArmuresAnciennes.getString(p_indice);
     }
 
     /**

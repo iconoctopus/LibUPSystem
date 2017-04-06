@@ -244,6 +244,7 @@ public final class UPReferenceSysteme
 	public final String equilibrage;
 	public final String attaque;
 	public final String parade;
+	public final String facture;
 
 	CollectionLibelles(JsonObject p_libelles)
 	{
@@ -260,6 +261,7 @@ public final class UPReferenceSysteme
 		equilibrage = p_libelles.getString("equilibrage");
 		attaque = p_libelles.getString("attaque");
 		parade = p_libelles.getString("parade");
+		facture = p_libelles.getString("facture");
 	    }
 	    else
 	    {
@@ -274,6 +276,7 @@ public final class UPReferenceSysteme
 		equilibrage = "equilibrage";
 		attaque = "attaque";
 		parade = "parade";
+		facture = "facture";
 	    }
 	}
     }

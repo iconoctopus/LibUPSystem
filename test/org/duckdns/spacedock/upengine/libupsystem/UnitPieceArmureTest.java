@@ -62,27 +62,30 @@ public class UnitPieceArmureTest
 	when(referenceArmuresMock.getPtsArmure(0, 0, false)).thenReturn(3);
 	when(referenceArmuresMock.getLocalisation(0, false)).thenReturn(0);
 	when(referenceArmuresMock.getLblPiece(0, false)).thenReturn("heaume complet");
-	when(referenceArmuresMock.getLblMateriauArmure(0)).thenReturn("plates");
+	when(referenceArmuresMock.getLblMateriauArmureAncienne(0)).thenReturn("plates");
 	when(referenceArmuresMock.getLblTypeArmure(0)).thenReturn("ancienne");
 	piece1 = new PieceArmure(0, 0, 0, false);
 
 	when(referenceArmuresMock.getPtsArmure(0, 3, false)).thenReturn(1);
 	when(referenceArmuresMock.getLblTypeArmure(1)).thenReturn("moderne");
+	when(referenceArmuresMock.getLblMateriauArmure(3)).thenReturn("légère");
 	piece2 = new PieceArmure(0, 1, 3, false);
 
 	when(referenceArmuresMock.getPtsArmure(7, 0, false)).thenReturn(6);
 	when(referenceArmuresMock.getLblPiece(7, false)).thenReturn("cuirasse");
 	when(referenceArmuresMock.getLblTypeArmure(2)).thenReturn("avec blindage");
 	when(referenceArmuresMock.getLocalisation(7, false)).thenReturn(1);
+	when(referenceArmuresMock.getLblMateriauArmure(0)).thenReturn("très lourde");
 	piece3 = new PieceArmure(7, 2, 0, false);
 
-	when(referenceArmuresMock.getPtsArmure(7, 3, false)).thenReturn(2);
+	when(referenceArmuresMock.getPtsArmure(7, 2, false)).thenReturn(3);
 	when(referenceArmuresMock.getLblTypeArmure(3)).thenReturn("énergétique");
-	piece4 = new PieceArmure(7, 3, 3, false);
+	when(referenceArmuresMock.getLblMateriauArmure(2)).thenReturn("moyenne");
+	piece4 = new PieceArmure(7, 3, 2, false);
 
 	when(referenceArmuresMock.getPtsArmure(4, 1, false)).thenReturn(2);
 	when(referenceArmuresMock.getLblPiece(4, false)).thenReturn("brassière");
-	when(referenceArmuresMock.getLblMateriauArmure(1)).thenReturn("lamelles ou maille");
+	when(referenceArmuresMock.getLblMateriauArmureAncienne(1)).thenReturn("lamelles ou maille");
 	when(referenceArmuresMock.getLocalisation(4, false)).thenReturn(2);
 	piece5 = new PieceArmure(4, 0, 1, false);
 
@@ -92,7 +95,6 @@ public class UnitPieceArmureTest
 	bouclier1 = new PieceArmure(3, 3, 1, true);
 
 	when(referenceArmuresMock.getPtsArmure(0, 0, true)).thenReturn(2);
-	when(referenceArmuresMock.getLblMateriauArmure(0)).thenReturn("métal");
 	when(referenceArmuresMock.getLocalisation(0, true)).thenReturn(3);
 	when(referenceArmuresMock.getLblPiece(0, true)).thenReturn("targe");
 	bouclier2 = new PieceArmure(0, 0, 0, true);
@@ -104,7 +106,7 @@ public class UnitPieceArmureTest
 	Assert.assertEquals(3, piece1.getNbpoints());
 	Assert.assertEquals(1, piece2.getNbpoints());
 	Assert.assertEquals(6, piece3.getNbpoints());
-	Assert.assertEquals(2, piece4.getNbpoints());
+	Assert.assertEquals(3, piece4.getNbpoints());
 	Assert.assertEquals(2, piece5.getNbpoints());
 	Assert.assertEquals(4, bouclier1.getNbpoints());
 	Assert.assertEquals(2, bouclier2.getNbpoints());
@@ -140,11 +142,11 @@ public class UnitPieceArmureTest
     public void testLibelle()
     {
 	Assert.assertEquals("heaume complet en plates", piece1.toString());
-	Assert.assertEquals("heaume complet moderne", piece2.toString());
-	Assert.assertEquals("cuirasse avec blindage", piece3.toString());
-	Assert.assertEquals("cuirasse énergétique", piece4.toString());
+	Assert.assertEquals("heaume complet moderne de facture légère", piece2.toString());
+	Assert.assertEquals("cuirasse avec blindage de facture très lourde", piece3.toString());
+	Assert.assertEquals("cuirasse énergétique de facture moyenne", piece4.toString());
 	Assert.assertEquals("brassière en lamelles ou maille", piece5.toString());
 	Assert.assertEquals("pavois énergétique", bouclier1.toString());
-	Assert.assertEquals("targe en métal", bouclier2.toString());
+	Assert.assertEquals("targe", bouclier2.toString());
     }
 }

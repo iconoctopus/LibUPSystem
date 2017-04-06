@@ -142,10 +142,10 @@ public class IntegEquipementTest
 	Assert.assertEquals(arme, persoRM3.getInventaire().getArmeCourante());
 
 	Arme arme2 = new ArmeCaC(2, Arme.QualiteArme.superieure, Arme.EquilibrageArme.mauvais);
-	Assert.assertEquals("épée courte de qualité supérieure et d'équilibrage mauvais", arme2.toString());
+	Assert.assertEquals("épée courte de qualité supérieure et équilibrage mauvais", arme2.toString());
 	Arme arme3 = new ArmeCaC(1, Arme.QualiteArme.inferieure, Arme.EquilibrageArme.bon);
-	Assert.assertEquals("rapière de qualité inférieure et d'équilibrage bon", arme3.toString());
+	Assert.assertEquals("coutelas de qualité inférieure et équilibrage bon", arme3.toString());
 	Arme arme4 = new ArmeDist(42, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal);
-	Assert.assertEquals("pistolet lourd de qualité moyenne et d'équilibrage normal", arme4.toString());
+	Assert.assertEquals("pistolet lourd de qualité moyenne et équilibrage normal", arme4.toString());
     }
 }

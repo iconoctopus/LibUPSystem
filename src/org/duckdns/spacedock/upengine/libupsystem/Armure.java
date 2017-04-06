@@ -22,7 +22,7 @@ package org.duckdns.spacedock.upengine.libupsystem;
  *
  * @author ykonoclast
  */
-final class Armure
+public final class Armure
 {
 
     /**

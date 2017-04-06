@@ -285,7 +285,7 @@ public class EnsembleJauges
 	 *
 	 * @return le nombre de blessures legeres physiques
 	 */
-	int getBlessuresLegeres()
+	public int getBlessuresLegeres()
 	{
 	    return m_nbBlessuresLegeres;
 	}
@@ -294,7 +294,7 @@ public class EnsembleJauges
 	 *
 	 * @return le nombre de blessures legeres mentales
 	 */
-	int getBlessuresLegeresMentales()
+	public int getBlessuresLegeresMentales()
 	{
 	    return m_nbBlessuresLegeresMentales;
 	}
@@ -303,7 +303,7 @@ public class EnsembleJauges
 	 *
 	 * @return la taille de la jauge de santé
 	 */
-	int getSante()
+	public int getSante()
 	{
 	    return m_santeMax;
 	}
@@ -312,7 +312,7 @@ public class EnsembleJauges
 	 *
 	 * @return la taille de la jauge d'init
 	 */
-	int getInitMax()
+	public int getInitMax()
 	{
 	    return m_initMax;
 	}
@@ -321,7 +321,7 @@ public class EnsembleJauges
 	 *
 	 * @return le remplissage de la jauge de santé
 	 */
-	int getBlessuresGraves()
+	public int getBlessuresGraves()
 	{
 	    return m_santeActu;
 	}
@@ -330,7 +330,7 @@ public class EnsembleJauges
 	 *
 	 * @return le remplissage de la jauge d'initiative
 	 */
-	int getInitActu()
+	public int getInitActu()
 	{
 	    return m_initActu;
 	}
@@ -339,7 +339,7 @@ public class EnsembleJauges
 	 *
 	 * @return la taille de la jauge de fatigue
 	 */
-	int getFatigue()
+	public int getFatigue()
 	{
 	    return m_fatigueMax;
 	}
@@ -348,7 +348,7 @@ public class EnsembleJauges
 	 *
 	 * @return la taille de la jauge de force d'âme
 	 */
-	int getForceDAmeMax()
+	public int getForceDAmeMax()
 	{
 	    return m_forceDAmeMax;
 	}
@@ -357,7 +357,7 @@ public class EnsembleJauges
 	 *
 	 * @return le remplissage de la jauge de fatigue
 	 */
-	int getPtsFatigue()
+	public int getPtsFatigue()
 	{
 	    return m_fatigueActu;
 	}
@@ -366,7 +366,7 @@ public class EnsembleJauges
 	 *
 	 * @return le remplissage de la jauge de force d'âme
 	 */
-	int getForceDAmeActu()
+	public int getForceDAmeActu()
 	{
 	    return m_forceDAmeActu;
 	}
@@ -375,7 +375,7 @@ public class EnsembleJauges
 	 *
 	 * @return la position du point de choc de santé
 	 */
-	int getPtChocSante()
+	public int getPtChocSante()
 	{
 	    return m_ptChocSante;
 	}
@@ -384,7 +384,7 @@ public class EnsembleJauges
 	 *
 	 * @return la position du point de choc de fatigue
 	 */
-	int getPtChocFatigue()
+	public int getPtChocFatigue()
 	{
 	    return m_ptChocFatigue;
 	}
@@ -394,7 +394,7 @@ public class EnsembleJauges
 	 * @return si le personnage possesseur de cet ensemble de jauges est
 	 * sonné
 	 */
-	boolean isSonne()
+	public boolean isSonne()
 	{
 	    return m_isSonne;
 	}
@@ -404,7 +404,7 @@ public class EnsembleJauges
 	 * @return si le personnage possesseur de cet ensemble de jauges est
 	 * incosncient
 	 */
-	boolean isInconscient()
+	public boolean isInconscient()
 	{
 	    return m_isInconscient;
 	}
@@ -414,7 +414,7 @@ public class EnsembleJauges
 	 * @return si le personnage possesseur de cet ensemble de jauges est
 	 * éliminé
 	 */
-	boolean isElimine()
+	public boolean isElimine()
 	{
 	    return m_isElimine;
 	}

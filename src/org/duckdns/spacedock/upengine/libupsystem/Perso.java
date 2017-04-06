@@ -31,11 +31,6 @@ public class Perso
      */
     private final ArbreDomaines m_arbreDomaines;
     /**
-     * rassemble armes et armures du personnage ainsi que quelques
-     * fonctionalités utiles notamment les armes et armures courantes
-     */
-    private final Inventaire m_inventaire = new Inventaire();
-    /**
      * la structure encapsulant l'état vital du personnage
      */
     private final EnsembleJauges m_jauges;
@@ -130,15 +125,11 @@ public class Perso
 
     /**
      * Fait effectuer une attaque au corps à corps au personnage. Le personnage
-     * attaquera systématiquement avec l'arme courante, il faut donc la
-     * configurer avant. Cette méthode vérifie que l'action est possible dans la
-     * phase courante en fonction de l'init du perso, elle est donc conçue pour
-     * le combat uniquement (utiliser la méthode générale des jets de compétence
-     * sinon) . Si l'on veut utiliser une autre arme il faut d'abord la
-     * configurer comme arme courante. Une exception est levée si l'on essaye
-     * d'attaquer en corps à corps avec une arme à distance (rien n'interdit
-     * d'entrer une distance 0 dans l'autre méthode adaptée). Si aucune arme
-     * n'est équipée on utilise par défaut les mains nues.
+     * attaquera systématiquement avec l'arme courante fournie (mains nues si
+     * null) Cette méthode vérifie que l'action est possible dans la phase
+     * courante en fonction de l'init du perso, elle est donc conçue pour le
+     * combat uniquement (utiliser la méthode générale des jets de compétence
+     * sinon)
      *
      * Il est important de garder la génération des dégâts séparée et déclenchée
      * depuis l'extérieur afin que le contrôleur puisse choisir d'utiliser les
@@ -146,17 +137,17 @@ public class Perso
      *
      * @param p_phaseActuelle
      * @param p_ND
+     * @param p_arme
      * @return
      */
-    public final RollUtils.RollResult attaquerCaC(int p_phaseActuelle, int p_ND)
+    public final RollUtils.RollResult attaquerCaC(int p_phaseActuelle, int p_ND, ArmeCaC p_arme)
     {
-	ArmeCaC arme = (ArmeCaC) m_inventaire.getArmeCourante();
 	int catArm = 0;//mains nues par défaut
-	if (arme != null)//une arme est équipée
+	if (p_arme != null)//une arme est équipée
 	{
-	    catArm = arme.getCategorie();
+	    catArm = p_arme.getCategorie();
 	}
-	return effectuerAttaque(p_phaseActuelle, p_ND, catArm * 2, 3, 0, 0, 0);//par convention les comp d'attaque de CaC sont à cat*2, les parades sont à Cat*2+1
+	return effectuerAttaque(p_phaseActuelle, p_ND, catArm * 2, 3, 0, 0, 0, p_arme);//par convention les comp d'attaque de CaC sont à cat*2, les parades sont à Cat*2+1
     }
 
     /**
@@ -164,12 +155,9 @@ public class Perso
      * vérifie que l'action est possible dans la phase courante en fonction de
      * l'init du perso, elle est donc conçue pour le combat uniquement (utiliser
      * la méthode pour les jets de compétence généraux sinon). On utilise l'arme
-     * courante. Si l'on veut utiliser une autre arme il faut d'abord la
-     * configurer comme arme courante. Une exception est levée si l'on essaye
-     * d'attaquer à distance avec une arme de corps à corps (rien n'interdit
-     * d'entrer une distance 0). Aucune vérification n'est effectuée sur le
-     * magasin actuel de l'arme. Si celui-ci n'est pas suffisant l'arme lèvera
-     * une exception.
+     * courante fournie (mains nues si null). Aucune vérification n'est
+     * effectuée sur le magasin actuel de l'arme. Si celui-ci n'est pas
+     * suffisant l'arme lèvera une exception.
      *
      * Il est important de garder la génération des dégâts séparée et déclenchée
      * depuis l'extérieur afin que le contrôleur puisse choisir d'utiliser les
@@ -179,17 +167,17 @@ public class Perso
      * @param p_ND
      * @param p_distance la distance de la cible
      * @param p_nbCoups nombre de tirs effectués (pour la règle
+     * @param p_arme
      * @return
      */
-    public RollResult attaquerDist(int p_phaseActuelle, int p_ND, int p_distance, int p_nbCoups)
+    public RollResult attaquerDist(int p_phaseActuelle, int p_ND, int p_distance, int p_nbCoups, ArmeDist p_arme)
     {
 	RollResult result = new RollResult(0, false, 0);//raté par défaut
-	ArmeDist arme = (ArmeDist) m_inventaire.getArmeCourante();
 
-	ArmeDist.DistReport report = arme.verifPreAttaque(p_distance, p_nbCoups);
+	ArmeDist.DistReport report = p_arme.verifPreAttaque(p_distance, p_nbCoups);
 	if (!report.isEchecAuto())//on n'est pas en situation d'échec automatique
 	{
-	    result = effectuerAttaque(p_phaseActuelle, p_ND, arme.getCategorie(), 4, report.getModDesLances(), report.getModDesGardes(), report.getModJet());
+	    result = effectuerAttaque(p_phaseActuelle, p_ND, p_arme.getCategorie(), 4, report.getModDesLances(), report.getModDesGardes(), report.getModJet(), p_arme);
 	}
 	return result;
     }
@@ -230,17 +218,20 @@ public class Perso
      * les effets d'armure
      *
      * @param p_degats
+     * @param p_armure peut être null
      */
-    public void etreBlesse(Degats p_degats)
+    public void etreBlesse(Degats p_degats, Armure p_armure)
     {
 
 	if (p_degats.getQuantite() >= 0 && p_degats.getTypeArme() >= 0)
 	{
-	    //application des effets d'armure
-	    Armure armure = m_inventaire.getArmure();
-	    int redDegats = armure.getRedDegats(p_degats.getTypeArme());
-	    int degatsEffectifs = p_degats.getQuantite() - redDegats;
-
+	    int degatsEffectifs = p_degats.getQuantite();
+	    if (p_armure != null)
+	    {
+		//application des effets d'armure
+		int redDegats = p_armure.getRedDegats(p_degats.getTypeArme());
+		degatsEffectifs -= redDegats;
+	    }
 	    if (degatsEffectifs > 0)
 	    {
 		m_jauges.recevoirDegatsPhysiques(degatsEffectifs);
@@ -260,7 +251,7 @@ public class Perso
      * @param p_increments
      * @return
      */
-    public Degats genererDegats(int p_increments)
+    public Degats genererDegats(int p_increments, Arme p_arme)
     {
 	int domaine;
 	int competence;
@@ -272,23 +263,21 @@ public class Perso
 
 	if (p_increments >= 0)
 	{
-	    Arme arme = m_inventaire.getArmeCourante();
-
-	    if (arme != null)//armes équipées
+	    if (p_arme != null)//armes équipées
 	    {
-		vd = arme.getVD();
-		typArm = arme.getTypeArme();
+		vd = p_arme.getVD();
+		typArm = p_arme.getTypeArme();
 
-		if (arme.getMode() == 0)//arme de corps à corps employée
+		if (p_arme.getMode() == 0)//arme de corps à corps employée
 		{
 		    domaine = 3;//corps à corps
-		    competence = arme.getCategorie() * 2;//les attaques sont à catégorie *2, les parades à catégorie * 2 +1
+		    competence = p_arme.getCategorie() * 2;//les attaques sont à catégorie *2, les parades à catégorie * 2 +1
 		    bonusSup += m_groupeTraits.getTrait(Trait.PHYSIQUE);//le rang de physique vient en bonus au nombre d'incréments
 		}
 		else//arme à distance employée
 		{
 		    domaine = 4;//distance
-		    competence = arme.getCategorie();//compétence d'arme
+		    competence = p_arme.getCategorie();//compétence d'arme
 		    //pas de bonus de physique pour les armes à distance
 		}
 	    }
@@ -352,15 +341,11 @@ public class Perso
     /**
      *
      * @return l'initiative totale du personnage en comptant le bonus de l'arme
+     * @param p_arme
      */
-    public int getInitTotale()
+    public int getInitTotale(Arme p_arme)
     {
-	return m_jauges.getInitTotale(m_inventaire.getArmeCourante());
-    }
-
-    public Inventaire getInventaire()
-    {
-	return m_inventaire;
+	return m_jauges.getInitTotale(p_arme);
     }
 
     /**
@@ -377,17 +362,19 @@ public class Perso
      * @param p_typeArme le type d'arme infligeant potentiellement des dégâts
      * entrants afin de prendre en compte l'armure
      * @param p_nbAdvSup nombre d'adversaires supplémentaires AU DELA DU PREMIER
+     * @param p_armure
      * @return la défense, calculée à partir du groupe de traits
      */
-    public int getDefense(int p_typeArme, int p_nbAdvSup)
+    public int getDefense(int p_typeArme, int p_nbAdvSup, Armure p_armure)
     {
 	int result = 0;
 	if (p_nbAdvSup >= 0)
 	{
-	    Armure armure = m_inventaire.getArmure();
-
 	    result = m_groupeTraits.getTrait(Trait.COORDINATION) * 5 + 5;//valeur de base
-	    result += armure.getBonusND(p_typeArme);//effets d'armure
+	    if (p_armure != null)
+	    {
+		result += p_armure.getBonusND(p_typeArme);//effets d'armure
+	    }
 	    result -= p_nbAdvSup * 2; // malus par adversaire supplémentaire
 	    if (m_jauges.getEtatVital().isSonne())//malus si sonné
 	    {
@@ -520,7 +507,7 @@ public class Perso
      * @param p_modifScore
      * @return
      */
-    private RollResult effectuerAttaque(int p_phaseActuelle, int p_ND, int p_indComp, int p_indDomaine, int p_modifNbLances, int p_modifNbGardes, int p_modifScore)
+    private RollResult effectuerAttaque(int p_phaseActuelle, int p_ND, int p_indComp, int p_indDomaine, int p_modifNbLances, int p_modifNbGardes, int p_modifScore, Arme p_arme)
     {
 	RollResult result = null;
 	if (m_jauges.agirEnCombat(p_phaseActuelle))
@@ -530,17 +517,15 @@ public class Perso
 	    int modFinal = 0 + p_modifScore;
 	    int ecartPhyMin = 0;
 
-	    Arme arme = m_inventaire.getArmeCourante();
-
 	    if (p_indDomaine != 3 || p_indDomaine == 3 && p_indComp != 0)
 	    {//on utilise une arme, il faut prendre en compte ses éventuels malus
 		{
-		    if (arme.getphysMin() > m_groupeTraits.getTrait(Trait.PHYSIQUE))
+		    if (p_arme.getphysMin() > m_groupeTraits.getTrait(Trait.PHYSIQUE))
 		    {
-			ecartPhyMin += m_groupeTraits.getTrait(Trait.PHYSIQUE) - arme.getphysMin();
+			ecartPhyMin += m_groupeTraits.getTrait(Trait.PHYSIQUE) - p_arme.getphysMin();
 		    }
 		}
-		modDesLances -= arme.getMalusAttaque();
+		modDesLances -= p_arme.getMalusAttaque();
 	    }
 	    modFinal += (ecartPhyMin * 10);
 	    result = effectuerJetComp(Trait.COORDINATION, p_indDomaine, p_indComp, p_ND, modDesLances, modDesGardes, modFinal);

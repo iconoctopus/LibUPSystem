@@ -63,8 +63,8 @@ public class IntegCaracTest
 	Assert.assertEquals(2, persoRM1.getEtatVital().getInitActu());
 	Assert.assertEquals(2, persoRM1.getEtatVital().getForceDAmeActu());
 	Assert.assertEquals(2, persoRM1.getEtatVital().getForceDAmeMax());
-	Assert.assertEquals(15, persoRM1.getDefense(0, 0));
-	Assert.assertEquals(5, persoRM1.getDefense(0, 6));
+	Assert.assertEquals(15, persoRM1.getDefense(0, 0, null));
+	Assert.assertEquals(5, persoRM1.getDefense(0, 6, null));
 	Assert.assertFalse(persoRM1.getEtatVital().isSonne());
 	Assert.assertFalse(persoRM1.getEtatVital().isInconscient());
 	Assert.assertFalse(persoRM1.getEtatVital().isElimine());
@@ -81,8 +81,8 @@ public class IntegCaracTest
 	Assert.assertEquals(3, persoRM3.getEtatVital().getInitActu());
 	Assert.assertEquals(2, persoRM3.getEtatVital().getForceDAmeActu());
 	Assert.assertEquals(2, persoRM3.getEtatVital().getForceDAmeMax());
-	Assert.assertEquals(25, persoRM3.getDefense(0, 0));
-	Assert.assertEquals(5, persoRM3.getDefense(0, 52));
+	Assert.assertEquals(25, persoRM3.getDefense(0, 0, null));
+	Assert.assertEquals(5, persoRM3.getDefense(0, 52, null));
 	Assert.assertFalse(persoRM3.getEtatVital().isSonne());
 	Assert.assertFalse(persoRM3.getEtatVital().isInconscient());
 	Assert.assertFalse(persoRM3.getEtatVital().isElimine());
@@ -99,8 +99,8 @@ public class IntegCaracTest
 	Assert.assertEquals(2, persoNonRM.getEtatVital().getInitActu());
 	Assert.assertEquals(1, persoNonRM.getEtatVital().getForceDAmeActu());
 	Assert.assertEquals(1, persoNonRM.getEtatVital().getForceDAmeMax());
-	Assert.assertEquals(15, persoNonRM.getDefense(0, 0));
-	Assert.assertEquals(7, persoNonRM.getDefense(0, 4));
+	Assert.assertEquals(15, persoNonRM.getDefense(0, 0, null));
+	Assert.assertEquals(7, persoNonRM.getDefense(0, 4, null));
 	Assert.assertFalse(persoNonRM.getEtatVital().isSonne());
 	Assert.assertFalse(persoNonRM.getEtatVital().isInconscient());
 	Assert.assertFalse(persoNonRM.getEtatVital().isElimine());

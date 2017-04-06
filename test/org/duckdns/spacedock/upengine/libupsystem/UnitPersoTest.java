@@ -51,7 +51,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @PrepareForTest(//pour les méthodes statiques c'est la classe appelante qui doit apparaître ici, pour les classes final c'est la classe appelée (donc UPReferenceSysteme n'apparaît ici que pour son caractère final et pas pour sa méthode getInstance()
 
 	{//les classes final, appelant du statique et les classes subissant un whennew
-	    Perso.class, EtatVital.class, GroupeTraits.class, UPReferenceSysteme.class, RollUtils.RollResult.class, Armure.class, Degats.class, EnsembleJauges.class, Inventaire.class, ArbreDomaines.class, ArmeDist.class
+	    Perso.class, EtatVital.class, GroupeTraits.class, UPReferenceSysteme.class, RollUtils.RollResult.class, Armure.class, Degats.class, EnsembleJauges.class, ArbreDomaines.class, ArmeDist.class
 	})
 public class UnitPersoTest
 {
@@ -64,7 +64,6 @@ public class UnitPersoTest
     private GroupeTraits traitsRM3;
     private GroupeTraits traitsRM1;
     private ArbreDomaines arbreMock;
-    private Inventaire inventaireMock;
     private Perso persoRM1;
     private Perso persoRM3;
     private static final ArrayList<String> listComp = new ArrayList<>();
@@ -149,10 +148,6 @@ public class UnitPersoTest
 	//on mocke un arbre de domaines
 	arbreMock = PowerMockito.mock(ArbreDomaines.class);
 	whenNew(ArbreDomaines.class).withNoArguments().thenReturn(arbreMock);
-
-	//On mocke un inventaire
-	inventaireMock = PowerMockito.mock(Inventaire.class);
-	whenNew(Inventaire.class).withNoArguments().thenReturn(inventaireMock);
 
 	//On crée les persos pour le test
 	persoRM1 = new Perso(1);
@@ -249,7 +244,6 @@ public class UnitPersoTest
 	when(armeMock.getCategorie()).thenReturn(3);
 	when(armeMock.getphysMin()).thenReturn(3);
 	when(armeMock.getMalusAttaque()).thenReturn(1);
-	when(inventaireMock.getArmeCourante()).thenReturn(armeMock);
 
 	//On mocke un retour pour vérifier qu'il traverse correctement les couches private et on le fait retourner par arbreMock
 	RollUtils.RollResult resultMock = PowerMockito.mock(RollUtils.RollResult.class);
@@ -263,7 +257,7 @@ public class UnitPersoTest
 	when(etatRM1.isSonne()).thenReturn(true);
 
 	//On fait effectuer une attaque à la hache à un perso RM1 en prenant en compte le physique minimal de 2 et le malus à l'attaque de 1
-	RollUtils.RollResult resultat = persoRM1.attaquerCaC(persoRM1.getActions().get(0), 12);
+	RollUtils.RollResult resultat = persoRM1.attaquerCaC(persoRM1.getActions().get(0), 12, armeMock);
 	verify(etatRM1).isSonne();
 	Assert.assertEquals(0, resultat.getNbIncrements());
 	Assert.assertEquals(10, resultat.getScoreBrut());
@@ -276,9 +270,6 @@ public class UnitPersoTest
     @Test
     public void testAttaquerCaCMainsNues()
     {
-	//On mocke un inventaire vide pour forcer le combat à mains nues
-	when(inventaireMock.getArmeCourante()).thenReturn(null);
-
 	//On mocke un retour pour vérifier qu'il traverse correctement les couches private et on le fait retourner par arbreMock
 	RollUtils.RollResult resultMock = PowerMockito.mock(RollUtils.RollResult.class);
 	PowerMockito.mockStatic(RollUtils.RollResult.class);
@@ -291,7 +282,7 @@ public class UnitPersoTest
 	when(etatRM3.isSonne()).thenReturn(false);
 
 	//On fait effectuer une attaque à mains nues à un perso RM3
-	RollUtils.RollResult resultat = persoRM3.attaquerCaC(persoRM3.getActions().get(0), 30);
+	RollUtils.RollResult resultat = persoRM3.attaquerCaC(persoRM3.getActions().get(0), 30, null);
 
 	Assert.assertEquals(3, resultat.getNbIncrements());
 	Assert.assertEquals(28, resultat.getScoreBrut());
@@ -304,9 +295,8 @@ public class UnitPersoTest
     @Test
     public void testAttaquerDist()
     {
-	//On mocke un inventaire contenant un mock d'arme ainsi qu'un mock de rapport de distance
+	//On créé mock d'arme ainsi qu'un mock de rapport de distance
 	ArmeDist armeMock = PowerMockito.mock(ArmeDist.class);
-	when(inventaireMock.getArmeCourante()).thenReturn(armeMock);
 	ArmeDist.DistReport reportMock = PowerMockito.mock(ArmeDist.DistReport.class);
 
 	//On mocke le isSonne()
@@ -328,7 +318,7 @@ public class UnitPersoTest
 	when(reportMock.getModDesGardes()).thenReturn(0);
 	when(reportMock.getModDesLances()).thenReturn(0);
 	when(reportMock.getModJet()).thenReturn(+5);
-	RollUtils.RollResult resultat = persoRM3.attaquerDist(persoRM3.getActions().get(0), 50, 20, 17);//cas limite important : l'arme est de catégorie 0 mais elle n'est pas "mains nues" car elle est à distance, les vérifications de "mains nues" doivent ne pas pêter
+	RollUtils.RollResult resultat = persoRM3.attaquerDist(persoRM3.getActions().get(0), 50, 20, 17, armeMock);//cas limite important : l'arme est de catégorie 0 mais elle n'est pas "mains nues" car elle est à distance, les vérifications de "mains nues" doivent ne pas pêter
 
 	verify(armeMock).verifPreAttaque(20, 17);
 	verify(reportMock).isEchecAuto();
@@ -343,7 +333,7 @@ public class UnitPersoTest
 
 	//cas de l'échec auto, toutes choses étant égales par ailleurs
 	when(reportMock.isEchecAuto()).thenReturn(true);
-	resultat = persoRM3.attaquerDist(persoRM3.getActions().get(1), 50, 20, 17);
+	resultat = persoRM3.attaquerDist(persoRM3.getActions().get(1), 50, 20, 17, armeMock);
 	Assert.assertEquals(0, resultat.getNbIncrements());
 	Assert.assertEquals(0, resultat.getScoreBrut());
 	Assert.assertEquals(false, resultat.isJetReussi());
@@ -370,7 +360,7 @@ public class UnitPersoTest
 	when(degatsMock1.getTypeArme()).thenReturn(2);
 	try
 	{
-	    persoRM3.etreBlesse(degatsMock1);
+	    persoRM3.etreBlesse(degatsMock1, null);
 	    fail();
 	}
 	catch (IllegalArgumentException e)
@@ -384,7 +374,7 @@ public class UnitPersoTest
 	when(degatsMock2.getTypeArme()).thenReturn(-42);
 	try
 	{
-	    persoRM3.etreBlesse(degatsMock2);
+	    persoRM3.etreBlesse(degatsMock2, null);
 	    fail();
 	}
 	catch (IllegalArgumentException e)
@@ -399,19 +389,18 @@ public class UnitPersoTest
 	//On mocke un inventaire contenant une armure
 	Armure armureMock = PowerMockito.mock(Armure.class);
 	when(armureMock.getRedDegats(2)).thenReturn(5);
-	when(inventaireMock.getArmure()).thenReturn(armureMock);
 
 	Degats degatsMock = PowerMockito.mock(Degats.class);
 	when(degatsMock.getQuantite()).thenReturn(23);
 	when(degatsMock.getTypeArme()).thenReturn(2);
-	persoRM3.etreBlesse(degatsMock);
+	persoRM3.etreBlesse(degatsMock, armureMock);
 
 	verify(jaugesRM3).recevoirDegatsPhysiques(18);
 
 	//cas limite : les dégâts à 0 pasent sans causer d'effet
 	when(degatsMock.getQuantite()).thenReturn(0);
 	when(degatsMock.getTypeArme()).thenReturn(0);
-	persoRM1.etreBlesse(degatsMock);
+	persoRM1.etreBlesse(degatsMock, armureMock);
 	verify(jaugesRM1, never()).recevoirDegatsPhysiques(0);
 	Assert.assertEquals(0, persoRM1.getEtatVital().getBlessuresGraves());
 	Assert.assertEquals(0, persoRM1.getEtatVital().getBlessuresLegeres());
@@ -433,7 +422,7 @@ public class UnitPersoTest
 	//cas d'erreur : incréments négatifs
 	try
 	{
-	    persoRM1.genererDegats(-1);
+	    persoRM1.genererDegats(-1, null);
 	    fail();
 	}
 	catch (IllegalArgumentException e)
@@ -451,8 +440,7 @@ public class UnitPersoTest
 	when(arbreMock.getRangDomaine(3)).thenReturn(3);
 
 	//Cas mains nues
-	Degats result = persoRM3.genererDegats(3);
-	verify(inventaireMock).getArmeCourante();
+	Degats result = persoRM3.genererDegats(3, null);
 	verify(arbreMock).getRangComp(3, 0);
 	verify(arbreMock).getRangDomaine(3);
 	assertEquals(18, result.getQuantite());
@@ -460,14 +448,13 @@ public class UnitPersoTest
 
 	//On mocke un inventaire contenant un mock d'arme
 	ArmeCaC armeMock = PowerMockito.mock(ArmeCaC.class);
-	when(inventaireMock.getArmeCourante()).thenReturn(armeMock);
 	when(armeMock.getVD()).thenReturn(7);
 	when(armeMock.getTypeArme()).thenReturn(3);
 	when(armeMock.getMode()).thenReturn(0);
 	when(armeMock.getCategorie()).thenReturn(1);
 
 	//Cas nominal
-	result = persoRM3.genererDegats(2);
+	result = persoRM3.genererDegats(2, armeMock);
 	verify(armeMock).getVD();
 	verify(armeMock).getTypeArme();
 	verify(armeMock).getMode();
@@ -489,14 +476,13 @@ public class UnitPersoTest
 	//On mocke un inventaire contenant un mock d'arme
 	ArmeDist armeMock = PowerMockito.mock(ArmeDist.class);
 	when(armeMock.getMode()).thenReturn(1);
-	when(inventaireMock.getArmeCourante()).thenReturn(armeMock);
 	when(armeMock.getVD()).thenReturn(5);
 	when(armeMock.getTypeArme()).thenReturn(2);
 	when(armeMock.getMode()).thenReturn(1);
 	when(armeMock.getCategorie()).thenReturn(2);
 
 	//Cas nominal
-	Degats result = persoRM1.genererDegats(0);
+	Degats result = persoRM1.genererDegats(0, armeMock);
 	verify(armeMock).getVD();
 	verify(armeMock).getTypeArme();
 	verify(armeMock).getMode();
@@ -512,7 +498,7 @@ public class UnitPersoTest
     {
 	try
 	{
-	    persoRM3.getDefense(0, -1);
+	    persoRM3.getDefense(0, -1, null);
 	    fail();
 	}
 	catch (IllegalArgumentException e)
@@ -527,31 +513,27 @@ public class UnitPersoTest
 	//On mocke un inventaire contenant une armure
 	Armure armureMock = PowerMockito.mock(Armure.class);
 	when(armureMock.getBonusND(3)).thenReturn(7);
-	when(inventaireMock.getArmure()).thenReturn(armureMock);
 
 	//le perso de RM3 est sonné pour vérifier que la règle est bien appliquée
 	when(etatRM3.isSonne()).thenReturn(true);
 
 	//sans adversaire supplémentaire
-	Assert.assertEquals(22, persoRM1.getDefense(3, 0));
+	Assert.assertEquals(22, persoRM1.getDefense(3, 0, armureMock));
 	verify(armureMock).getBonusND(3);
-	Assert.assertEquals(27, persoRM3.getDefense(3, 0));
+	Assert.assertEquals(27, persoRM3.getDefense(3, 0, armureMock));
 
 	//avec adversaires supplémentaire (mais calcul normal)
-	Assert.assertEquals(20, persoRM1.getDefense(3, 1));
-	Assert.assertEquals(21, persoRM3.getDefense(3, 3));
+	Assert.assertEquals(20, persoRM1.getDefense(3, 1, armureMock));
+	Assert.assertEquals(21, persoRM3.getDefense(3, 3, armureMock));
 
 	//avec adversaires supplémentaire entraînant défense <5 donc application du minimum
-	Assert.assertEquals(5, persoRM1.getDefense(3, 9));//positif mais < 5
-	Assert.assertEquals(5, persoRM3.getDefense(3, 52));//négatif
+	Assert.assertEquals(5, persoRM1.getDefense(3, 9, armureMock));//positif mais < 5
+	Assert.assertEquals(5, persoRM3.getDefense(3, 52, armureMock));//négatif
     }
 
     @Test
     public void testGetSetDiversNominal()
     {//si non déjà testés dans les autres méthodes de cette classe
-
-	//méthodes liées à l'inventaire
-	Assert.assertEquals(inventaireMock, persoRM3.getInventaire());
 
 	//méthodes de libellés
 	Assert.assertEquals("PersoRM3", persoRM3.toString());
@@ -601,11 +583,10 @@ public class UnitPersoTest
 	verify(traitsRM3).setTrait(COORDINATION, 1);
 
 	//méthodes liées aux jauges
-	persoRM3.getInitTotale();
+	persoRM3.getInitTotale(null);
 	verify(jaugesRM3).getInitTotale(null);//cas sans arme équipée
 	Arme armeMock = PowerMockito.mock(Arme.class);
-	when(inventaireMock.getArmeCourante()).thenReturn(armeMock);
-	persoRM3.getInitTotale();
+	persoRM3.getInitTotale(armeMock);
 	verify(jaugesRM3).getInitTotale(armeMock);//cas avec arme équipée
 
 	persoRM1.getEtatVital();

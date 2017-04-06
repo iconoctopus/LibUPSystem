@@ -46,7 +46,6 @@ public class PieceArmure implements Iprotection
      * @param p_idPiece
      * @param p_type
      * @param p_materiau
-     * @param p_isBouclier car ils ont leurs propres règles
      */
     public PieceArmure(int p_idPiece, int p_type, int p_materiau)
     {
@@ -80,7 +79,7 @@ public class PieceArmure implements Iprotection
     /**
      * @return the m_localisation
      */
-    int getLocalisation()
+    public int getLocalisation()
     {
 	return m_localisation;
     }

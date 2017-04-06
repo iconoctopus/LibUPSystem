@@ -20,7 +20,7 @@ package org.duckdns.spacedock.upengine.libupsystem;
  *
  * @author ykonoclast
  */
-interface Iprotection
+public interface Iprotection
 {
 
     int getNbPoints();

@@ -41,7 +41,7 @@ final class IntegStatTestUtils
      * @param p_nbCoups
      * @return
      */
-    static boolean reussiteStatistiqueAttaque(Perso p_perso, int p_nd, int p_distance, int p_nbCoups)
+    static boolean reussiteStatistiqueAttaque(Perso p_perso, int p_nd, int p_distance, int p_nbCoups, Arme p_arme)
     {
 	p_perso.genInit();
 	int nbReussites = 0;
@@ -57,15 +57,15 @@ final class IntegStatTestUtils
 
 	    if (p_distance > 0)
 	    {//cas d'une attaque à distance
-		if (p_perso.attaquerDist(p_perso.getActions().get(0), p_nd, p_distance, p_nbCoups).isJetReussi())
+		((ArmeDist) p_arme).recharger(p_nbCoups);
+		if (p_perso.attaquerDist(p_perso.getActions().get(0), p_nd, p_distance, p_nbCoups, (ArmeDist) p_arme).isJetReussi())
 		{
 		    reussite = true;
 		}
-		((ArmeDist) p_perso.getInventaire().getArmeCourante()).recharger(p_nbCoups);//pour que le test continue, on recharge l'arme, sinon elle se videra au bout de quelques boucles
 	    }
 	    else
 	    {//cas d'une attaque au corps à corps
-		if (p_perso.attaquerCaC(p_perso.getActions().get(0), p_nd).isJetReussi())
+		if (p_perso.attaquerCaC(p_perso.getActions().get(0), p_nd, (ArmeCaC) p_arme).isJetReussi())
 		{
 		    reussite = true;
 		}
@@ -130,7 +130,7 @@ final class IntegStatTestUtils
 	for (int i = 0; i <= limiteLAncers; ++i)
 	{//on crée ici un nouveau perso pour chaque test : sinon les blessures s'accumulent entre deux boucles et ils meurrent au final...
 	    Perso perso = new Perso(p_rm);
-	    perso.etreBlesse(new Degats(p_degats, 0));
+	    perso.etreBlesse(new Degats(p_degats, 0), null);
 	    nbBlessuresGraves += perso.getEtatVital().getBlessuresGraves();
 	}
 	return (int) (nbBlessuresGraves / (limiteLAncers + 1));

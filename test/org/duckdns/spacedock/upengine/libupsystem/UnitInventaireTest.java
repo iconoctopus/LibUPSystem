@@ -225,7 +225,6 @@ public class UnitInventaireTest
 	    verify(casqueMock3, never()).getMalusParade();
 	    Assert.assertEquals("emploi de la mauvaise méthode dans ce contexte:localisation incorrecte", e.getMessage());
 	}
-
     }
 
     @Test

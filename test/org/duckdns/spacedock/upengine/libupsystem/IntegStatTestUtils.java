@@ -21,6 +21,8 @@ import org.duckdns.spacedock.upengine.libupsystem.Perso.Degats;
 import static org.junit.Assert.fail;
 
 /**
+ * classe fournissant des utilitaires pour les tests statistiques mis en oeuvre
+ * dans les autres classes
  *
  * @author ykonoclast
  */
@@ -29,44 +31,44 @@ final class IntegStatTestUtils
 
     static int limiteLAncers = 9999;//dix-mille lancers
 
+    /**
+     * effectue un grand nombre de jets d'attaque et répond vrai si la majorité
+     * est une réussite
+     *
+     * @param p_perso
+     * @param p_nd
+     * @param p_distance
+     * @param p_nbCoups
+     * @return
+     */
     static boolean reussiteStatistiqueAttaque(Perso p_perso, int p_nd, int p_distance, int p_nbCoups)
     {
 	p_perso.genInit();
 	int nbReussites = 0;
 	int nbEchecs = 0;
-	int compteurActions = 0;
 	for (int i = 0; i <= limiteLAncers; ++i)
-	{
+	{//boucle d'un grand nombre de lancers, on utilise les actions du personnage, cela teste au passage le bon fonctionnement du système d'init
 	    boolean reussite = false;
 
-	    if (compteurActions > p_perso.getActions().size())
-	    {
+	    if (p_perso.getActions().isEmpty())
+	    {//le tour du perso est terminé, on régènére ses actions
 		p_perso.genInit();
-		compteurActions = 0;
 	    }
 
 	    if (p_distance > 0)
-	    {
+	    {//cas d'une attaque à distance
 		if (p_perso.attaquerDist(p_perso.getActions().get(0), p_nd, p_distance, p_nbCoups).isJetReussi())
 		{
 		    reussite = true;
 		}
-		((ArmeDist) p_perso.getInventaire().getArmeCourante()).recharger(p_nbCoups);
+		((ArmeDist) p_perso.getInventaire().getArmeCourante()).recharger(p_nbCoups);//pour que le test continue, on recharge l'arme, sinon elle se videra au bout de quelques boucles
 	    }
 	    else
-	    {
-		try
+	    {//cas d'une attaque au corps à corps
+		if (p_perso.attaquerCaC(p_perso.getActions().get(0), p_nd).isJetReussi())
 		{
-		    if (p_perso.attaquerCaC(p_perso.getActions().get(0), p_nd).isJetReussi())
-		    {
-			reussite = true;
-		    }
+		    reussite = true;
 		}
-		catch (IndexOutOfBoundsException e)
-		{
-		    fail();
-		}
-
 	    }
 	    if (reussite)
 	    {
@@ -76,12 +78,19 @@ final class IntegStatTestUtils
 	    {
 		nbEchecs++;
 	    }
-
-	    compteurActions++;
 	}
-	return (nbReussites > nbEchecs);
+	return (nbReussites > nbEchecs);//si une majorité des jets est réussie
     }
 
+    /**
+     * effectue un grand nombre de jets de trait et répond vrai si la majorité
+     * est une réussite
+     *
+     * @param p_perso
+     * @param p_nd
+     * @param p_idTrait
+     * @return
+     */
     static boolean reussiteStatistiqueJetsTrait(Perso p_perso, int p_nd, Trait p_idTrait)
     {
 	int nbReussites = 0;
@@ -106,6 +115,15 @@ final class IntegStatTestUtils
 	return (nbReussites > nbEchecs);
     }
 
+    /**
+     * inflige une quantité de dégât donnée un grand nombre de fois de suite à
+     * un même nombre d'incarnations de persos et renvoie le nombre de blessures
+     * graves qu'ils reçoiventen moyenne
+     *
+     * @param p_degats
+     * @param p_rm
+     * @return
+     */
     static int nbBlessuresGravesStatistique(int p_degats, int p_rm)
     {
 	int nbBlessuresGraves = 0;
@@ -117,5 +135,4 @@ final class IntegStatTestUtils
 	}
 	return (int) (nbBlessuresGraves / (limiteLAncers + 1));
     }
-
 }

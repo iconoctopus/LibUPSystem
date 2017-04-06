@@ -34,7 +34,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
  * que les deux sous-classes ont au final peu de code différencié
  *
  * Exceptionellement on ne mocke pas UPReferenceSysteme car il est impossible de
- * mocker les membres de la sous-classe, c'est donc en partie un test
+ * mocker les membres de sa sous-classe, c'est donc en partie un test
  * d'intégration
  *
  * @author ykonoclast
@@ -67,11 +67,11 @@ public class UnitArmeTest
 	referenceMock = PowerMockito.mock(UPReferenceArmes.class);
 	PowerMockito.mockStatic(UPReferenceArmes.class);
 	when(UPReferenceArmes.getInstance()).thenReturn(referenceMock);
-	listEquilibrage = new EnumMap<Arme.EquilibrageArme, String>(Arme.EquilibrageArme.class);
+	listEquilibrage = new EnumMap<>(Arme.EquilibrageArme.class);
 	listEquilibrage.put(Arme.EquilibrageArme.mauvais, "mauvais");
 	listEquilibrage.put(Arme.EquilibrageArme.normal, "normal");
 	listEquilibrage.put(Arme.EquilibrageArme.bon, "bon");
-	listQualite = new EnumMap<Arme.QualiteArme, String>(Arme.QualiteArme.class);
+	listQualite = new EnumMap<>(Arme.QualiteArme.class);
 	listQualite.put(Arme.QualiteArme.inferieure, "inférieure");
 	listQualite.put(Arme.QualiteArme.moyenne, "moyenne");
 	listQualite.put(Arme.QualiteArme.superieure, "supérieure");
@@ -138,6 +138,7 @@ public class UnitArmeTest
 	when(referenceMock.getMagasinArme(512)).thenReturn(19);
 	when(referenceMock.getNbActionsRechargeArme(512)).thenReturn(1);
 	when(referenceMock.getPorteeArme(512)).thenReturn(50);
+
 	arme8 = new ArmeDist(512, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais);
     }
 
@@ -246,7 +247,7 @@ public class UnitArmeTest
     }
 
     @Test
-    public void testGetSpecifiqueDistancet()
+    public void testGetSpecifiqueDistance()
     {
 	Assert.assertEquals(5, arme5.getMalusCourt());
 	Assert.assertEquals(10, arme5.getMalusLong());

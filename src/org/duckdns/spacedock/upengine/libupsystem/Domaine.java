@@ -27,6 +27,9 @@ import org.duckdns.spacedock.commonutils.PropertiesHandler;
 class Domaine
 {
 
+    /**
+     * le rang du domaine en question
+     */
     private int m_rang;
 
     /**
@@ -50,7 +53,7 @@ class Domaine
 	    int nbComps = UPReferenceSysteme.getInstance().getListComp(p_indice).size();
 	    for (int i = 0; i < nbComps; ++i)
 	    {
-		m_competences.add(new Competence(0, new ArrayList<String>()));
+		m_competences.add(new Competence(0, new ArrayList<>()));
 	    }
 	}
 	else
@@ -84,25 +87,25 @@ class Domaine
     }
 
     /**
-     * @param p_numéro l'indice de la compétence visée dans le tableau interne
+     * @param p_indComp l'indice de la compétence visée dans le tableau interne
      * du domaine
      * @return le rang de la competence en question
      */
-    int getRangComp(int p_numéro)
+    int getRangComp(int p_indComp)
     {
-	return m_competences.get(p_numéro).getRang();
+	return m_competences.get(p_indComp).getRang();
     }
 
     /**
      *
-     * @param p_indice
+     * @param p_indComp
      * @param p_rang
      */
-    void setRangComp(int p_indice, int p_rang)
+    void setRangComp(int p_indComp, int p_rang)
     {
 	if (p_rang <= m_rang)
 	{
-	    m_competences.get(p_indice).setRang(p_rang);
+	    m_competences.get(p_indComp).setRang(p_rang);
 	}
 	else
 	{
@@ -112,32 +115,32 @@ class Domaine
 
     /**
      *
-     * @param p_comp
+     * @param p_indComp l'indice de la comp dans le tableau interne du domaine
      * @returns la liste des spécialités de la comp passée en paramétre
      */
-    ArrayList<String> getSpecialites(int p_comp)
+    ArrayList<String> getSpecialites(int p_indComp)
     {
-	return m_competences.get(p_comp).getSpecialites();
+	return m_competences.get(p_indComp).getSpecialites();
     }
 
     /**
      *
-     * @param p_comp
+     * @param p_indComp
      * @param p_specialite
      */
-    void addSpecialite(int p_comp, String p_specialite)
+    void addSpecialite(int p_indComp, String p_specialite)
     {
-	m_competences.get(p_comp).addSpecialite(p_specialite);
+	m_competences.get(p_indComp).addSpecialite(p_specialite);
     }
 
     /**
      *
-     * @param p_comp
+     * @param p_indComp
      * @param p_indiceSpe
      */
-    void removeSpecialite(int p_comp, int p_indiceSpe)
+    void removeSpecialite(int p_indComp, int p_indiceSpe)
     {
-	m_competences.get(p_comp).removeSpecialite(p_indiceSpe);
+	m_competences.get(p_indComp).removeSpecialite(p_indiceSpe);
     }
 
     /**

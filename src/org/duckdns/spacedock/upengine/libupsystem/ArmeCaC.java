@@ -16,9 +16,6 @@
  */
 package org.duckdns.spacedock.upengine.libupsystem;
 
-import org.duckdns.spacedock.commonutils.ErrorHandler;
-import org.duckdns.spacedock.commonutils.PropertiesHandler;
-
 /**
  *
  * @author ykonoclast
@@ -26,11 +23,20 @@ import org.duckdns.spacedock.commonutils.PropertiesHandler;
 public class ArmeCaC extends Arme
 {
 
+    /**
+     * la VD supplémentaire provenant de la qualité qui doit être ajoutée
+     * lorsque getVD est interrogé
+     */
     private final int m_bonusVDSup;
+    /**
+     * le bonus d'init supplémentaire provenant de l'équilibrage qui doit être
+     * ajouté lorsque getBonusInit est appelé
+     */
     private final int m_bonusInitSup;
 
     /**
-     * constructeur identique à celui de la superclasse
+     * constructeur identique à celui de la superclasse, celle-ci emploie la
+     * qualité et l'équilibrage pour le nommage, ici on en applique les effets
      *
      * @param p_indice
      * @param p_qualite

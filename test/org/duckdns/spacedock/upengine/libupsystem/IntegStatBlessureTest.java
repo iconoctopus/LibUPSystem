@@ -43,7 +43,7 @@ public class IntegStatBlessureTest
     @Test
     public void testDegatsLourds()
     {
-	int nbGraves = IntegStatTestUtils.nbBlessuresGravesStatistique(55, 5);
+	int nbGraves = IntegStatTestUtils.nbBlessuresGravesStatistique(57, 5);
 	Assert.assertEquals(3, nbGraves);
     }
 }

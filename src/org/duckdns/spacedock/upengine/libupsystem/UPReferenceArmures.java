@@ -22,6 +22,7 @@ import javax.json.JsonObject;
 import static org.duckdns.spacedock.commonutils.JSONHandler.loadJsonFile;
 
 /**
+ * classe peremttant l'accès aux éléments de référence concernant les armures
  *
  * @author ykonoclast
  */
@@ -32,12 +33,10 @@ public class UPReferenceArmures
      * list des libellés des matériaux d'armures
      */
     private final JsonArray m_listLblMatArmures;
-
     /**
      * liste des libellés des localisations
      */
     private final JsonArray m_listLblLoca;
-
     /**
      * liste de libellés des types d'armures
      */
@@ -57,7 +56,6 @@ public class UPReferenceArmures
      * d'armes
      */
     private final JsonArray m_tableAjustementArmure;
-
     /**
      * table des bonus au ND, indexée par le rang d'armure (issu du tableau des
      * rangs)
@@ -77,7 +75,6 @@ public class UPReferenceArmures
      * liste des libellés des matériaux des boucliers
      */
     private final JsonArray m_listLblMatBoucliers;
-
     /**
      * instance unique de cet objet
      */
@@ -91,7 +88,6 @@ public class UPReferenceArmures
     {
 	JsonObject object;
 
-	//chargement des règles d'armure
 	object = loadJsonFile("libupsystem", "equipement/caracs_armures.json");
 	m_tableArmureBonusND = object.getJsonArray("bonusND");
 	m_tableArmureRedDegats = object.getJsonArray("red_degats");
@@ -133,7 +129,7 @@ public class UPReferenceArmures
 	int resultat = 0;
 
 	int rang = getRang(pointsEffectifs);
-	if (rang >= 0)//impossible si l'on est arrivé jusque là mais on ne sait jamais
+	if (rang >= 0)//impossible autrement si l'on est arrivé jusque là mais on ne sait jamais
 	{
 	    resultat = m_tableArmureBonusND.getInt(rang);
 	}
@@ -154,7 +150,7 @@ public class UPReferenceArmures
 	int resultat = 0;
 
 	int rang = getRang(pointsEffectifs);
-	if (rang >= 0)//impossible si l'on est arrivé jusque là mais on ne sait jamais
+	if (rang >= 0)//impossible autrment si l'on est arrivé jusque là mais on ne sait jamais
 	{
 	    resultat = m_tableArmureRedDegats.getInt(rang);
 	}

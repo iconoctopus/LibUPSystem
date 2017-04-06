@@ -17,9 +17,9 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
 /**
- * Classe représentant une arme et permettant de générer des dégâts avec
- * celle-ci.Elle est abstraite car l'on ne doit pouvoir instancier que ses
- * dérivées qui sont porteuses du code signifiant pour le CaC et le CaD
+ * Classe représentant une arme. Elle est abstraite car l'on ne doit pouvoir
+ * instancier que ses dérivées qui sont porteuses du code signifiant pour le CaC
+ * et le CaD
  *
  * @author ykonoclast
  */
@@ -27,7 +27,7 @@ public abstract class Arme
 {
 
     /**
-     * le nombre de mains nécessaire au maniement de l'arme
+     * Si l'arme nécessite deux mains pour être maniée
      */
     private final boolean m_arme2Mains;
     /**
@@ -35,7 +35,9 @@ public abstract class Arme
      */
     private int m_bonusInit;
     /**
-     * la catégorie d'arme (permet de définir la compétence à utiliser)
+     * la catégorie d'arme (permet de définir les compétences à utiliser). Pour
+     * les armes de corps à corps on définit l'attaque à 2*rang et la parade à
+     * 2*rang+1, les armes à distances ont leur attaque à rang tout simplement
      */
     private final int m_categorie;
     /**
@@ -47,7 +49,7 @@ public abstract class Arme
      */
     private final int m_malusAttaque;
     /**
-     * le mode d'attaque de l'arme
+     * le mode d'attaque de l'arme (corps à corps ou distance)
      */
     private final int m_mode;
     /**
@@ -75,11 +77,12 @@ public abstract class Arme
     public Arme(int p_indice, QualiteArme p_qualite, EquilibrageArme p_equilibrage)
     {
 	UPReferenceArmes referenceArm = UPReferenceArmes.getInstance();
+	UPReferenceSysteme referenceSys = UPReferenceSysteme.getInstance();
 
 	String nom = referenceArm.getLblArme(p_indice);
 
-	UPReferenceSysteme referenceSys = UPReferenceSysteme.getInstance();
 	nom = nom.concat(" ");
+
 	//récupération des éléments liés à la qualité et l'équilibrage de l'arme
 	if (p_qualite == QualiteArme.maitre)//traitement spécial des armes de maître
 	{

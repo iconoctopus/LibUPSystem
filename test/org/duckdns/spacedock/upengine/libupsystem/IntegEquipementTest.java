@@ -37,7 +37,7 @@ public class IntegEquipementTest
 
     @Test
     public void testAjoutIntegArmure() throws Exception
-    {//TODO tester les libellés
+    {
 	Inventaire inventaire = persoRM3.getInventaire();
 
 	PieceArmure casque = new PieceArmure(0, 1, 0, false);
@@ -105,7 +105,6 @@ public class IntegEquipementTest
 	PieceArmure bouclier = new PieceArmure(0, 2, 0, true);
 	inventaire.addBouclier(bouclier, Inventaire.Lateralisation.GAUCHE);
 	Assert.assertEquals(bouclier, inventaire.getBouclier(Inventaire.Lateralisation.GAUCHE));
-
 	Assert.assertEquals(0, inventaire.getArmure().getMalusParade());
 	Assert.assertEquals(11, inventaire.getArmure().getMalusEsquive());
 	Assert.assertEquals(40, persoRM3.getDefense(2, 0));//le bouclier doit avoir fait augmenter le type général de l'armure en plus de lui avoir fait passer un rang
@@ -129,7 +128,7 @@ public class IntegEquipementTest
 
     @Test
     public void testIntegArmes()
-    {//TODO tester les libellés
+    {
 	Arme arme = new ArmeCaC(0, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais);
 	persoRM3.getInventaire().addArme(arme, Inventaire.Lateralisation.DROITE);
 	Assert.assertEquals(arme, persoRM3.getInventaire().getArmeCourante());

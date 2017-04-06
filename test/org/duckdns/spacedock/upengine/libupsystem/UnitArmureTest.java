@@ -47,7 +47,7 @@ public class UnitArmureTest
 
     @Test
     public void testGetReactionDegatsEntrants()
-    {//on mocke la référence
+    {   //on mocke la référence
 	UPReferenceArmures referenceMock = PowerMockito.mock(UPReferenceArmures.class);
 	PowerMockito.mockStatic(UPReferenceArmures.class);
 	when(UPReferenceArmures.getInstance()).thenReturn(referenceMock);

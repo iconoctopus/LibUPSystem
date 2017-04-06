@@ -19,6 +19,9 @@ package org.duckdns.spacedock.upengine.libupsystem;
 import java.util.ArrayList;
 
 /**
+ * Classe représentant l'ensemble des domaines et de leurs compétences (et les
+ * contenant). Elle les construit pour un perso (les domaines et compétences ne
+ * devraient jamais être manipulés en dehors de cette classe).
  *
  * @author ykonoclast
  */
@@ -45,55 +48,55 @@ public class ArbreDomaines
 
     /**
      *
-     * @param p_domaine
-     * @param p_comp
+     * @param p_indDomaine
+     * @param p_indComp
      * @return
      */
-    public int getRangComp(int p_domaine, int p_comp)
+    public int getRangComp(int p_indDomaine, int p_indComp)
     {
-	return m_listDomaines.get(p_domaine).getRangComp(p_comp);
+	return m_listDomaines.get(p_indDomaine).getRangComp(p_indComp);
     }
 
     /**
      *
-     * @param p_domaine
+     * @param p_indDomaine
      * @return
      */
-    public int getRangDomaine(int p_domaine)
+    public int getRangDomaine(int p_indDomaine)
     {
-	return m_listDomaines.get(p_domaine).getRang();
+	return m_listDomaines.get(p_indDomaine).getRang();
     }
 
     /**
      *
-     * @param p_domaine
-     * @param p_comp
+     * @param p_indDomaine
+     * @param p_indComp
      * @param p_rang
      */
-    public void setRangComp(int p_domaine, int p_comp, int p_rang)
+    public void setRangComp(int p_indDomaine, int p_indComp, int p_rang)
     {
-	m_listDomaines.get(p_domaine).setRangComp(p_comp, p_rang);
+	m_listDomaines.get(p_indDomaine).setRangComp(p_indComp, p_rang);
     }
 
     /**
      *
-     * @param p_domaine
+     * @param p_indDomaine
      * @param p_rang
      */
-    public void setRangDomaine(int p_domaine, int p_rang)
+    public void setRangDomaine(int p_indDomaine, int p_rang)
     {
-	m_listDomaines.get(p_domaine).setRang(p_rang);
+	m_listDomaines.get(p_indDomaine).setRang(p_rang);
     }
 
     /**
      *
-     * @param p_domaine
-     * @param p_comp
+     * @param p_indDomaine
+     * @param p_indComp
      * @param p_specialite
      */
-    void addSpecialite(int p_domaine, int p_comp, String p_specialite)
+    void addSpecialite(int p_indDomaine, int p_indComp, String p_specialite)
     {
-	m_listDomaines.get(p_domaine).addSpecialite(p_comp, p_specialite);
+	m_listDomaines.get(p_indDomaine).addSpecialite(p_indComp, p_specialite);
     }
 
     /**
@@ -115,23 +118,23 @@ public class ArbreDomaines
 
     /**
      *
-     * @param p_domaine
-     * @param p_comp
+     * @param p_indDomaine
+     * @param p_indComp
      * @return
      */
-    ArrayList<String> getSpecialites(int p_domaine, int p_comp)
+    ArrayList<String> getSpecialites(int p_indDomaine, int p_indComp)
     {
-	return m_listDomaines.get(p_domaine).getSpecialites(p_comp);
+	return m_listDomaines.get(p_indDomaine).getSpecialites(p_indComp);
     }
 
     /**
      *
-     * @param p_domaine
-     * @param p_comp
+     * @param p_indDomaine
+     * @param p_indComp
      * @param p_indiceSpe
      */
-    void removeSpecialite(int p_domaine, int p_comp, int p_indiceSpe)
+    void removeSpecialite(int p_indDomaine, int p_indComp, int p_indiceSpe)
     {
-	m_listDomaines.get(p_domaine).removeSpecialite(p_comp, p_indiceSpe);
+	m_listDomaines.get(p_indDomaine).removeSpecialite(p_indComp, p_indiceSpe);
     }
 }

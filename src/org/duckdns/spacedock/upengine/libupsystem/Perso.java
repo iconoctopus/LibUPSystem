@@ -64,7 +64,6 @@ public class Perso
 	m_arbreDomaines = p_arbre;
 
 	m_jauges = new EnsembleJauges(p_traits);
-
     }
 
     /**
@@ -80,7 +79,7 @@ public class Perso
 	}
 
 	//configuration des traits
-	ArrayList<Integer> listTrait = new ArrayList<Integer>();
+	ArrayList<Integer> listTrait = new ArrayList<>();
 	listTrait.add(p_RM);
 	listTrait.add(p_RM + 1);
 	listTrait.add(p_RM - 2);
@@ -134,11 +133,12 @@ public class Perso
      * attaquera systématiquement avec l'arme courante, il faut donc la
      * configurer avant. Cette méthode vérifie que l'action est possible dans la
      * phase courante en fonction de l'init du perso, elle est donc conçue pour
-     * le combat uniquement. Si l'on veut utiliser une autre arme il faut
-     * d'abord la configurer comme arme courante. Une exception est levée si
-     * l'on essaye d'attaquer en corps à corps avec une arme à distance (rien
-     * n'interdit d'entrer une distance 0 dans l'autre méthode adaptée). Si
-     * aucune arme n'est équipée on utilise par défaut les mains nues.
+     * le combat uniquement (utiliser la méthode générale des jets de compétence
+     * sinon) . Si l'on veut utiliser une autre arme il faut d'abord la
+     * configurer comme arme courante. Une exception est levée si l'on essaye
+     * d'attaquer en corps à corps avec une arme à distance (rien n'interdit
+     * d'entrer une distance 0 dans l'autre méthode adaptée). Si aucune arme
+     * n'est équipée on utilise par défaut les mains nues.
      *
      * Il est important de garder la génération des dégâts séparée et déclenchée
      * depuis l'extérieur afin que le contrôleur puisse choisir d'utiliser les
@@ -162,13 +162,14 @@ public class Perso
     /**
      * Fait effectuer une attaque à distance au personnage. Cette méthode
      * vérifie que l'action est possible dans la phase courante en fonction de
-     * l'init du perso, elle est donc conçue pour le combat uniquement. On
-     * utilise l'arme courante. Si l'on veut utiliser une autre arme il faut
-     * d'abord la configurer comme arme courante. Une exception est levée si
-     * l'on essaye d'attaquer à distance avec une arme de corps à corps (rien
-     * n'interdit d'entrer une distance 0). Aucune vérification n'est effectuée
-     * sur le magasin actuel de l'arme. Si celui-ci n'est pas suffisant l'arme
-     * lèvera une exception.
+     * l'init du perso, elle est donc conçue pour le combat uniquement (utiliser
+     * la méthode pour les jets de compétence généraux sinon). On utilise l'arme
+     * courante. Si l'on veut utiliser une autre arme il faut d'abord la
+     * configurer comme arme courante. Une exception est levée si l'on essaye
+     * d'attaquer à distance avec une arme de corps à corps (rien n'interdit
+     * d'entrer une distance 0). Aucune vérification n'est effectuée sur le
+     * magasin actuel de l'arme. Si celui-ci n'est pas suffisant l'arme lèvera
+     * une exception.
      *
      * Il est important de garder la génération des dégâts séparée et déclenchée
      * depuis l'extérieur afin que le contrôleur puisse choisir d'utiliser les
@@ -235,6 +236,7 @@ public class Perso
 
 	if (p_degats.getQuantite() >= 0 && p_degats.getTypeArme() >= 0)
 	{
+	    //application des effets d'armure
 	    Armure armure = m_inventaire.getArmure();
 	    int redDegats = armure.getRedDegats(p_degats.getTypeArme());
 	    int degatsEffectifs = p_degats.getQuantite() - redDegats;
@@ -338,6 +340,10 @@ public class Perso
 	return m_jauges.getActions();
     }
 
+    /**
+     *
+     * @return un rapport complet sur l'état des jauges
+     */
     public EtatVital getEtatVital()
     {
 	return m_jauges.getEtatVital();
@@ -409,34 +415,34 @@ public class Perso
 
     /**
      *
-     * @param p_domaine
-     * @param p_comp
+     * @param p_indDomaine l'indice du domaine
+     * @param p_indComp l'indice de la comp dans le domaine
      * @return
      */
-    public int getRangComp(int p_domaine, int p_comp)
+    public int getRangComp(int p_indDomaine, int p_indComp)
     {
-	return m_arbreDomaines.getRangComp(p_domaine, p_comp);
+	return m_arbreDomaines.getRangComp(p_indDomaine, p_indComp);
     }
 
     /**
      *
-     * @param p_domaine
+     * @param p_indDomaine l'indice du domaine
      * @return
      */
-    public int getRangDomaine(int p_domaine)
+    public int getRangDomaine(int p_indDomaine)
     {
-	return m_arbreDomaines.getRangDomaine(p_domaine);
+	return m_arbreDomaines.getRangDomaine(p_indDomaine);
     }
 
     /**
      *
-     * @param p_domaine
-     * @param p_comp
+     * @param p_indDomaine l'indice du domaine
+     * @param p_indComp l'indice de la compétence dans le domaine
      * @return
      */
-    public ArrayList<String> getSpecialites(int p_domaine, int p_comp)
+    public ArrayList<String> getSpecialites(int p_indDomaine, int p_indComp)
     {
-	return m_arbreDomaines.getSpecialites(p_domaine, p_comp);
+	return m_arbreDomaines.getSpecialites(p_indDomaine, p_indComp);
     }
 
     /**
@@ -451,44 +457,44 @@ public class Perso
 
     /**
      *
-     * @param p_domaine
-     * @param p_comp
+     * @param p_indDomaine
+     * @param p_indComp
      * @param p_indiceSpe
      */
-    public void removeSpecialite(int p_domaine, int p_comp, int p_indiceSpe)
+    public void removeSpecialite(int p_indDomaine, int p_indComp, int p_indiceSpe)
     {
-	m_arbreDomaines.removeSpecialite(p_domaine, p_comp, p_indiceSpe);
+	m_arbreDomaines.removeSpecialite(p_indDomaine, p_indComp, p_indiceSpe);
     }
 
     /**
      *
-     * @param p_domaine
-     * @param p_comp
+     * @param p_indDomaine
+     * @param p_indComp
      * @param p_rang
      */
-    public void setRangComp(int p_domaine, int p_comp, int p_rang)
+    public void setRangComp(int p_indDomaine, int p_indComp, int p_rang)
     {
-	m_arbreDomaines.setRangComp(p_domaine, p_comp, p_rang);
+	m_arbreDomaines.setRangComp(p_indDomaine, p_indComp, p_rang);
     }
 
     /**
      *
-     * @param p_domaine
+     * @param p_indDomaine
      * @param p_rang
      */
-    public void setRangDomaine(int p_domaine, int p_rang)
+    public void setRangDomaine(int p_indDomaine, int p_rang)
     {
-	m_arbreDomaines.setRangDomaine(p_domaine, p_rang);
+	m_arbreDomaines.setRangDomaine(p_indDomaine, p_rang);
     }
 
     /**
      *
      * @param p_trait le trait considéré
-     * @param p_valeur
+     * @param p_rang
      */
-    public void setTrait(Trait p_trait, int p_valeur)
+    public void setTrait(Trait p_trait, int p_rang)
     {
-	m_groupeTraits.setTrait(p_trait, p_valeur);
+	m_groupeTraits.setTrait(p_trait, p_rang);
 	m_jauges.initJauges();//TODO : en l'état les jauges sont complètement remplacées : on perd donc les blessures, la force d'âme dépensée etc.
     }
 
@@ -502,23 +508,23 @@ public class Perso
      * Méthode où les éléments communs d'attaque se déroulent : les méthodes
      * précédentes ont calculé les bonus/malus et diverses conditions de
      * l'attaque spécifiques à leur situation (distance ou CaC), celle-ci va
-     * prendre en compte tous les éléments communs et aire exécuter le jet à la
-     * méthode afférente
+     * prendre en compte tous les éléments communs et faire exécuter le jet
+     * d'attaque à la méthode afférente
      *
      * @param p_phaseActuelle
      * @param p_ND
-     * @param p_comp
-     * @param p_domaine
+     * @param p_indComp
+     * @param p_indDomaine
      * @param p_modifNbLances
      * @param p_modifNbGardes
      * @param p_modifScore
      * @return
      */
-    private RollResult effectuerAttaque(int p_phaseActuelle, int p_ND, int p_comp, int p_domaine, int p_modifNbLances, int p_modifNbGardes, int p_modifScore)
+    private RollResult effectuerAttaque(int p_phaseActuelle, int p_ND, int p_indComp, int p_indDomaine, int p_modifNbLances, int p_modifNbGardes, int p_modifScore)
     {
 	RollResult result = null;
 	if (m_jauges.agirEnCombat(p_phaseActuelle))
-	{
+	{//on peut agir
 	    int modDesLances = 0 + p_modifNbLances;
 	    int modDesGardes = 0 + p_modifNbGardes;
 	    int modFinal = 0 + p_modifScore;
@@ -526,8 +532,8 @@ public class Perso
 
 	    Arme arme = m_inventaire.getArmeCourante();
 
-	    if (p_domaine != 3 || p_domaine == 3 && p_comp != 0)//on utilise une arme, il faut prendre en compte ses éventuels malus
-	    {
+	    if (p_indDomaine != 3 || p_indDomaine == 3 && p_indComp != 0)
+	    {//on utilise une arme, il faut prendre en compte ses éventuels malus
 		{
 		    if (arme.getphysMin() > m_groupeTraits.getTrait(Trait.PHYSIQUE))
 		    {
@@ -537,17 +543,14 @@ public class Perso
 		modDesLances -= arme.getMalusAttaque();
 	    }
 	    modFinal += (ecartPhyMin * 10);
-	    result = effectuerJetComp(Trait.COORDINATION, p_domaine, p_comp, p_ND, modDesLances, modDesGardes, modFinal);
+	    result = effectuerJetComp(Trait.COORDINATION, p_indDomaine, p_indComp, p_ND, modDesLances, modDesGardes, modFinal);
 	}
 	return result;
     }
 
     /**
      * classe utilisée pour encapsuler les résultats d'une attaque réussie ; des
-     * dégâts mais aussi le type. On n'utilise pas de collections clé/valeur
-     * comme une EnumMap car l'on veut juste un accès simple à des champs
-     * définis : inutile de dégrader les performances avec toute la mécanique
-     * des collections.
+     * dégâts mais aussi le type.
      */
     public static final class Degats
     {

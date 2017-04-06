@@ -269,7 +269,7 @@ public class UnitArbreDomainesTest
 	verify(domaineMock).addSpecialite(6, "gravure sur écorce de cacahuète");
 
 	//Cas get
-	ArrayList<String> listSpeTest = new ArrayList<String>();
+	ArrayList<String> listSpeTest = new ArrayList<>();
 	listSpeTest.add("danse avec les pingouins");
 	listSpeTest.add("récurrage de string");
 	listSpeTest.add("échelle à deux mains");

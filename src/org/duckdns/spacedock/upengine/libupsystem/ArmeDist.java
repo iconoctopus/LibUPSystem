@@ -53,8 +53,10 @@ public class ArmeDist extends Arme
     private final int m_portee;
 
     /**
-     * constructeur appelant dans UPReferenceSysteme les spécificités des arms à
-     * distance
+     * constructeur identique à celui de la superclasse, celle-ci emploie la
+     * qualité et l'équilibrage pour le nommage, ici on en applique les effets
+     * le constructeur appelle aussi dans UPReferenceSysteme les spécificités
+     * des armes à distance
      *
      * @param p_indice
      * @param p_qualite
@@ -122,6 +124,17 @@ public class ArmeDist extends Arme
 	}
     }
 
+    /**
+     * méthode appelée par le perso avant qu'il n'effectue son attaque, elle va
+     * se charger des particularismes des armes à distance pour présenter les
+     * bonus/malus finaux agglomérés qu'il faudra appliquer à l'attaque en
+     * fonction de la portée et du nombre de munitions employées. Elle se
+     * chargera aussi de définir si l'arme peut opérer selon ces paramétres.
+     *
+     * @param p_distance
+     * @param p_nbCoups
+     * @return
+     */
     DistReport verifPreAttaque(int p_distance, int p_nbCoups)
     {
 	DistReport result = new DistReport(0, 0, 0, true);//échec auto par défaut
@@ -139,7 +152,7 @@ public class ArmeDist extends Arme
 		{//portée longue
 		    modDist -= getMalusLong();
 		}
-		//tir effectif, maintenant il faut calculer l'éventuel bonus de rafale
+		//conditions initiales remplies, maintenant il faut évaluer l'éventuelle rafale
 		int bonusDesLancesRafale = 0;
 		int bonusDesGardesRafale = 0;
 
@@ -250,7 +263,7 @@ public class ArmeDist extends Arme
 
     /**
      * classe interne utilisée pour encapsuler l'évaluation pré-déclenchement
-     * d'une attaque
+     * d'une attaque à distance
      */
     public static final class DistReport
     {
@@ -266,6 +279,7 @@ public class ArmeDist extends Arme
 	 * @param p_lances
 	 * @param p_gardes
 	 * @param p_modif
+	 * @param p_echec
 	 */
 	public DistReport(int p_lances, int p_gardes, int p_modif, boolean p_echec)
 	{

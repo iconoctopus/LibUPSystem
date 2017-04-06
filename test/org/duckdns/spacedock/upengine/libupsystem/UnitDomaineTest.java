@@ -44,9 +44,8 @@ public class UnitDomaineTest
 {
 
     private Domaine domaine;
-    private Domaine domaineCac;
     private UPReferenceSysteme referenceMock;
-    private static ArrayList<String> listComp = new ArrayList<>();
+    private final static ArrayList<String> listComp = new ArrayList<>();
     private Competence competenceMock;
 
     @BeforeClass

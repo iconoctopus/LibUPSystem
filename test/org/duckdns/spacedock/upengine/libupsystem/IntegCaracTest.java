@@ -25,8 +25,8 @@ import org.junit.Test;
  *
  * @author ykonoclast
  */
-public class IntegCaracTest//tester les libellés
-{//TODO vérifier que les compétences d'attaque et de parade sont bien positionnées
+public class IntegCaracTest
+{
 
     Perso persoRM1;
     Perso persoRM3;

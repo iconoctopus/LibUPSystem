@@ -67,10 +67,10 @@ public class UnitPersoTest
     private Inventaire inventaireMock;
     private Perso persoRM1;
     private Perso persoRM3;
-    private static ArrayList<String> listComp = new ArrayList<>();
-    private static ArrayList<String> listDom = new ArrayList<>();
-    private static ArrayList<Integer> listRM1 = new ArrayList<>();
-    private static ArrayList<Integer> listRM3 = new ArrayList<>();
+    private static final ArrayList<String> listComp = new ArrayList<>();
+    private static final ArrayList<String> listDom = new ArrayList<>();
+    private static final ArrayList<Integer> listRM1 = new ArrayList<>();
+    private static final ArrayList<Integer> listRM3 = new ArrayList<>();
 
     @BeforeClass
     public static void setupClass()

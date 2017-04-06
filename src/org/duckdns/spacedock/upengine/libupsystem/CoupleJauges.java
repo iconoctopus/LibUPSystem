@@ -190,10 +190,9 @@ class CoupleJauges
      * @param p_degats
      * @param p_traits les traits du personnage cible afin de faire le jet
      * d'absorption puis le jet d'inconscience et éventuellement le jet de mort
-     * @return le niveau de remplissage de la jauge externe, ce qui permet de
-     * suivre si celle-ci a été réduite
+     * @return
      */
-    int recevoirDegats(int p_degats, GroupeTraits p_traits)
+    void recevoirDegats(int p_degats, GroupeTraits p_traits)
     {
 	if (p_degats >= 0)
 	{
@@ -240,7 +239,6 @@ class CoupleJauges
 	{
 	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("degats") + ":" + p_degats);
 	}
-	return m_remplissage_externe;
     }
 
     /**

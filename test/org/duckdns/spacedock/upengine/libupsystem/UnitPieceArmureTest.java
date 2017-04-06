@@ -113,18 +113,6 @@ public class UnitPieceArmureTest
     }
 
     @Test
-    public void testId()
-    {
-	Assert.assertEquals(0, piece1.getIdPiece());
-	Assert.assertEquals(0, piece2.getIdPiece());
-	Assert.assertEquals(7, piece3.getIdPiece());
-	Assert.assertEquals(7, piece4.getIdPiece());
-	Assert.assertEquals(4, piece5.getIdPiece());
-	Assert.assertEquals(3, bouclier1.getIdPiece());
-	Assert.assertEquals(0, bouclier2.getIdPiece());
-    }
-
-    @Test
     public void testMalusEsquive()
     {
 
@@ -148,18 +136,6 @@ public class UnitPieceArmureTest
 	Assert.assertEquals(0, piece5.getMalusParade());
 	Assert.assertEquals(0, bouclier1.getMalusParade());
 	Assert.assertEquals(0, bouclier2.getMalusParade());
-    }
-
-    @Test
-    public void testMateriau()
-    {
-	Assert.assertEquals(0, piece1.getMateriau());
-	Assert.assertEquals(3, piece2.getMateriau());
-	Assert.assertEquals(0, piece3.getMateriau());
-	Assert.assertEquals(3, piece4.getMateriau());
-	Assert.assertEquals(1, piece5.getMateriau());
-	Assert.assertEquals(1, bouclier1.getMateriau());
-	Assert.assertEquals(0, bouclier2.getMateriau());
     }
 
     @Test

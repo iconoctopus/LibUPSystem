@@ -30,9 +30,8 @@ public class EnsembleJauges
 {
 
     /**
-     * les actions du personnage dans ce tour sous la forme de la phase dans
-     * laquelle l'action se déroule dans l'ordre des phases (donc tableau de la
-     * taille de l'init)
+     * les actions restantes du personnage dans ce tour, le tableau va varier de
+     * taille au fur et à mesure que les actions sont consommées
      */
     private ArrayList<Integer> m_actions;
     /**
@@ -55,6 +54,10 @@ public class EnsembleJauges
 	genInit();
     }
 
+    /**
+     * méthode créant de nouvelles jauges en fonction du groupe de traits
+     * possédé
+     */
     void initJauges()
     {
 	int traitMin = m_groupeTraits.getTrait(Trait.PHYSIQUE);
@@ -67,7 +70,6 @@ public class EnsembleJauges
 		traitMin = traitcourant;
 	    }
 	}
-
 	m_jaugeFatigueForceDAme = new CoupleJauges(m_groupeTraits.getTrait(Trait.PHYSIQUE), m_groupeTraits.getTrait(Trait.VOLONTE), traitMin);
 	m_jaugeSanteInit = new CoupleJauges(m_groupeTraits.getTrait(Trait.PHYSIQUE), m_groupeTraits.getTrait(Trait.VOLONTE), m_groupeTraits.getTrait(Trait.MENTAL), m_groupeTraits.getTrait(Trait.COORDINATION));
     }
@@ -100,9 +102,9 @@ public class EnsembleJauges
     {
 	int initiative = m_jaugeSanteInit.getRemplissage_externe();
 	ArrayList<Integer> tabResult = new ArrayList<>();
-	if (initiative > 0)
+	if (initiative > 0)//le personnage est capable d'avoir des actions dans un tour
 	{
-	    for (int i = 0; i < initiative; i++)
+	    for (int i = 0; i < initiative; i++)//on parcourt le tableau des actions et on le remplit
 	    {
 		tabResult.add(RollUtils.lancer(1, 1, true));
 	    }
@@ -122,17 +124,10 @@ public class EnsembleJauges
     public boolean agirEnCombat(int p_phaseActuelle)
     {
 	boolean result = false;
-	if (p_phaseActuelle > 0 && p_phaseActuelle < 11)
+	if (isActif(p_phaseActuelle))
 	{
-	    if (isActif(p_phaseActuelle))
-	    {
-		m_actions.remove(0);
-		result = true;
-	    }
-	}
-	else
-	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("phase") + ":" + p_phaseActuelle);
+	    m_actions.remove(0);//on peut agir, donc on consomme une action
+	    result = true;
 	}
 	return result;
     }
@@ -164,20 +159,17 @@ public class EnsembleJauges
 
     /**
      * @param p_arme l'arme qui va donner son bonus d'initiative (la méthode
-     * accepte
+     * accepte les armesà distance comme au corps à corps)
      * @return l'initiative totale du personnage en comptant le bonus de l'arme
      */
     public int getInitTotale(Arme p_arme)
     {
 	int result = 0;
 
-	//traitement de la partie dûe aux dés d'action
+	//traitement de la partie dûe aux dés d'action, on parcourt les dés d'actions non encore consommés
 	for (int i = 0; i < m_actions.size(); ++i)
 	{
-	    if (m_actions.get(i) < 11)//si l'action considérée est toujours disponible
-	    {
-		result += m_actions.get(i);
-	    }
+	    result += m_actions.get(i);
 	}
 
 	//traitement du bonus dû à l'arme

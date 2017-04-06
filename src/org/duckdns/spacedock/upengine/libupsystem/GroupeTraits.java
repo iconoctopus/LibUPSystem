@@ -28,7 +28,10 @@ import org.duckdns.spacedock.upengine.libupsystem.RollUtils.RollResult;
 public class GroupeTraits
 {
 
-    private EnumMap<Trait, Integer> m_traits;
+    /**
+     * l'ensebmle des valeurs numériques correspondant aux rangs des traits
+     */
+    private final EnumMap<Trait, Integer> m_traits;
 
     /**
      * constructeur prenant les divers rangs de traits en paramétre
@@ -52,14 +55,14 @@ public class GroupeTraits
     /**
      * effectue le jet de trait
      *
-     * @param p_trait
+     * @param p_idTrait
      * @param p_ND
      * @param p_isSonne
      * @return
      */
-    RollResult effectuerJetTrait(Trait p_trait, int p_ND, boolean p_isSonne)
+    RollResult effectuerJetTrait(Trait p_idTrait, int p_ND, boolean p_isSonne)
     {
-	return RollUtils.extraireIncrements(RollUtils.lancer(m_traits.get(p_trait), m_traits.get(p_trait), p_isSonne), p_ND);
+	return RollUtils.extraireIncrements(RollUtils.lancer(m_traits.get(p_idTrait), m_traits.get(p_idTrait), p_isSonne), p_ND);
     }
 
     /**

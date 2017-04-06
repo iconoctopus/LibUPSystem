@@ -37,7 +37,7 @@ public final class UPReferenceSysteme
 {
 
     /**
-     * table des autres libellés
+     * table des libellés divers
      */
     private final CollectionLibelles m_collectionLibelles;
     /**
@@ -57,7 +57,6 @@ public final class UPReferenceSysteme
      * préfixe des libellés des compétences de parade
      */
     private final String m_lblCompParade;
-
     /**
      * table des modificateurs à l'init issus de la coordination
      */
@@ -96,7 +95,7 @@ public final class UPReferenceSysteme
 
 	//chargement des libellés de traits
 	JsonArray tabTraits = object.getJsonArray("traits");
-	m_listLblTrait = new EnumMap<Trait, String>(Trait.class);
+	m_listLblTrait = new EnumMap<>(Trait.class);
 	m_listLblTrait.put(PHYSIQUE, tabTraits.getString(0));
 	m_listLblTrait.put(COORDINATION, tabTraits.getString(1));
 	m_listLblTrait.put(MENTAL, tabTraits.getString(2));
@@ -125,6 +124,10 @@ public final class UPReferenceSysteme
 	return (m_instance);
     }
 
+    /**
+     *
+     * @return la collection des libellés
+     */
     public CollectionLibelles getCollectionLibelles()
     {
 	return m_collectionLibelles;
@@ -137,7 +140,6 @@ public final class UPReferenceSysteme
      */
     public int getInitModCoord(int p_coordination)
     {
-	//le tableau est indexé à partir de 0, pas la coordination
 	return m_tableInitCoord.getInt(p_coordination);
     }
 
@@ -148,13 +150,12 @@ public final class UPReferenceSysteme
      */
     public int getInitModMental(int p_mental)
     {
-	//le tableau est indexé à partir de 0, pas le mental
 	return m_tableInitMental.getInt(p_mental);
     }
 
     /**
      *
-     * @param p_indice l'identifiant du trait
+     * @param p_idTrait l'identifiant du trait
      * @return le libelle du trait indicé
      */
     public String getLibelleTrait(Trait p_idTrait)
@@ -180,7 +181,7 @@ public final class UPReferenceSysteme
 	{
 	    ArrayList<String> listCaC = reference.getListCatArmeCaC();
 	    for (int i = 0; i < listCaC.size(); ++i)
-	    {
+	    {//on préfixe les compétences d'attaque et de parade puis on les suffixe de la catégorie
 		res.add(m_collectionLibelles.attaque + " " + listCaC.get(i));
 		res.add(m_collectionLibelles.parade + " " + listCaC.get(i));
 	    }
@@ -226,7 +227,8 @@ public final class UPReferenceSysteme
 
     /**
      * Classe encapsulant les libellés autres que ceux utilisés dans les
-     * caractéristiques et l'équipement (surtout utilisé pour l'entrée sortie)
+     * caractéristiques et l'équipement (surtout utilisé pour l'entrée sortie
+     * des caracs de système)
      */
     public final class CollectionLibelles
     {
@@ -258,7 +260,6 @@ public final class UPReferenceSysteme
 		equilibrage = p_libelles.getString("equilibrage");
 		attaque = p_libelles.getString("attaque");
 		parade = p_libelles.getString("parade");
-
 	    }
 	    else
 	    {

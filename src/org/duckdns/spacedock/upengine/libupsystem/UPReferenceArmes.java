@@ -23,6 +23,7 @@ import javax.json.JsonObject;
 import static org.duckdns.spacedock.commonutils.JSONHandler.loadJsonFile;
 
 /**
+ * classe permettant l'accès aux éléments de référence concernant les armes
  *
  * @author ykonoclast
  */
@@ -33,7 +34,6 @@ public class UPReferenceArmes
      * tableau contenant toutes les armes existant en jeu
      */
     private final JsonArray m_tabArmes;
-
     /**
      * liste des libellés des catégories d'armes de corps à corps
      */
@@ -51,21 +51,18 @@ public class UPReferenceArmes
      * liste des libellés des types d'armes
      */
     private final JsonArray m_listLblTypArm;
-
-    /**
-     * instance unique de cet objet
-     */
-    private static UPReferenceArmes m_instance;
-
     /**
      * liste des libellés de qualité d'arme
      */
     public final EnumMap<Arme.QualiteArme, String> m_listLblQualite;
-
     /**
      * liste des libellés d'équilibrage d'arme
      */
     public final EnumMap<Arme.EquilibrageArme, String> m_listLblEquilibrage;
+    /**
+     * instance unique de cet objet
+     */
+    private static UPReferenceArmes m_instance;
 
     /**
      * véritable constructeur privé effectuant tous les accès fichiers à
@@ -75,7 +72,6 @@ public class UPReferenceArmes
     {
 	JsonObject object;
 
-	//chargement des règles d'armes
 	object = loadJsonFile("libupsystem", "equipement/caracs_armes.json");
 	m_tabArmes = object.getJsonArray("armes");
 	m_listLblTypArm = object.getJsonArray("types_armes");
@@ -84,14 +80,14 @@ public class UPReferenceArmes
 	m_listLblModArm = object.getJsonArray("mod_armes");
 
 	JsonArray tabQualite = object.getJsonArray("qualite_armes");
-	m_listLblQualite = new EnumMap<Arme.QualiteArme, String>(Arme.QualiteArme.class);
+	m_listLblQualite = new EnumMap<>(Arme.QualiteArme.class);
 	m_listLblQualite.put(Arme.QualiteArme.inferieure, tabQualite.getString(0));
 	m_listLblQualite.put(Arme.QualiteArme.moyenne, tabQualite.getString(1));
 	m_listLblQualite.put(Arme.QualiteArme.superieure, tabQualite.getString(2));
 	m_listLblQualite.put(Arme.QualiteArme.maitre, tabQualite.getString(3));
 
 	JsonArray tabEquilibrage = object.getJsonArray("equilibrage_armes");
-	m_listLblEquilibrage = new EnumMap<Arme.EquilibrageArme, String>(Arme.EquilibrageArme.class);
+	m_listLblEquilibrage = new EnumMap<>(Arme.EquilibrageArme.class);
 	m_listLblEquilibrage.put(Arme.EquilibrageArme.mauvais, tabEquilibrage.getString(0));
 	m_listLblEquilibrage.put(Arme.EquilibrageArme.normal, tabEquilibrage.getString(1));
 	m_listLblEquilibrage.put(Arme.EquilibrageArme.bon, tabEquilibrage.getString(2));
@@ -179,14 +175,12 @@ public class UPReferenceArmes
      */
     public ArrayList<String> getListCatArmeCaC()
     {
-
 	ArrayList<String> res = new ArrayList<>();
 	for (int i = 0; i < m_listCatArmCaC.size(); ++i)
 	{
 	    res.add(m_listCatArmCaC.getString(i));
 	}
 	return res;
-
     }
 
     /**
@@ -257,7 +251,7 @@ public class UPReferenceArmes
     }
 
     /**
-     * renvoie le malus à l'attaque à courte portée de l'arme
+     * renvoie le malus aux jets à courte portée de l'arme
      *
      * @param p_indice
      * @return
@@ -268,7 +262,7 @@ public class UPReferenceArmes
     }
 
     /**
-     * renvoie le malus à l'attaque à longue portée de l'arme
+     * renvoie le malus aux jets à longue portée de l'arme
      *
      * @param p_indice
      * @return
@@ -352,5 +346,4 @@ public class UPReferenceArmes
 	JsonObject arme = m_tabArmes.getJsonObject(p_indice);
 	return arme.getInt("type");
     }
-
 }

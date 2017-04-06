@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 ykonoclast
  *
  * This program is free software: you can redistribute it and/or modify
@@ -21,7 +21,10 @@ import org.duckdns.spacedock.commonutils.ErrorHandler;
 import org.duckdns.spacedock.commonutils.PropertiesHandler;
 
 /**
- * classe représentant une compétence
+ * classe représentant une compétence, pas de logique ici, le traitement est
+ * effectué au niveau du domaine, la gestion des spécialités est encore
+ * embryonnaire : la compétence en possède une liste mais celles-ci ne sont en
+ * aucun cas gérées par le système
  *
  * @author ykonoclast
  */
@@ -40,10 +43,7 @@ class Competence
     private final ArrayList<String> m_specialites;
 
     /**
-     * Classe encapsulant une compétence (pincipalement rang et spécialités) La
-     * gestion des spécialités est encore embryonnaire : la compétence en
-     * possède une liste mais celles-ci ne sont en aucun cas gérées par le
-     * système
+     * Constructeur
      *
      *
      * @param p_rang
@@ -58,7 +58,7 @@ class Competence
 	}
 	else
 	{
-	    m_specialites = new ArrayList<String>();
+	    m_specialites = new ArrayList<>();
 	}
     }
 
@@ -99,7 +99,7 @@ class Competence
      */
     final ArrayList<String> getSpecialites()
     {
-	return new ArrayList<String>(m_specialites);
+	return new ArrayList<>(m_specialites);
     }
 
     /**
@@ -110,5 +110,4 @@ class Competence
     {
 	m_specialites.remove(p_indice);
     }
-
 }

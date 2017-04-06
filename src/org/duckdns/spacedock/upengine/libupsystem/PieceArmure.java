@@ -17,15 +17,11 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
 /**
- * classe interne représentant une pièce individuelle d'une armure
+ * classe représentant une pièce individuelle d'une armure
  */
 public class PieceArmure
 {
 
-    /**
-     * l'indice de la pièce
-     */
-    private final int m_idPiece;
     /**
      * si la pièce est un boucliere
      */
@@ -48,10 +44,6 @@ public class PieceArmure
      */
     private final int m_malusParade;
     /**
-     * le matériau de la pièce
-     */
-    private final int m_materiau;
-    /**
      * le nombre de points de cette pièce
      */
     private final int m_nbpoints;
@@ -70,24 +62,25 @@ public class PieceArmure
      */
     public PieceArmure(int p_idPiece, int p_type, int p_materiau, boolean p_isBouclier)
     {
-	m_idPiece = p_idPiece;
 	m_type = p_type;
 	UPReferenceArmures referenceArmures = UPReferenceArmures.getInstance();
 	UPReferenceSysteme referenceSys = UPReferenceSysteme.getInstance();
-	m_materiau = p_materiau;
+
+	//construction du nom
 	if (p_type == 0)
 	{
-	    m_libelle = referenceArmures.getLblPiece(m_idPiece, p_isBouclier) + " " + referenceSys.getCollectionLibelles().interArmure + " " + referenceArmures.getLblMateriauArmure(m_materiau, p_isBouclier);
+	    m_libelle = referenceArmures.getLblPiece(p_idPiece, p_isBouclier) + " " + referenceSys.getCollectionLibelles().interArmure + " " + referenceArmures.getLblMateriauArmure(p_materiau, p_isBouclier);
 	}
 	else
 	{
-	    m_libelle = referenceArmures.getLblPiece(m_idPiece, p_isBouclier) + " " + referenceArmures.getLblTypeArmure(p_type);
+	    m_libelle = referenceArmures.getLblPiece(p_idPiece, p_isBouclier) + " " + referenceArmures.getLblTypeArmure(p_type);
 	}
+
 	m_isBouclier = p_isBouclier;
 	m_nbpoints = referenceArmures.getPtsArmure(p_idPiece, p_materiau, p_isBouclier);
-	m_malusEsquive = referenceArmures.getMalusEsquive(m_idPiece, m_materiau, p_isBouclier);
-	m_malusParade = referenceArmures.getMalusParade(m_idPiece, m_materiau, p_isBouclier);
-	m_localisation = referenceArmures.getLocalisation(m_idPiece, p_isBouclier);
+	m_malusEsquive = referenceArmures.getMalusEsquive(p_idPiece, p_materiau, p_isBouclier);
+	m_malusParade = referenceArmures.getMalusParade(p_idPiece, p_materiau, p_isBouclier);
+	m_localisation = referenceArmures.getLocalisation(p_idPiece, p_isBouclier);
     }
 
     /**
@@ -98,14 +91,6 @@ public class PieceArmure
     public String toString()
     {
 	return m_libelle;
-    }
-
-    /**
-     * @return the m_idPiece
-     */
-    int getIdPiece()
-    {
-	return m_idPiece;
     }
 
     /**
@@ -130,14 +115,6 @@ public class PieceArmure
     int getMalusParade()
     {
 	return m_malusParade;
-    }
-
-    /**
-     * @return the m_materiau
-     */
-    int getMateriau()
-    {
-	return m_materiau;
     }
 
     /**

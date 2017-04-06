@@ -1,51 +1,52 @@
+/*
+ * Copyright (C) 2017 ykonoclast
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import org.duckdns.spacedock.commonutils.ErrorHandler;
 import org.duckdns.spacedock.commonutils.PropertiesHandler;
-import org.duckdns.spacedock.upengine.libupsystem.Arme.Degats;
+import org.duckdns.spacedock.upengine.libupsystem.EnsembleJauges.EtatVital;
+import org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait;
 import org.duckdns.spacedock.upengine.libupsystem.RollUtils.RollResult;
 
 public class Perso
 {
 
     /**
-     * les actions du personnage dans ce tour sous la forme de la phase dans
-     * laquelle l'action se déroule dans l'ordre des phases (donc tableau de la
-     * taille de l'init) ,celles consommées sont fixées à 11
+     * arbre des domaines/compétences du personnage
      */
-    private ArrayList<Integer> m_actions;
-    /**
-     * l'indice de l'action courantes dans le tableau des actions
-     */
-    private int m_actionCourante;
-    /**
-     * le nom du personage
-     */
-    private String m_libellePerso;
-    /**
-     * non finale pour augment à l'xp et définition hors constructeur
-     */
-    private CoupleJauge m_jaugeSanteInit;
-    /**
-     * non finale pour augment à l'xp et définition hors constructeur
-     */
-    private CoupleJauge m_jaugeFatigueForceDAme;
+    private final ArbreDomaines m_arbreDomaines;
     /**
      * rassemble armes et armures du personnage ainsi que quelques
      * fonctionalités utiles notamment les armes et armures courantes
      */
     private final Inventaire m_inventaire = new Inventaire();
     /**
-     * dans l'ordre : 0:Physique ; 1:Coordination ; 2:Mental ; 3:Volonté ;
-     * 4:Sociabilité
+     * la structure encapsulant l'état vital du personnage
      */
-    private final int[] m_traits;
+    private final EnsembleJauges m_jauges;
     /**
-     * arbre des domaines/compétences du personnage
+     * le nom du personage
      */
-    private final ArbreDomaines m_arbreDomaines;
+    private String m_libellePerso;
+    /**
+     * les traits du personnage
+     */
+    private final GroupeTraits m_groupeTraits;
 
     /**
      * Constructeur de Perso prenant des caractéristiques en paramétres. Il est
@@ -55,21 +56,14 @@ public class Perso
      * @param p_traits
      * @param p_arbre
      */
-    public Perso(int[] p_traits, ArbreDomaines p_arbre)
+    public Perso(GroupeTraits p_traits, ArbreDomaines p_arbre)
     {
-	if (p_traits.length != 5)
-	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("nbtraits") + ":" + p_traits.length);
-	}
-	for (int i = 0; i < p_traits.length; ++i)
-	{
-	    if (p_traits[i] < 0)
-	    {
-		ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("trait") + ":" + p_traits[i]);
-	    }
-	}
-	m_traits = p_traits;
+	m_libellePerso = "Perso";
+
+	m_groupeTraits = p_traits;
 	m_arbreDomaines = p_arbre;
+
+	m_jauges = new EnsembleJauges(p_traits);
     }
 
     /**
@@ -79,123 +73,59 @@ public class Perso
      */
     public Perso(int p_RM)
     {
-	if (p_RM < 1)
+	if (p_RM < 1 || p_RM > 9)
 	{
 	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("rang") + ":" + p_RM);
 	}
-	//configuration des traits
-	m_traits = new int[5];
-	m_traits[0] = p_RM;//physique
-	m_traits[1] = p_RM;//coordination
-	m_traits[2] = p_RM - 1;//mental
-	m_traits[3] = p_RM - 1;//volonté
-	m_traits[4] = p_RM - 1;//sociabilité
 
-	//configuration automatique des autres caractéristiques maintenant possible car les traits sont générés
-	initPerso();
+	//configuration des traits
+	ArrayList<Integer> listTrait = new ArrayList<>();
+	listTrait.add(p_RM);
+	listTrait.add(p_RM + 1);
+	listTrait.add(p_RM - 2);
+	listTrait.add(p_RM - 1);
+	listTrait.add(p_RM - 3);
+
+	for (int i = 0; i < 5; ++i)
+	{
+	    if (listTrait.get(i) < 2)
+	    {
+		listTrait.set(i, 2);//minimum de 2 aux traits
+	    }
+	}
+
+	m_groupeTraits = new GroupeTraits(listTrait.get(0), listTrait.get(1), listTrait.get(2), listTrait.get(3), listTrait.get(4));
+
+	m_jauges = new EnsembleJauges(m_groupeTraits);
 
 	//configuration des caractéristiques de combat une fois que l'arbre des domaines est généré
 	//configuration du domaine corps à corps
 	m_arbreDomaines = new ArbreDomaines();
-	m_arbreDomaines.setRangDomaine(3, p_RM);
-	for (int i = 0; i < UPReference.getInstance().getListComp(3).size(); i++)
+	m_arbreDomaines.setRangDomaine(3, p_RM + 1);
+	for (int i = 0; i < UPReferenceSysteme.getInstance().getListComp(3).size(); i++)
 	{
-	    m_arbreDomaines.setRangComp(3, i, p_RM);
+	    m_arbreDomaines.setRangComp(3, i, p_RM + 1);
 	}
 
 	//idem pour tout le domaine combat à distance
-	m_arbreDomaines.setRangDomaine(4, p_RM);
-	for (int i = 0; i < UPReference.getInstance().getListComp(4).size(); i++)
+	m_arbreDomaines.setRangDomaine(4, p_RM + 1);
+	for (int i = 0; i < UPReferenceSysteme.getInstance().getListComp(4).size(); i++)
 	{
-	    m_arbreDomaines.setRangComp(4, i, p_RM);
+	    m_arbreDomaines.setRangComp(4, i, p_RM + 1);
 	}
-
-	//on ajoute des rangs en esquive
-	m_arbreDomaines.setRangDomaine(2, p_RM);
-	m_arbreDomaines.setRangComp(2, 0, p_RM);
 
 	m_libellePerso = PropertiesHandler.getInstance("libupsystem").getString("lbl_perso_std") + p_RM;
     }
 
     /**
-     * initialise les caractéristiques hors traits du personnage
-     */
-    private void initPerso()
-    {
-	initJauges();
-	genInit();
-    }
-
-    /**
-     * initialise les jauges du personnage avec le tableau de ses traits, doit
-     * donc être appelé par le onstructeur après cette initialisation
-     */
-    private void initJauges()
-    {
-	int traitMin = m_traits[0];
-	for (int i = 1; i < m_traits.length; ++i)
-	{
-	    if (m_traits[i] < traitMin)
-	    {
-		traitMin = m_traits[i];
-	    }
-	}
-	m_jaugeFatigueForceDAme = new CoupleJauge(m_traits[0], m_traits[3], traitMin);
-	m_jaugeSanteInit = new CoupleJauge(m_traits[0], m_traits[3], m_traits[2], m_traits[1]);
-    }
-
-    /**
-     * génère l'initiative du personnage, devrait être appelée dans le
-     * constructeur mais par la suite contrôlée de l'extérieur
-     */
-    public final void genInit()
-    {
-	int initiative = m_jaugeSanteInit.getRemplissage_externe();
-	m_actionCourante = 0;
-	ArrayList<Integer> tabResult = new ArrayList<>();
-	if (initiative > 0)
-	{
-	    for (int i = 0; i < initiative; i++)
-	    {
-		tabResult.add(RollUtils.lancer(1, 1, true));
-	    }
-	}
-	Collections.sort(tabResult);
-	m_actions = tabResult;
-    }
-
-    /**
-     * fait effectuer au personnage un jet de l'une de ses compétences. Appelé
-     * en interne par les méthodes d'attaque qui effectuent les pré-traitements
-     * pour aboutir aux caractéristiques finales du jet.
      *
-     * @param p_ND
-     * @param p_comp
      * @param p_domaine
-     * @param p_modifNbLances
-     * @param p_modifNbGardes
-     * @param p_modifScore
-     * @param p_trait
-     * @return le résultat du jet
+     * @param p_comp
+     * @param p_specialite
      */
-    public final RollUtils.RollResult effectuerJetComp(int p_ND, int p_comp, int p_domaine, int p_modifNbLances, int p_modifNbGardes, int p_modifScore, int p_trait)
+    public void addSpecialite(int p_domaine, int p_comp, String p_specialite)
     {
-	return m_arbreDomaines.effectuerJetComp(p_domaine, p_comp, p_trait, p_ND, p_modifNbLances, p_modifNbGardes, p_modifScore, isSonne());
-    }
-
-    /**
-     * fait effectuer au personnage un jet avec l'un de ses traits purs.
-     *
-     * @param p_ND
-     * @param p_modifNbLances
-     * @param p_modifNbGardes
-     * @param p_modifScore
-     * @param p_trait
-     * @return le résultat du jet
-     */
-    public final RollUtils.RollResult effectuerJetTrait(int p_ND, int p_modifNbLances, int p_modifNbGardes, int p_modifScore, int p_trait)
-    {
-	return RollUtils.extraireIncrements(RollUtils.lancer(m_traits[p_trait], m_traits[p_trait], isSonne()), p_ND);
+	m_arbreDomaines.addSpecialite(p_domaine, p_comp, p_specialite);
     }
 
     /**
@@ -203,11 +133,12 @@ public class Perso
      * attaquera systématiquement avec l'arme courante, il faut donc la
      * configurer avant. Cette méthode vérifie que l'action est possible dans la
      * phase courante en fonction de l'init du perso, elle est donc conçue pour
-     * le combat uniquement. Si l'on veut utiliser une autre arme il faut
-     * d'abord la configurer comme arme courante. Une exception est levée si
-     * l'on essaye d'attaquer en corps à corps avec une arme à distance (rien
-     * n'interdit d'entrer une distance 0 dans l'autre méthode adaptée). Si
-     * aucune arme n'est équipée on utilise par défaut les mains nues.
+     * le combat uniquement (utiliser la méthode générale des jets de compétence
+     * sinon) . Si l'on veut utiliser une autre arme il faut d'abord la
+     * configurer comme arme courante. Une exception est levée si l'on essaye
+     * d'attaquer en corps à corps avec une arme à distance (rien n'interdit
+     * d'entrer une distance 0 dans l'autre méthode adaptée). Si aucune arme
+     * n'est équipée on utilise par défaut les mains nues.
      *
      * Il est important de garder la génération des dégâts séparée et déclenchée
      * depuis l'extérieur afin que le contrôleur puisse choisir d'utiliser les
@@ -231,14 +162,14 @@ public class Perso
     /**
      * Fait effectuer une attaque à distance au personnage. Cette méthode
      * vérifie que l'action est possible dans la phase courante en fonction de
-     * l'init du perso, elle est donc conçue pour le combat uniquement. On
-     * utilise l'arme courante ou les mains nues. Si l'on veut utiliser une
-     * autre arme il faut d'abord la configurer comme arme courante. Une
-     * exception est levée si l'on essaye d'attaquer à distance avec une arme de
-     * corps à corps (rien n'interdit d'entrer une distance 0 dans l'autre
-     * méthode adaptée). Aucune vérification n'est effectuée sur le magasin
-     * actuel de l'arme. Si celui-ci n'est pas suffisant l'arme lèvera une
-     * exception.
+     * l'init du perso, elle est donc conçue pour le combat uniquement (utiliser
+     * la méthode pour les jets de compétence généraux sinon). On utilise l'arme
+     * courante. Si l'on veut utiliser une autre arme il faut d'abord la
+     * configurer comme arme courante. Une exception est levée si l'on essaye
+     * d'attaquer à distance avec une arme de corps à corps (rien n'interdit
+     * d'entrer une distance 0). Aucune vérification n'est effectuée sur le
+     * magasin actuel de l'arme. Si celui-ci n'est pas suffisant l'arme lèvera
+     * une exception.
      *
      * Il est important de garder la génération des dégâts séparée et déclenchée
      * depuis l'extérieur afin que le contrôleur puisse choisir d'utiliser les
@@ -254,134 +185,71 @@ public class Perso
     {
 	RollResult result = new RollResult(0, false, 0);//raté par défaut
 	ArmeDist arme = (ArmeDist) m_inventaire.getArmeCourante();
-	int modDist = 0;
-	if (p_distance >= 0 && p_nbCoups > 0 && p_nbCoups <= 20)
-	{
-	    arme.consommerMun(p_nbCoups);//on consomme les coups, une exception sera levée si il n'y a pas assez de munitions, le code appelant devrait vérifier systématiquement cela
-	    if (p_distance <= arme.getPortee())//échec auto si distance > portée
-	    {
-		if (p_distance <= (int) Math.round((double) arme.getPortee() / (double) 2))
-		{//portée courte
-		    modDist -= arme.getMalusCourt();
-		}
-		else
-		{//portée longue
-		    modDist -= arme.getMalusLong();
-		}
-		//tir effectif, maintenant il faut calculer l'éventuel bonus de rafale
-		int bonusDesLancesRafale = 0;
-		int bonusDesGardesRafale = 0;
 
-		if (p_nbCoups > 1)
-		{
-		    if (arme.getCategorie() == 4)//rafales acceptées, sinon lever une exception
-		    {
-			if (p_nbCoups >= 3)//les bonus commmencent à partir de 3 balles
-			{
-			    if (p_nbCoups < 4)//rafale courte
-			    {
-				bonusDesLancesRafale = 2;
-			    }
-			    else
-			    {
-				if (p_nbCoups < 10)//rafale moyenne
-				{
-				    int preResult = (p_nbCoups / 3);//division entre int donc troncature
-				    bonusDesLancesRafale = preResult * 2;
-				}
-				else//rafale longue
-				{
-				    bonusDesLancesRafale = bonusDesGardesRafale = (p_nbCoups / 5);//division entre int donc troncature
-				}
-			    }
-			}
-		    }
-		    else
-		    {
-			ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("nbCoups") + ":" + p_nbCoups);
-		    }
-
-		}
-		result = effectuerAttaque(p_phaseActuelle, p_ND, arme.getCategorie(), 4, bonusDesLancesRafale, bonusDesGardesRafale, modDist);
-	    }
-	}
-	else
+	ArmeDist.DistReport report = arme.verifPreAttaque(p_distance, p_nbCoups);
+	if (!report.isEchecAuto())//on n'est pas en situation d'échec automatique
 	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("distance") + ":" + p_distance + " " + PropertiesHandler.getInstance("libupsystem").getString("nbCoups") + ":" + p_nbCoups);
+	    result = effectuerAttaque(p_phaseActuelle, p_ND, arme.getCategorie(), 4, report.getModDesLances(), report.getModDesGardes(), report.getModJet());
 	}
 	return result;
     }
 
     /**
-     * Méthode où les éléments communs d'attaque se déroulent : les méthodes
-     * précédentes ont calculé les bonus/malus et diverses conditions de
-     * l'attaque spécifiques à leur situation (distance ou CaC), celle-ci va
-     * prendre en compte tous les éléments communs et aire exécuter le jet à la
-     * méthode afférente
+     * fait effectuer au personnage un jet de l'une de ses compétences. Appelé
+     * en interne par les méthodes d'attaque qui effectuent les pré-traitements
+     * pour aboutir aux caractéristiques finales du jet.
      *
-     * @param p_phaseActuelle
+     * @param p_idTrait id du trait à utiliser (pas la valeur!)
      * @param p_ND
-     * @param p_comp
-     * @param p_domaine
+     * @param p_indComp
+     * @param p_indDomaine
      * @param p_modifNbLances
      * @param p_modifNbGardes
      * @param p_modifScore
-     * @return
+     * @return le résultat du jet
      */
-    private RollResult effectuerAttaque(int p_phaseActuelle, int p_ND, int p_comp, int p_domaine, int p_modifNbLances, int p_modifNbGardes, int p_modifScore)
+    public final RollUtils.RollResult effectuerJetComp(Trait p_idTrait, int p_indDomaine, int p_indComp, int p_ND, int p_modifNbLances, int p_modifNbGardes, int p_modifScore)
     {
-	RollResult result = null;
-	if (agirEnCombat(p_phaseActuelle))
-	{
-	    int modDesLances = 0 + p_modifNbLances;
-	    int modDesGardes = 0 + p_modifNbGardes;
-	    int modFinal = 0 + p_modifScore;
-	    int ecartPhyMin = 0;
-
-	    Arme arme = m_inventaire.getArmeCourante();
-
-	    if (p_comp != 0)//on utilise une arme, il faut prendre en compte ses éventuels malus
-	    {
-		{
-		    if (arme.getphysMin() > m_traits[0])
-		    {
-			ecartPhyMin += m_traits[0] - arme.getphysMin();
-		    }
-		}
-		modDesLances -= arme.getMalusAttaque();
-	    }
-	    modFinal += (ecartPhyMin * 10);
-	    result = effectuerJetComp(p_ND, p_comp, p_domaine, modDesLances, modDesGardes, modFinal, m_traits[1]);
-	}
-	return result;
+	return m_arbreDomaines.effectuerJetComp(m_groupeTraits.getTrait(p_idTrait), p_indDomaine, p_indComp, p_ND, p_modifNbLances, p_modifNbGardes, p_modifScore, m_jauges.getEtatVital().isSonne());
     }
 
     /**
-     * fait dépenser une action au personnage dans la phase en cours si c'est
-     * possible
+     * fait effectuer au personnage un jet avec l'un de ses traits purs.
      *
-     * @param p_phaseActuelle
-     * @return un booléen indiquant si il est possible d'agir dans la phase en
-     * cours
+     * @param p_trait
+     * @param p_ND
+     * @return le résultat du jet
      */
-    public boolean agirEnCombat(int p_phaseActuelle)
+    public final RollUtils.RollResult effectuerJetTrait(Trait p_trait, int p_ND)
     {
-	boolean result = false;
-	if (p_phaseActuelle > 0 && p_phaseActuelle < 11)
-	{
+	return m_groupeTraits.effectuerJetTrait(p_trait, p_ND, m_jauges.getEtatVital().isSonne());
+    }
 
-	    if ((m_actions.size() - m_actionCourante) > 0 && p_phaseActuelle == m_actions.get(m_actionCourante))
+    /**
+     * inflige des dégâts à ce perso, via la jauge de Santé après avoir appliqué
+     * les effets d'armure
+     *
+     * @param p_degats
+     */
+    public void etreBlesse(Degats p_degats)
+    {
+
+	if (p_degats.getQuantite() >= 0 && p_degats.getTypeArme() >= 0)
+	{
+	    //application des effets d'armure
+	    Armure armure = m_inventaire.getArmure();
+	    int redDegats = armure.getRedDegats(p_degats.getTypeArme());
+	    int degatsEffectifs = p_degats.getQuantite() - redDegats;
+
+	    if (degatsEffectifs > 0)
 	    {
-		m_actions.set(m_actionCourante, 11);
-		m_actionCourante++;
-		result = true;
+		m_jauges.recevoirDegatsPhysiques(degatsEffectifs);
 	    }
 	}
 	else
 	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("phase") + ":" + p_phaseActuelle);
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("degats") + ":" + p_degats.getQuantite() + " " + PropertiesHandler.getInstance("libupsystem").getString("type") + ":" + p_degats.getTypeArme());
 	}
-	return result;
     }
 
     /**
@@ -394,7 +262,13 @@ public class Perso
      */
     public Degats genererDegats(int p_increments)
     {
-	Degats result = new Degats(RollUtils.lancer(m_traits[0] + p_increments, 1, isSonne()), 0); //mains nues par défaut
+	int domaine;
+	int competence;
+	int vd;
+	int bonusSup = p_increments * 2;//bonus aux dégâts du aux incréments (pas de ciblage dans cette méthode)
+	int typArm;
+
+	Degats result = new Degats(0, 0);
 
 	if (p_increments >= 0)
 	{
@@ -402,15 +276,31 @@ public class Perso
 
 	    if (arme != null)//armes équipées
 	    {
+		vd = arme.getVD();
+		typArm = arme.getTypeArme();
+
 		if (arme.getMode() == 0)//arme de corps à corps employée
 		{
-		    result = ((ArmeCaC) arme).genererDegats(p_increments, m_traits[0], isSonne());
+		    domaine = 3;//corps à corps
+		    competence = arme.getCategorie() * 2;//les attaques sont à catégorie *2, les parades à catégorie * 2 +1
+		    bonusSup += m_groupeTraits.getTrait(Trait.PHYSIQUE);//le rang de physique vient en bonus au nombre d'incréments
 		}
 		else//arme à distance employée
 		{
-		    result = ((ArmeDist) arme).genererDegats(p_increments, isSonne());
+		    domaine = 4;//distance
+		    competence = arme.getCategorie();//compétence d'arme
+		    //pas de bonus de physique pour les armes à distance
 		}
 	    }
+	    else//combat à mains nues
+	    {
+		vd = m_groupeTraits.getTrait(Trait.PHYSIQUE);
+		typArm = 0;
+		domaine = 3;//corps à corps
+		competence = 0;//comp mains nues
+		bonusSup += m_groupeTraits.getTrait(Trait.PHYSIQUE);//le rang de physique vient en bonus au nombre d'incréments
+	    }
+	    return new Degats(vd + m_arbreDomaines.getRangDomaine(domaine) + m_arbreDomaines.getRangComp(domaine, competence) + bonusSup, typArm);
 	}
 	else
 	{
@@ -420,108 +310,43 @@ public class Perso
     }
 
     /**
-     * inflige des dégâts, via la jauge de Santé après avoir appliqué les effets
-     * d'm_armure
-     *
-     * @param p_degats
-     */
-    public void etreBlesse(Degats p_degats)
-    {
-	if (p_degats.getQuantite() >= 0)
-	{
-	    Armure armure = m_inventaire.getArmure();
-	    int redDegats = armure.getRedDegats(p_degats.getTypeArme());
-	    int degatsEffectifs = p_degats.getQuantite() - redDegats;
-
-	    if (degatsEffectifs > 0)
-	    {
-		m_jaugeSanteInit.recevoirDegats(degatsEffectifs, this);
-	    }
-	}
-	else
-	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("degats") + ":" + p_degats.getQuantite());
-	}
-    }
-
-    /**
-     *
-     * @param p_typeArme
-     * @param p_catArme catégorie d'arme à employer en parade, ignoré si
-     * esquive, attnetion ce n'est pas le numéro index de comp mais bien la
-     * catégorie d'arme
-     * @param p_esquive : si l'esquive doit être employée, sinon c'est une
-     * parade qui est effectuée
-     * @return le ND passif calculé à partir des comps et de l'armure
-     */
-    public int getNDPassif(int p_typeArme, int p_catArme, boolean p_esquive)
-    {
-	int ND;
-	int rang;
-	int effetArmure = 0;
-	Armure armure = m_inventaire.getArmure();
-
-	if (!p_esquive)
-	{
-	    //calcul de la valeur issue de la compétence parade
-	    rang = m_arbreDomaines.getRangComp(3, p_catArme * 2 + 1); // la comp de parade est par convention à cat*2+1 là où attaque est à cat*2
-
-	    //ajout des bonus  et malus d'armure
-	    effetArmure += armure.getBonusND(p_typeArme);
-	    effetArmure -= armure.getMalusParade();
-	}
-	else
-	{
-	    //calcul de la valeur issue de la compétence esquive
-	    rang = m_arbreDomaines.getRangComp(2, 0);
-	    //ajout des bonus  et malus d'armure
-	    effetArmure += armure.getBonusND(p_typeArme);
-	    effetArmure -= armure.getMalusEsquive();
-
-	}
-
-	if (rang > 0)
-	{
-	    ND = rang * 5 + 5;
-	    if (rang >= 3)
-	    {
-		ND += 5;
-	    }
-	}
-	else
-	{
-	    if (!p_esquive)
-	    {
-		rang = m_arbreDomaines.getRangDomaine(3);
-	    }
-	    else
-	    {
-		rang = m_arbreDomaines.getRangDomaine(2);
-	    }
-	    ND = rang * 5 - 5;
-	    if (ND < 5)
-	    {
-		ND = 5;
-	    }
-	}
-	ND += effetArmure;
-	return ND;
-    }
-
-    /**
-     * renvoie vrai si le personnage a une action dans la phase active
-     * comportement indéfini si demande pour pĥase ultérieure ou antérieure
+     * fait dépenser une action au personnage si il lui est possible d'agir dans
+     * la phase actuelle
      *
      * @param p_phaseActuelle
-     * @return
+     * @return vrai si le perso peut agir
+     */
+    public boolean agirEnCombat(int p_phaseActuelle)
+    {
+	return m_jauges.agirEnCombat(p_phaseActuelle);
+    }
+
+    /**
+     *
+     * @param p_phaseActuelle
+     * @return vrai si le perso a une action dans la phase actuelle
      */
     public boolean isActif(int p_phaseActuelle)
     {
-	if (p_phaseActuelle <= 0 || p_phaseActuelle > 10)
-	{
-	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("phase") + ":" + p_phaseActuelle);
-	}
-	return ((m_actions.size() - m_actionCourante) > 0 && p_phaseActuelle == m_actions.get(m_actionCourante));
+	return m_jauges.isActif(p_phaseActuelle);
+    }
+
+    /**
+     *
+     * @return une copie : la liste n'est pas modifiable de l'extérieur
+     */
+    public ArrayList<Integer> getActions()
+    {
+	return m_jauges.getActions();
+    }
+
+    /**
+     *
+     * @return un rapport complet sur l'état des jauges
+     */
+    public EtatVital getEtatVital()
+    {
+	return m_jauges.getEtatVital();
     }
 
     /**
@@ -530,30 +355,12 @@ public class Perso
      */
     public int getInitTotale()
     {
-	int result = 0;
-
-	//traitement de la partie dûe aux dés d'action
-	for (int i = 0; i < m_actions.size(); ++i)
-	{
-	    if (m_actions.get(i) < 11)//si l'action considérée est toujours disponible
-	    {
-		result += m_actions.get(i);
-	    }
-	}
-
-	//traitement du bonus dû à l'arme
-	Arme arme = m_inventaire.getArmeCourante();
-	if (arme != null)
-	{
-	    result += arme.getBonusInit() * 5;
-	}
-	return result;
+	return m_jauges.getInitTotale(m_inventaire.getArmeCourante());
     }
 
-    @Override
-    public String toString()
+    public Inventaire getInventaire()
     {
-	return m_libellePerso;
+	return m_inventaire;
     }
 
     /**
@@ -567,160 +374,229 @@ public class Perso
 
     /**
      *
-     * @param p_domaine
-     * @param p_rang
+     * @param p_typeArme le type d'arme infligeant potentiellement des dégâts
+     * entrants afin de prendre en compte l'armure
+     * @param p_nbAdvSup nombre d'adversaires supplémentaires AU DELA DU PREMIER
+     * @return la défense, calculée à partir du groupe de traits
      */
-    public void setRangDomaine(int p_domaine, int p_rang)
+    public int getDefense(int p_typeArme, int p_nbAdvSup)
     {
-	m_arbreDomaines.setRangDomaine(p_domaine, p_rang);
+	int result = 0;
+	if (p_nbAdvSup >= 0)
+	{
+	    Armure armure = m_inventaire.getArmure();
+
+	    result = m_groupeTraits.getTrait(Trait.COORDINATION) * 5 + 5;//valeur de base
+	    result += armure.getBonusND(p_typeArme);//effets d'armure
+	    result -= p_nbAdvSup * 2; // malus par adversaire supplémentaire
+	    if (m_jauges.getEtatVital().isSonne())//malus si sonné
+	    {
+		result -= 5;
+	    }
+	    if (result < 5)//application de la règle du minimum de 5 à la défense
+	    {
+		result = 5;
+	    }
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("nb_adv_sup") + ":" + p_nbAdvSup);
+	}
+	return result;
+    }
+
+    /**
+     * force le personnage à relancer son initiative
+     */
+    public void genInit()
+    {
+	m_jauges.genInit();
     }
 
     /**
      *
-     * @param p_domaine
+     * @param p_indDomaine l'indice du domaine
+     * @param p_indComp l'indice de la comp dans le domaine
      * @return
      */
-    public int getRangDomaine(int p_domaine)
+    public int getRangComp(int p_indDomaine, int p_indComp)
     {
-	return m_arbreDomaines.getRangDomaine(p_domaine);
+	return m_arbreDomaines.getRangComp(p_indDomaine, p_indComp);
     }
 
     /**
      *
-     * @param p_domaine
-     * @param p_comp
-     * @param p_rang
-     */
-    public void setRangComp(int p_domaine, int p_comp, int p_rang)
-    {
-	m_arbreDomaines.setRangComp(p_domaine, p_comp, p_rang);
-    }
-
-    /**
-     *
-     * @param p_domaine
-     * @param p_comp
+     * @param p_indDomaine l'indice du domaine
      * @return
      */
-    public int getRangComp(int p_domaine, int p_comp)
+    public int getRangDomaine(int p_indDomaine)
     {
-	return m_arbreDomaines.getRangComp(p_domaine, p_comp);
+	return m_arbreDomaines.getRangDomaine(p_indDomaine);
     }
 
     /**
      *
-     * @param p_domaine
-     * @param p_comp
+     * @param p_indDomaine l'indice du domaine
+     * @param p_indComp l'indice de la compétence dans le domaine
      * @return
      */
-    public ArrayList<String> getSpecialites(int p_domaine, int p_comp)
+    public ArrayList<String> getSpecialites(int p_indDomaine, int p_indComp)
     {
-	return m_arbreDomaines.getSpecialites(p_domaine, p_comp);
+	return m_arbreDomaines.getSpecialites(p_indDomaine, p_indComp);
     }
 
     /**
      *
-     * @param p_domaine
-     * @param p_comp
-     * @param p_specialite
-     */
-    public void addSpecialite(int p_domaine, int p_comp, String p_specialite)
-    {
-	m_arbreDomaines.addSpecialite(p_domaine, p_comp, p_specialite);
-    }
-
-    /**
-     *
-     * @param p_domaine
-     * @param p_comp
-     * @param p_indiceSpe
-     */
-    public void removeSpecialite(int p_domaine, int p_comp, int p_indiceSpe)
-    {
-	m_arbreDomaines.removeSpecialite(p_domaine, p_comp, p_indiceSpe);
-    }
-
-    public Inventaire getInventaire()
-    {
-	return m_inventaire;
-    }
-
-    /**
-     * les 2 jauges sont prises en compte
-     *
-     * @return
-     */
-    public boolean isInconscient()
-    {
-	return m_jaugeSanteInit.isInconscient() || m_jaugeFatigueForceDAme.isInconscient();
-    }
-
-    /**
-     * les 2 jauges sont prises en compte
-     *
-     * @return
-     */
-    public boolean isSonne()
-    {
-	return (m_jaugeSanteInit.isSonne() || m_jaugeFatigueForceDAme.isSonne());
-    }
-
-    /**
-     * les 2 jauges sont prises en compte
-     *
-     * @return
-     */
-    public boolean isElimine()
-    {
-	return (m_jaugeFatigueForceDAme.isElimine() || m_jaugeSanteInit.isElimine());
-    }
-
-    public int getBlessuresGraves()
-    {
-	return m_jaugeSanteInit.getRemplissage_interne();
-    }
-
-    public int getBlessuresLegeres()
-    {
-	return m_jaugeSanteInit.getBlessuresLegeres();
-    }
-
-    public int getPointsDeFatigue()
-    {
-	return m_jaugeFatigueForceDAme.getRemplissage_interne();
-    }
-
-    public int getBlessuresLegeresMentales()
-    {
-	return m_jaugeFatigueForceDAme.getBlessuresLegeres();
-    }
-
-    /**
-     *
-     * @return une copie : la liste n'est pas modifiable de l'extérieur
-     */
-    public ArrayList<Integer> getActions()
-    {
-	return new ArrayList<>(m_actions);
-    }
-
-    /**
-     *
-     * @param p_indice
-     * @param p_valeur
-     */
-    public void setTrait(int p_indice, int p_valeur)
-    {
-	m_traits[p_indice] = p_valeur;
-    }
-
-    /**
-     *
-     * @param p_indice
+     * @param p_trait le trait considéré
      * @return la valeur du trait
      */
-    public int getTrait(int p_indice)
+    public int getTrait(Trait p_trait)
     {
-	return m_traits[p_indice];
+	return m_groupeTraits.getTrait(p_trait);
+    }
+
+    /**
+     *
+     * @param p_indDomaine
+     * @param p_indComp
+     * @param p_indiceSpe
+     */
+    public void removeSpecialite(int p_indDomaine, int p_indComp, int p_indiceSpe)
+    {
+	m_arbreDomaines.removeSpecialite(p_indDomaine, p_indComp, p_indiceSpe);
+    }
+
+    /**
+     *
+     * @param p_indDomaine
+     * @param p_indComp
+     * @param p_rang
+     */
+    public void setRangComp(int p_indDomaine, int p_indComp, int p_rang)
+    {
+	m_arbreDomaines.setRangComp(p_indDomaine, p_indComp, p_rang);
+    }
+
+    /**
+     *
+     * @param p_indDomaine
+     * @param p_rang
+     */
+    public void setRangDomaine(int p_indDomaine, int p_rang)
+    {
+	m_arbreDomaines.setRangDomaine(p_indDomaine, p_rang);
+    }
+
+    /**
+     *
+     * @param p_trait le trait considéré
+     * @param p_rang
+     */
+    public void setTrait(Trait p_trait, int p_rang)
+    {
+	m_groupeTraits.setTrait(p_trait, p_rang);
+	m_jauges.initJauges();//TODO : en l'état les jauges sont complètement remplacées : on perd donc les blessures, la force d'âme dépensée etc.
+    }
+
+    @Override
+    public String toString()
+    {
+	return m_libellePerso;
+    }
+
+    /**
+     * Méthode où les éléments communs d'attaque se déroulent : les méthodes
+     * précédentes ont calculé les bonus/malus et diverses conditions de
+     * l'attaque spécifiques à leur situation (distance ou CaC), celle-ci va
+     * prendre en compte tous les éléments communs et faire exécuter le jet
+     * d'attaque à la méthode afférente
+     *
+     * @param p_phaseActuelle
+     * @param p_ND
+     * @param p_indComp
+     * @param p_indDomaine
+     * @param p_modifNbLances
+     * @param p_modifNbGardes
+     * @param p_modifScore
+     * @return
+     */
+    private RollResult effectuerAttaque(int p_phaseActuelle, int p_ND, int p_indComp, int p_indDomaine, int p_modifNbLances, int p_modifNbGardes, int p_modifScore)
+    {
+	RollResult result = null;
+	if (m_jauges.agirEnCombat(p_phaseActuelle))
+	{//on peut agir
+	    int modDesLances = 0 + p_modifNbLances;
+	    int modDesGardes = 0 + p_modifNbGardes;
+	    int modFinal = 0 + p_modifScore;
+	    int ecartPhyMin = 0;
+
+	    Arme arme = m_inventaire.getArmeCourante();
+
+	    if (p_indDomaine != 3 || p_indDomaine == 3 && p_indComp != 0)
+	    {//on utilise une arme, il faut prendre en compte ses éventuels malus
+		{
+		    if (arme.getphysMin() > m_groupeTraits.getTrait(Trait.PHYSIQUE))
+		    {
+			ecartPhyMin += m_groupeTraits.getTrait(Trait.PHYSIQUE) - arme.getphysMin();
+		    }
+		}
+		modDesLances -= arme.getMalusAttaque();
+	    }
+	    modFinal += (ecartPhyMin * 10);
+	    result = effectuerJetComp(Trait.COORDINATION, p_indDomaine, p_indComp, p_ND, modDesLances, modDesGardes, modFinal);
+	}
+	return result;
+    }
+
+    /**
+     * classe utilisée pour encapsuler les résultats d'une attaque réussie ; des
+     * dégâts mais aussi le type.
+     */
+    public static final class Degats
+    {
+
+	/**
+	 * le total des dégâts infligés
+	 */
+	private int m_quantite;
+	/**
+	 * le type d'arme employé
+	 */
+	private int m_typeArme;
+
+	/**
+	 * constructeur de dégâts
+	 *
+	 * @param p_quantite
+	 * @param p_typeArme
+	 */
+	public Degats(int p_quantite, int p_typeArme)
+	{
+	    if (p_quantite >= 0 && p_typeArme >= 0)
+	    {
+		m_quantite = p_quantite;
+		m_typeArme = p_typeArme;
+	    }
+	    else
+	    {
+		ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("degats") + ":" + p_quantite + " " + PropertiesHandler.getInstance("libupsystem").getString("type") + ":" + p_typeArme);
+	    }
+	}
+
+	/**
+	 * @return the m_quantite
+	 */
+	public int getQuantite()
+	{
+	    return m_quantite;
+	}
+
+	/**
+	 * @return the m_typeArme
+	 */
+	public int getTypeArme()
+	{
+	    return m_typeArme;
+	}
     }
 }

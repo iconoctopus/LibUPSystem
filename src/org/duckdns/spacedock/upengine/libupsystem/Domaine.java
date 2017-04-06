@@ -1,7 +1,18 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2017 ykonoclast
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.duckdns.spacedock.upengine.libupsystem;
 
@@ -11,11 +22,14 @@ import org.duckdns.spacedock.commonutils.PropertiesHandler;
 
 /**
  *
- * @author iconoctopus
+ * @author ykonoclast
  */
 class Domaine
 {
 
+    /**
+     * le rang du domaine en question
+     */
     private int m_rang;
 
     /**
@@ -36,10 +50,10 @@ class Domaine
 	if (p_indice >= 0)
 	{
 	    setRang(p_rang);
-	    int nbComps = UPReference.getInstance().getListComp(p_indice).size();
+	    int nbComps = UPReferenceSysteme.getInstance().getListComp(p_indice).size();
 	    for (int i = 0; i < nbComps; ++i)
 	    {
-		m_competences.add(new Competence(0, null));
+		m_competences.add(new Competence(0, new ArrayList<>()));
 	    }
 	}
 	else
@@ -73,24 +87,25 @@ class Domaine
     }
 
     /**
-     * @param p_comp l'indice de la compétence visée
+     * @param p_indComp l'indice de la compétence visée dans le tableau interne
+     * du domaine
      * @return le rang de la competence en question
      */
-    int getRangCompetence(int p_comp)
+    int getRangComp(int p_indComp)
     {
-	return m_competences.get(p_comp).getRang();
+	return m_competences.get(p_indComp).getRang();
     }
 
     /**
      *
-     * @param p_indice
+     * @param p_indComp
      * @param p_rang
      */
-    void setRangComp(int p_indice, int p_rang)
+    void setRangComp(int p_indComp, int p_rang)
     {
 	if (p_rang <= m_rang)
 	{
-	    m_competences.get(p_indice).setRang(p_rang);
+	    m_competences.get(p_indComp).setRang(p_rang);
 	}
 	else
 	{
@@ -100,39 +115,39 @@ class Domaine
 
     /**
      *
-     * @param p_comp
+     * @param p_indComp l'indice de la comp dans le tableau interne du domaine
      * @returns la liste des spécialités de la comp passée en paramétre
      */
-    ArrayList<String> getSpecialites(int p_comp)
+    ArrayList<String> getSpecialites(int p_indComp)
     {
-	return m_competences.get(p_comp).getSpecialites();
+	return m_competences.get(p_indComp).getSpecialites();
     }
 
     /**
      *
-     * @param p_comp
+     * @param p_indComp
      * @param p_specialite
      */
-    void addSpecialite(int p_comp, String p_specialite)
+    void addSpecialite(int p_indComp, String p_specialite)
     {
-	m_competences.get(p_comp).addSpecialite(p_specialite);
+	m_competences.get(p_indComp).addSpecialite(p_specialite);
     }
 
     /**
      *
-     * @param p_comp
+     * @param p_indComp
      * @param p_indiceSpe
      */
-    void removeSpecialite(int p_comp, int p_indiceSpe)
+    void removeSpecialite(int p_indComp, int p_indiceSpe)
     {
-	m_competences.get(p_comp).removeSpecialite(p_indiceSpe);
+	m_competences.get(p_indComp).removeSpecialite(p_indiceSpe);
     }
 
     /**
      * effectue le jet de l'une des compétences du domaine
      *
-     * @param p_comp
-     * @param p_trait
+     * @param p_indComp
+     * @param p_rangTrait
      * @param p_nd
      * @param p_modifNbDesLances
      * @param p_modifNbDesGardes
@@ -140,20 +155,20 @@ class Domaine
      * @param p_isSonne
      * @return
      */
-    RollUtils.RollResult effectuerJetComp(int p_comp, int p_trait, int p_nd, int p_modifNbDesLances, int p_modifNbDesGardes, int p_modifScore, boolean p_isSonne)
+    RollUtils.RollResult effectuerJetComp(int p_rangTrait, int p_indComp, int p_nd, int p_modifNbDesLances, int p_modifNbDesGardes, int p_modifScore, boolean p_isSonne)
     {
 	int result = 0;
 
-	if (getRang() > 0 && p_comp >= 0 && p_trait >= 0)
+	if (getRang() > 0 && p_indComp >= 0 && p_rangTrait >= 0)
 	{
-	    int comp = m_competences.get(p_comp).getRang();
+	    int comp = m_competences.get(p_indComp).getRang();
 
 	    int bonus = p_modifScore;
 	    int lances = getRang() + comp + p_modifNbDesLances;
-	    int gardes = p_trait + p_modifNbDesGardes;
+	    int gardes = p_rangTrait + p_modifNbDesGardes;
 	    if (lances > 0)
 	    {
-		if (p_trait > 0)
+		if (p_rangTrait > 0)
 		{
 		    /*if(specialite)
 		{
@@ -178,9 +193,9 @@ class Domaine
 	{
 	    String message = "";
 
-	    message = message.concat(PropertiesHandler.getInstance("libupsystem").getString("trait") + ":" + p_trait);
+	    message = message.concat(PropertiesHandler.getInstance("libupsystem").getString("trait") + ":" + p_rangTrait);
 	    message = message.concat(" " + PropertiesHandler.getInstance("libupsystem").getString("dom") + ":" + getRang());
-	    message = message.concat(" " + PropertiesHandler.getInstance("commonutils").getString("indice") + " " + PropertiesHandler.getInstance("libupsystem").getString("comp") + ":" + p_comp);
+	    message = message.concat(" " + PropertiesHandler.getInstance("commonutils").getString("indice") + " " + PropertiesHandler.getInstance("libupsystem").getString("comp") + ":" + p_indComp);
 	    ErrorHandler.paramAberrant(message);
 	}
 	return RollUtils.extraireIncrements(result, p_nd);

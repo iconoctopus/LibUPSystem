@@ -3,13 +3,11 @@
     "typarmure": "type d'armure",
     "ptsarmure": "points d'armure",
     "trait": "trait",
-    "interArme": "en",
+    "interArmure": "en",
     "liaison_standard": "de",
     "liaison_addition": "et",
     "equilibrage": "équilibrage",
     "qualite": "qualité",
-    "lib_qualite": ["inférieure", "moyenne", "supérieure", "de maître"],
-    "lib_equilibrage": ["mauvais", "normal", "bon"],
     "attaque": "attaque",
     "parade": "parade"
 }

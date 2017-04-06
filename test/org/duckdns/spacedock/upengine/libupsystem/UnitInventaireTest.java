@@ -64,24 +64,18 @@ public class UnitInventaireTest
 	when(casqueMock.getLocalisation()).thenReturn(0);
 	when(casqueMock.getType()).thenReturn(0);
 	when(casqueMock.getNbpoints()).thenReturn(2);
-	when(casqueMock.getMalusEsquive()).thenReturn(0);
-	when(casqueMock.getMalusParade()).thenReturn(1);
 
 	ganteletMock = PowerMockito.mock(PieceArmure.class);
 	when(ganteletMock.isBouclier()).thenReturn(false);
 	when(ganteletMock.getLocalisation()).thenReturn(3);
 	when(ganteletMock.getType()).thenReturn(2);
 	when(ganteletMock.getNbpoints()).thenReturn(5);
-	when(ganteletMock.getMalusEsquive()).thenReturn(1);
-	when(ganteletMock.getMalusParade()).thenReturn(0);
 
 	bouclierMock = PowerMockito.mock(PieceArmure.class);
 	when(bouclierMock.isBouclier()).thenReturn(true);
 	when(bouclierMock.getLocalisation()).thenReturn(3);
 	when(bouclierMock.getType()).thenReturn(1);
 	when(bouclierMock.getNbpoints()).thenReturn(5);
-	when(bouclierMock.getMalusEsquive()).thenReturn(1);
-	when(bouclierMock.getMalusParade()).thenReturn(0);
     }
 
     @Test
@@ -191,8 +185,6 @@ public class UnitInventaireTest
 	    verify(casqueMock2, never()).getLocalisation();
 	    verify(casqueMock2, never()).getType();
 	    verify(casqueMock2, never()).getNbpoints();
-	    verify(casqueMock2, never()).getMalusEsquive();
-	    verify(casqueMock2, never()).getMalusParade();
 	    Assert.assertEquals("emploi de la mauvaise méthode dans ce contexte:l'emplacement n'est pas libre", e.getMessage());
 	}
 
@@ -221,8 +213,6 @@ public class UnitInventaireTest
 	    verify(casqueMock3).getLocalisation();//la localisation est vérifiée, toutes les méthodes suivantes ne sont pas testées car la pièce n'est pas scannée vu que l'erreur est lancée avant
 	    verify(casqueMock3, never()).getType();
 	    verify(casqueMock3, never()).getNbpoints();
-	    verify(casqueMock3, never()).getMalusEsquive();
-	    verify(casqueMock3, never()).getMalusParade();
 	    Assert.assertEquals("emploi de la mauvaise méthode dans ce contexte:localisation incorrecte", e.getMessage());
 	}
     }
@@ -240,14 +230,12 @@ public class UnitInventaireTest
 	verify(casqueMock).isBouclier();
 	verify(casqueMock).getType();
 	verify(casqueMock).getNbpoints();
-	verify(casqueMock).getMalusEsquive();
-	verify(casqueMock).getMalusParade();
 
 	Assert.assertEquals(casqueMock, inventaireTest.getPieceArmure(Inventaire.PartieCorps.TETE));
 
 	//On construit un mock d'armure pour vérifier les paramétres de construction de l'inventaire
 	Armure armureMockAvecCasque = PowerMockito.mock(Armure.class);
-	whenNew(Armure.class).withArguments(2, 0, 0, 1).thenReturn(armureMockAvecCasque);
+	whenNew(Armure.class).withArguments(2, 0).thenReturn(armureMockAvecCasque);
 
 	//On vérifie que l'armure renvoyée correspond au casque mis en place
 	Armure armureRetour = inventaireTest.getArmure();
@@ -255,7 +243,7 @@ public class UnitInventaireTest
 
 	//On ajoute le gantelet, le type doit changer ainsi que le nombre de points et l'un des malus
 	Armure armureMockAvecCasqueEtGantelet = PowerMockito.mock(Armure.class);
-	whenNew(Armure.class).withArguments(7, 2, 1, 1).thenReturn(armureMockAvecCasqueEtGantelet);
+	whenNew(Armure.class).withArguments(7, 2).thenReturn(armureMockAvecCasqueEtGantelet);
 	inventaireTest.addPieceArmure(ganteletMock, Inventaire.PartieCorps.MAINDROITE);
 
 	//On vérifie que l'armure renvoyée correspond au casque mis en place
@@ -311,8 +299,6 @@ public class UnitInventaireTest
 	    verify(bouclierMock2, never()).getLocalisation();
 	    verify(bouclierMock2, never()).getType();
 	    verify(bouclierMock2, never()).getNbpoints();
-	    verify(bouclierMock2, never()).getMalusEsquive();
-	    verify(bouclierMock2, never()).getMalusParade();
 	    Assert.assertEquals("emploi de la mauvaise méthode dans ce contexte:l'emplacement n'est pas libre", e.getMessage());
 	}
 
@@ -330,8 +316,6 @@ public class UnitInventaireTest
 	    verify(bouclierMock3, never()).getLocalisation();
 	    verify(bouclierMock3, never()).getType();
 	    verify(bouclierMock3, never()).getNbpoints();
-	    verify(bouclierMock3, never()).getMalusEsquive();
-	    verify(bouclierMock3, never()).getMalusParade();
 	    Assert.assertEquals("emploi de la mauvaise méthode dans ce contexte:cette méthode ne s'emploie pas avec un bouclier", e.getMessage());
 	}
 
@@ -358,8 +342,6 @@ public class UnitInventaireTest
 	    verify(ganteletMock, never()).getLocalisation();
 	    verify(ganteletMock, never()).getType();
 	    verify(ganteletMock, never()).getNbpoints();
-	    verify(ganteletMock, never()).getMalusEsquive();
-	    verify(ganteletMock, never()).getMalusParade();
 	    Assert.assertEquals("emploi de la mauvaise méthode dans ce contexte:cette méthode ne s'applique qu'aux boucliers", e.getMessage());
 	}
     }
@@ -372,8 +354,6 @@ public class UnitInventaireTest
 	verify(bouclierMock, times(2)).isBouclier();//on appelle bien cette méthode deux fois (une fois dans l'inventaire, une fois dans l'emplacement)
 	verify(bouclierMock).getType();
 	verify(bouclierMock).getNbpoints();
-	verify(bouclierMock).getMalusEsquive();
-	verify(bouclierMock).getMalusParade();
     }
 
     @Test

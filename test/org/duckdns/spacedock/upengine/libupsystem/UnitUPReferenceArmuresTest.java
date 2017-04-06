@@ -71,9 +71,9 @@ public class UnitUPReferenceArmuresTest
     public void testGetPointsBouclier()
     {
 	Assert.assertEquals(2, m_reference.getPtsArmure(0, 0, true));
-	Assert.assertEquals(1, m_reference.getPtsArmure(0, 1, true));
+	Assert.assertEquals(2, m_reference.getPtsArmure(0, 1, true));
 	Assert.assertEquals(5, m_reference.getPtsArmure(3, 0, true));
-	Assert.assertEquals(4, m_reference.getPtsArmure(3, 1, true));
+	Assert.assertEquals(5, m_reference.getPtsArmure(3, 1, true));
     }
 
     @Test
@@ -109,25 +109,15 @@ public class UnitUPReferenceArmuresTest
     }
 
     @Test
-    public void testGetMalusEsquive()
+    public void testGetMalusArmure()
     {
-	Assert.assertEquals(0, m_reference.getMalusEsquive(0, 0, false));
-	Assert.assertEquals(0, m_reference.getMalusEsquive(0, 0, true));
-	Assert.assertEquals(0, m_reference.getMalusEsquive(0, 3, false));
-	Assert.assertEquals(10, m_reference.getMalusEsquive(7, 0, false));
-	Assert.assertEquals(1, m_reference.getMalusEsquive(7, 3, false));
-	Assert.assertEquals(0, m_reference.getMalusEsquive(1, 1, true));
-    }
-
-    @Test
-    public void testGetMalusParade()
-    {
-	Assert.assertEquals(0, m_reference.getMalusParade(0, 0, false));
-	Assert.assertEquals(0, m_reference.getMalusParade(0, 3, false));
-	Assert.assertEquals(0, m_reference.getMalusParade(7, 0, false));
-	Assert.assertEquals(0, m_reference.getMalusParade(7, 3, false));
-	Assert.assertEquals(0, m_reference.getMalusParade(4, 0, false));
-	Assert.assertEquals(0, m_reference.getMalusParade(4, 2, false));
+	Assert.assertEquals(0, m_reference.getMalusArmure(1));
+	Assert.assertEquals(0, m_reference.getMalusArmure(2));
+	Assert.assertEquals(0, m_reference.getMalusArmure(5));
+	Assert.assertEquals(2, m_reference.getMalusArmure(11));
+	Assert.assertEquals(3, m_reference.getMalusArmure(20));
+	Assert.assertEquals(4, m_reference.getMalusArmure(21));
+	Assert.assertEquals(5, m_reference.getMalusArmure(30));
     }
 
     @Test
@@ -163,12 +153,6 @@ public class UnitUPReferenceArmuresTest
     {
 	Assert.assertEquals("moderne", m_reference.getListTypeArmure().get(1));
 	Assert.assertEquals("avec blindage", m_reference.getListTypeArmure().get(2));
-    }
-
-    public void testGetListMateriauBouclier()
-    {
-	Assert.assertEquals("métal", m_reference.getListMateriauBouclier().get(1));
-	Assert.assertEquals("bois", m_reference.getListMateriauBouclier().get(0));
     }
 
     public void testGetListBouclier()

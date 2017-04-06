@@ -62,6 +62,11 @@ public class UPReferenceArmures
      */
     private final JsonArray m_tableArmureBonusND;
     /**
+     * table des malus d'armure indexée par le rang d'armure (issu du tableau
+     * des rangs)
+     */
+    private final JsonArray m_tableArmureMalus;
+    /**
      * table des rangs d'armure, à chaque rang (indice) correspond un seuil de
      * points d'armure à atteindre
      */
@@ -71,10 +76,6 @@ public class UPReferenceArmures
      * tableau des rangs)
      */
     private final JsonArray m_tableArmureRedDegats;
-    /**
-     * liste des libellés des matériaux des boucliers
-     */
-    private final JsonArray m_listLblMatBoucliers;
     /**
      * instance unique de cet objet
      */
@@ -91,13 +92,13 @@ public class UPReferenceArmures
 	object = loadJsonFile("libupsystem", "equipement/caracs_armures.json");
 	m_tableArmureBonusND = object.getJsonArray("bonusND");
 	m_tableArmureRedDegats = object.getJsonArray("red_degats");
+	m_tableArmureMalus = object.getJsonArray("malus_armure");
 	m_tableArmureRangs = object.getJsonArray("rangs");
 	m_tableAjustementArmure = object.getJsonArray("ajustements");
 	m_tabPiecesArmures = object.getJsonArray("pieces");
 	m_listLblMatArmures = object.getJsonArray("materiaux_armures");
 	m_listLblTypArmures = object.getJsonArray("types_armures");
 	m_tabBoucliers = object.getJsonArray("boucliers");
-	m_listLblMatBoucliers = object.getJsonArray("materiaux_boucliers");
 	m_listLblLoca = object.getJsonArray("localisations");
     }
 
@@ -159,6 +160,23 @@ public class UPReferenceArmures
 
     /**
      *
+     * @param p_nbPoints
+     * @return la réduction aux dégâts de l'armure par rapport au type d'arme
+     */
+    public int getMalusArmure(int p_nbPoints)
+    {
+	int resultat = 0;
+
+	int rang = getRang(p_nbPoints);
+	if (rang >= 0)//impossible autrment si l'on est arrivé jusque là mais on ne sait jamais
+	{
+	    resultat = m_tableArmureMalus.getInt(rang);
+	}
+	return resultat;
+    }
+
+    /**
+     *
      * @param p_indice
      * @return le libllé d'une localisation
      */
@@ -170,21 +188,11 @@ public class UPReferenceArmures
     /**
      *
      * @param p_indice
-     * @param p_isBouclier
      * @return le libellé d'un matériau d'armure
      */
-    public String getLblMateriauArmure(int p_indice, boolean p_isBouclier)
+    public String getLblMateriauArmure(int p_indice)
     {
-	String res;
-	if (p_isBouclier)
-	{
-	    res = m_listLblMatBoucliers.getString(p_indice);
-	}
-	else
-	{
-	    res = m_listLblMatArmures.getString(p_indice);
-	}
-	return res;
+	return m_listLblMatArmures.getString(p_indice);
     }
 
     /**
@@ -250,21 +258,6 @@ public class UPReferenceArmures
     }
 
     /**
-     * la liste des noms de tous les matériaux de boucliers
-     *
-     * @return
-     */
-    public ArrayList<String> getListMateriauBouclier()
-    {
-	ArrayList<String> res = new ArrayList<>();
-	for (int i = 0; i < m_listLblMatBoucliers.size(); ++i)
-	{
-	    res.add(m_listLblMatBoucliers.getString(i));
-	}
-	return res;
-    }
-
-    /**
      * la liste des noms de toutes les pieces d'armures
      *
      * @return
@@ -318,25 +311,6 @@ public class UPReferenceArmures
 
     /**
      *
-     * @param p_indicePiece
-     * @param p_materiau
-     * @param p_isBouclier
-     * @return le malus d'esquive d'une pièce d'un matériau donné
-     */
-    public int getMalusEsquive(int p_indicePiece, int p_materiau, boolean p_isBouclier)
-    {
-	int res = 0;
-	if (!p_isBouclier)
-	{
-	    JsonObject piece = m_tabPiecesArmures.getJsonObject(p_indicePiece);
-	    JsonArray tabMalus = piece.getJsonArray("malus_esquive");
-	    res = tabMalus.getInt(p_materiau);
-	}
-	return res;
-    }
-
-    /**
-     *
      * @param p_idPiece
      * @param p_materiau
      * @param p_isBouclier
@@ -349,8 +323,7 @@ public class UPReferenceArmures
 	if (p_isBouclier)
 	{
 	    JsonObject objetIntermediaire = m_tabBoucliers.getJsonObject(p_idPiece);
-	    JsonArray tabIntermediaire = objetIntermediaire.getJsonArray("points");
-	    res = tabIntermediaire.getInt(p_materiau);
+	    res = objetIntermediaire.getInt("points");
 	}
 	else
 	{
@@ -392,24 +365,4 @@ public class UPReferenceArmures
 	}
 	return (i);
     }
-
-    /**
-     *
-     * @param p_indicePiece
-     * @param p_materiau
-     * @param p_isBouclier
-     * @return le malus de parade d'une pièce d'un matériau donné
-     */
-    public int getMalusParade(int p_indicePiece, int p_materiau, boolean p_isBouclier)
-    {
-	int res = 0;
-	if (!p_isBouclier)
-	{
-	    JsonObject piece = m_tabPiecesArmures.getJsonObject(p_indicePiece);
-	    JsonArray tabMalus = piece.getJsonArray("malus_parade");
-	    res = tabMalus.getInt(p_materiau);
-	}
-	return res;
-    }
-
 }

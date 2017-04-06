@@ -26,13 +26,9 @@ final class Armure
 {
 
     /**
-     * le malus d'esquive de l'armure
+     * le malus de l'armure, pour l'instant, n'est utilisé nulle part
      */
-    private final int m_malusEsquive;
-    /**
-     * le malus de parade de l'armure
-     */
-    private final int m_malusParade;
+    private final int m_malusArmure;
     /**
      * les points d'armure
      */
@@ -45,12 +41,11 @@ final class Armure
     /**
      * constructeur d'armure
      */
-    Armure(int p_points, int p_type, int p_malusEsquive, int p_malusParade)
+    Armure(int p_points, int p_type)
     {
 	m_type = p_type;
 	m_points = p_points;
-	m_malusEsquive = p_malusEsquive;
-	m_malusParade = p_malusParade;
+	m_malusArmure = UPReferenceArmures.getInstance().getMalusArmure(p_points);
     }
 
     /**
@@ -65,22 +60,6 @@ final class Armure
     }
 
     /**
-     * @return the m_malusEsquive
-     */
-    int getMalusEsquive()
-    {
-	return m_malusEsquive;
-    }
-
-    /**
-     * @return the m_malusParade
-     */
-    int getMalusParade()
-    {
-	return m_malusParade;
-    }
-
-    /**
      *
      * @param p_typArm
      * @return renvoie la réduction effective des dégâts offerte par cette
@@ -90,4 +69,15 @@ final class Armure
     {
 	return UPReferenceArmures.getInstance().getRedDegats(m_points, p_typArm, m_type);
     }
+
+    /**
+     *
+     * @param p_typArm
+     * @return renvoie le malus que l'armure affecte aux actions délicates
+     */
+    int getMalusArmure()
+    {
+	return m_malusArmure;
+    }
+
 }

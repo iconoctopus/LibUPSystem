@@ -40,14 +40,6 @@ public class Inventaire
     /**
      * le malus d'esquive de l'armure, provient de la somme de ceux des pièces
      */
-    private int m_malusEsquive;
-    /**
-     * le malus de parade de l'armure, provient de la somme de ceux des pièces
-     */
-    private int m_malusParade;
-    /**
-     * les points d'armure, viennent des ajouts de pièces
-     */
     private int m_pointsArmure;
     /**
      * le type d'armure, c'est par défaut le type le plus élevé parmi les pièces
@@ -76,8 +68,6 @@ public class Inventaire
 
 	//valeurs initiales d'une armure vide
 	m_typeArmure = 0;
-	m_malusEsquive = 0;
-	m_malusParade = 0;
 	m_pointsArmure = 0;
 
 	m_cotePrincipal = Lateralisation.DROITE;//par défaut
@@ -359,7 +349,7 @@ public class Inventaire
      */
     Armure getArmure()
     {
-	return new Armure(m_pointsArmure, m_typeArmure, m_malusEsquive, m_malusParade);
+	return new Armure(m_pointsArmure, m_typeArmure);
     }
 
     /**
@@ -372,8 +362,6 @@ public class Inventaire
     {
 	//on commence par réinitialiser l'armure
 	m_typeArmure = 0;
-	m_malusEsquive = 0;
-	m_malusParade = 0;
 	m_pointsArmure = 0;
 
 	//l'armure remise à 0, on peut la faire remonter
@@ -412,8 +400,6 @@ public class Inventaire
 	}
 
 	m_pointsArmure += p_piece.getNbpoints();
-	m_malusEsquive += p_piece.getMalusEsquive();
-	m_malusParade += p_piece.getMalusParade();
     }
 
     /**

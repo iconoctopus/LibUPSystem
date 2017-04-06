@@ -83,8 +83,7 @@ public class IntegEquipementTest
 	Assert.assertEquals(15, armure.getRedDegats(1));
 	Assert.assertEquals(35, persoRM3.getDefense(2, 0));
 	Assert.assertEquals(5, armure.getRedDegats(2));
-	Assert.assertEquals(0, armure.getMalusParade());
-	Assert.assertEquals(12, armure.getMalusEsquive());
+	Assert.assertEquals(5, armure.getMalusArmure());
 
 	//suppression de l'une des pièce d'armure et vérification qu'elle est effective
 	inventaire.removePieceArmure(Inventaire.PartieCorps.PIEDGAUCHE);
@@ -98,15 +97,13 @@ public class IntegEquipementTest
 	Assert.assertEquals(15, armure.getRedDegats(0));
 	Assert.assertEquals(35, persoRM3.getDefense(2, 0));
 	Assert.assertEquals(5, armure.getRedDegats(2));
-	Assert.assertEquals(0, armure.getMalusParade());
-	Assert.assertEquals(11, armure.getMalusEsquive());
+	Assert.assertEquals(4, armure.getMalusArmure());
 
 	//test de l'ajout d'un bouclier
 	PieceArmure bouclier = new PieceArmure(0, 2, 0, true);
 	inventaire.addBouclier(bouclier, Inventaire.Lateralisation.GAUCHE);
 	Assert.assertEquals(bouclier, inventaire.getBouclier(Inventaire.Lateralisation.GAUCHE));
-	Assert.assertEquals(0, inventaire.getArmure().getMalusParade());
-	Assert.assertEquals(11, inventaire.getArmure().getMalusEsquive());
+	Assert.assertEquals(5, inventaire.getArmure().getMalusArmure());
 	Assert.assertEquals(40, persoRM3.getDefense(2, 0));//le bouclier doit avoir fait augmenter le type général de l'armure en plus de lui avoir fait passer un rang
 	Assert.assertEquals(15, inventaire.getArmure().getRedDegats(2));
 	Assert.assertEquals(35, persoRM3.getDefense(3, 0));
@@ -122,8 +119,7 @@ public class IntegEquipementTest
 	Assert.assertEquals(15, inventaire.getArmure().getRedDegats(0));
 	Assert.assertEquals(35, persoRM3.getDefense(2, 0));
 	Assert.assertEquals(5, inventaire.getArmure().getRedDegats(2));
-	Assert.assertEquals(0, inventaire.getArmure().getMalusParade());
-	Assert.assertEquals(11, inventaire.getArmure().getMalusEsquive());
+	Assert.assertEquals(4, inventaire.getArmure().getMalusArmure());
     }
 
     @Test

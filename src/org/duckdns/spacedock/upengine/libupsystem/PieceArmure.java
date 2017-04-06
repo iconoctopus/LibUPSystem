@@ -36,14 +36,6 @@ public class PieceArmure
      */
     private final int m_localisation;
     /**
-     * le malus d'esquive infligé par cette piècé
-     */
-    private final int m_malusEsquive;
-    /**
-     * le malus de parade infligé par cette pièce
-     */
-    private final int m_malusParade;
-    /**
      * le nombre de points de cette pièce
      */
     private final int m_nbpoints;
@@ -69,7 +61,12 @@ public class PieceArmure
 	//construction du nom
 	if (p_type == 0)
 	{
-	    m_libelle = referenceArmures.getLblPiece(p_idPiece, p_isBouclier) + " " + referenceSys.getCollectionLibelles().interArmure + " " + referenceArmures.getLblMateriauArmure(p_materiau, p_isBouclier);
+	    String libelleTemp = referenceArmures.getLblPiece(p_idPiece, p_isBouclier);
+	    if (!isBouclier())
+	    {//on ajoute le nom lié au matériau
+		libelleTemp = libelleTemp.concat(" " + referenceSys.getCollectionLibelles().interArmure + " " + referenceArmures.getLblMateriauArmure(p_materiau));
+	    }
+	    m_libelle = libelleTemp;
 	}
 	else
 	{
@@ -78,8 +75,6 @@ public class PieceArmure
 
 	m_isBouclier = p_isBouclier;
 	m_nbpoints = referenceArmures.getPtsArmure(p_idPiece, p_materiau, p_isBouclier);
-	m_malusEsquive = referenceArmures.getMalusEsquive(p_idPiece, p_materiau, p_isBouclier);
-	m_malusParade = referenceArmures.getMalusParade(p_idPiece, p_materiau, p_isBouclier);
 	m_localisation = referenceArmures.getLocalisation(p_idPiece, p_isBouclier);
     }
 
@@ -99,22 +94,6 @@ public class PieceArmure
     int getLocalisation()
     {
 	return m_localisation;
-    }
-
-    /**
-     * @return the m_malusEsquive
-     */
-    int getMalusEsquive()
-    {
-	return m_malusEsquive;
-    }
-
-    /**
-     * @return the m_malusParade
-     */
-    int getMalusParade()
-    {
-	return m_malusParade;
     }
 
     /**

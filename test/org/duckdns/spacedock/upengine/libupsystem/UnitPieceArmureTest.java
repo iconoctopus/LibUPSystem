@@ -60,82 +60,42 @@ public class UnitPieceArmureTest
 
 	//On crée les pièces de test
 	when(referenceArmuresMock.getPtsArmure(0, 0, false)).thenReturn(3);
-	when(referenceArmuresMock.getMalusEsquive(0, 0, false)).thenReturn(0);
-	when(referenceArmuresMock.getMalusParade(0, 0, false)).thenReturn(0);
 	when(referenceArmuresMock.getLocalisation(0, false)).thenReturn(0);
 	when(referenceArmuresMock.getLblPiece(0, false)).thenReturn("heaume complet");
-	when(referenceArmuresMock.getLblMateriauArmure(0, false)).thenReturn("plates");
+	when(referenceArmuresMock.getLblMateriauArmure(0)).thenReturn("plates");
 	when(referenceArmuresMock.getLblTypeArmure(0)).thenReturn("ancienne");
 	piece1 = new PieceArmure(0, 0, 0, false);
 
 	when(referenceArmuresMock.getPtsArmure(0, 3, false)).thenReturn(1);
-	when(referenceArmuresMock.getMalusEsquive(0, 3, false)).thenReturn(0);
-	when(referenceArmuresMock.getMalusParade(0, 3, false)).thenReturn(0);
 	when(referenceArmuresMock.getLblTypeArmure(1)).thenReturn("moderne");
 	piece2 = new PieceArmure(0, 1, 3, false);
 
 	when(referenceArmuresMock.getPtsArmure(7, 0, false)).thenReturn(6);
-	when(referenceArmuresMock.getMalusEsquive(7, 0, false)).thenReturn(10);
-	when(referenceArmuresMock.getMalusParade(7, 0, false)).thenReturn(0);
 	when(referenceArmuresMock.getLblPiece(7, false)).thenReturn("cuirasse");
 	when(referenceArmuresMock.getLblTypeArmure(2)).thenReturn("avec blindage");
 	when(referenceArmuresMock.getLocalisation(7, false)).thenReturn(1);
 	piece3 = new PieceArmure(7, 2, 0, false);
 
 	when(referenceArmuresMock.getPtsArmure(7, 3, false)).thenReturn(2);
-	when(referenceArmuresMock.getMalusEsquive(7, 3, false)).thenReturn(1);
-	when(referenceArmuresMock.getMalusParade(7, 3, false)).thenReturn(0);
 	when(referenceArmuresMock.getLblTypeArmure(3)).thenReturn("énergétique");
 	piece4 = new PieceArmure(7, 3, 3, false);
 
 	when(referenceArmuresMock.getPtsArmure(4, 1, false)).thenReturn(2);
-	when(referenceArmuresMock.getMalusEsquive(4, 1, false)).thenReturn(0);
-	when(referenceArmuresMock.getMalusParade(4, 1, false)).thenReturn(0);
 	when(referenceArmuresMock.getLblPiece(4, false)).thenReturn("brassière");
-	when(referenceArmuresMock.getLblMateriauArmure(1, false)).thenReturn("lamelles ou maille");
+	when(referenceArmuresMock.getLblMateriauArmure(1)).thenReturn("lamelles ou maille");
 	when(referenceArmuresMock.getLocalisation(4, false)).thenReturn(2);
 	piece5 = new PieceArmure(4, 0, 1, false);
 
 	when(referenceArmuresMock.getPtsArmure(3, 1, true)).thenReturn(4);
-	when(referenceArmuresMock.getMalusEsquive(3, 1, true)).thenReturn(0);
-	when(referenceArmuresMock.getMalusParade(3, 1, true)).thenReturn(0);
 	when(referenceArmuresMock.getLocalisation(3, true)).thenReturn(3);
 	when(referenceArmuresMock.getLblPiece(3, true)).thenReturn("pavois");
 	bouclier1 = new PieceArmure(3, 3, 1, true);
 
 	when(referenceArmuresMock.getPtsArmure(0, 0, true)).thenReturn(2);
-	when(referenceArmuresMock.getMalusEsquive(0, 0, true)).thenReturn(0);
-	when(referenceArmuresMock.getMalusParade(0, 0, true)).thenReturn(0);
-	when(referenceArmuresMock.getLblMateriauArmure(0, true)).thenReturn("métal");
+	when(referenceArmuresMock.getLblMateriauArmure(0)).thenReturn("métal");
 	when(referenceArmuresMock.getLocalisation(0, true)).thenReturn(3);
 	when(referenceArmuresMock.getLblPiece(0, true)).thenReturn("targe");
 	bouclier2 = new PieceArmure(0, 0, 0, true);
-    }
-
-    @Test
-    public void testMalusEsquive()
-    {
-
-	Assert.assertEquals(0, piece1.getMalusEsquive());
-	Assert.assertEquals(0, piece2.getMalusEsquive());
-	Assert.assertEquals(10, piece3.getMalusEsquive());
-	Assert.assertEquals(1, piece4.getMalusEsquive());
-	Assert.assertEquals(0, piece5.getMalusEsquive());
-	Assert.assertEquals(0, bouclier1.getMalusEsquive());
-	Assert.assertEquals(0, bouclier2.getMalusEsquive());
-    }
-
-    @Test
-    public void testMalusParade()
-    {
-
-	Assert.assertEquals(0, piece1.getMalusParade());
-	Assert.assertEquals(0, piece2.getMalusParade());
-	Assert.assertEquals(0, piece3.getMalusParade());
-	Assert.assertEquals(0, piece4.getMalusParade());
-	Assert.assertEquals(0, piece5.getMalusParade());
-	Assert.assertEquals(0, bouclier1.getMalusParade());
-	Assert.assertEquals(0, bouclier2.getMalusParade());
     }
 
     @Test

@@ -38,14 +38,6 @@ public class UnitArmureTest
 {
 
     @Test
-    public void testGetMalus()
-    {
-	Armure armure = new Armure(2, 12, 1, 3);
-	Assert.assertEquals(1, armure.getMalusEsquive());
-	Assert.assertEquals(3, armure.getMalusParade());
-    }
-
-    @Test
     public void testGetReactionDegatsEntrants()
     {   //on mocke la référence
 	UPReferenceArmures referenceMock = PowerMockito.mock(UPReferenceArmures.class);
@@ -54,7 +46,7 @@ public class UnitArmureTest
 	when(referenceMock.getBonusND(12, 3, 2)).thenReturn(5);
 	when(referenceMock.getRedDegats(14, 6, 7)).thenReturn(12);
 
-	Assert.assertEquals(5, (new Armure(12, 2, 0, 5)).getBonusND(3));
-	Assert.assertEquals(12, (new Armure(14, 7, 0, 7)).getRedDegats(6));
+	Assert.assertEquals(5, (new Armure(12, 2)).getBonusND(3));
+	Assert.assertEquals(12, (new Armure(14, 7)).getRedDegats(6));
     }
 }

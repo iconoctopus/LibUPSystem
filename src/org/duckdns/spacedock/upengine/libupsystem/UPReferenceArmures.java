@@ -213,23 +213,23 @@ public class UPReferenceArmures
     /**
      *
      * @param p_indice
-     * @param p_isBouclier
      * @return le libellé d'une pièce d'armure
      */
-    public String getLblPiece(int p_indice, boolean p_isBouclier)
+    public String getLblPiece(int p_indice)
     {
-	String res;
-	if (p_isBouclier)
-	{
-	    JsonObject objetIntermediaire = m_tabBoucliers.getJsonObject(p_indice);
-	    res = objetIntermediaire.getString("lbl");
-	}
-	else
-	{
-	    JsonObject piece = m_tabPiecesArmures.getJsonObject(p_indice);
-	    res = piece.getString("lbl");
-	}
-	return res;
+	JsonObject piece = m_tabPiecesArmures.getJsonObject(p_indice);
+	return piece.getString("lbl");
+    }
+
+    /**
+     *
+     * @param p_indice
+     * @return le libellé d'un bouclier
+     */
+    public String getLblBouclier(int p_indice)
+    {
+	JsonObject objetIntermediaire = m_tabBoucliers.getJsonObject(p_indice);
+	return objetIntermediaire.getString("lbl");
     }
 
     /**
@@ -305,22 +305,11 @@ public class UPReferenceArmures
     /**
      *
      * @param p_indice
-     * @param p_isBouclier
      * @return la localisation d'une pièce
      */
-    public int getLocalisation(int p_indice, boolean p_isBouclier)
+    public int getLocalisation(int p_indice)
     {
-	JsonArray tab;
-
-	if (!p_isBouclier)
-	{
-	    tab = m_tabPiecesArmures;
-	}
-	else
-	{
-	    tab = m_tabBoucliers;
-	}
-	JsonObject piece = tab.getJsonObject(p_indice);
+	JsonObject piece = m_tabPiecesArmures.getJsonObject(p_indice);
 	return piece.getInt("loca");
     }
 
@@ -328,25 +317,25 @@ public class UPReferenceArmures
      *
      * @param p_idPiece
      * @param p_materiau
-     * @param p_isBouclier
      * @return le nombre de points d'armure d'une pièce d'un matériau spécifiés
      * par leurs indices
      */
-    public int getPtsArmure(int p_idPiece, int p_materiau, boolean p_isBouclier)
+    public int getPtsPiece(int p_idPiece, int p_materiau)
     {
-	int res;
-	if (p_isBouclier)
-	{
-	    JsonObject objetIntermediaire = m_tabBoucliers.getJsonObject(p_idPiece);
-	    res = objetIntermediaire.getInt("points");
-	}
-	else
-	{
-	    JsonObject piece = m_tabPiecesArmures.getJsonObject(p_idPiece);
-	    JsonArray tabPoints = piece.getJsonArray("points");
-	    res = tabPoints.getInt(p_materiau);
-	}
-	return res;
+	JsonObject piece = m_tabPiecesArmures.getJsonObject(p_idPiece);
+	JsonArray tabPoints = piece.getJsonArray("points");
+	return tabPoints.getInt(p_materiau);
+    }
+
+    /**
+     *
+     * @param p_idPiece
+     * @return le nombre de points d'armure d'un bouclier
+     */
+    public int getPtsBouclier(int p_idPiece)
+    {
+	JsonObject objetIntermediaire = m_tabBoucliers.getJsonObject(p_idPiece);
+	return objetIntermediaire.getInt("points");
     }
 
     /**

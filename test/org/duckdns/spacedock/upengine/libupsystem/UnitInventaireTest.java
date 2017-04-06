@@ -38,7 +38,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @PrepareForTest(//pour les méthodes statiques c'est la classe appelante qui doit apparaître ici, pour les classes final c'est la classe appelée (donc UPReferenceSysteme n'apparaît ici que pour son caractère final et pas pour sa méthode getInstance()
 
 	{//les classes final, appelant du statique et les classes subissant un whennew
-	    Armure.class, Inventaire.class
+	    Armure.class, Inventaire.class, Bouclier.class
 	})
 public class UnitInventaireTest
 {
@@ -48,7 +48,7 @@ public class UnitInventaireTest
     private Arme arme2MainsMock;
     private PieceArmure casqueMock;
     private PieceArmure ganteletMock;
-    private PieceArmure bouclierMock;
+    private Bouclier bouclierMock;
 
     @Before
     public void setUp()
@@ -60,22 +60,18 @@ public class UnitInventaireTest
 	when(arme2MainsMock.isArme2Mains()).thenReturn(true);
 
 	casqueMock = PowerMockito.mock(PieceArmure.class);
-	when(casqueMock.isBouclier()).thenReturn(false);
 	when(casqueMock.getLocalisation()).thenReturn(0);
 	when(casqueMock.getType()).thenReturn(0);
-	when(casqueMock.getNbpoints()).thenReturn(2);
+	when(casqueMock.getNbPoints()).thenReturn(2);
 
 	ganteletMock = PowerMockito.mock(PieceArmure.class);
-	when(ganteletMock.isBouclier()).thenReturn(false);
 	when(ganteletMock.getLocalisation()).thenReturn(3);
 	when(ganteletMock.getType()).thenReturn(2);
-	when(ganteletMock.getNbpoints()).thenReturn(5);
+	when(ganteletMock.getNbPoints()).thenReturn(5);
 
-	bouclierMock = PowerMockito.mock(PieceArmure.class);
-	when(bouclierMock.isBouclier()).thenReturn(true);
-	when(bouclierMock.getLocalisation()).thenReturn(3);
+	bouclierMock = PowerMockito.mock(Bouclier.class);
 	when(bouclierMock.getType()).thenReturn(1);
-	when(bouclierMock.getNbpoints()).thenReturn(5);
+	when(bouclierMock.getNbPoints()).thenReturn(5);
     }
 
     @Test
@@ -168,11 +164,9 @@ public class UnitInventaireTest
     {
 	//inventaire initialement occupé par un casque
 	inventaireTest.addPieceArmure(casqueMock, Inventaire.PartieCorps.TETE);
-	verify(casqueMock).isBouclier();
 
 	//Erreur : ajout sur zone occupée
 	PieceArmure casqueMock2 = PowerMockito.mock(PieceArmure.class);//on crée un mock supplémentaire pour pouvoir vérifier les appels indépendament
-	when(casqueMock2.isBouclier()).thenReturn(false);
 	try
 	{
 	    inventaireTest.addPieceArmure(casqueMock2, Inventaire.PartieCorps.TETE);
@@ -181,10 +175,9 @@ public class UnitInventaireTest
 
 	catch (IllegalStateException e)
 	{
-	    verify(casqueMock2).isBouclier();//on appelle bien cette méthode, toutes les suivantes ne sont pas testées car la pièce n'est pas scannée vu que l'erreur est lancée avant
 	    verify(casqueMock2, never()).getLocalisation();
 	    verify(casqueMock2, never()).getType();
-	    verify(casqueMock2, never()).getNbpoints();
+	    verify(casqueMock2, never()).getNbPoints();
 	    Assert.assertEquals("emploi de la mauvaise méthode dans ce contexte:l'emplacement n'est pas libre", e.getMessage());
 	}
 
@@ -201,7 +194,6 @@ public class UnitInventaireTest
 
 	//Erreur : localisation incorrecte
 	PieceArmure casqueMock3 = PowerMockito.mock(PieceArmure.class);//on crée un mock supplémentaire pour pouvoir vérifier les appels indépendament
-	when(casqueMock3.isBouclier()).thenReturn(false);
 	try
 	{
 	    inventaireTest.addPieceArmure(casqueMock3, Inventaire.PartieCorps.PIEDDROIT);
@@ -209,10 +201,9 @@ public class UnitInventaireTest
 	}
 	catch (IllegalStateException e)
 	{
-	    verify(casqueMock3).isBouclier();//on appelle bien cette méthode
 	    verify(casqueMock3).getLocalisation();//la localisation est vérifiée, toutes les méthodes suivantes ne sont pas testées car la pièce n'est pas scannée vu que l'erreur est lancée avant
 	    verify(casqueMock3, never()).getType();
-	    verify(casqueMock3, never()).getNbpoints();
+	    verify(casqueMock3, never()).getNbPoints();
 	    Assert.assertEquals("emploi de la mauvaise méthode dans ce contexte:localisation incorrecte", e.getMessage());
 	}
     }
@@ -227,9 +218,8 @@ public class UnitInventaireTest
 	inventaireTest.addPieceArmure(casqueMock, Inventaire.PartieCorps.TETE);
 	//on vérifie que la pièce est intégralement scannée
 	verify(casqueMock).getLocalisation();
-	verify(casqueMock).isBouclier();
 	verify(casqueMock).getType();
-	verify(casqueMock).getNbpoints();
+	verify(casqueMock).getNbPoints();
 
 	Assert.assertEquals(casqueMock, inventaireTest.getPieceArmure(Inventaire.PartieCorps.TETE));
 
@@ -261,7 +251,6 @@ public class UnitInventaireTest
     {
 	//On commence par un bouclier présent à gauche
 	inventaireTest.addBouclier(bouclierMock, Inventaire.Lateralisation.GAUCHE);
-	verify(bouclierMock, times(2)).isBouclier();//appelé deux fois : une fois ici et une fois dans les profondeurs de l'emplacement
 	//arme dans même main que bouclier
 	try
 	{
@@ -286,8 +275,7 @@ public class UnitInventaireTest
 
 	//on ajoute une arme à droite et l'on essaye d'ajouter un bouclier dans la même main
 	inventaireTest.addArme(arme1MainMock, Inventaire.Lateralisation.DROITE);
-	PieceArmure bouclierMock2 = PowerMockito.mock(PieceArmure.class);//on crée un mock supplémentaire pour pouvoir vérifier les appels indépendament
-	when(bouclierMock2.isBouclier()).thenReturn(true);
+	Bouclier bouclierMock2 = PowerMockito.mock(Bouclier.class);//on crée un mock supplémentaire pour pouvoir vérifier les appels indépendament
 	try
 	{
 	    inventaireTest.addBouclier(bouclierMock2, Inventaire.Lateralisation.DROITE);
@@ -295,28 +283,9 @@ public class UnitInventaireTest
 	}
 	catch (IllegalStateException e)
 	{
-	    verify(bouclierMock2).isBouclier();//on appelle bien cette méthode, toutes les suivantes ne sont pas testées car la pièce n'est pas scannée vu que l'erreur est lancée avant
-	    verify(bouclierMock2, never()).getLocalisation();
 	    verify(bouclierMock2, never()).getType();
-	    verify(bouclierMock2, never()).getNbpoints();
+	    verify(bouclierMock2, never()).getNbPoints();
 	    Assert.assertEquals("emploi de la mauvaise méthode dans ce contexte:l'emplacement n'est pas libre", e.getMessage());
-	}
-
-	//erreur : ajout d'un bouclier par la méthode addPieceArmure
-	PieceArmure bouclierMock3 = PowerMockito.mock(PieceArmure.class);//on crée un mock supplémentaire pour pouvoir vérifier les appels indépendament
-	when(bouclierMock3.isBouclier()).thenReturn(true);
-	try
-	{
-	    inventaireTest.addPieceArmure(bouclierMock3, Inventaire.PartieCorps.MAINDROITE);
-	    fail();
-	}
-	catch (IllegalStateException e)
-	{
-	    verify(bouclierMock3).isBouclier();//on appelle bien cette méthode, toutes les suivantes ne sont pas testées car la pièce n'est pas scannée vu que l'erreur est lancée avant
-	    verify(bouclierMock3, never()).getLocalisation();
-	    verify(bouclierMock3, never()).getType();
-	    verify(bouclierMock3, never()).getNbpoints();
-	    Assert.assertEquals("emploi de la mauvaise méthode dans ce contexte:cette méthode ne s'emploie pas avec un bouclier", e.getMessage());
 	}
 
 	//erreur : retrait du bouclier de la main libre de bouclier (mais portant une arme)
@@ -329,21 +298,6 @@ public class UnitInventaireTest
 	{
 	    Assert.assertEquals("emploi de la mauvaise méthode dans ce contexte:l'emplacement n'est pas actuellement occupé", e.getMessage());
 	}
-
-	//erreur : ajout d'autre chose qu'un bouclier par la méthode des boucliers, tester avec un gantelet qui théoriquement va dans la main
-	try
-	{
-	    inventaireTest.addBouclier(ganteletMock, Inventaire.Lateralisation.DROITE);
-	    fail();
-	}
-	catch (IllegalStateException e)
-	{
-	    verify(ganteletMock).isBouclier();//on appelle bien cette méthode, toutes les suivantes ne sont pas testées car la pièce n'est pas scannée vu que l'erreur est lancée avant
-	    verify(ganteletMock, never()).getLocalisation();
-	    verify(ganteletMock, never()).getType();
-	    verify(ganteletMock, never()).getNbpoints();
-	    Assert.assertEquals("emploi de la mauvaise méthode dans ce contexte:cette méthode ne s'applique qu'aux boucliers", e.getMessage());
-	}
     }
 
     @Test
@@ -351,9 +305,8 @@ public class UnitInventaireTest
     {
 	//On commence par un bouclier présent à gauche et l'on vérifie que la pièce est intégralement scannée
 	inventaireTest.addBouclier(bouclierMock, Inventaire.Lateralisation.GAUCHE);
-	verify(bouclierMock, times(2)).isBouclier();//on appelle bien cette méthode deux fois (une fois dans l'inventaire, une fois dans l'emplacement)
 	verify(bouclierMock).getType();
-	verify(bouclierMock).getNbpoints();
+	verify(bouclierMock).getNbPoints();
     }
 
     @Test

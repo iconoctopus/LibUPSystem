@@ -46,8 +46,6 @@ public class UnitPieceArmureTest
     static PieceArmure piece3;
     static PieceArmure piece4;
     static PieceArmure piece5;
-    static PieceArmure bouclier1;
-    static PieceArmure bouclier2;
     private static UPReferenceArmures referenceArmuresMock;
 
     @BeforeClass
@@ -59,57 +57,45 @@ public class UnitPieceArmureTest
 	when(UPReferenceArmures.getInstance()).thenReturn(referenceArmuresMock);
 
 	//On crée les pièces de test
-	when(referenceArmuresMock.getPtsArmure(0, 0, false)).thenReturn(3);
-	when(referenceArmuresMock.getLocalisation(0, false)).thenReturn(0);
-	when(referenceArmuresMock.getLblPiece(0, false)).thenReturn("heaume complet");
+	when(referenceArmuresMock.getPtsPiece(0, 0)).thenReturn(3);
+	when(referenceArmuresMock.getLocalisation(0)).thenReturn(0);
+	when(referenceArmuresMock.getLblPiece(0)).thenReturn("heaume complet");
 	when(referenceArmuresMock.getLblMateriauArmureAncienne(0)).thenReturn("plates");
 	when(referenceArmuresMock.getLblTypeArmure(0)).thenReturn("ancienne");
-	piece1 = new PieceArmure(0, 0, 0, false);
+	piece1 = new PieceArmure(0, 0, 0);
 
-	when(referenceArmuresMock.getPtsArmure(0, 3, false)).thenReturn(1);
+	when(referenceArmuresMock.getPtsPiece(0, 3)).thenReturn(1);
 	when(referenceArmuresMock.getLblTypeArmure(1)).thenReturn("moderne");
 	when(referenceArmuresMock.getLblMateriauArmure(3)).thenReturn("légère");
-	piece2 = new PieceArmure(0, 1, 3, false);
+	piece2 = new PieceArmure(0, 1, 3);
 
-	when(referenceArmuresMock.getPtsArmure(7, 0, false)).thenReturn(6);
-	when(referenceArmuresMock.getLblPiece(7, false)).thenReturn("cuirasse");
+	when(referenceArmuresMock.getPtsPiece(7, 0)).thenReturn(6);
+	when(referenceArmuresMock.getLblPiece(7)).thenReturn("cuirasse");
 	when(referenceArmuresMock.getLblTypeArmure(2)).thenReturn("avec blindage");
-	when(referenceArmuresMock.getLocalisation(7, false)).thenReturn(1);
+	when(referenceArmuresMock.getLocalisation(7)).thenReturn(1);
 	when(referenceArmuresMock.getLblMateriauArmure(0)).thenReturn("très lourde");
-	piece3 = new PieceArmure(7, 2, 0, false);
+	piece3 = new PieceArmure(7, 2, 0);
 
-	when(referenceArmuresMock.getPtsArmure(7, 2, false)).thenReturn(3);
+	when(referenceArmuresMock.getPtsPiece(7, 2)).thenReturn(3);
 	when(referenceArmuresMock.getLblTypeArmure(3)).thenReturn("énergétique");
 	when(referenceArmuresMock.getLblMateriauArmure(2)).thenReturn("moyenne");
-	piece4 = new PieceArmure(7, 3, 2, false);
+	piece4 = new PieceArmure(7, 3, 2);
 
-	when(referenceArmuresMock.getPtsArmure(4, 1, false)).thenReturn(2);
-	when(referenceArmuresMock.getLblPiece(4, false)).thenReturn("brassière");
+	when(referenceArmuresMock.getPtsPiece(4, 1)).thenReturn(2);
+	when(referenceArmuresMock.getLblPiece(4)).thenReturn("brassière");
 	when(referenceArmuresMock.getLblMateriauArmureAncienne(1)).thenReturn("lamelles ou maille");
-	when(referenceArmuresMock.getLocalisation(4, false)).thenReturn(2);
-	piece5 = new PieceArmure(4, 0, 1, false);
-
-	when(referenceArmuresMock.getPtsArmure(3, 1, true)).thenReturn(4);
-	when(referenceArmuresMock.getLocalisation(3, true)).thenReturn(3);
-	when(referenceArmuresMock.getLblPiece(3, true)).thenReturn("pavois");
-	bouclier1 = new PieceArmure(3, 3, 1, true);
-
-	when(referenceArmuresMock.getPtsArmure(0, 0, true)).thenReturn(2);
-	when(referenceArmuresMock.getLocalisation(0, true)).thenReturn(3);
-	when(referenceArmuresMock.getLblPiece(0, true)).thenReturn("targe");
-	bouclier2 = new PieceArmure(0, 0, 0, true);
+	when(referenceArmuresMock.getLocalisation(4)).thenReturn(2);
+	piece5 = new PieceArmure(4, 0, 1);
     }
 
     @Test
     public void testPoints()
     {
-	Assert.assertEquals(3, piece1.getNbpoints());
-	Assert.assertEquals(1, piece2.getNbpoints());
-	Assert.assertEquals(6, piece3.getNbpoints());
-	Assert.assertEquals(3, piece4.getNbpoints());
-	Assert.assertEquals(2, piece5.getNbpoints());
-	Assert.assertEquals(4, bouclier1.getNbpoints());
-	Assert.assertEquals(2, bouclier2.getNbpoints());
+	Assert.assertEquals(3, piece1.getNbPoints());
+	Assert.assertEquals(1, piece2.getNbPoints());
+	Assert.assertEquals(6, piece3.getNbPoints());
+	Assert.assertEquals(3, piece4.getNbPoints());
+	Assert.assertEquals(2, piece5.getNbPoints());
     }
 
     @Test
@@ -121,8 +107,6 @@ public class UnitPieceArmureTest
 	Assert.assertEquals(2, piece3.getType());
 	Assert.assertEquals(3, piece4.getType());
 	Assert.assertEquals(0, piece5.getType());
-	Assert.assertEquals(3, bouclier1.getType());
-	Assert.assertEquals(0, bouclier2.getType());
     }
 
     @Test
@@ -134,8 +118,6 @@ public class UnitPieceArmureTest
 	Assert.assertEquals(1, piece3.getLocalisation());
 	Assert.assertEquals(1, piece4.getLocalisation());
 	Assert.assertEquals(2, piece5.getLocalisation());
-	Assert.assertEquals(3, bouclier1.getLocalisation());
-	Assert.assertEquals(3, bouclier2.getLocalisation());
     }
 
     @Test
@@ -146,7 +128,5 @@ public class UnitPieceArmureTest
 	Assert.assertEquals("cuirasse avec blindage de facture très lourde", piece3.toString());
 	Assert.assertEquals("cuirasse énergétique de facture moyenne", piece4.toString());
 	Assert.assertEquals("brassière en lamelles ou maille", piece5.toString());
-	Assert.assertEquals("pavois énergétique", bouclier1.toString());
-	Assert.assertEquals("targe", bouclier2.toString());
     }
 }

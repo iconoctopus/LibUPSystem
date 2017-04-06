@@ -70,28 +70,26 @@ public class UnitUPReferenceArmuresTest
     @Test
     public void testGetPointsBouclier()
     {
-	Assert.assertEquals(2, m_reference.getPtsArmure(0, 0, true));
-	Assert.assertEquals(2, m_reference.getPtsArmure(0, 1, true));
-	Assert.assertEquals(5, m_reference.getPtsArmure(3, 0, true));
-	Assert.assertEquals(5, m_reference.getPtsArmure(3, 1, true));
+	Assert.assertEquals(2, m_reference.getPtsBouclier(0));
+	Assert.assertEquals(5, m_reference.getPtsBouclier(3));
     }
 
     @Test
     public void testGetLblBouclier()
     {
-	Assert.assertEquals("targe", m_reference.getLblPiece(0, true));
-	Assert.assertEquals("bouclier", m_reference.getLblPiece(1, true));
-	Assert.assertEquals("écu", m_reference.getLblPiece(2, true));
-	Assert.assertEquals("pavois", m_reference.getLblPiece(3, true));
+	Assert.assertEquals("targe", m_reference.getLblBouclier(0));
+	Assert.assertEquals("bouclier", m_reference.getLblBouclier(1));
+	Assert.assertEquals("écu", m_reference.getLblBouclier(2));
+	Assert.assertEquals("pavois", m_reference.getLblBouclier(3));
     }
 
     @Test
-    public void testGetPtsArmure()
+    public void testGetPtsPice()
     {
-	Assert.assertEquals(3, m_reference.getPtsArmure(0, 0, false));
-	Assert.assertEquals(1, m_reference.getPtsArmure(0, 3, false));
-	Assert.assertEquals(6, m_reference.getPtsArmure(7, 0, false));
-	Assert.assertEquals(2, m_reference.getPtsArmure(7, 3, false));
+	Assert.assertEquals(3, m_reference.getPtsPiece(0, 0));
+	Assert.assertEquals(1, m_reference.getPtsPiece(0, 3));
+	Assert.assertEquals(6, m_reference.getPtsPiece(7, 0));
+	Assert.assertEquals(2, m_reference.getPtsPiece(7, 3));
     }
 
     @Test
@@ -104,8 +102,8 @@ public class UnitUPReferenceArmuresTest
     @Test
     public void testGetLblPiece()
     {
-	Assert.assertEquals("casque complet", m_reference.getLblPiece(0, false));
-	Assert.assertEquals("cuirasse", m_reference.getLblPiece(7, false));
+	Assert.assertEquals("casque complet", m_reference.getLblPiece(0));
+	Assert.assertEquals("cuirasse", m_reference.getLblPiece(7));
     }
 
     @Test
@@ -123,11 +121,10 @@ public class UnitUPReferenceArmuresTest
     @Test
     public void testGetLocalisation()
     {
-	Assert.assertEquals(0, m_reference.getLocalisation(0, false));
-	Assert.assertEquals(1, m_reference.getLocalisation(7, false));
-	Assert.assertEquals(2, m_reference.getLocalisation(4, false));
-	Assert.assertEquals(4, m_reference.getLocalisation(5, false));
-	Assert.assertEquals(3, m_reference.getLocalisation(0, true));
+	Assert.assertEquals(0, m_reference.getLocalisation(0));
+	Assert.assertEquals(1, m_reference.getLocalisation(7));
+	Assert.assertEquals(2, m_reference.getLocalisation(4));
+	Assert.assertEquals(4, m_reference.getLocalisation(5));
     }
 
     @Test

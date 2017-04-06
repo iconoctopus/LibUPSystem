@@ -128,36 +128,29 @@ public class Inventaire
      * @param p_bouclier
      * @param p_cote
      */
-    public void addBouclier(PieceArmure p_bouclier, Lateralisation p_cote)
+    public void addBouclier(Bouclier p_bouclier, Lateralisation p_cote)
     {
-	if (p_bouclier.isBouclier())
+	EmplacementMain main;
+
+	//identification de la main
+	if (p_cote == Lateralisation.DROITE)
 	{
-	    EmplacementMain main;
-
-	    //identification de la main
-	    if (p_cote == Lateralisation.DROITE)
-	    {
-		main = (EmplacementMain) m_diagrammeEmplacement.get(PartieCorps.MAINDROITE);
-	    }
-	    else
-	    {
-		main = (EmplacementMain) m_diagrammeEmplacement.get(PartieCorps.MAINGAUCHE);
-	    }
-
-	    if (!main.isOccupeArmeBouclier())
-	    {//la voie est libre pour l'ajout
-		main.setBouclier(p_bouclier);
-		reScanArmure();
-	    }
-	    else
-	    {
-		//exception emplacement non libre
-		ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("emplacement_pas_libre"));
-	    }
+	    main = (EmplacementMain) m_diagrammeEmplacement.get(PartieCorps.MAINDROITE);
 	}
 	else
 	{
-	    ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("pas_bouclier"));
+	    main = (EmplacementMain) m_diagrammeEmplacement.get(PartieCorps.MAINGAUCHE);
+	}
+
+	if (!main.isOccupeArmeBouclier())
+	{//la voie est libre pour l'ajout
+	    main.setBouclier(p_bouclier);
+	    reScanArmure();
+	}
+	else
+	{
+	    //exception emplacement non libre
+	    ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("emplacement_pas_libre"));
 	}
     }
 
@@ -171,24 +164,16 @@ public class Inventaire
      */
     public void addPieceArmure(PieceArmure p_piece, PartieCorps p_zone)
     {
-	if (!p_piece.isBouclier())//pièce d'armure classique
-	{
-	    Emplacement emplacement = m_diagrammeEmplacement.get(p_zone);
-	    if (!emplacement.isOccupeArmure())
-	    {//c'est libre, on ajoute
-		emplacement.setPiece(p_piece);
-		reScanArmure();
-	    }
-	    else
-	    {
-		//exception emplacement non libre
-		ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("emplacement_pas_libre"));
-	    }
+	Emplacement emplacement = m_diagrammeEmplacement.get(p_zone);
+	if (!emplacement.isOccupeArmure())
+	{//c'est libre, on ajoute
+	    emplacement.setPiece(p_piece);
+	    reScanArmure();
 	}
 	else
 	{
-	    //cette méthode ne s'applique pas aux boucliers
-	    ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("est_bouclier"));
+	    //exception emplacement non libre
+	    ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("emplacement_pas_libre"));
 	}
     }
 
@@ -216,7 +201,7 @@ public class Inventaire
      * @param p_cote
      * @return
      */
-    public PieceArmure getBouclier(Lateralisation p_cote)
+    public Bouclier getBouclier(Lateralisation p_cote)
     {
 	EmplacementMain main;
 	if (p_cote == Lateralisation.DROITE)
@@ -365,41 +350,61 @@ public class Inventaire
 	m_pointsArmure = 0;
 
 	//l'armure remise à 0, on peut la faire remonter
-	for (Emplacement e : m_diagrammeEmplacement.values())
+	/*for (Emplacement e : m_diagrammeEmplacement.values())
 	{
 	    if (e.isOccupeArmure())
 	    {
-		scanPiece(e.getPiece());
+		scanProtection(e.getPiece());
 	    }
 	    if (e.isMain())
 	    {
 		if (((EmplacementMain) e).isOccupeArmeBouclier())
 		{
-		    PieceArmure bouclier = ((EmplacementMain) e).getBouclier();
+		    Bouclier bouclier = ((EmplacementMain) e).getBouclier();
 		    if (bouclier != null)
 		    {
-			scanPiece(bouclier);
+			scanProtection(bouclier);
+		    }
+		}
+	    }
+	}*/
+	for (PartieCorps p : PartieCorps.values())
+	{
+	    Emplacement e = m_diagrammeEmplacement.get(p);
+	    if (e.isOccupeArmure())
+	    {
+		scanProtection(e.getPiece());
+	    }
+	    if (p == PartieCorps.MAINDROITE || p == PartieCorps.MAINGAUCHE)
+	    {
+		if (((EmplacementMain) e).isOccupeArmeBouclier())
+		{
+		    Bouclier bouclier = ((EmplacementMain) e).getBouclier();
+		    if (bouclier != null)
+		    {
+			scanProtection(bouclier);
 		    }
 		}
 	    }
 	}
+
     }
 
     /**
      * analyse une pièce d'armure et la prend en compte dans les caracs d'armure
      * courante
      *
-     * @param p_piece
+     * @param p_protection
      */
-    private void scanPiece(PieceArmure p_piece)
+    private void scanProtection(Iprotection p_protection)
     {
-	int type = p_piece.getType();
+	int type = p_protection.getType();
 	if (m_typeArmure < type)
 	{
 	    m_typeArmure = type;//on considère toujours le meilleur type porté pour les coups non-ciblés
 	}
 
-	m_pointsArmure += p_piece.getNbpoints();
+	m_pointsArmure += p_protection.getNbPoints();
     }
 
     /**
@@ -510,7 +515,7 @@ public class Inventaire
 	/**
 	 * le bouclier occupant l'emplacement
 	 */
-	private PieceArmure m_bouclier;
+	private Bouclier m_bouclier;
 	/**
 	 * si une arme occupe la main
 	 */
@@ -567,7 +572,7 @@ public class Inventaire
 	 * @return le bouclier actuellement dans l'emplacement, éventuellement
 	 * null
 	 */
-	private PieceArmure getBouclier()
+	private Bouclier getBouclier()
 	{
 	    return m_bouclier;
 	}
@@ -578,7 +583,7 @@ public class Inventaire
 	 *
 	 * @param p_bouclier
 	 */
-	private void setBouclier(PieceArmure p_bouclier)
+	private void setBouclier(Bouclier p_bouclier)
 	{
 	    if (isOccupeArmeBouclier())
 	    {
@@ -586,15 +591,8 @@ public class Inventaire
 	    }
 	    else
 	    {
-		if (p_bouclier.isBouclier())
-		{
-		    m_bouclier = p_bouclier;
-		    m_occupeBouclier = true;
-		}
-		else
-		{
-		    ErrorHandler.mauvaiseMethode(PropertiesHandler.getInstance("libupsystem").getErrorMessage("pas_bouclier"));
-		}
+		m_bouclier = p_bouclier;
+		m_occupeBouclier = true;
 	    }
 	}
 
@@ -655,12 +653,6 @@ public class Inventaire
 	private boolean isOccupeArmeBouclier()
 	{
 	    return m_occupeArme || m_occupeBouclier || m_armeDeuxMainsDansMainPrincipale;
-	}
-
-	@Override
-	boolean isMain()
-	{
-	    return true;
 	}
     }
 

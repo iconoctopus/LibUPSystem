@@ -40,42 +40,52 @@ public class IntegEquipementTest
     {
 	Inventaire inventaire = persoRM3.getInventaire();
 
-	PieceArmure casque = new PieceArmure(0, 1, 0, false);
-	PieceArmure cuirasse = new PieceArmure(7, 0, 0, false);
-	PieceArmure jambiereGauche = new PieceArmure(5, 0, 0, false);
-	PieceArmure jambiereDroite = new PieceArmure(5, 0, 0, false);
-	PieceArmure brassiereGauche = new PieceArmure(4, 0, 0, false);
-	PieceArmure brassiereDroite = new PieceArmure(4, 0, 0, false);
-	PieceArmure botteGauche = new PieceArmure(6, 0, 0, false);
-	PieceArmure botteDroite = new PieceArmure(6, 0, 0, false);
-	PieceArmure ganteletGauche = new PieceArmure(3, 0, 2, false);
-	PieceArmure ganteletDroit = new PieceArmure(3, 0, 2, false);
+	PieceArmure casque = new PieceArmure(0, 1, 0);
+	PieceArmure cuirasse = new PieceArmure(7, 0, 0);
+	PieceArmure jambiereGauche = new PieceArmure(5, 0, 0);
+	PieceArmure jambiereDroite = new PieceArmure(5, 0, 0);
+	PieceArmure brassiereGauche = new PieceArmure(4, 0, 0);
+	PieceArmure brassiereDroite = new PieceArmure(4, 0, 0);
+	PieceArmure botteGauche = new PieceArmure(6, 0, 0);
+	PieceArmure botteDroite = new PieceArmure(6, 0, 0);
+	PieceArmure ganteletGauche = new PieceArmure(3, 0, 2);
+	PieceArmure ganteletDroit = new PieceArmure(3, 0, 2);
 
 	//On ajoute un gantelet à un perso il n'y pas assez de points pour changer le ND et la réduction des dégâts
 	inventaire.addPieceArmure(ganteletGauche, Inventaire.PartieCorps.MAINGAUCHE);
 	Assert.assertEquals(ganteletGauche, inventaire.getPieceArmure(Inventaire.PartieCorps.MAINGAUCHE));
+	Assert.assertEquals("gantelet en cuir clouté", ganteletGauche.toString());
 	Assert.assertEquals(25, persoRM3.getDefense(0, 0));
 	Assert.assertEquals(0, inventaire.getArmure().getRedDegats(0));
 
 	//vérification du cas nominal de l'ajout, pour toutes les zones
 	inventaire.addPieceArmure(casque, Inventaire.PartieCorps.TETE);
 	Assert.assertEquals(casque, inventaire.getPieceArmure(Inventaire.PartieCorps.TETE));
+	Assert.assertEquals("casque complet moderne de facture très lourde", casque.toString());
 	inventaire.addPieceArmure(cuirasse, Inventaire.PartieCorps.CORPS);
 	Assert.assertEquals(cuirasse, inventaire.getPieceArmure(Inventaire.PartieCorps.CORPS));
+	Assert.assertEquals("cuirasse en plates", cuirasse.toString());
 	inventaire.addPieceArmure(jambiereDroite, Inventaire.PartieCorps.JAMBEDROITE);
 	Assert.assertEquals(jambiereDroite, inventaire.getPieceArmure(Inventaire.PartieCorps.JAMBEDROITE));
+	Assert.assertEquals("jambière en plates", jambiereDroite.toString());
 	inventaire.addPieceArmure(jambiereGauche, Inventaire.PartieCorps.JAMBEGAUCHE);
 	Assert.assertEquals(jambiereGauche, inventaire.getPieceArmure(Inventaire.PartieCorps.JAMBEGAUCHE));
+	Assert.assertEquals("jambière en plates", jambiereGauche.toString());
 	inventaire.addPieceArmure(brassiereDroite, Inventaire.PartieCorps.BRASDROIT);
 	Assert.assertEquals(brassiereDroite, inventaire.getPieceArmure(Inventaire.PartieCorps.BRASDROIT));
+	Assert.assertEquals("brassière en plates", brassiereDroite.toString());
 	inventaire.addPieceArmure(brassiereGauche, Inventaire.PartieCorps.BRASGAUCHE);
 	Assert.assertEquals(brassiereGauche, inventaire.getPieceArmure(Inventaire.PartieCorps.BRASGAUCHE));
+	Assert.assertEquals("brassière en plates", brassiereGauche.toString());
 	inventaire.addPieceArmure(botteDroite, Inventaire.PartieCorps.PIEDDROIT);
 	Assert.assertEquals(botteDroite, inventaire.getPieceArmure(Inventaire.PartieCorps.PIEDDROIT));
+	Assert.assertEquals("botte en plates", botteDroite.toString());
 	inventaire.addPieceArmure(botteGauche, Inventaire.PartieCorps.PIEDGAUCHE);
 	Assert.assertEquals(botteGauche, inventaire.getPieceArmure(Inventaire.PartieCorps.PIEDGAUCHE));
+	Assert.assertEquals("botte en plates", botteGauche.toString());
 	inventaire.addPieceArmure(ganteletDroit, Inventaire.PartieCorps.MAINDROITE);
 	Assert.assertEquals(ganteletDroit, inventaire.getPieceArmure(Inventaire.PartieCorps.MAINDROITE));
+	Assert.assertEquals("gantelet en cuir clouté", ganteletGauche.toString());
 
 	//récupération de l'armure totale (avec les deux bottes)
 	Armure armure = inventaire.getArmure();
@@ -100,7 +110,8 @@ public class IntegEquipementTest
 	Assert.assertEquals(4, armure.getMalusArmure());
 
 	//test de l'ajout d'un bouclier
-	PieceArmure bouclier = new PieceArmure(0, 2, 0, true);
+	Bouclier bouclier = new Bouclier(0, 2);
+	Assert.assertEquals("targe avec blindage", bouclier.toString());
 	inventaire.addBouclier(bouclier, Inventaire.Lateralisation.GAUCHE);
 	Assert.assertEquals(bouclier, inventaire.getBouclier(Inventaire.Lateralisation.GAUCHE));
 	Assert.assertEquals(5, inventaire.getArmure().getMalusArmure());
@@ -126,7 +137,15 @@ public class IntegEquipementTest
     public void testIntegArmes()
     {
 	Arme arme = new ArmeCaC(0, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais);
+	Assert.assertEquals("cimeterre de maître", arme.toString());
 	persoRM3.getInventaire().addArme(arme, Inventaire.Lateralisation.DROITE);
 	Assert.assertEquals(arme, persoRM3.getInventaire().getArmeCourante());
+
+	Arme arme2 = new ArmeCaC(2, Arme.QualiteArme.superieure, Arme.EquilibrageArme.mauvais);
+	Assert.assertEquals("épée courte de qualité supérieure et d'équilibrage mauvais", arme2.toString());
+	Arme arme3 = new ArmeCaC(1, Arme.QualiteArme.inferieure, Arme.EquilibrageArme.bon);
+	Assert.assertEquals("rapière de qualité inférieure et d'équilibrage bon", arme3.toString());
+	Arme arme4 = new ArmeDist(42, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.normal);
+	Assert.assertEquals("pistolet lourd de qualité moyenne et d'équilibrage normal", arme4.toString());
     }
 }

@@ -17,9 +17,10 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
 /**
- * classe représentant une pièce individuelle d'une armure
+ *
+ * @author ykonoclast
  */
-public class PieceArmure implements Iprotection
+public class Bouclier implements Iprotection
 {
 
     /**
@@ -35,20 +36,14 @@ public class PieceArmure implements Iprotection
      * le type de cette pièce
      */
     private final int m_type;
-    /**
-     * la localisation de la pièce
-     */
-    private final int m_localisation;
 
     /**
      * costructeur de pièces d'armure
      *
      * @param p_idPiece
      * @param p_type
-     * @param p_materiau
-     * @param p_isBouclier car ils ont leurs propres règles
      */
-    public PieceArmure(int p_idPiece, int p_type, int p_materiau)
+    public Bouclier(int p_idPiece, int p_type)
     {
 	m_type = p_type;
 	UPReferenceArmures referenceArmures = UPReferenceArmures.getInstance();
@@ -57,14 +52,15 @@ public class PieceArmure implements Iprotection
 	//construction du nom
 	if (p_type == 0)
 	{//armure ancienne
-	    m_libelle = referenceArmures.getLblPiece(p_idPiece) + " " + referenceSys.getCollectionLibelles().interArmure + " " + referenceArmures.getLblMateriauArmureAncienne(p_materiau);
+	    String libelleTemp = referenceArmures.getLblBouclier(p_idPiece);
+	    m_libelle = libelleTemp;
 	}
 	else
 	{//armure moderne
-	    m_libelle = referenceArmures.getLblPiece(p_idPiece) + " " + referenceArmures.getLblTypeArmure(p_type) + " " + referenceSys.getCollectionLibelles().liaison + " " + referenceSys.getCollectionLibelles().facture + " " + referenceArmures.getLblMateriauArmure(p_materiau);
+	    String libelleTemp = referenceArmures.getLblBouclier(p_idPiece) + " " + referenceArmures.getLblTypeArmure(p_type);
+	    m_libelle = libelleTemp;
 	}
-	m_nbpoints = referenceArmures.getPtsPiece(p_idPiece, p_materiau);
-	m_localisation = referenceArmures.getLocalisation(p_idPiece);
+	m_nbpoints = referenceArmures.getPtsBouclier(p_idPiece);
     }
 
     /**
@@ -75,14 +71,6 @@ public class PieceArmure implements Iprotection
     public String toString()
     {
 	return m_libelle;
-    }
-
-    /**
-     * @return the m_localisation
-     */
-    int getLocalisation()
-    {
-	return m_localisation;
     }
 
     /**

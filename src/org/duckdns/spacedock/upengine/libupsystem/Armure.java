@@ -41,7 +41,7 @@ public final class Armure
     /**
      * constructeur d'armure
      */
-    Armure(int p_points, int p_type)
+    public Armure(int p_points, int p_type)
     {
 	m_type = p_type;
 	m_points = p_points;
@@ -54,7 +54,7 @@ public final class Armure
      * @return renvoie le bonus au ND effectif offert par cette armure contre un
      * type d'arme donné
      */
-    int getBonusND(int p_typArm)
+    public int getBonusND(int p_typArm)
     {
 	return UPReferenceArmures.getInstance().getBonusND(m_points, p_typArm, m_type);
     }
@@ -65,7 +65,7 @@ public final class Armure
      * @return renvoie la réduction effective des dégâts offerte par cette
      * armure contre un type d'arme donné
      */
-    int getRedDegats(int p_typArm)
+    public int getRedDegats(int p_typArm)
     {
 	return UPReferenceArmures.getInstance().getRedDegats(m_points, p_typArm, m_type);
     }
@@ -75,7 +75,7 @@ public final class Armure
      * @param p_typArm
      * @return renvoie le malus que l'armure affecte aux actions délicates
      */
-    int getMalusArmure()
+    public int getMalusArmure()
     {
 	return m_malusArmure;
     }

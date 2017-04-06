@@ -18,6 +18,7 @@ package org.duckdns.spacedock.upengine.libupsystem;
 
 import org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait;
 import org.duckdns.spacedock.upengine.libupsystem.Perso.Degats;
+import static org.junit.Assert.fail;
 
 /**
  *
@@ -38,7 +39,7 @@ final class IntegStatTestUtils
 	{
 	    boolean reussite = false;
 
-	    if (compteurActions == p_perso.getActions().size())
+	    if (compteurActions > p_perso.getActions().size())
 	    {
 		p_perso.genInit();
 		compteurActions = 0;
@@ -46,7 +47,7 @@ final class IntegStatTestUtils
 
 	    if (p_distance > 0)
 	    {
-		if (p_perso.attaquerDist(p_perso.getActions().get(compteurActions), p_nd, p_distance, p_nbCoups).isJetReussi())
+		if (p_perso.attaquerDist(p_perso.getActions().get(0), p_nd, p_distance, p_nbCoups).isJetReussi())
 		{
 		    reussite = true;
 		}
@@ -54,9 +55,16 @@ final class IntegStatTestUtils
 	    }
 	    else
 	    {
-		if (p_perso.attaquerCaC(p_perso.getActions().get(compteurActions), p_nd).isJetReussi())
+		try
 		{
-		    reussite = true;
+		    if (p_perso.attaquerCaC(p_perso.getActions().get(0), p_nd).isJetReussi())
+		    {
+			reussite = true;
+		    }
+		}
+		catch (IndexOutOfBoundsException e)
+		{
+		    fail();
 		}
 
 	    }

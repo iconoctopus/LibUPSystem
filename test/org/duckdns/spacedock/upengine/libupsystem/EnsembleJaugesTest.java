@@ -118,16 +118,10 @@ public class EnsembleJaugesTest
     @Test
     public void testAgirEnCombatNominal()
     {
-	//On teste la "consommation" des actions pour des persos ayant des valeurs d'initiative différentes
+	//On teste la "consommation" des actions
+	Assert.assertEquals(1, jaugesRM1.getActions().size());
 	jaugesRM1.agirEnCombat(jaugesRM1.getActions().get(0));
-	Assert.assertEquals(11, jaugesRM1.getActions().get(0).intValue());
-
-	jaugesRM3.agirEnCombat(jaugesRM3.getActions().get(0));
-	Assert.assertEquals(11, jaugesRM3.getActions().get(0).intValue());
-	jaugesRM3.agirEnCombat(jaugesRM3.getActions().get(1));
-	Assert.assertEquals(11, jaugesRM3.getActions().get(1).intValue());
-	jaugesRM3.agirEnCombat(jaugesRM3.getActions().get(2));
-	Assert.assertEquals(11, jaugesRM3.getActions().get(2).intValue());
+	Assert.assertEquals(0, jaugesRM1.getActions().size());
     }
 
     @Test

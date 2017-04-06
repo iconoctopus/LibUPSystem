@@ -30,14 +30,9 @@ public class EnsembleJauges
 {
 
     /**
-     * l'indice de l'action courantes dans le tableau des actions
-     */
-    private int m_actionCourante;
-
-    /**
      * les actions du personnage dans ce tour sous la forme de la phase dans
      * laquelle l'action se déroule dans l'ordre des phases (donc tableau de la
-     * taille de l'init) ,celles consommées sont fixées à 11
+     * taille de l'init)
      */
     private ArrayList<Integer> m_actions;
     /**
@@ -104,7 +99,6 @@ public class EnsembleJauges
     public final void genInit()
     {
 	int initiative = m_jaugeSanteInit.getRemplissage_externe();
-	m_actionCourante = 0;
 	ArrayList<Integer> tabResult = new ArrayList<>();
 	if (initiative > 0)
 	{
@@ -132,8 +126,7 @@ public class EnsembleJauges
 	{
 	    if (isActif(p_phaseActuelle))
 	    {
-		m_actions.set(m_actionCourante, 11);
-		m_actionCourante++;
+		m_actions.remove(0);
 		result = true;
 	    }
 	}
@@ -157,7 +150,7 @@ public class EnsembleJauges
 	{
 	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("phase") + ":" + p_phaseActuelle);
 	}
-	return ((m_actions.size() - m_actionCourante) > 0 && p_phaseActuelle == m_actions.get(m_actionCourante));//si l'indice dans le tableau des actions indique que toutes celles-ci n'ont pas été consommées et si l'action pointée par cet indice correspond à la phase actuelle
+	return (m_actions.size() > 0 && p_phaseActuelle == m_actions.get(0));//si la liste des actions possibles n'est pas vide et que la prochaine action à accomplir est dans la phase actuelle
     }
 
     /**

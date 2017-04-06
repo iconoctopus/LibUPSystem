@@ -44,7 +44,14 @@ public final class UPReferenceSysteme
      * tableau contenant tous les domaines et leurs compétences non free form,
      */
     private final JsonArray m_arbreDomaines;
-
+    /**
+     * la liste des valeurs de ND
+     */
+    public final EnumMap<ND, Integer> m_listValeurND;
+    /**
+     * la liste des libellés des ND
+     */
+    public final EnumMap<ND, String> m_listLblND;
     /**
      * préfixe des libellés des compétences d'attaque
      */
@@ -83,9 +90,20 @@ public final class UPReferenceSysteme
 	JsonObject object;
 
 	//chargement des règles de calcul de l'initiative
-	object = loadJsonFile("libupsystem", "tables_systeme/tab_init.json");
-	m_tableInitCoord = object.getJsonArray("coordination");
-	m_tableInitMental = object.getJsonArray("mental");
+	object = loadJsonFile("libupsystem", "tables_systeme/tab_sys.json");
+	m_tableInitCoord = object.getJsonObject("init").getJsonArray("coordination");
+	m_tableInitMental = object.getJsonObject("init").getJsonArray("mental");
+	JsonArray nDarray = object.getJsonArray("ND");
+	JsonArray lblNDarray = object.getJsonArray("lbl_ND");
+	m_listLblND = new EnumMap<>(ND.class);
+	m_listValeurND = new EnumMap<>(ND.class);
+	int i = 0;
+	for (ND n : ND.values())
+	{
+	    m_listValeurND.put(n, nDarray.getInt(i));
+	    m_listLblND.put(n, lblNDarray.getString(i));
+	    ++i;
+	}
 
 	//chargement des libellés des caractéristiques particulières
 	object = loadJsonFile("libupsystem", "tables_systeme/tab_caracs.json");
@@ -280,4 +298,12 @@ public final class UPReferenceSysteme
 	    }
 	}
     }
+
+    /**
+     * Enum contenant les niveaux de difficulté standards
+     */
+    public enum ND
+    {
+	facile, moyen, difficile, tres_difficile
+    };
 }

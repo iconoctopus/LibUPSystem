@@ -133,4 +133,18 @@ public final class UnitUPReferenceSysTest
 	Assert.assertEquals("équilibrage", m_reference.getCollectionLibelles().equilibrage);
 	Assert.assertEquals("parade", m_reference.getCollectionLibelles().parade);
     }
+
+    @Test
+    public void testND()
+    {
+	Assert.assertEquals("facile", m_reference.m_listLblND.get(UPReferenceSysteme.ND.facile));
+	Assert.assertEquals("moyen", m_reference.m_listLblND.get(UPReferenceSysteme.ND.moyen));
+	Assert.assertEquals("difficile", m_reference.m_listLblND.get(UPReferenceSysteme.ND.difficile));
+	Assert.assertEquals("très difficile", m_reference.m_listLblND.get(UPReferenceSysteme.ND.tres_difficile));
+
+	Assert.assertEquals(10, m_reference.m_listValeurND.get(UPReferenceSysteme.ND.facile).intValue());
+	Assert.assertEquals(15, m_reference.m_listValeurND.get(UPReferenceSysteme.ND.moyen).intValue());
+	Assert.assertEquals(25, m_reference.m_listValeurND.get(UPReferenceSysteme.ND.difficile).intValue());
+	Assert.assertEquals(40, m_reference.m_listValeurND.get(UPReferenceSysteme.ND.tres_difficile).intValue());
+    }
 }

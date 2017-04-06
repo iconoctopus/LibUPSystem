@@ -18,11 +18,8 @@ package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.util.ArrayList;
 import java.util.ListIterator;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
@@ -42,7 +39,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 	{//les classes final, appelant du statique et les classes subissant un whennew
 	    EnsembleJauges.EtatVital.class, GroupeTraits.class, RollUtils.RollResult.class, EnsembleJauges.class, CoupleJauges.class
 	})
-public class EnsembleJaugesTest
+public class UnitEnsembleJaugesTest
 {
 
     private EnsembleJauges jaugesRM1;
@@ -161,11 +158,15 @@ public class EnsembleJaugesTest
 		Assert.assertTrue(result.get(i) < 11 && result.get(i) > 0); //on vérifie que les init générées ne sont pas ridicules.
 	    }
 	}
-
-	Assert.assertEquals((int) jaugesRM1.getActions().get(0), (int) jaugesRM1.getInitTotale(null));//son init de base
+	int action1 = jaugesRM3.getActions().get(0);
+	int action2 = jaugesRM3.getActions().get(1);
+	int action3 = jaugesRM3.getActions().get(2);
+	Assert.assertEquals(action1 + action2 + action3, (int) jaugesRM3.getInitTotale(null));//init de base
+	jaugesRM3.agirEnCombat(action1);//on consomme la première action pour tester que l'init totale est modifiée
+	Assert.assertEquals(action2 + action3, (int) jaugesRM3.getInitTotale(null));//init après consommation d'une action
 	ArmeCaC armeMock = PowerMockito.mock(ArmeCaC.class);//on ajoute une arme avec bonus d'init de 2
 	when(armeMock.getBonusInit()).thenReturn(2);
-	Assert.assertEquals((int) jaugesRM1.getActions().get(0) + 10, (int) jaugesRM1.getInitTotale(armeMock));//son init améliorée par un bonus d'init de 2
+	Assert.assertEquals(action2 + action3 + 10, (int) jaugesRM3.getInitTotale(armeMock));//init améliorée par un bonus d'init de 2
 
 	//test de isActif()
 	Assert.assertTrue(jaugesRM3.isActif(jaugesRM3.getActions().get(0)));

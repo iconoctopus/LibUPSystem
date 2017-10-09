@@ -29,21 +29,21 @@ public class IntegStatBlessureTest
     @Test
     public void testDegatsLegers()
     {
-	int nbGraves = IntegStatTestUtils.nbBlessuresGravesStatistique(17, 2);
-	Assert.assertEquals(1, nbGraves);
+	int nbDegLourds = IntegStatTestUtils.nbBlessuresStatistique(17, 2);
+	Assert.assertEquals(1, nbDegLourds);
     }
 
     @Test
     public void testDegatsMoyens()
     {
-	int nbGraves = IntegStatTestUtils.nbBlessuresGravesStatistique(33, 3);
-	Assert.assertEquals(2, nbGraves);
+	int nbBless = IntegStatTestUtils.nbBlessuresStatistique(33, 3);
+	Assert.assertEquals(2, nbBless);
     }
 
     @Test
     public void testDegatsLourds()
     {
-	int nbGraves = IntegStatTestUtils.nbBlessuresGravesStatistique(57, 5);
-	Assert.assertEquals(3, nbGraves);
+	int nbBless = IntegStatTestUtils.nbBlessuresStatistique(57, 5);
+	Assert.assertEquals(3, nbBless);
     }
 }

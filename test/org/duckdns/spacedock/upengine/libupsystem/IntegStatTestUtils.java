@@ -118,21 +118,21 @@ final class IntegStatTestUtils
     /**
      * inflige une quantité de dégât donnée un grand nombre de fois de suite à
      * un même nombre d'incarnations de persos et renvoie le nombre de blessures
-     * graves qu'ils reçoiventen moyenne
+     * qu'ils reçoiventen moyenne
      *
      * @param p_degats
      * @param p_rm
      * @return
      */
-    static int nbBlessuresGravesStatistique(int p_degats, int p_rm)
+    static int nbBlessuresStatistique(int p_degats, int p_rm)
     {
-	int nbBlessuresGraves = 0;
+	int nbBlessures = 0;
 	for (int i = 0; i <= limiteLAncers; ++i)
 	{//on crée ici un nouveau perso pour chaque test : sinon les blessures s'accumulent entre deux boucles et ils meurrent au final...
 	    Perso perso = new Perso(p_rm);
 	    perso.etreBlesse(new Degats(p_degats, 0), null);
-	    nbBlessuresGraves += perso.getEtatVital().getBlessuresGraves();
+	    nbBlessures += perso.getEtatVital().getBlessures();
 	}
-	return (int) (nbBlessuresGraves / (limiteLAncers + 1));
+	return (int) (nbBlessures / (limiteLAncers + 1));
     }
 }

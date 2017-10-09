@@ -254,13 +254,13 @@ public class UnitEnsembleJaugesTest
     public void testGetEtatInternes()
     {
 	when(santeInitRM3Mock.getRemplissage_interne()).thenReturn(2);
-	Assert.assertEquals(2, jaugesRM3.getEtatVital().getBlessuresGraves());
+	Assert.assertEquals(2, jaugesRM3.getEtatVital().getBlessures());
 
 	when(santeInitRM3Mock.getTaille_interne()).thenReturn(5);
 	Assert.assertEquals(5, jaugesRM3.getEtatVital().getSante());
 
-	when(santeInitRM3Mock.getBlessuresLegeres()).thenReturn(23);
-	Assert.assertEquals(23, jaugesRM3.getEtatVital().getBlessuresLegeres());
+	when(santeInitRM3Mock.getPointsDegats()).thenReturn(23);
+	Assert.assertEquals(23, jaugesRM3.getEtatVital().getPointsDegatsPhysiques());
 
 	when(fatigueFARM3Mock.getRemplissage_interne()).thenReturn(7);
 	Assert.assertEquals(7, jaugesRM3.getEtatVital().getPtsFatigue());
@@ -268,14 +268,14 @@ public class UnitEnsembleJaugesTest
 	when(fatigueFARM3Mock.getTaille_interne()).thenReturn(6);
 	Assert.assertEquals(6, jaugesRM3.getEtatVital().getFatigue());
 
-	when(fatigueFARM3Mock.getBlessuresLegeres()).thenReturn(27);
-	Assert.assertEquals(27, jaugesRM3.getEtatVital().getBlessuresLegeresMentales());
+	when(fatigueFARM3Mock.getPointsDegats()).thenReturn(27);
+	Assert.assertEquals(27, jaugesRM3.getEtatVital().getPointsDegatsChoc());
 
-	when(santeInitRM3Mock.getPtChoc()).thenReturn(2);
-	Assert.assertEquals(2, jaugesRM3.getEtatVital().getPtChocSante());
+	when(santeInitRM3Mock.getPtRupture()).thenReturn(2);
+	Assert.assertEquals(2, jaugesRM3.getEtatVital().getPtRuptureSante());
 
-	when(fatigueFARM3Mock.getPtChoc()).thenReturn(4);
-	Assert.assertEquals(4, jaugesRM3.getEtatVital().getPtChocFatigue());
+	when(fatigueFARM3Mock.getPtRupture()).thenReturn(4);
+	Assert.assertEquals(4, jaugesRM3.getEtatVital().getPtRuptureFatigue());
     }
 
     @Test

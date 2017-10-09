@@ -33,11 +33,11 @@ class CoupleJauges
     /**
      * niveau actuel de blessures légères
      */
-    private int m_blessuresLegeres;
+    private int m_pointsDegats;
     /**
-     * position du point de choc
+     * position du point de rupture
      */
-    private int m_choc;
+    private int m_rupture;
     /**
      * représente l'élimination d'un personnage : mort ou coma
      */
@@ -53,7 +53,7 @@ class CoupleJauges
      */
     private int m_remplissage_externe;
     /**
-     * le remplissage de la jauge interne (blessures graves ou point de fatigue)
+     * le remplissage de la jauge interne (blessures ou commotions)
      */
     private int m_remplissage_interne;
     /**
@@ -105,11 +105,11 @@ class CoupleJauges
     }
 
     /**
-     * @return the m_blessuresLegeres
+     * @return the m_pointsDegats
      */
-    int getBlessuresLegeres()
+    int getPointsDegats()
     {
-	return m_blessuresLegeres;
+	return m_pointsDegats;
     }
 
     /**
@@ -146,11 +146,11 @@ class CoupleJauges
 
     /**
      *
-     * @return la position du point de choc de cette jauge
+     * @return la position du point de rupture de cette jauge
      */
-    int getPtChoc()
+    int getPtRupture()
     {
-	return m_choc;
+	return m_rupture;
     }
 
     /**
@@ -175,11 +175,11 @@ class CoupleJauges
     /**
      *
      * @return le statut sonne ou non, calculé en fonction du remplissage et du
-     * point choc
+     * point rupture
      */
     Boolean isSonne()
     {
-	return (m_remplissage_interne >= m_choc);
+	return (m_remplissage_interne >= m_rupture);
     }
 
     /**
@@ -197,30 +197,30 @@ class CoupleJauges
 	if (p_degats >= 0)
 	{
 	    int quotient;
-	    int blessGraves;
-	    m_blessuresLegeres += p_degats;
-	    RollResult jetAbsorption = p_traits.effectuerJetTrait(Trait.PHYSIQUE, m_blessuresLegeres, false);
+	    int degLourd;
+	    m_pointsDegats += p_degats;
+	    RollResult jetAbsorption = p_traits.effectuerJetTrait(Trait.PHYSIQUE, m_pointsDegats, false);
 
 	    if (!jetAbsorption.isJetReussi())//le jet d'absorption est en dessous du ND des blessures légères
 	    {
-		quotient = ((m_blessuresLegeres) - (jetAbsorption).getScoreBrut());
+		quotient = ((m_pointsDegats) - (jetAbsorption).getScoreBrut());
 		quotient = quotient / 10; //on compte le nombre de tranches entières de 10, la division entre int va normalement correctement tronquer
-		blessGraves = (int) quotient + 1;//total des blessures graves : une pour avoir raté le jet, et une par tranche de 10
-		m_blessuresLegeres = 0;
-		m_remplissage_interne += blessGraves;
+		degLourd = (int) quotient + 1;//total des degats lourds : une pour avoir raté le jet, et une par tranche de 10
+		m_pointsDegats = 0;
+		m_remplissage_interne += degLourd;
 
-		if (m_remplissage_interne > m_choc)//on risque l'inconscience et l'élimination
+		if (m_remplissage_interne > m_rupture)//on risque l'inconscience et l'élimination
 		{
-		    int nbIncrementsRequis = m_remplissage_interne - m_choc - 1;//nombre de blessures graves au delà du point de choc moins une
+		    int nbIncrementsRequis = m_remplissage_interne - m_rupture - 1;//nombre de degats lourds au delà du point de rupture moins une
 		    RollResult jetInconscience = p_traits.effectuerJetTrait(Trait.VOLONTE, UPReferenceSysteme.getInstance().getValeurND(UPReferenceSysteme.ND.moyen), false);
-		    boolean jetInconscienceReussi = jetInconscience.isJetReussi() && jetInconscience.getNbIncrements() >= nbIncrementsRequis;//jet d'inconscience (ND moyen, autant d'incrément que de blessures au delà du point de choc moins une
+		    boolean jetInconscienceReussi = jetInconscience.isJetReussi() && jetInconscience.getNbIncrements() >= nbIncrementsRequis;//jet d'inconscience (ND moyen, autant d'incrément que de blessures au delà du point de rupture moins une
 
 		    if (m_remplissage_interne >= m_taille_interne || !jetInconscienceReussi)//jet d'inconscience raté ou jauge remplie
 		    {
 			m_inconscient = true;
 			//on risque maintenant l'élimination
 			RollResult jetMort = p_traits.effectuerJetTrait(Trait.PHYSIQUE, UPReferenceSysteme.getInstance().getValeurND(UPReferenceSysteme.ND.moyen), false);
-			boolean jetMortReussi = jetMort.isJetReussi() && jetMort.getNbIncrements() >= nbIncrementsRequis;//jet de mort (ND moyen, autant d'incrément que de blessures au delà du point de choc moins une
+			boolean jetMortReussi = jetMort.isJetReussi() && jetMort.getNbIncrements() >= nbIncrementsRequis;//jet de mort (ND moyen, autant d'incrément que de blessures au delà du point de rupture moins une
 			if (m_remplissage_interne > m_taille_interne || !jetMortReussi)//jauge déborde ou jet de mort raté
 			{
 			    m_elimine = true;
@@ -254,16 +254,16 @@ class CoupleJauges
      *
      * @param p_taille_interne
      * @param p_taille_externe
-     * @param p_choc
+     * @param p_rupture
      */
-    private void instancier(int p_taille_interne, int p_taille_externe, int p_choc)
+    private void instancier(int p_taille_interne, int p_taille_externe, int p_rupture)
     {
 	m_taille_externe = p_taille_externe;
 	m_taille_interne = p_taille_interne;
-	m_choc = p_choc;
+	m_rupture = p_rupture;
 	m_remplissage_externe = m_taille_externe;
-	m_remplissage_interne = 0;//au départ on a pas de blessures graves/ points de fatigue
-	m_blessuresLegeres = 0;
+	m_remplissage_interne = 0;//au départ on a pas de blessures / commotions
+	m_pointsDegats = 0;
 	m_elimine = false;
 	m_inconscient = false;
     }

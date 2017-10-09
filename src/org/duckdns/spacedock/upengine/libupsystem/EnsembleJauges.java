@@ -198,13 +198,13 @@ public class EnsembleJauges
     {
 
 	/**
-	 * le nombre de blessures legeres mentales
+	 * le nombre de points de degats choc
 	 */
-	private final int m_nbBlessuresLegeresMentales;
+	private final int m_degatsChoc;
 	/**
-	 * le nombre de blessures legeres physiques
+	 * le nombre de points de dégâts physiuqes
 	 */
-	private final int m_nbBlessuresLegeres;
+	private final int m_degatsPhysiques;
 	/**
 	 * la taille de la jauge de santé
 	 */
@@ -238,13 +238,13 @@ public class EnsembleJauges
 	 */
 	private final int m_forceDAmeActu;
 	/**
-	 * la position du point de choc de la jauge de santé
+	 * la position du point de rupture de la jauge de santé
 	 */
-	private final int m_ptChocSante;
+	private final int m_ptRuptureSante;
 	/**
-	 * la position du point de choc de la jauge de fatigue
+	 * la position du point de rupture de la jauge de fatigue
 	 */
-	private final int m_ptChocFatigue;
+	private final int m_ptRuptureFatigue;
 	/**
 	 * si l'une des deux jauges indique sonne
 	 */
@@ -264,8 +264,8 @@ public class EnsembleJauges
 	 */
 	public EtatVital()
 	{
-	    m_nbBlessuresLegeres = m_jaugeSanteInit.getBlessuresLegeres();
-	    m_nbBlessuresLegeresMentales = m_jaugeFatigueForceDAme.getBlessuresLegeres();
+	    m_degatsPhysiques = m_jaugeSanteInit.getPointsDegats();
+	    m_degatsChoc = m_jaugeFatigueForceDAme.getPointsDegats();
 	    m_santeMax = m_jaugeSanteInit.getTaille_interne();
 	    m_initMax = m_jaugeSanteInit.getTaille_externe();
 	    m_santeActu = m_jaugeSanteInit.getRemplissage_interne();
@@ -274,8 +274,8 @@ public class EnsembleJauges
 	    m_forceDAmeMax = m_jaugeFatigueForceDAme.getTaille_externe();
 	    m_fatigueActu = m_jaugeFatigueForceDAme.getRemplissage_interne();
 	    m_forceDAmeActu = m_jaugeFatigueForceDAme.getRemplissage_externe();
-	    m_ptChocSante = m_jaugeSanteInit.getPtChoc();
-	    m_ptChocFatigue = m_jaugeFatigueForceDAme.getPtChoc();
+	    m_ptRuptureSante = m_jaugeSanteInit.getPtRupture();
+	    m_ptRuptureFatigue = m_jaugeFatigueForceDAme.getPtRupture();
 	    m_isSonne = m_jaugeFatigueForceDAme.isSonne() || m_jaugeSanteInit.isSonne();
 	    m_isInconscient = m_jaugeFatigueForceDAme.isInconscient() || m_jaugeSanteInit.isInconscient();
 	    m_isElimine = m_jaugeFatigueForceDAme.isElimine() || m_jaugeSanteInit.isElimine();
@@ -283,20 +283,20 @@ public class EnsembleJauges
 
 	/**
 	 *
-	 * @return le nombre de blessures legeres physiques
+	 * @return le nombre de points de degats physiques
 	 */
-	public int getBlessuresLegeres()
+	public int getPointsDegatsPhysiques()
 	{
-	    return m_nbBlessuresLegeres;
+	    return m_degatsPhysiques;
 	}
 
 	/**
 	 *
-	 * @return le nombre de blessures legeres mentales
+	 * @return le nombre de points de degats hoc
 	 */
-	public int getBlessuresLegeresMentales()
+	public int getPointsDegatsChoc()
 	{
-	    return m_nbBlessuresLegeresMentales;
+	    return m_degatsChoc;
 	}
 
 	/**
@@ -321,7 +321,7 @@ public class EnsembleJauges
 	 *
 	 * @return le remplissage de la jauge de santé
 	 */
-	public int getBlessuresGraves()
+	public int getBlessures()
 	{
 	    return m_santeActu;
 	}
@@ -373,20 +373,20 @@ public class EnsembleJauges
 
 	/**
 	 *
-	 * @return la position du point de choc de santé
+	 * @return la position du point de rupture de santé
 	 */
-	public int getPtChocSante()
+	public int getPtRuptureSante()
 	{
-	    return m_ptChocSante;
+	    return m_ptRuptureSante;
 	}
 
 	/**
 	 *
-	 * @return la position du point de choc de fatigue
+	 * @return la position du point de rupture de fatigue
 	 */
-	public int getPtChocFatigue()
+	public int getPtRuptureFatigue()
 	{
-	    return m_ptChocFatigue;
+	    return m_ptRuptureFatigue;
 	}
 
 	/**

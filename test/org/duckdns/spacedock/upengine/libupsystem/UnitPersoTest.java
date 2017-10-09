@@ -402,8 +402,8 @@ public class UnitPersoTest
 	when(degatsMock.getTypeArme()).thenReturn(0);
 	persoRM1.etreBlesse(degatsMock, armureMock);
 	verify(jaugesRM1, never()).recevoirDegatsPhysiques(0);
-	Assert.assertEquals(0, persoRM1.getEtatVital().getBlessuresGraves());
-	Assert.assertEquals(0, persoRM1.getEtatVital().getBlessuresLegeres());
+	Assert.assertEquals(0, persoRM1.getEtatVital().getBlessures());
+	Assert.assertEquals(0, persoRM1.getEtatVital().getPointsDegatsPhysiques());
     }
 
     @Test

@@ -51,14 +51,14 @@ public class IntegCaracTest
     @Test
     public void testCaracsSecondaires()
     {
-	Assert.assertEquals(0, persoRM1.getEtatVital().getBlessuresGraves());
-	Assert.assertEquals(0, persoRM1.getEtatVital().getBlessuresLegeres());
-	Assert.assertEquals(0, persoRM1.getEtatVital().getBlessuresLegeresMentales());
+	Assert.assertEquals(0, persoRM1.getEtatVital().getBlessures());
+	Assert.assertEquals(0, persoRM1.getEtatVital().getPointsDegatsPhysiques());
+	Assert.assertEquals(0, persoRM1.getEtatVital().getPointsDegatsChoc());
 	Assert.assertEquals(4, persoRM1.getEtatVital().getFatigue());
 	Assert.assertEquals(4, persoRM1.getEtatVital().getSante());
 	Assert.assertEquals(0, persoRM1.getEtatVital().getPtsFatigue());
-	Assert.assertEquals(2, persoRM1.getEtatVital().getPtChocFatigue());
-	Assert.assertEquals(2, persoRM1.getEtatVital().getPtChocSante());
+	Assert.assertEquals(2, persoRM1.getEtatVital().getPtRuptureFatigue());
+	Assert.assertEquals(2, persoRM1.getEtatVital().getPtRuptureSante());
 	Assert.assertEquals(2, persoRM1.getEtatVital().getInitMax());
 	Assert.assertEquals(2, persoRM1.getEtatVital().getInitActu());
 	Assert.assertEquals(2, persoRM1.getEtatVital().getForceDAmeActu());
@@ -69,14 +69,14 @@ public class IntegCaracTest
 	Assert.assertFalse(persoRM1.getEtatVital().isInconscient());
 	Assert.assertFalse(persoRM1.getEtatVital().isElimine());
 
-	Assert.assertEquals(0, persoRM3.getEtatVital().getBlessuresGraves());
-	Assert.assertEquals(0, persoRM3.getEtatVital().getBlessuresLegeres());
-	Assert.assertEquals(0, persoRM3.getEtatVital().getBlessuresLegeresMentales());
+	Assert.assertEquals(0, persoRM3.getEtatVital().getBlessures());
+	Assert.assertEquals(0, persoRM3.getEtatVital().getPointsDegatsPhysiques());
+	Assert.assertEquals(0, persoRM3.getEtatVital().getPointsDegatsChoc());
 	Assert.assertEquals(5, persoRM3.getEtatVital().getFatigue());
 	Assert.assertEquals(5, persoRM3.getEtatVital().getSante());
 	Assert.assertEquals(0, persoRM3.getEtatVital().getPtsFatigue());
-	Assert.assertEquals(2, persoRM3.getEtatVital().getPtChocFatigue());
-	Assert.assertEquals(3, persoRM3.getEtatVital().getPtChocSante());
+	Assert.assertEquals(2, persoRM3.getEtatVital().getPtRuptureFatigue());
+	Assert.assertEquals(3, persoRM3.getEtatVital().getPtRuptureSante());
 	Assert.assertEquals(3, persoRM3.getEtatVital().getInitMax());
 	Assert.assertEquals(3, persoRM3.getEtatVital().getInitActu());
 	Assert.assertEquals(2, persoRM3.getEtatVital().getForceDAmeActu());
@@ -87,14 +87,14 @@ public class IntegCaracTest
 	Assert.assertFalse(persoRM3.getEtatVital().isInconscient());
 	Assert.assertFalse(persoRM3.getEtatVital().isElimine());
 
-	Assert.assertEquals(0, persoNonRM.getEtatVital().getBlessuresGraves());
-	Assert.assertEquals(0, persoNonRM.getEtatVital().getBlessuresLegeres());
-	Assert.assertEquals(0, persoNonRM.getEtatVital().getBlessuresLegeresMentales());
+	Assert.assertEquals(0, persoNonRM.getEtatVital().getBlessures());
+	Assert.assertEquals(0, persoNonRM.getEtatVital().getPointsDegatsPhysiques());
+	Assert.assertEquals(0, persoNonRM.getEtatVital().getPointsDegatsChoc());
 	Assert.assertEquals(5, persoNonRM.getEtatVital().getFatigue());
 	Assert.assertEquals(5, persoNonRM.getEtatVital().getSante());
 	Assert.assertEquals(0, persoNonRM.getEtatVital().getPtsFatigue());
-	Assert.assertEquals(4, persoNonRM.getEtatVital().getPtChocFatigue());
-	Assert.assertEquals(1, persoNonRM.getEtatVital().getPtChocSante());
+	Assert.assertEquals(4, persoNonRM.getEtatVital().getPtRuptureFatigue());
+	Assert.assertEquals(1, persoNonRM.getEtatVital().getPtRuptureSante());
 	Assert.assertEquals(2, persoNonRM.getEtatVital().getInitMax());
 	Assert.assertEquals(2, persoNonRM.getEtatVital().getInitActu());
 	Assert.assertEquals(1, persoNonRM.getEtatVital().getForceDAmeActu());

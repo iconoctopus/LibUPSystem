@@ -403,4 +403,70 @@ public class UnitArmeTest
 	assertEquals(3, report.getModDesGardes());
 	assertEquals(3, report.getModDesLances());
     }
+
+    /*
+    @Test
+    public void testGenererDegatsCaCNominal()
+    {
+	//On prévoie les appels aux domaines et compétences
+	when(arbreMock.getRangComp(3, 0)).thenReturn(3);
+	when(arbreMock.getRangComp(3, 2)).thenReturn(3);
+	when(arbreMock.getRangDomaine(3)).thenReturn(3);
+
+	//Cas mains nues
+	Degats result = persoRM3.genererDegats(3, null);
+	verify(arbreMock).getRangComp(3, 0);
+	verify(arbreMock).getRangDomaine(3);
+	assertEquals(18, result.getQuantite());
+	assertEquals(0, result.getTypeArme());
+
+	//On mocke une arme
+	ArmeCaC armeMock = PowerMockito.mock(ArmeCaC.class);
+	when(armeMock.getVD()).thenReturn(7);
+	when(armeMock.getTypeArme()).thenReturn(3);
+	when(armeMock.getMode()).thenReturn(0);
+	when(armeMock.getCategorie()).thenReturn(1);
+
+	//Cas nominal
+	result = persoRM3.genererDegats(2, armeMock);
+	verify(armeMock).getVD();
+	verify(armeMock).getTypeArme();
+	verify(armeMock).getMode();
+	verify(armeMock).getCategorie();
+	verify(arbreMock).getRangComp(3, 2);
+	verify(arbreMock, times(2)).getRangDomaine(3);
+	verify(traitsRM3, times(3)).getTrait(PHYSIQUE);
+	assertEquals(20, result.getQuantite());
+	assertEquals(3, result.getTypeArme());
+    }
+
+    @Test
+    public void testGenererDegatsDistNominal()
+    {
+	//On prévoie les appels aux domaines et compétences
+	when(arbreMock.getRangComp(4, 2)).thenReturn(1);
+	when(arbreMock.getRangDomaine(4)).thenReturn(1);
+
+	//On mocke un inventaire contenant un mock d'arme
+	ArmeDist armeMock = PowerMockito.mock(ArmeDist.class);
+	when(armeMock.getMode()).thenReturn(1);
+	when(armeMock.getVD()).thenReturn(5);
+	when(armeMock.getTypeArme()).thenReturn(2);
+	when(armeMock.getMode()).thenReturn(1);
+	when(armeMock.getCategorie()).thenReturn(2);
+
+	//Cas nominal
+	Degats result = persoRM1.genererDegats(0, armeMock);
+	verify(armeMock).getVD();
+	verify(armeMock).getTypeArme();
+	verify(armeMock).getMode();
+	verify(armeMock).getCategorie();
+	verify(arbreMock).getRangComp(4, 2);
+	verify(arbreMock).getRangDomaine(4);
+	assertEquals(7, result.getQuantite());
+	assertEquals(2, result.getTypeArme());
+    }
+
+
+     */
 }

@@ -109,6 +109,22 @@ public class ArmeDist extends Arme
     }
 
     /**
+     * ajoute la compétence d'arme au trait corrdination
+     *
+     * @param p_Traits
+     * @param p_arbreDomComp
+     * @return
+     */
+    @Override
+    int extractBonusCarac(GroupeTraits p_Traits, ArbreDomaines p_arbreDomComp)
+    {
+	int domaine = 4;//distance
+	int competence = getCategorie();//comp d'arme
+
+	return (p_arbreDomComp.getRangComp(domaine, competence) + p_Traits.getTrait(GroupeTraits.Trait.COORDINATION));
+    }
+
+    /**
      *
      * @param p_nbMun
      */

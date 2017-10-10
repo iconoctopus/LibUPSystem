@@ -16,6 +16,9 @@
  */
 package org.duckdns.spacedock.upengine.libupsystem;
 
+import org.duckdns.spacedock.commonutils.ErrorHandler;
+import org.duckdns.spacedock.commonutils.PropertiesHandler;
+
 /**
  * Classe représentant une arme. Elle est abstraite car l'on ne doit pouvoir
  * instancier que ses dérivées qui sont porteuses du code signifiant pour le CaC
@@ -140,6 +143,21 @@ public abstract class Arme
 	m_mode = referenceArm.getModArme(p_indice);
     }
 
+    /**
+     * renvoie les dégâts d'une arme en fonction des caractéristiques de
+     * celle-ci et de celui qui la porte
+     *
+     * @param p_Traits
+     * @param p_arbreDomComp
+     * @return
+     */
+    Degats genererDegats(GroupeTraits p_Traits, ArbreDomaines p_ArbreDomComp, int p_incr)
+    {
+	return new Degats(getVD() + extractBonusCarac(p_Traits, p_ArbreDomComp) + 2 * p_incr, getTypeArme());
+    }
+
+    abstract int extractBonusCarac(GroupeTraits p_Traits, ArbreDomaines p_ArbreDomComp);
+
     public int getBonusInit()
     {
 	return m_bonusInit;
@@ -201,4 +219,56 @@ public abstract class Arme
     {
 	mauvais, normal, bon
     };
+
+    /**
+     * classe utilisée pour encapsuler les résultats d'une attaque réussie ; des
+     * dégâts mais aussi le type.
+     */
+    public static final class Degats
+    {
+
+	/**
+	 * le total des dégâts infligés
+	 */
+	private int m_quantite;
+	/**
+	 * le type d'arme employé
+	 */
+	private int m_typeArme;
+
+	/**
+	 * constructeur de dégâts
+	 *
+	 * @param p_quantite
+	 * @param p_typeArme
+	 */
+	public Degats(int p_quantite, int p_typeArme)
+	{
+	    if (p_quantite >= 0 && p_typeArme >= 0)
+	    {
+		m_quantite = p_quantite;
+		m_typeArme = p_typeArme;
+	    }
+	    else
+	    {
+		ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("degats") + ":" + p_quantite + " " + PropertiesHandler.getInstance("libupsystem").getString("type") + ":" + p_typeArme);
+	    }
+	}
+
+	/**
+	 * @return the m_quantite
+	 */
+	public int getQuantite()
+	{
+	    return m_quantite;
+	}
+
+	/**
+	 * @return the m_typeArme
+	 */
+	public int getTypeArme()
+	{
+	    return m_typeArme;
+	}
+    }
 }

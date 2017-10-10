@@ -19,6 +19,7 @@ package org.duckdns.spacedock.upengine.libupsystem;
 import java.util.ArrayList;
 import org.duckdns.spacedock.commonutils.ErrorHandler;
 import org.duckdns.spacedock.commonutils.PropertiesHandler;
+import org.duckdns.spacedock.upengine.libupsystem.Arme.Degats;
 import org.duckdns.spacedock.upengine.libupsystem.EnsembleJauges.EtatVital;
 import org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait;
 import org.duckdns.spacedock.upengine.libupsystem.RollUtils.RollResult;
@@ -244,52 +245,26 @@ public class Perso
     }
 
     /**
-     * génère des dégâts avec l'arme courante (distance ou corps à corps),
+     * génère des dégâts avec une arme donnée (distance ou corps à corps),
      * séparée de l'attaque pour que le contrôleur puisse utiliser les
      * incréments pour autre chose (comme cibler ou permettre une défense)
      *
+     * @param p_arme
      * @param p_increments
      * @return
      */
     public Degats genererDegats(int p_increments, Arme p_arme)
     {
-	int domaine;
-	int competence;
-	int vd;
-	int bonusSup = p_increments * 2;//bonus aux dégâts du aux incréments (pas de ciblage dans cette méthode)
-	int typArm;
-
 	Degats result = new Degats(0, 0);
+	Arme arme = p_arme;
 
 	if (p_increments >= 0)
 	{
-	    if (p_arme != null)//armes équipées
+	    if (arme == null)//mains nues
 	    {
-		vd = p_arme.getVD();
-		typArm = p_arme.getTypeArme();
-
-		if (p_arme.getMode() == 0)//arme de corps à corps employée
-		{
-		    domaine = 3;//corps à corps
-		    competence = p_arme.getCategorie() * 2;//les attaques sont à catégorie *2, les parades à catégorie * 2 +1
-		    bonusSup += m_groupeTraits.getTrait(Trait.PHYSIQUE);//le rang de physique vient en bonus au nombre d'incréments
-		}
-		else//arme à distance employée
-		{
-		    domaine = 4;//distance
-		    competence = p_arme.getCategorie();//compétence d'arme
-		    //pas de bonus de physique pour les armes à distance
-		}
+		arme = new ArmeMainsNues(m_groupeTraits);
 	    }
-	    else//combat à mains nues
-	    {
-		vd = m_groupeTraits.getTrait(Trait.PHYSIQUE);
-		typArm = 0;
-		domaine = 3;//corps à corps
-		competence = 0;//comp mains nues
-		bonusSup += m_groupeTraits.getTrait(Trait.PHYSIQUE);//le rang de physique vient en bonus au nombre d'incréments
-	    }
-	    return new Degats(vd + m_arbreDomaines.getRangDomaine(domaine) + m_arbreDomaines.getRangComp(domaine, competence) + bonusSup, typArm);
+	    result = arme.genererDegats(m_groupeTraits, m_arbreDomaines, p_increments);
 	}
 	else
 	{
@@ -533,55 +508,4 @@ public class Perso
 	return result;
     }
 
-    /**
-     * classe utilisée pour encapsuler les résultats d'une attaque réussie ; des
-     * dégâts mais aussi le type.
-     */
-    public static final class Degats
-    {
-
-	/**
-	 * le total des dégâts infligés
-	 */
-	private int m_quantite;
-	/**
-	 * le type d'arme employé
-	 */
-	private int m_typeArme;
-
-	/**
-	 * constructeur de dégâts
-	 *
-	 * @param p_quantite
-	 * @param p_typeArme
-	 */
-	public Degats(int p_quantite, int p_typeArme)
-	{
-	    if (p_quantite >= 0 && p_typeArme >= 0)
-	    {
-		m_quantite = p_quantite;
-		m_typeArme = p_typeArme;
-	    }
-	    else
-	    {
-		ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("degats") + ":" + p_quantite + " " + PropertiesHandler.getInstance("libupsystem").getString("type") + ":" + p_typeArme);
-	    }
-	}
-
-	/**
-	 * @return the m_quantite
-	 */
-	public int getQuantite()
-	{
-	    return m_quantite;
-	}
-
-	/**
-	 * @return the m_typeArme
-	 */
-	public int getTypeArme()
-	{
-	    return m_typeArme;
-	}
-    }
 }

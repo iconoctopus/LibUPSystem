@@ -16,9 +16,8 @@
  */
 package org.duckdns.spacedock.upengine.libupsystem;
 
+import org.duckdns.spacedock.upengine.libupsystem.Arme.Degats;
 import org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait;
-import org.duckdns.spacedock.upengine.libupsystem.Perso.Degats;
-import static org.junit.Assert.fail;
 
 /**
  * classe fournissant des utilitaires pour les tests statistiques mis en oeuvre

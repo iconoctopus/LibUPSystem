@@ -591,6 +591,16 @@
 	    "type": 2,
 	    "2mains": true,
 	    "mode": 1
+	}, {
+	    "nom": "mains nues",
+	    "VD": 0,
+	    "bonus_init": 0,
+	    "malus_attaque": 0,
+	    "physique_minimal": 0,
+	    "categorie": 0,
+	    "type": 0,
+	    "2mains": false,
+	    "mode": 0
 	}],
     "types_armes": ["simple", "perce-armure", "pénétrante", "perce-blindage", "énergétique"],
     "cat_armes_cac": ["mains nues", "armes d'escrime", "armes à lame longue", "haches", "armes contondantes", "petites armes", "armes d'hast", "armes spéciales", "armes énergétiques", "armes lourdes"],

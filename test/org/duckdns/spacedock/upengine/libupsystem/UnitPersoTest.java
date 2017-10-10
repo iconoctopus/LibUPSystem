@@ -17,6 +17,7 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.util.ArrayList;
+import org.duckdns.spacedock.upengine.libupsystem.Arme.Degats;
 import org.duckdns.spacedock.upengine.libupsystem.EnsembleJauges.EtatVital;
 import org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait;
 import static org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait.COORDINATION;
@@ -24,7 +25,6 @@ import static org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait.MENT
 import static org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait.PHYSIQUE;
 import static org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait.PRESENCE;
 import static org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait.VOLONTE;
-import org.duckdns.spacedock.upengine.libupsystem.Perso.Degats;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -51,7 +51,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @PrepareForTest(//pour les méthodes statiques c'est la classe appelante qui doit apparaître ici, pour les classes final c'est la classe appelée (donc UPReferenceSysteme n'apparaît ici que pour son caractère final et pas pour sa méthode getInstance()
 
 	{//les classes final, appelant du statique et les classes subissant un whennew
-	    Perso.class, EtatVital.class, GroupeTraits.class, UPReferenceSysteme.class, RollUtils.RollResult.class, Armure.class, Degats.class, EnsembleJauges.class, ArbreDomaines.class, ArmeDist.class
+	    ArmeMainsNues.class, Perso.class, EtatVital.class, GroupeTraits.class, UPReferenceSysteme.class, RollUtils.RollResult.class, Armure.class, Degats.class, EnsembleJauges.class, ArbreDomaines.class, ArmeDist.class
 	})
 public class UnitPersoTest
 {
@@ -432,65 +432,31 @@ public class UnitPersoTest
     }
 
     @Test
-    public void testGenererDegatsCaCNominal()
+    public void testGenererDegatsNominal() throws Exception
     {
 	//On prévoie les appels aux domaines et compétences
 	when(arbreMock.getRangComp(3, 0)).thenReturn(3);
 	when(arbreMock.getRangComp(3, 2)).thenReturn(3);
 	when(arbreMock.getRangDomaine(3)).thenReturn(3);
 
+	//Cas standard
+	//On mocke une arme et un résultat de dégâts
+	ArmeCaC armeMock = PowerMockito.mock(ArmeCaC.class);
+	Degats degatsMock = PowerMockito.mock(Degats.class);
+	when(armeMock.genererDegats(traitsRM3, arbreMock, 3)).thenReturn(degatsMock);
+
+	Degats result = persoRM3.genererDegats(3, armeMock);
+	verify(armeMock).genererDegats(traitsRM3, arbreMock, 3);
+	assertEquals(degatsMock, result);
+
 	//Cas mains nues
-	Degats result = persoRM3.genererDegats(3, null);
-	verify(arbreMock).getRangComp(3, 0);
-	verify(arbreMock).getRangDomaine(3);
-	assertEquals(18, result.getQuantite());
 	assertEquals(0, result.getTypeArme());
 
-	//On mocke un inventaire contenant un mock d'arme
-	ArmeCaC armeMock = PowerMockito.mock(ArmeCaC.class);
-	when(armeMock.getVD()).thenReturn(7);
-	when(armeMock.getTypeArme()).thenReturn(3);
-	when(armeMock.getMode()).thenReturn(0);
-	when(armeMock.getCategorie()).thenReturn(1);
-
-	//Cas nominal
-	result = persoRM3.genererDegats(2, armeMock);
-	verify(armeMock).getVD();
-	verify(armeMock).getTypeArme();
-	verify(armeMock).getMode();
-	verify(armeMock).getCategorie();
-	verify(arbreMock).getRangComp(3, 2);
-	verify(arbreMock, times(2)).getRangDomaine(3);
-	verify(traitsRM3, times(3)).getTrait(PHYSIQUE);
-	assertEquals(20, result.getQuantite());
-	assertEquals(3, result.getTypeArme());
-    }
-
-    @Test
-    public void testGenererDegatsDistNominal()
-    {
-	//On prévoie les appels aux domaines et compétences
-	when(arbreMock.getRangComp(4, 2)).thenReturn(1);
-	when(arbreMock.getRangDomaine(4)).thenReturn(1);
-
-	//On mocke un inventaire contenant un mock d'arme
-	ArmeDist armeMock = PowerMockito.mock(ArmeDist.class);
-	when(armeMock.getMode()).thenReturn(1);
-	when(armeMock.getVD()).thenReturn(5);
-	when(armeMock.getTypeArme()).thenReturn(2);
-	when(armeMock.getMode()).thenReturn(1);
-	when(armeMock.getCategorie()).thenReturn(2);
-
-	//Cas nominal
-	Degats result = persoRM1.genererDegats(0, armeMock);
-	verify(armeMock).getVD();
-	verify(armeMock).getTypeArme();
-	verify(armeMock).getMode();
-	verify(armeMock).getCategorie();
-	verify(arbreMock).getRangComp(4, 2);
-	verify(arbreMock).getRangDomaine(4);
-	assertEquals(7, result.getQuantite());
-	assertEquals(2, result.getTypeArme());
+	ArmeMainsNues mainsNuesMock = PowerMockito.mock(ArmeMainsNues.class);
+	when(mainsNuesMock.genererDegats(traitsRM3, arbreMock, 7)).thenReturn(degatsMock);
+	whenNew(ArmeMainsNues.class).withArguments(traitsRM3).thenReturn(mainsNuesMock);
+	result = persoRM3.genererDegats(7, null);
+	assertEquals(result, degatsMock);
     }
 
     @Test

@@ -81,6 +81,22 @@ public class ArmeCaC extends Arme
     }
 
     /**
+     * ajoute la compétence d'arme au trait physique
+     *
+     * @param p_Traits
+     * @param p_arbreDomComp
+     * @return
+     */
+    @Override
+    int extractBonusCarac(GroupeTraits p_Traits, ArbreDomaines p_arbreDomComp)
+    {
+	int domaine = 3;//corps à corps
+	int competence = getCategorie() * 2;//les attaques sont à catégorie *2, les parades à catégorie * 2 +1
+
+	return (p_arbreDomComp.getRangComp(domaine, competence) + p_Traits.getTrait(GroupeTraits.Trait.PHYSIQUE));
+    }
+
+    /**
      *
      * @return la valeur de dégâts modifiée par les valeurs d'équilibrage et de
      * qualité

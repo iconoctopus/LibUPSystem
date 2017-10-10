@@ -281,6 +281,7 @@ public final class UPReferenceSysteme
 	public final String attaque;
 	public final String parade;
 	public final String facture;
+	public final String mainsnues;
 
 	CollectionLibelles(JsonObject p_libelles)
 	{
@@ -298,6 +299,7 @@ public final class UPReferenceSysteme
 		attaque = p_libelles.getString("attaque");
 		parade = p_libelles.getString("parade");
 		facture = p_libelles.getString("facture");
+		mainsnues = p_libelles.getString("mains_nues");
 	    }
 	    else
 	    {
@@ -313,6 +315,7 @@ public final class UPReferenceSysteme
 		attaque = "attaque";
 		parade = "parade";
 		facture = "facture";
+		mainsnues = "mains nues";
 	    }
 	}
     }

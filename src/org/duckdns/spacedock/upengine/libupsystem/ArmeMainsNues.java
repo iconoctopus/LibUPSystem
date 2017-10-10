@@ -38,4 +38,10 @@ public class ArmeMainsNues extends ArmeCaC
     {
 	return (super.getVD() + m_physique);
     }
+
+    @Override
+    public String toString()
+    {
+	return (UPReferenceSysteme.getInstance().getCollectionLibelles().mainsnues);
+    }
 }

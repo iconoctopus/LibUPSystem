@@ -147,13 +147,23 @@ public abstract class Arme
      * renvoie les dégâts d'une arme en fonction des caractéristiques de
      * celle-ci et de celui qui la porte
      *
-     * @param p_Traits
+     * @param p_traits
      * @param p_arbreDomComp
      * @return
      */
-    Degats genererDegats(GroupeTraits p_Traits, ArbreDomaines p_ArbreDomComp, int p_incr)
+    Degats genererDegats(GroupeTraits p_traits, ArbreDomaines p_arbreDomComp, int p_incr)
     {
-	return new Degats(getVD() + extractBonusCarac(p_Traits, p_ArbreDomComp) + 2 * p_incr, getTypeArme());
+	Degats result = new Degats(0, 0);
+	if (p_incr >= 0)
+	{
+
+	    result = new Degats(getVD() + extractBonusCarac(p_traits, p_arbreDomComp) + 2 * p_incr, getTypeArme());
+	}
+	else
+	{
+	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("increments") + ":" + p_incr);
+	}
+	return result;
     }
 
     abstract int extractBonusCarac(GroupeTraits p_Traits, ArbreDomaines p_ArbreDomComp);

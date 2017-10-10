@@ -17,12 +17,16 @@
 package org.duckdns.spacedock.upengine.libupsystem;
 
 import java.util.EnumMap;
+import org.duckdns.spacedock.upengine.libupsystem.Arme.Degats;
+import static org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait.PHYSIQUE;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -56,6 +60,7 @@ public class UnitArmeTest
     private static ArmeDist arme6;
     private static ArmeDist arme7;
     private static ArmeDist arme8;
+    private static ArmeMainsNues armeMainsNues;
     private static UPReferenceArmes referenceMock;
     private static EnumMap<Arme.QualiteArme, String> listQualite;
     private static EnumMap<Arme.EquilibrageArme, String> listEquilibrage;
@@ -140,6 +145,21 @@ public class UnitArmeTest
 	when(referenceMock.getPorteeArme(512)).thenReturn(50);
 
 	arme8 = new ArmeDist(512, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais);
+
+	when(referenceMock.getVDArme(50)).thenReturn(1);
+	when(referenceMock.getBonusInitArme(50)).thenReturn(1);
+	when(referenceMock.getCategorieArme(50)).thenReturn(0);
+	when(referenceMock.getTypeArme(50)).thenReturn(1);
+	when(referenceMock.getMalusAttaqueArme(50)).thenReturn(1);
+	when(referenceMock.getPhysMinArme(50)).thenReturn(1);
+	when(referenceMock.isArme2Mains(50)).thenReturn(false);
+	when(referenceMock.getModArme(50)).thenReturn(1);
+	when(referenceMock.getLblArme(50)).thenReturn("fausses mains nues");
+
+	//on mocke des traits
+	GroupeTraits traitsMockMainsNues = PowerMockito.mock(GroupeTraits.class);
+	when(traitsMockMainsNues.getTrait(GroupeTraits.Trait.PHYSIQUE)).thenReturn(9);
+	armeMainsNues = new ArmeMainsNues(traitsMockMainsNues);
     }
 
     @Test
@@ -153,6 +173,7 @@ public class UnitArmeTest
 	Assert.assertEquals(0, arme6.getBonusInit());
 	Assert.assertEquals(0, arme7.getBonusInit());
 	Assert.assertEquals(2, arme8.getBonusInit());
+	Assert.assertEquals(1, armeMainsNues.getBonusInit());
     }
 
     @Test
@@ -166,6 +187,7 @@ public class UnitArmeTest
 	Assert.assertEquals(0, arme6.getCategorie());
 	Assert.assertEquals(0, arme7.getCategorie());
 	Assert.assertEquals(4, arme8.getCategorie());
+	Assert.assertEquals(0, armeMainsNues.getCategorie());
     }
 
     @Test
@@ -179,6 +201,7 @@ public class UnitArmeTest
 	Assert.assertEquals(3, arme6.getVD());
 	Assert.assertEquals(3, arme7.getVD());
 	Assert.assertEquals(5, arme8.getVD());
+	Assert.assertEquals(10, armeMainsNues.getVD());
     }
 
     @Test
@@ -192,6 +215,7 @@ public class UnitArmeTest
 	Assert.assertEquals(0, arme6.getMalusAttaque());
 	Assert.assertEquals(0, arme7.getMalusAttaque());
 	Assert.assertEquals(1, arme8.getMalusAttaque());
+	Assert.assertEquals(1, armeMainsNues.getMalusAttaque());
     }
 
     @Test
@@ -205,6 +229,7 @@ public class UnitArmeTest
 	Assert.assertEquals(0, arme6.getTypeArme());
 	Assert.assertEquals(0, arme7.getTypeArme());
 	Assert.assertEquals(2, arme8.getTypeArme());
+	Assert.assertEquals(1, armeMainsNues.getTypeArme());
     }
 
     @Test
@@ -218,6 +243,7 @@ public class UnitArmeTest
 	Assert.assertEquals(0, arme6.getphysMin());
 	Assert.assertEquals(0, arme7.getphysMin());
 	Assert.assertEquals(3, arme8.getphysMin());
+	Assert.assertEquals(1, armeMainsNues.getphysMin());
     }
 
     @Test
@@ -231,6 +257,7 @@ public class UnitArmeTest
 	Assert.assertTrue(arme6.isArme2Mains());
 	Assert.assertTrue(arme7.isArme2Mains());
 	Assert.assertFalse(arme8.isArme2Mains());
+	Assert.assertFalse(armeMainsNues.isArme2Mains());
     }
 
     @Test
@@ -244,6 +271,7 @@ public class UnitArmeTest
 	Assert.assertEquals("arc de qualité inférieure et équilibrage bon", arme6.toString());
 	Assert.assertEquals("arc de qualité supérieure et équilibrage mauvais", arme7.toString());
 	Assert.assertEquals("SupaShooter de maître", arme8.toString());
+	Assert.assertEquals("mains nues", armeMainsNues.toString());
     }
 
     @Test
@@ -404,69 +432,48 @@ public class UnitArmeTest
 	assertEquals(3, report.getModDesLances());
     }
 
-    /*
     @Test
-    public void testGenererDegatsCaCNominal()
+    public void testGenererDegats()//exceptionellement on fait tous les test en une seule méthode : elle utilise plusieurs mocks qui lui sont propres donc c'est tout de même plus simple
     {
-	//On prévoie les appels aux domaines et compétences
-	when(arbreMock.getRangComp(3, 0)).thenReturn(3);
+	//On prévoie les appels aux traits et aux compétences
+	ArbreDomaines arbreMock = PowerMockito.mock(ArbreDomaines.class);
 	when(arbreMock.getRangComp(3, 2)).thenReturn(3);
-	when(arbreMock.getRangDomaine(3)).thenReturn(3);
+	when(arbreMock.getRangComp(3, 0)).thenReturn(8);
+	when(arbreMock.getRangComp(4, 4)).thenReturn(6);
+	GroupeTraits traitsMock = PowerMockito.mock(GroupeTraits.class);
+	when(traitsMock.getTrait(GroupeTraits.Trait.PHYSIQUE)).thenReturn(2);
+	when(traitsMock.getTrait(GroupeTraits.Trait.COORDINATION)).thenReturn(7);
+
+	//cas armes de corps à corps
+	Degats result = arme1.genererDegats(traitsMock, arbreMock, 1);
+	verify(arbreMock).getRangComp(3, 2);
+	verify(traitsMock).getTrait(PHYSIQUE);
+	assertEquals(12, result.getQuantite());
+	assertEquals(4, result.getTypeArme());
+
+	//Cas armes à distance
+	result = arme8.genererDegats(traitsMock, arbreMock, 9);
+	verify(arbreMock).getRangComp(4, 4);
+	verify(traitsMock).getTrait(GroupeTraits.Trait.COORDINATION);
+	assertEquals(36, result.getQuantite());
+	assertEquals(2, result.getTypeArme());
 
 	//Cas mains nues
-	Degats result = persoRM3.genererDegats(3, null);
+	result = armeMainsNues.genererDegats(traitsMock, arbreMock, 0);
 	verify(arbreMock).getRangComp(3, 0);
-	verify(arbreMock).getRangDomaine(3);
-	assertEquals(18, result.getQuantite());
-	assertEquals(0, result.getTypeArme());
-
-	//On mocke une arme
-	ArmeCaC armeMock = PowerMockito.mock(ArmeCaC.class);
-	when(armeMock.getVD()).thenReturn(7);
-	when(armeMock.getTypeArme()).thenReturn(3);
-	when(armeMock.getMode()).thenReturn(0);
-	when(armeMock.getCategorie()).thenReturn(1);
-
-	//Cas nominal
-	result = persoRM3.genererDegats(2, armeMock);
-	verify(armeMock).getVD();
-	verify(armeMock).getTypeArme();
-	verify(armeMock).getMode();
-	verify(armeMock).getCategorie();
-	verify(arbreMock).getRangComp(3, 2);
-	verify(arbreMock, times(2)).getRangDomaine(3);
-	verify(traitsRM3, times(3)).getTrait(PHYSIQUE);
+	verify(traitsMock, times(2)).getTrait(PHYSIQUE);
 	assertEquals(20, result.getQuantite());
-	assertEquals(3, result.getTypeArme());
+	assertEquals(1, result.getTypeArme());
+
+	//cas d'erreur : incréments négatifs
+	try
+	{
+	    arme1.genererDegats(traitsMock, arbreMock, -1);
+	    fail();
+	}
+	catch (IllegalArgumentException e)
+	{
+	    Assert.assertEquals("paramétre aberrant:incréments:-1", e.getMessage());
+	}
     }
-
-    @Test
-    public void testGenererDegatsDistNominal()
-    {
-	//On prévoie les appels aux domaines et compétences
-	when(arbreMock.getRangComp(4, 2)).thenReturn(1);
-	when(arbreMock.getRangDomaine(4)).thenReturn(1);
-
-	//On mocke un inventaire contenant un mock d'arme
-	ArmeDist armeMock = PowerMockito.mock(ArmeDist.class);
-	when(armeMock.getMode()).thenReturn(1);
-	when(armeMock.getVD()).thenReturn(5);
-	when(armeMock.getTypeArme()).thenReturn(2);
-	when(armeMock.getMode()).thenReturn(1);
-	when(armeMock.getCategorie()).thenReturn(2);
-
-	//Cas nominal
-	Degats result = persoRM1.genererDegats(0, armeMock);
-	verify(armeMock).getVD();
-	verify(armeMock).getTypeArme();
-	verify(armeMock).getMode();
-	verify(armeMock).getCategorie();
-	verify(arbreMock).getRangComp(4, 2);
-	verify(arbreMock).getRangDomaine(4);
-	assertEquals(7, result.getQuantite());
-	assertEquals(2, result.getTypeArme());
-    }
-
-
-     */
 }

@@ -118,8 +118,6 @@ public class UnitArmeTest
 	when(referenceMock.getModArme(34)).thenReturn(1);
 	when(referenceMock.getLblArme(34)).thenReturn("arc");
 
-	when(referenceMock.getMalusCourtArme(34)).thenReturn(5);
-	when(referenceMock.getMalusLongArme(34)).thenReturn(10);
 	when(referenceMock.getMagasinArme(34)).thenReturn(3);
 	when(referenceMock.getNbActionsRechargeArme(34)).thenReturn(1);
 	when(referenceMock.getPorteeArme(34)).thenReturn(150);
@@ -138,8 +136,6 @@ public class UnitArmeTest
 	when(referenceMock.getModArme(512)).thenReturn(1);
 	when(referenceMock.getLblArme(512)).thenReturn("SupaShooter");
 
-	when(referenceMock.getMalusCourtArme(512)).thenReturn(5);
-	when(referenceMock.getMalusLongArme(512)).thenReturn(10);
 	when(referenceMock.getMagasinArme(512)).thenReturn(19);
 	when(referenceMock.getNbActionsRechargeArme(512)).thenReturn(1);
 	when(referenceMock.getPorteeArme(512)).thenReturn(50);
@@ -277,29 +273,21 @@ public class UnitArmeTest
     @Test
     public void testGetSpecifiqueDistance()
     {
-	Assert.assertEquals(5, arme5.getMalusCourt());
-	Assert.assertEquals(10, arme5.getMalusLong());
 	Assert.assertEquals(0, arme5.getMunCourantes());
 	Assert.assertEquals(3, arme5.getTailleMAgasin());
 	Assert.assertEquals(1, arme5.getNbActionsRecharge());
 	Assert.assertEquals(150, arme5.getPortee());
 
-	Assert.assertEquals(8, arme6.getMalusCourt());
-	Assert.assertEquals(13, arme6.getMalusLong());
 	Assert.assertEquals(0, arme6.getMunCourantes());
 	Assert.assertEquals(3, arme6.getTailleMAgasin());
 	Assert.assertEquals(1, arme6.getNbActionsRecharge());
 	Assert.assertEquals(300, arme6.getPortee());
 
-	Assert.assertEquals(2, arme7.getMalusCourt());
-	Assert.assertEquals(7, arme7.getMalusLong());
 	Assert.assertEquals(0, arme7.getMunCourantes());
 	Assert.assertEquals(3, arme7.getTailleMAgasin());
 	Assert.assertEquals(1, arme7.getNbActionsRecharge());
 	Assert.assertEquals(75, arme7.getPortee());
 
-	Assert.assertEquals(-1, arme8.getMalusCourt());
-	Assert.assertEquals(4, arme8.getMalusLong());
 	Assert.assertEquals(0, arme8.getMunCourantes());
 	Assert.assertEquals(19, arme8.getTailleMAgasin());
 	Assert.assertEquals(1, arme8.getNbActionsRecharge());
@@ -406,28 +394,28 @@ public class UnitArmeTest
 
 	//Cas coup par coup, portée courte (pile la moitié pour vérifier l'arrondi et le "inférieur ou égal", physique minimal dépassé, malus au jet d'attaque
 	ArmeDist.DistReport report = arme8.verifPreAttaque(50, 1);
-	assertEquals(1, report.getModJet());
+	assertEquals(6, report.getModJet());
 	assertEquals(0, report.getModDesGardes());
 	assertEquals(0, report.getModDesLances());
 	arme8.recharger(1);
 
 	//Cas rafale courte, portée longue (juste 1 au dessus de la moitié)
 	report = arme8.verifPreAttaque(51, 3);
-	assertEquals(-4, report.getModJet());
+	assertEquals(1, report.getModJet());
 	assertEquals(0, report.getModDesGardes());
 	assertEquals(2, report.getModDesLances());
 	arme8.recharger(3);
 
 	//Cas rafale moyenne (8 coups donc 2 tranches entières de 3), portée courte
 	report = arme8.verifPreAttaque(25, 8);
-	assertEquals(1, report.getModJet());
+	assertEquals(6, report.getModJet());
 	assertEquals(0, report.getModDesGardes());
 	assertEquals(4, report.getModDesLances());
 	arme8.recharger(8);
 
 	//Cas rafale longue(19 coups donc 3 tranches entières de 5), portée longue
 	report = arme8.verifPreAttaque(75, 19);
-	assertEquals(-4, report.getModJet());
+	assertEquals(1, report.getModJet());
 	assertEquals(3, report.getModDesGardes());
 	assertEquals(3, report.getModDesLances());
     }

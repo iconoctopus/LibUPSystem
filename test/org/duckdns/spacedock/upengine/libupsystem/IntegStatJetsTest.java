@@ -59,19 +59,19 @@ public class IntegStatJetsTest
 	Assert.assertFalse(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM3, 38, 0, 0, new ArmeCaC(8, Arme.QualiteArme.inferieure, Arme.EquilibrageArme.bon)));
 
 	//attaque à distance au fusil d'assaut coup par coup avec RM5 et portée courte
-	Assert.assertTrue(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM5, 55, 300, 1, new ArmeDist(44, Arme.QualiteArme.superieure, Arme.EquilibrageArme.bon)));//pile la portée, donc courte
-	Assert.assertFalse(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM5, 57, 300, 2, new ArmeDist(44, Arme.QualiteArme.superieure, Arme.EquilibrageArme.bon)));//deux balles ne devraient rien changer, on n'est pas au seuil de rafale courte
+	Assert.assertTrue(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM5, 60, 300, 1, new ArmeDist(44, Arme.QualiteArme.superieure, Arme.EquilibrageArme.bon)));//pile la portée, donc courte
+	Assert.assertFalse(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM5, 62, 300, 2, new ArmeDist(44, Arme.QualiteArme.superieure, Arme.EquilibrageArme.bon)));//deux balles ne devraient rien changer, on n'est pas au seuil de rafale courte
 
 	//attaque à distance au fusil d'assaut en rafale courte avec RM3 et portée courte
-	Assert.assertTrue(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM3, 34, 100, 3, new ArmeDist(44, Arme.QualiteArme.inferieure, Arme.EquilibrageArme.normal)));
-	Assert.assertFalse(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM3, 36, 20, 3, new ArmeDist(44, Arme.QualiteArme.inferieure, Arme.EquilibrageArme.normal)));
+	Assert.assertTrue(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM3, 39, 100, 3, new ArmeDist(44, Arme.QualiteArme.inferieure, Arme.EquilibrageArme.normal)));
+	Assert.assertFalse(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM3, 41, 20, 3, new ArmeDist(44, Arme.QualiteArme.inferieure, Arme.EquilibrageArme.normal)));
 
 	//attaque à distance au fusil d'assaut en rafale moyenne avec RM3 et portée longue
-	Assert.assertTrue(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM3, 41, 400, 8, new ArmeDist(44, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais)));//donc deux groupes entiers de trois balles
-	Assert.assertFalse(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM3, 42, 540, 8, new ArmeDist(44, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais)));
+	Assert.assertTrue(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM3, 46, 400, 8, new ArmeDist(44, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais)));//donc deux groupes entiers de trois balles
+	Assert.assertFalse(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM3, 47, 540, 8, new ArmeDist(44, Arme.QualiteArme.maitre, Arme.EquilibrageArme.mauvais)));
 
 	//attaque à distance au fusil d'assaut en rafale longue avec RM5 et portée courte
-	Assert.assertTrue(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM5, 64, 60, 13, new ArmeDist(44, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.mauvais)));//deux groupes entiers de 5 balles
-	Assert.assertFalse(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM5, 68, 20, 13, new ArmeDist(44, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.mauvais)));
+	Assert.assertTrue(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM5, 69, 60, 13, new ArmeDist(44, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.mauvais)));//deux groupes entiers de 5 balles
+	Assert.assertFalse(IntegStatTestUtils.reussiteStatistiqueAttaque(persoRM5, 73, 20, 13, new ArmeDist(44, Arme.QualiteArme.moyenne, Arme.EquilibrageArme.mauvais)));
     }
 }

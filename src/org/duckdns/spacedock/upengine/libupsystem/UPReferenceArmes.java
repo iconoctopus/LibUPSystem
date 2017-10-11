@@ -251,28 +251,6 @@ public class UPReferenceArmes
     }
 
     /**
-     * renvoie le malus aux jets à courte portée de l'arme
-     *
-     * @param p_indice
-     * @return
-     */
-    public int getMalusCourtArme(int p_indice)
-    {
-	return m_tabArmes.getJsonObject(p_indice).getInt("malus_court");
-    }
-
-    /**
-     * renvoie le malus aux jets à longue portée de l'arme
-     *
-     * @param p_indice
-     * @return
-     */
-    public int getMalusLongArme(int p_indice)
-    {
-	return m_tabArmes.getJsonObject(p_indice).getInt("malus_long");
-    }
-
-    /**
      *
      * @param p_indice
      * @return le mode d'attaque d'une arme représentée par son index

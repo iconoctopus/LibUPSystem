@@ -150,18 +150,6 @@ public class UnitUPReferenceArmesTest
     }
 
     @Test
-    public void testGetMalusCourtArme()
-    {
-	Assert.assertEquals(5, m_reference.getMalusCourtArme(38));
-    }
-
-    @Test
-    public void testGetMalusLongArme()
-    {
-	Assert.assertEquals(10, m_reference.getMalusLongArme(38));
-    }
-
-    @Test
     public void testGetPorteeArme()
     {
 	Assert.assertEquals(300, m_reference.getPorteeArme(38));

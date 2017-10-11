@@ -34,23 +34,18 @@ public class ArmeDist extends Arme
      * la capacité du magasin de l'arme
      */
     private final int m_magasinMax;
-
-    /**
-     * le malus à portée courte
-     */
-    private final int m_malusCourt;
-    /**
-     * le malus à portée longue
-     */
-    private final int m_malusLong;
     /**
      * le nombre d'actions pour recharger
      */
     private final int m_nbActionsRecharge;
     /**
-     * le malus à portée longue
+     * la portée de l'arme
      */
     private final int m_portee;
+    /**
+     * le modificateur aux jets pour toucher du fait de la qualité
+     */
+    private final int m_modifJet;
 
     /**
      * constructeur identique à celui de la superclasse, celle-ci emploie la
@@ -66,12 +61,11 @@ public class ArmeDist extends Arme
     {
 	super(p_indice, p_qualite, p_equilibrage);
 	UPReferenceArmes reference = UPReferenceArmes.getInstance();
-	int modifMalus;
 	int porteeEffective = reference.getPorteeArme(p_indice);
 
 	if (p_qualite == QualiteArme.maitre)//traitement spécial des armes de maître
 	{
-	    modifMalus = -6;
+	    m_modifJet = 6;
 	    porteeEffective = porteeEffective * 2;
 	}
 	else
@@ -79,13 +73,13 @@ public class ArmeDist extends Arme
 	    switch (p_qualite)
 	    {
 		case inferieure:
-		    modifMalus = +3;
+		    m_modifJet = -3;
 		    break;
 		case superieure:
-		    modifMalus = -3;
+		    m_modifJet = +3;
 		    break;
 		default:
-		    modifMalus = 0;
+		    m_modifJet = 0;
 		    break;
 	    }
 	    switch (p_equilibrage)
@@ -100,8 +94,6 @@ public class ArmeDist extends Arme
 		    break;
 	    }
 	}
-	m_malusCourt = reference.getMalusCourtArme(p_indice) + modifMalus;//ainsi que modifié par la qualité
-	m_malusLong = reference.getMalusLongArme(p_indice) + modifMalus;//ainsi que modifié par la qualité
 	m_portee = porteeEffective;//ainsi que modifiée par l'équilibrage et la qualité
 	m_nbActionsRecharge = reference.getNbActionsRechargeArme(p_indice);
 	m_magasinMax = reference.getMagasinArme(p_indice);
@@ -144,8 +136,10 @@ public class ArmeDist extends Arme
      * méthode appelée par le perso avant qu'il n'effectue son attaque, elle va
      * se charger des particularismes des armes à distance pour présenter les
      * bonus/malus finaux agglomérés qu'il faudra appliquer à l'attaque en
-     * fonction de la portée et du nombre de munitions employées. Elle se
-     * chargera aussi de définir si l'arme peut opérer selon ces paramétres.
+     * fonction de la portée, de la qualité de l'arme et du nombre de munitions
+     * employées. Elle se chargera aussi de définir si l'arme peut opérer selon
+     * ces paramétres. Elle ne prend pas en compte le modificateur normal à
+     * l'attaque commun à toutes les armes
      *
      * @param p_distance
      * @param p_nbCoups
@@ -154,19 +148,15 @@ public class ArmeDist extends Arme
     DistReport verifPreAttaque(int p_distance, int p_nbCoups)
     {
 	DistReport result = new DistReport(0, 0, 0, true);//échec auto par défaut
-	int modDist = 0;
+	int modJetFinal = m_modifJet;
 	if (p_distance >= 0 && p_nbCoups > 0 && p_nbCoups <= 20)
 	{
 	    consommerMun(p_nbCoups);//on consomme les coups, une exception sera levée si il n'y a pas assez de munitions, le code appelant devrait vérifier systématiquement cela
 	    if (p_distance <= getPortee())//échec auto si distance > portée
 	    {
-		if (p_distance <= (int) Math.round((double) getPortee() / (double) 2))
-		{//portée courte
-		    modDist -= getMalusCourt();
-		}
-		else
+		if (p_distance > (int) Math.round((double) getPortee() / (double) 2))
 		{//portée longue
-		    modDist -= getMalusLong();
+		    modJetFinal -= 5;
 		}
 		//conditions initiales remplies, maintenant il faut évaluer l'éventuelle rafale
 		int bonusDesLancesRafale = 0;
@@ -198,11 +188,11 @@ public class ArmeDist extends Arme
 		    }
 		    else
 		    {
-			recharger(p_nbCoups);//on restaure les coups retirés alors qu'en fait le tir n'a pas eu lieu car l'arme ne peut tier en rafale
+			recharger(p_nbCoups);//on restaure les coups retirés car fait le tir n'a pas eu lieu car l'arme ne peut tirer en rafale
 			ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("nbCoups") + ":" + p_nbCoups);
 		    }
 		}
-		result = new DistReport(bonusDesLancesRafale, bonusDesGardesRafale, modDist, false);
+		result = new DistReport(bonusDesLancesRafale, bonusDesGardesRafale, modJetFinal, false);
 	    }
 	}
 	else
@@ -210,22 +200,6 @@ public class ArmeDist extends Arme
 	    ErrorHandler.paramAberrant(PropertiesHandler.getInstance("libupsystem").getString("distance") + ":" + p_distance + " " + PropertiesHandler.getInstance("libupsystem").getString("nbCoups") + ":" + p_nbCoups);
 	}
 	return result;
-    }
-
-    /**
-     * @return the m_malusCourt
-     */
-    int getMalusCourt()
-    {
-	return m_malusCourt;
-    }
-
-    /**
-     * @return the m_malusLong
-     */
-    int getMalusLong()
-    {
-	return m_malusLong;
     }
 
     /**
@@ -284,8 +258,17 @@ public class ArmeDist extends Arme
     public static final class DistReport
     {
 
+	/**
+	 * modificateur(pas malus) au nombre de dés gardés
+	 */
 	private final int m_modDesGardes;
+	/**
+	 * modificateur(pas malus) au nombre de dés lancés
+	 */
 	private final int m_modDesLances;
+	/**
+	 * modificateur (pas malus) au score final
+	 */
 	private final int m_modJet;
 	private final boolean m_echecAuto;
 
@@ -295,14 +278,14 @@ public class ArmeDist extends Arme
 	 * @param p_lances
 	 * @param p_gardes
 	 * @param p_modif
-	 * @param p_echec
+	 * @param p_echecAuto
 	 */
-	public DistReport(int p_lances, int p_gardes, int p_modif, boolean p_echec)
+	public DistReport(int p_lances, int p_gardes, int p_modif, boolean p_echecAuto)
 	{
 	    m_modDesGardes = p_gardes;
 	    m_modDesLances = p_lances;
 	    m_modJet = p_modif;
-	    m_echecAuto = p_echec;
+	    m_echecAuto = p_echecAuto;
 	}
 
 	public int getModDesGardes()
@@ -315,6 +298,10 @@ public class ArmeDist extends Arme
 	    return m_modDesLances;
 	}
 
+	/**
+	 *
+	 * @return le nombre relatif qui va venir changer le score final
+	 */
 	public int getModJet()
 	{
 	    return m_modJet;

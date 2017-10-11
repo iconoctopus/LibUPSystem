@@ -41,14 +41,15 @@ public class UnitUPReferenceArmuresTest
 	Assert.assertEquals(0, m_reference.getRedDegats(0, 0, 0));
 	Assert.assertEquals(0, m_reference.getRedDegats(2, 4, 3));//2/2 = 1
 	Assert.assertEquals(5, m_reference.getRedDegats(8, 4, 3));//8/2 = 4
-	Assert.assertEquals(5, m_reference.getRedDegats(12, 4, 3));//12/2 = 6
-	Assert.assertEquals(15, m_reference.getRedDegats(8, 0, 3));
-	Assert.assertEquals(15, m_reference.getRedDegats(138, 4, 0));//arrondi 138/5 = 27
-	Assert.assertEquals(15, m_reference.getRedDegats(103, 4, 0));//arrondi 103/5 = 21
-	Assert.assertEquals(10, m_reference.getRedDegats(87, 4, 0));//arrondi 88/5 = 18
-	Assert.assertEquals(5, m_reference.getRedDegats(21, 2, 1));//arrondi 21/2 = 11
-	Assert.assertEquals(10, m_reference.getRedDegats(32, 3, 2));
-	Assert.assertEquals(5, m_reference.getRedDegats(19, 3, 1));//arrondi 19/3 = 6
+	Assert.assertEquals(10, m_reference.getRedDegats(12, 4, 3));//12/2 = 6
+	Assert.assertEquals(15, m_reference.getRedDegats(8, 0, 3));//8*4=32
+	Assert.assertEquals(14, m_reference.getRedDegats(138, 4, 0));//arrondi 138/5 = 27
+	Assert.assertEquals(13, m_reference.getRedDegats(103, 4, 0));//arrondi 103/5 = 21
+	Assert.assertEquals(12, m_reference.getRedDegats(87, 4, 0));//arrondi 88/5 = 18
+	Assert.assertEquals(11, m_reference.getRedDegats(21, 2, 1));//arrondi 21/2 = 11
+	Assert.assertEquals(12, m_reference.getRedDegats(32, 3, 2));//32/2=16
+	Assert.assertEquals(10, m_reference.getRedDegats(19, 3, 1));//arrondi 19/3 = 6
+	Assert.assertEquals(15, m_reference.getRedDegats(42, 0, 0));
     }
 
     @Test
@@ -58,13 +59,14 @@ public class UnitUPReferenceArmuresTest
 	Assert.assertEquals(0, m_reference.getBonusND(2, 4, 3));//2/2 = 1
 	Assert.assertEquals(0, m_reference.getBonusND(8, 4, 3));//8/2 = 1
 	Assert.assertEquals(5, m_reference.getBonusND(12, 4, 3));//12/2 = 6
-	Assert.assertEquals(15, m_reference.getBonusND(8, 0, 3));
-	Assert.assertEquals(15, m_reference.getBonusND(138, 4, 0));//arrondi 138/5 = 27
-	Assert.assertEquals(10, m_reference.getBonusND(103, 4, 0));//arrondi 103/5 = 21
-	Assert.assertEquals(10, m_reference.getBonusND(88, 4, 0));//arrondi 88/5 = 18
-	Assert.assertEquals(10, m_reference.getBonusND(21, 2, 1));//arrondi 21/2 = 11
-	Assert.assertEquals(10, m_reference.getBonusND(32, 3, 2));
+	Assert.assertEquals(10, m_reference.getBonusND(8, 0, 3));//8*4=32
+	Assert.assertEquals(9, m_reference.getBonusND(138, 4, 0));//arrondi 138/5 = 27
+	Assert.assertEquals(8, m_reference.getBonusND(103, 4, 0));//arrondi 103/5 = 21
+	Assert.assertEquals(7, m_reference.getBonusND(88, 4, 0));//arrondi 88/5 = 18
+	Assert.assertEquals(6, m_reference.getBonusND(21, 2, 1));//arrondi 21/2 = 11
+	Assert.assertEquals(7, m_reference.getBonusND(32, 3, 2));//32/2=16
 	Assert.assertEquals(5, m_reference.getBonusND(19, 3, 1));//arrondi 19/3 = 6
+	Assert.assertEquals(10, m_reference.getBonusND(52, 0, 0));
     }
 
     @Test
@@ -112,10 +114,11 @@ public class UnitUPReferenceArmuresTest
 	Assert.assertEquals(0, m_reference.getMalusArmure(1));
 	Assert.assertEquals(0, m_reference.getMalusArmure(2));
 	Assert.assertEquals(0, m_reference.getMalusArmure(5));
-	Assert.assertEquals(2, m_reference.getMalusArmure(11));
-	Assert.assertEquals(3, m_reference.getMalusArmure(20));
-	Assert.assertEquals(4, m_reference.getMalusArmure(21));
-	Assert.assertEquals(5, m_reference.getMalusArmure(30));
+	Assert.assertEquals(6, m_reference.getMalusArmure(11));
+	Assert.assertEquals(7, m_reference.getMalusArmure(20));
+	Assert.assertEquals(8, m_reference.getMalusArmure(21));
+	Assert.assertEquals(9, m_reference.getMalusArmure(30));
+	Assert.assertEquals(10, m_reference.getMalusArmure(59));
     }
 
     @Test

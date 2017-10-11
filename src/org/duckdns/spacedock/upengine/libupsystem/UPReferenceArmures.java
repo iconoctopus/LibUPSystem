@@ -363,7 +363,7 @@ public class UPReferenceArmures
     private int getRang(int p_points)
     {
 	int i = -1;//on commence avec i en dehors du tableau (0 points d'armure, pas de bonus) et l'on teste si on peut l'augmenter, quand on ne peut plus l'augmenter on le renvoie.
-	while (i <= 4 && p_points >= m_tableArmureRangs.getInt(i + 1))
+	while (i <= 5 && p_points >= m_tableArmureRangs.getInt(i + 1))
 	{
 	    ++i;
 	}

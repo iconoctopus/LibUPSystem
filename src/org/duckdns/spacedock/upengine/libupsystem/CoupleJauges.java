@@ -19,7 +19,7 @@ package org.duckdns.spacedock.upengine.libupsystem;
 import org.duckdns.spacedock.commonutils.ErrorHandler;
 import org.duckdns.spacedock.commonutils.PropertiesHandler;
 import org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait;
-import org.duckdns.spacedock.upengine.libupsystem.RollUtils.RollResult;
+import org.duckdns.spacedock.upengine.libupsystem.RollGenerator.RollResult;
 
 /**
  * représente l'un des couples de jauges vitales d'un personnage : santé/init ou

@@ -37,7 +37,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @PrepareForTest(//pour les méthodes statiques c'est la classe appelante qui doit apparaître ici, pour les classes final c'est la classe appelée (donc UPReferenceSysteme n'apparaît ici que pour son caractère final et pas pour sa méthode getInstance()
 
 	{//les classes final, appelant du statique et les classes subissant un whennew
-	    EnsembleJauges.EtatVital.class, GroupeTraits.class, RollUtils.RollResult.class, EnsembleJauges.class, CoupleJauges.class
+	    EnsembleJauges.EtatVital.class, GroupeTraits.class, RollGenerator.RollResult.class, EnsembleJauges.class, CoupleJauges.class
 	})
 public class UnitEnsembleJaugesTest
 {
@@ -147,7 +147,7 @@ public class UnitEnsembleJaugesTest
     }
 
     @Test
-    public void testToutesMethodesInitNominal()//petite exception aux règles des tests unitaires car il est difficile de mocker les méthodes statiques de la classe statique RollUtils, on vérifie donc simplement que les résultats sont dans les normes
+    public void testToutesMethodesInitNominal()//petite exception aux règles des tests unitaires car il est difficile de mocker les méthodes statiques de la classe statique RollGenerator, on vérifie donc simplement que les résultats sont dans les normes
     {
 	for (int j = 0; j <= 4; j++)//5 tests de suite pour être sur
 	{

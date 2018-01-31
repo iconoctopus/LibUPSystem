@@ -155,15 +155,15 @@ class Domaine
      * @param p_isSonne
      * @return
      */
-    RollUtils.RollResult effectuerJetComp(int p_rangTrait, int p_indComp, int p_nd, int p_modifNbDesLances, int p_modifNbDesGardes, int p_modifScore, boolean p_isSonne)
+    RollGenerator.RollResult effectuerJetComp(int p_rangTrait, int p_indComp, int p_nd, int p_modifNbDesLances, int p_modifNbDesGardes, int p_modifScore, boolean p_isSonne)
     {
-	int result = 0;
+	RollGenerator.RollResult result = new RollGenerator.RollResult(0, false, 0);
+	RollGenerator generator = RollGenerator.getInstance();
 
 	if (getRang() > 0 && p_indComp >= 0 && p_rangTrait >= 0)
 	{
 	    int comp = m_competences.get(p_indComp).getRang();
-
-	    int bonus = p_modifScore;
+	    int modif = p_modifScore + ((comp >= 3) ? 5 : 0);
 	    int lances = getRang() + comp + p_modifNbDesLances;
 	    int gardes = p_rangTrait + p_modifNbDesGardes;
 	    if (lances > 0)
@@ -176,28 +176,18 @@ class Domaine
 
 		    lances++;
 		}*/
-		    if (comp >= 3)
-		    {
-			bonus += 5;
-		    }
-		    result = RollUtils.lancer(lances, gardes, p_isSonne);
-		}
-		result = result + bonus;
-		if (result < 0)
-		{
-		    result = 0;
+		    result = generator.effectuerJet(p_nd, lances, gardes, p_isSonne, modif);
 		}
 	    }
 	}
 	else
 	{
 	    String message = "";
-
 	    message = message.concat(PropertiesHandler.getInstance("libupsystem").getString("trait") + ":" + p_rangTrait);
 	    message = message.concat(" " + PropertiesHandler.getInstance("libupsystem").getString("dom") + ":" + getRang());
 	    message = message.concat(" " + PropertiesHandler.getInstance("commonutils").getString("indice") + " " + PropertiesHandler.getInstance("libupsystem").getString("comp") + ":" + p_indComp);
 	    ErrorHandler.paramAberrant(message);
 	}
-	return RollUtils.extraireIncrements(result, p_nd);
+	return result;
     }
 }

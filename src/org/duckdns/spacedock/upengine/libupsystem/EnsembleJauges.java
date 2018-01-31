@@ -100,13 +100,14 @@ public class EnsembleJauges
      */
     public final void genInit()
     {
+	RollGenerator generator = RollGenerator.getInstance();
 	int initiative = m_jaugeSanteInit.getRemplissage_externe();
 	ArrayList<Integer> tabResult = new ArrayList<>();
 	if (initiative > 0)//le personnage est capable d'avoir des actions dans un tour
 	{
 	    for (int i = 0; i < initiative; i++)//on parcourt le tableau des actions et on le remplit
 	    {
-		tabResult.add(RollUtils.lancer(1, 1, true));
+		tabResult.add(generator.lancerDe(true));
 	    }
 	}
 	Collections.sort(tabResult);

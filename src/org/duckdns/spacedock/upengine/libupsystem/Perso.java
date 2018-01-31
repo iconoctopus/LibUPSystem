@@ -22,7 +22,7 @@ import org.duckdns.spacedock.commonutils.PropertiesHandler;
 import org.duckdns.spacedock.upengine.libupsystem.Arme.Degats;
 import org.duckdns.spacedock.upengine.libupsystem.EnsembleJauges.EtatVital;
 import org.duckdns.spacedock.upengine.libupsystem.GroupeTraits.Trait;
-import org.duckdns.spacedock.upengine.libupsystem.RollUtils.RollResult;
+import org.duckdns.spacedock.upengine.libupsystem.RollGenerator.RollResult;
 
 public class Perso
 {
@@ -141,7 +141,7 @@ public class Perso
      * @param p_arme
      * @return
      */
-    public final RollUtils.RollResult attaquerCaC(int p_phaseActuelle, int p_ND, ArmeCaC p_arme)
+    public final RollGenerator.RollResult attaquerCaC(int p_phaseActuelle, int p_ND, ArmeCaC p_arme)
     {
 	int catArm = 0;//mains nues par défaut
 	if (p_arme != null)//une arme est équipée
@@ -197,7 +197,7 @@ public class Perso
      * @param p_modifScore
      * @return le résultat du jet
      */
-    public final RollUtils.RollResult effectuerJetComp(Trait p_idTrait, int p_indDomaine, int p_indComp, int p_ND, int p_modifNbLances, int p_modifNbGardes, int p_modifScore)
+    public final RollGenerator.RollResult effectuerJetComp(Trait p_idTrait, int p_indDomaine, int p_indComp, int p_ND, int p_modifNbLances, int p_modifNbGardes, int p_modifScore)
     {
 	return m_arbreDomaines.effectuerJetComp(m_groupeTraits.getTrait(p_idTrait), p_indDomaine, p_indComp, p_ND, p_modifNbLances, p_modifNbGardes, p_modifScore, m_jauges.getEtatVital().isSonne());
     }
@@ -209,7 +209,7 @@ public class Perso
      * @param p_ND
      * @return le résultat du jet
      */
-    public final RollUtils.RollResult effectuerJetTrait(Trait p_trait, int p_ND)
+    public final RollGenerator.RollResult effectuerJetTrait(Trait p_trait, int p_ND)
     {
 	return m_groupeTraits.effectuerJetTrait(p_trait, p_ND, m_jauges.getEtatVital().isSonne());
     }

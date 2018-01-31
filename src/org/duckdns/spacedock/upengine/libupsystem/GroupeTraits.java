@@ -19,7 +19,7 @@ package org.duckdns.spacedock.upengine.libupsystem;
 import java.util.EnumMap;
 import org.duckdns.spacedock.commonutils.ErrorHandler;
 import org.duckdns.spacedock.commonutils.PropertiesHandler;
-import org.duckdns.spacedock.upengine.libupsystem.RollUtils.RollResult;
+import org.duckdns.spacedock.upengine.libupsystem.RollGenerator.RollResult;
 
 /**
  *
@@ -62,7 +62,7 @@ public class GroupeTraits
      */
     RollResult effectuerJetTrait(Trait p_idTrait, int p_ND, boolean p_isSonne)
     {
-	return RollUtils.extraireIncrements(RollUtils.lancer(m_traits.get(p_idTrait), m_traits.get(p_idTrait), p_isSonne), p_ND);
+	return RollGenerator.getInstance().effectuerJet(p_ND, m_traits.get(p_idTrait), m_traits.get(p_idTrait), p_isSonne, 0);
     }
 
     /**

@@ -51,7 +51,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @PrepareForTest(//pour les méthodes statiques c'est la classe appelante qui doit apparaître ici, pour les classes final c'est la classe appelée (donc UPReferenceSysteme n'apparaît ici que pour son caractère final et pas pour sa méthode getInstance()
 
 	{//les classes final, appelant du statique et les classes subissant un whennew
-	    ArmeMainsNues.class, Perso.class, EtatVital.class, GroupeTraits.class, UPReferenceSysteme.class, RollUtils.RollResult.class, Armure.class, Degats.class, EnsembleJauges.class, ArbreDomaines.class, ArmeDist.class
+	    ArmeMainsNues.class, Perso.class, EtatVital.class, GroupeTraits.class, UPReferenceSysteme.class, RollGenerator.RollResult.class, Armure.class, Degats.class, EnsembleJauges.class, ArbreDomaines.class, ArmeDist.class
 	})
 public class UnitPersoTest
 {
@@ -246,8 +246,8 @@ public class UnitPersoTest
 	when(armeMock.getMalusAttaque()).thenReturn(1);
 
 	//On mocke un retour pour vérifier qu'il traverse correctement les couches private et on le fait retourner par arbreMock
-	RollUtils.RollResult resultMock = PowerMockito.mock(RollUtils.RollResult.class);
-	PowerMockito.mockStatic(RollUtils.RollResult.class);
+	RollGenerator.RollResult resultMock = PowerMockito.mock(RollGenerator.RollResult.class);
+	PowerMockito.mockStatic(RollGenerator.RollResult.class);
 	when(resultMock.getNbIncrements()).thenReturn(0);
 	when(resultMock.isJetReussi()).thenReturn(false);
 	when(resultMock.getScoreBrut()).thenReturn(10);
@@ -257,7 +257,7 @@ public class UnitPersoTest
 	when(etatRM1.isSonne()).thenReturn(true);
 
 	//On fait effectuer une attaque à la hache à un perso RM1 en prenant en compte le physique minimal de 2 et le malus à l'attaque de 1
-	RollUtils.RollResult resultat = persoRM1.attaquerCaC(persoRM1.getActions().get(0), 12, armeMock);
+	RollGenerator.RollResult resultat = persoRM1.attaquerCaC(persoRM1.getActions().get(0), 12, armeMock);
 	verify(etatRM1).isSonne();
 	Assert.assertEquals(0, resultat.getNbIncrements());
 	Assert.assertEquals(10, resultat.getScoreBrut());
@@ -271,8 +271,8 @@ public class UnitPersoTest
     public void testAttaquerCaCMainsNues()
     {
 	//On mocke un retour pour vérifier qu'il traverse correctement les couches private et on le fait retourner par arbreMock
-	RollUtils.RollResult resultMock = PowerMockito.mock(RollUtils.RollResult.class);
-	PowerMockito.mockStatic(RollUtils.RollResult.class);
+	RollGenerator.RollResult resultMock = PowerMockito.mock(RollGenerator.RollResult.class);
+	PowerMockito.mockStatic(RollGenerator.RollResult.class);
 	when(resultMock.getNbIncrements()).thenReturn(3);
 	when(resultMock.isJetReussi()).thenReturn(true);
 	when(resultMock.getScoreBrut()).thenReturn(28);
@@ -282,7 +282,7 @@ public class UnitPersoTest
 	when(etatRM3.isSonne()).thenReturn(false);
 
 	//On fait effectuer une attaque à mains nues à un perso RM3
-	RollUtils.RollResult resultat = persoRM3.attaquerCaC(persoRM3.getActions().get(0), 30, null);
+	RollGenerator.RollResult resultat = persoRM3.attaquerCaC(persoRM3.getActions().get(0), 30, null);
 
 	Assert.assertEquals(3, resultat.getNbIncrements());
 	Assert.assertEquals(28, resultat.getScoreBrut());
@@ -303,8 +303,8 @@ public class UnitPersoTest
 	when(etatRM3.isSonne()).thenReturn(false);
 
 	//On mocke un retour pour vérifier qu'il traverse correctement les couches private et on le fait retourner par arbreMock
-	RollUtils.RollResult resultMock = PowerMockito.mock(RollUtils.RollResult.class);
-	PowerMockito.mockStatic(RollUtils.RollResult.class);
+	RollGenerator.RollResult resultMock = PowerMockito.mock(RollGenerator.RollResult.class);
+	PowerMockito.mockStatic(RollGenerator.RollResult.class);
 	when(resultMock.getNbIncrements()).thenReturn(1);
 	when(resultMock.isJetReussi()).thenReturn(true);
 	when(resultMock.getScoreBrut()).thenReturn(22);
@@ -318,7 +318,7 @@ public class UnitPersoTest
 	when(reportMock.getModDesGardes()).thenReturn(0);
 	when(reportMock.getModDesLances()).thenReturn(0);
 	when(reportMock.getModJet()).thenReturn(+5);
-	RollUtils.RollResult resultat = persoRM3.attaquerDist(persoRM3.getActions().get(0), 50, 20, 17, armeMock);//cas limite important : l'arme est de catégorie 0 mais elle n'est pas "mains nues" car elle est à distance, les vérifications de "mains nues" doivent ne pas pêter
+	RollGenerator.RollResult resultat = persoRM3.attaquerDist(persoRM3.getActions().get(0), 50, 20, 17, armeMock);//cas limite important : l'arme est de catégorie 0 mais elle n'est pas "mains nues" car elle est à distance, les vérifications de "mains nues" doivent ne pas pêter
 
 	verify(armeMock).verifPreAttaque(20, 17);
 	verify(reportMock).isEchecAuto();

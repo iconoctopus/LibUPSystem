@@ -31,9 +31,10 @@ public class UnitRollUtilsTest
     @Test
     public void testLancerErreur()
     {
+	RollGenerator generator = RollGenerator.getInstance();
 	try
 	{
-	    RollUtils.lancer(-1, 2, true);
+	    generator.lancerGarder(-1, 2, true);
 	    fail();
 	}
 	catch (IllegalArgumentException e)
@@ -43,40 +44,12 @@ public class UnitRollUtilsTest
 
 	try
 	{
-	    RollUtils.lancer(2, -1, true);
+	    generator.lancerGarder(2, -1, true);
 	    fail();
 	}
 	catch (IllegalArgumentException e)
 	{
 	    Assert.assertEquals("paramétre aberrant:nombre de dés lancés:2 nombre de dés gardés:-1", e.getMessage());
 	}
-    }
-
-    @Test
-    public void testExtraireIncrements()
-    {
-	//Cas d'échec
-	Assert.assertFalse(RollUtils.extraireIncrements(12, 25).isJetReussi());
-	Assert.assertEquals(12, RollUtils.extraireIncrements(12, 25).getScoreBrut());
-	Assert.assertEquals(0, RollUtils.extraireIncrements(12, 25).getNbIncrements());
-
-	//Pile le ND
-	Assert.assertTrue(RollUtils.extraireIncrements(25, 25).isJetReussi());
-	Assert.assertEquals(25, RollUtils.extraireIncrements(25, 25).getScoreBrut());
-	Assert.assertEquals(0, RollUtils.extraireIncrements(25, 25).getNbIncrements());
-
-	//Tranche non entière de 5
-	Assert.assertTrue(RollUtils.extraireIncrements(29, 25).isJetReussi());
-	Assert.assertEquals(29, RollUtils.extraireIncrements(29, 25).getScoreBrut());
-	Assert.assertEquals(0, RollUtils.extraireIncrements(29, 25).getNbIncrements());
-
-	Assert.assertTrue(RollUtils.extraireIncrements(34, 25).isJetReussi());
-	Assert.assertEquals(34, RollUtils.extraireIncrements(34, 25).getScoreBrut());
-	Assert.assertEquals(1, RollUtils.extraireIncrements(34, 25).getNbIncrements());
-
-	//Tranches entières de 5
-	Assert.assertTrue(RollUtils.extraireIncrements(35, 25).isJetReussi());
-	Assert.assertEquals(35, RollUtils.extraireIncrements(35, 25).getScoreBrut());
-	Assert.assertEquals(2, RollUtils.extraireIncrements(35, 25).getNbIncrements());
     }
 }

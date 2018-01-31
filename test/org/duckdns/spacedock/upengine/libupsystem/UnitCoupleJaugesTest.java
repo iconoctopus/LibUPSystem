@@ -36,7 +36,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @PrepareForTest(//pour les méthodes statiques c'est la classe appelante qui doit apparaître ici, pour les classes final c'est la classe appelée (donc UPReferenceSysteme n'apparaît ici que pour son caractère final et pas pour sa méthode getInstance()
 
 	{//les classes final, appelant du statique et les classes subissant un whennew
-	    UPReferenceSysteme.class, CoupleJauges.class, RollUtils.RollResult.class, Perso.class
+	    UPReferenceSysteme.class, CoupleJauges.class, RollGenerator.RollResult.class, Perso.class
 	})
 public class UnitCoupleJaugesTest
 {
@@ -45,7 +45,7 @@ public class UnitCoupleJaugesTest
     static CoupleJauges jaugeFFA;
     private GroupeTraits groupeTraitMock;
     private UPReferenceSysteme referenceMock;
-    private RollUtils.RollResult resultMock;
+    private RollGenerator.RollResult resultMock;
 
     @Before
     public void setUp()
@@ -60,8 +60,8 @@ public class UnitCoupleJaugesTest
 	groupeTraitMock = PowerMockito.mock(GroupeTraits.class);
 
 	//On fabrique un mock de résultat de jet
-	resultMock = PowerMockito.mock(RollUtils.RollResult.class);
-	PowerMockito.mockStatic(RollUtils.RollResult.class);
+	resultMock = PowerMockito.mock(RollGenerator.RollResult.class);
+	PowerMockito.mockStatic(RollGenerator.RollResult.class);
 
 	//On mocke les deux jauges avec les modificateurs issus de la référence
 	when(referenceMock.getInitModCoord(1)).thenReturn(2);
@@ -261,14 +261,14 @@ public class UnitCoupleJaugesTest
 	when(resultMock.getScoreBrut()).thenReturn(29);
 	when(groupeTraitMock.effectuerJetTrait(GroupeTraits.Trait.PHYSIQUE, 40, false)).thenReturn(resultMock);
 
-	RollUtils.RollResult resultMockInconsc = PowerMockito.mock(RollUtils.RollResult.class);
-	PowerMockito.mockStatic(RollUtils.RollResult.class);
+	RollGenerator.RollResult resultMockInconsc = PowerMockito.mock(RollGenerator.RollResult.class);
+	PowerMockito.mockStatic(RollGenerator.RollResult.class);
 	when(resultMockInconsc.isJetReussi()).thenReturn(true);
 	when(resultMockInconsc.getNbIncrements()).thenReturn(0);
 	when(groupeTraitMock.effectuerJetTrait(GroupeTraits.Trait.VOLONTE, 15, false)).thenReturn(resultMockInconsc);//réussite du jet d'inconscience, mais le perso tombe quand même
 
-	RollUtils.RollResult resultMockMort = PowerMockito.mock(RollUtils.RollResult.class);
-	PowerMockito.mockStatic(RollUtils.RollResult.class);
+	RollGenerator.RollResult resultMockMort = PowerMockito.mock(RollGenerator.RollResult.class);
+	PowerMockito.mockStatic(RollGenerator.RollResult.class);
 	when(resultMockMort.isJetReussi()).thenReturn(true);
 	when(resultMockMort.getNbIncrements()).thenReturn(0);//0 incréments suffisent dans ce cas, une seule blessure dépasse du point de choc
 	when(groupeTraitMock.effectuerJetTrait(GroupeTraits.Trait.PHYSIQUE, 15, false)).thenReturn(resultMockMort);//réussite du jet de mort, le perso reste en vie
@@ -311,14 +311,14 @@ public class UnitCoupleJaugesTest
 	//mort auto
 	//On rajoute trois blessures à la petite jauge de santé/init pour générer un débordement donc mort auto, les jets réussis qui suivent n'y changeront rien
 
-	RollUtils.RollResult resultMockInconsc = PowerMockito.mock(RollUtils.RollResult.class);
-	PowerMockito.mockStatic(RollUtils.RollResult.class);
+	RollGenerator.RollResult resultMockInconsc = PowerMockito.mock(RollGenerator.RollResult.class);
+	PowerMockito.mockStatic(RollGenerator.RollResult.class);
 	when(resultMockInconsc.isJetReussi()).thenReturn(true);
 	when(resultMockInconsc.getNbIncrements()).thenReturn(0);
 	when(groupeTraitMock.effectuerJetTrait(GroupeTraits.Trait.VOLONTE, 15, false)).thenReturn(resultMockInconsc);//réussite du jet d'inconscience, mais le perso tombe quand même
 
-	RollUtils.RollResult resultMockMort = PowerMockito.mock(RollUtils.RollResult.class);
-	PowerMockito.mockStatic(RollUtils.RollResult.class);
+	RollGenerator.RollResult resultMockMort = PowerMockito.mock(RollGenerator.RollResult.class);
+	PowerMockito.mockStatic(RollGenerator.RollResult.class);
 	when(resultMockMort.isJetReussi()).thenReturn(true);
 	when(resultMockMort.getNbIncrements()).thenReturn(7);//même avec plein d'incréments la jauge a débordé et le perso est mort
 	when(groupeTraitMock.effectuerJetTrait(GroupeTraits.Trait.PHYSIQUE, 15, false)).thenReturn(resultMockMort);//réussite du jet de mort, le perso meurt quand même

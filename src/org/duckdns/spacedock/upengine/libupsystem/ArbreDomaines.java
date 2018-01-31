@@ -111,7 +111,7 @@ public class ArbreDomaines
      * @param p_isSonne
      * @return
      */
-    RollUtils.RollResult effectuerJetComp(int p_rangTrait, int p_indDomaine, int p_indComp, int p_nd, int p_modifNbDesLances, int p_modifNbDesGardes, int p_modifScore, boolean p_isSonne)
+    RollGenerator.RollResult effectuerJetComp(int p_rangTrait, int p_indDomaine, int p_indComp, int p_nd, int p_modifNbDesLances, int p_modifNbDesGardes, int p_modifScore, boolean p_isSonne)
     {
 	return m_listDomaines.get(p_indDomaine).effectuerJetComp(p_rangTrait, p_indComp, p_nd, p_modifNbDesLances, p_modifNbDesGardes, p_modifScore, p_isSonne);
     }

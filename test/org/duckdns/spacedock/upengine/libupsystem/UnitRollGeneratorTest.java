@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
  *
  * @author ykonoclast
  */
-public class UnitRollUtilsTest
+public class UnitRollGeneratorTest
 {
 //cas d'erreur sur paramétres
 
